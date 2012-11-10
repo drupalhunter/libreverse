@@ -107,7 +107,6 @@ set ( IO_JAVA_CLASS_HEADERS
   inner_classes_attribute.hpp
   integer_variable_info.hpp
   java_meta_info.hpp
-  java_types.hpp
   line_number_item.hpp
   line_number_table_attribute.hpp
   local_variable.hpp

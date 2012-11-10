@@ -18,23 +18,29 @@
    along with this program.  If not, see
    <http://www.gnu.org/licenses/>.
 */
-#ifndef _JAVA_META_INFO_H
-#define _JAVA_META_INFO_H
+#ifndef REVERSE_IO_INPUT_FILE_READERS_JAVA_CLASS_JAVA_META_INFO_HPP_INCLUDED
+#define REVERSE_IO_INPUT_FILE_READERS_JAVA_CLASS_JAVA_META_INFO_HPP_INCLUDED
 
 #include <boost/cstdint.hpp>
 #include <string>
 
-namespace libreverse {
-  namespace java_module {
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace java_class {
 
-  class Java_Meta_Info {
-  public:
+	  class java_meta_info {
+	  public:
+	    
+	    static const std::string file_type;
+	    
+	  };
 
-    static const std::string FILE_TYPE;
+	} // namespace java_class
+      } // namespace file_readers
+    } // namespace input
+  } // namspace io
+} // namespace reverse
 
-  };
-
-} /* namespace java_module */
-} /* namespace libreverse */
-
-#endif /* _JAVA_META_INFO_H */
+#endif // ifndef REVERSE_IO_INPUT_FILE_READERS_JAVA_CLASS_JAVA_META_INFO_HPP_INCLUDED

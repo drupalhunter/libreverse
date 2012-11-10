@@ -1,87 +1,91 @@
 /*  Elf_Training_Data.h
 
-   Copyright (C) 2008 Stephen Torri
+    Copyright (C) 2008 Stephen Torri
 
-   This file is part of Libreverse.
+    This file is part of Libreverse.
 
-   Libreverse is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published
-   by the Free Software Foundation; either version 3, or (at your
-   option) any later version.
+    Libreverse is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published
+    by the Free Software Foundation; either version 3, or (at your
+    option) any later version.
 
-   Libreverse is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
+    Libreverse is distributed in the hope that it will be useful, but
+    WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with this program.  If not, see
-   <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see
+    <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ELF_TRAINING_DATA_H
-#define ELF_TRAINING_DATA_H
+#ifndef REVERSE_COMPONENTS_INPUT_GRNN_CLASSIFIER_TYPES_HPP_INCLUDED
+#define REVERSE_COMPONENTS_INPUT_GRNN_CLASSIFIER_TYPES_HPP_INCLUDED
+
+#include <reverse/components/input/grnn/classifier_types.hpp>
+#include <reverse/components/input/grnn/variable_map.hpp>
 
 #include <boost/shared_ptr.hpp>
 #include <boost/cstdint.hpp>
 #include <string>
 
-#include "Classifier_Types.h"
-#include "Variable_Map.h"
+namespace reverse {
+  namespace components {
+    namespace input {
+      namespace grnn {
 
-namespace libreverse
-{
-  namespace classifier
-  {
-    class Elf_Training_Data
-    {
-    public:
+	class elf_training_data
+	{
+	public:
 
-      static const boost::uint8_t ATTRIBUTE_COUNT;
-      static const boost::uint8_t CLASSIFIER_TARGET;
+	  static const boost::uint8_t attribute_count;
+	  static const boost::uint8_t classifier_target;
 
-      enum Attributes
-        {
-	  ATTRIBUTE_TARGET_ID = 0,
-	  ATTRIBUTE_FILESIZE = 1,
-	  ATTRIBUTE_ENTRY_POINT_ADDRESS = 2,
-	  ATTRIBUTE_SECTION_HEADERS_START = 3,
-	  ATTRIBUTE_PROGRAM_HEADER_COUNT = 4,
-	  ATTRIBUTE_SECTION_HEADER_COUNT = 5,
-	  ATTRIBUTE_SECTION_HEADER_STRING_TABLE_INDEX = 6,
-	  ATTRIBUTE_TEXT_SECTION_SIZE = 7
-        };
+	  enum attributes
+	    {
+	      attribute_target_id = 0,
+	      attribute_filesize = 1,
+	      attribute_entry_point_address = 2,
+	      attribute_section_headers_start = 3,
+	      attribute_program_header_count = 4,
+	      attribute_section_header_count = 5,
+	      attribute_section_header_string_table_index = 6,
+	      attribute_text_section_size = 7
+	    };
 
-      friend class Elf_Training_Data_Parser;
+	  friend class elf_training_data_parser;
 
-      Elf_Training_Data ();
+	  elf_training_data ();
 
-      ~Elf_Training_Data();
+	  ~elf_training_data();
 
-      static std::string get_Attribute_String_List ( classifier_types::Configuration<Elf_Training_Data>::ptr_t config );
+	  static std::string get_attribute_string_list ( classifier_types::configuration<elf_training_data>::ptr_t config );
 
-      std::string to_String ( classifier_types::Configuration<Elf_Training_Data>::ptr_t config ) const;
+	  std::string to_string ( classifier_types::configuration<elf_training_data>::ptr_t config ) const;
 
-      std::string to_XML ( classifier_types::Configuration<Elf_Training_Data>::ptr_t config ) const;
+	  std::string to_xml ( classifier_types::configuration<elf_training_data>::ptr_t config ) const;
       
-      classifier_types::Variable_Map::map_type::const_iterator begin ( void ) const;
-      classifier_types::Variable_Map::map_type::iterator begin ( void );
+	  classifier_types::variable_map::map_type::const_iterator begin ( void ) const;
+	  classifier_types::variable_map::map_type::iterator begin ( void );
 
-      classifier_types::Variable_Map::map_type::const_iterator end ( void ) const;
-      classifier_types::Variable_Map::map_type::iterator end ( void );
+	  classifier_types::variable_map::map_type::const_iterator end ( void ) const;
+	  classifier_types::variable_map::map_type::iterator end ( void );
 
-      void set_Attribute ( boost::uint32_t index, double value );
+	  void set_attribute ( boost::uint32_t index, double value );
 
-      double get_Attribute ( boost::uint32_t index );
+	  double get_attribute ( boost::uint32_t index );
 
-      bool empty ( void ) const;
+	  bool empty ( void ) const;
 
-    private:
+	private:
 
-      classifier::Variable_Map m_data;
-    };
+	  classifier::variable_map m_data;
+	};
 
-  } /* namespace classifier */
-} /* namespace libreverse */
+      } // namespace grnn
+    } // namespace input
+  } // namespace components
+} // namespace reverse
 
-#endif /* ELF_TRAINING_DATA_H */
+
+#endif // ifndef REVERSE_COMPONENTS_INPUT_GRNN_CLASSIFIER_TYPES_HPP_INCLUDED

@@ -19,47 +19,52 @@
     <http://www.gnu.org/licenses/>.
 */
 
-#ifndef COMPILER_CLASSIFIER_ALGORITHM_FACTORY_H_
-#define COMPILER_CLASSIFIER_ALGORITHM_FACTORY_H_
+#ifndef REVERSE_COMPONENTS_INPUT_GRNN_COMPILER_CLASSIFIER_ALGORITHM_FACTORY_HPP_INCLUDED
+#define REVERSE_COMPONENTS_INPUT_GRNN_COMPILER_CLASSIFIER_ALGORITHM_FACTORY_HPP_INCLUDED
 
-#include "Classifier_Types.h"
+namespace reverse {
+  namespace components {
+    namespace input {
+      namespace grnn {
 
-namespace libreverse { namespace classifier {
+	class classifier_algorithm;
 
-    class Compiler_Classifier_Algorithm_Factory {
-    public:
+	class compiler_classifier_algorithm_factory {
+	public:
+	  
+	  static compiler_classifier_algorithm_factory& instance()
+	  {
+	    static compiler_classifier_algorithm_factory fact_ref;
+	    return fact_ref;
+	  }
 
-      static Compiler_Classifier_Algorithm_Factory& Instance()
-      {
-	static Compiler_Classifier_Algorithm_Factory fact_ref;
-	return fact_ref;
-      }
+	  /**
+	   * \brief Create a new Classifier Algorithm
+	   *
+	   * \pre None
+	   *
+	   * \post Classifier Algorithm is not null
+	   *
+	   * \return Return a Component pointer to the new File Type Detector
+	   */
+	  boost::shared_ptr < components::input::grnn::classifier_algorithm >
+	  get_classifier ( std::string type );
 
-      /**
-       * \brief Create a new Classifier Algorithm
-       *
-       * \pre None
-       *
-       * \post Classifier Algorithm is not null
-       *
-       * \return Return a Component pointer to the new File Type Detector
-       */
-      classifier_types::Classifier_Algorithm::ptr_t
-      get_Classifier ( std::string type );
+	private:
 
-    private:
+	  compiler_classifier_algorithm_factory (){}
 
-      Compiler_Classifier_Algorithm_Factory (){}
-
-      Compiler_Classifier_Algorithm_Factory ( const Compiler_Classifier_Algorithm_Factory& ){}
+	  compiler_classifier_algorithm_factory ( const compiler_classifier_algorithm_factory& ){}
       
-      Compiler_Classifier_Algorithm_Factory& operator= ( const Compiler_Classifier_Algorithm_Factory& ){}
+	  compiler_classifier_algorithm_factory& operator= ( const compiler_classifier_algorithm_factory& ){}
       
-      ~Compiler_Classifier_Algorithm_Factory (){}
+	  ~compiler_classifier_algorithm_factory (){}
 
-    };
+	};
 
-  } /* namespace classifier */
-} /* namespace libreverse */
+      } // namespace grnn
+    } // namespace input
+  } // namespace components
+} // namespace reverse
 
-#endif /* COMPILER_CLASSIFIER_ALGORITHM_FACTORY_H_ */
+#endif // ifndef REVERSE_COMPONENTS_INPUT_GRNN_COMPILER_CLASSIFIER_ALGORITHM_FACTORY_HPP_INCLUDED
