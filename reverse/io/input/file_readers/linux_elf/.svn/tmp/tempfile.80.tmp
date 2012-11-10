@@ -1,0 +1,39 @@
+#include "Elf_arc.h"
+#include <iostream>
+#include "libreverse/Trace.h"
+
+using namespace libreverse::api;
+using namespace libreverse::trace;
+
+namespace libreverse { namespace elf_module {
+
+    inline std::string
+    Elf_arc::get_Type ( boost::uint32_t type )
+    {
+        Trace::write_Trace ( TraceArea::IO,
+                             TraceLevel::DETAIL,
+                             "Entering Elf_arc::get_Type" );
+
+        std::string output = "";
+
+        switch (type)
+            {
+            case 0: output = "R_ARC_NONE"; break;
+            case 1: output = "R_ARC_32"; break;
+            case 2: output = "R_ARC_B26"; break;
+            case 3: output = "R_ARC_B22_PCREL"; break;
+            default:
+                {
+                    std::cerr << "Unknown arc relocation type:" << type << std::endl;
+                    output = "unknown";
+                }
+            }
+
+        Trace::write_Trace ( TraceArea::IO,
+                             TraceLevel::DETAIL,
+                            "Exiting Elf_arc::get_Type" );
+
+        return output;
+    }
+} /* namespace elf_module */
+} /* namespace libreverse */

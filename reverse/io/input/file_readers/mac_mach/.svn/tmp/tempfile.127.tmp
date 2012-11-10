@@ -1,0 +1,11 @@
+#include "Twolevel_Hint.h"
+
+namespace libreverse { namespace mach_module {
+
+  Twolevel_Hint::Twolevel_Hint ()
+    : m_isubimage ( 0 ),
+      m_itoc ( 0 )
+  {}
+
+} /* namespace mach_module */
+} /* namespace libreverse */

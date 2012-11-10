@@ -1,0 +1,45 @@
+project(win_tests) {
+	custom_only = 1
+	Define_Custom(MPC) {
+		command = echo
+		inputext = .mpc
+	}
+
+	verbatim(automake,local) {
+
+        TEST_PROGS = \
+        	test_winhlp32 \
+        	test_cokegift \
+        	test_genuine_check_w32_parite_b
+
+        check_PROGRAMS = $(TEST_PROGS)
+        TESTS = $(TEST_PROGS)
+
+        test_winhlp32_CXXFLAGS = -I$(top_srcdir)/ $(BOOST_INCLUDES)
+        test_winhlp32_SOURCES = test_winhlp32.cpp
+        test_winhlp32_DEPENDENCIES = $(top_builddir)/libreverse/libreverse.la
+
+        test_winhlp32_LDFLAGS = -L$(top_builddir)/libreverse -lreverse \
+        	-lboost_date_time \
+        	-lboost_unit_test_framework \
+            -lexpat
+
+        test_cokegift_CXXFLAGS = -I$(top_srcdir)/ $(BOOST_INCLUDES)
+        test_cokegift_SOURCES = test_cokegift.cpp
+        test_cokegift_DEPENDENCIES = $(top_builddir)/libreverse/libreverse.la
+
+        test_cokegift_LDFLAGS = -L$(top_builddir)/libreverse -lreverse \
+        	-lboost_date_time \
+        	-lboost_unit_test_framework \
+            -lexpat
+
+        test_genuine_check_w32_parite_b_CXXFLAGS = -I$(top_srcdir)/ $(BOOST_INCLUDES)
+        test_genuine_check_w32_parite_b_SOURCES = test_genuine_check_w32_parite_b.cpp
+        test_genuine_check_w32_parite_b_DEPENDENCIES = $(top_builddir)/libreverse/libreverse.la
+
+        test_genuine_check_w32_parite_b_LDFLAGS = -L$(top_builddir)/libreverse -lreverse \
+        	-lboost_date_time \
+        	-lboost_unit_test_framework \
+            -lexpat
+	}
+}

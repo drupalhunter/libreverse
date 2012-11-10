@@ -1,0 +1,375 @@
+/*  Java_Types.h
+
+   Copyright (C) 2008 Stephen Torri
+
+   This file is part of Libreverse.
+
+   Libreverse is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published
+   by the Free Software Foundation; either version 3, or (at your
+   option) any later version.
+
+   Libreverse is distributed in the hope that it will be useful, but
+   WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see
+   <http://www.gnu.org/licenses/>.
+*/
+
+#ifndef JAVA_TYPES_H_
+#define JAVA_TYPES_H_
+
+#include <boost/shared_ptr.hpp>
+#include <vector>
+#include <map>
+#include <boost/cstdint.hpp>
+
+namespace libreverse {
+
+    namespace java_module {
+        class Append_Frame;
+        class Attribute_Info;
+        class Chop_Frame;
+        class Class_File;
+        class Class_Header;
+        class Code_Attribute;
+        class Constant_Class_Info;
+        class Constant_Double_Info;
+        class Constant_Fieldref_Info;
+        class Constant_Float_Info;
+        class Constant_Integer_Info;
+        class Constant_InterfaceMethodref_Info;
+        class Constant_Long_Info;
+        class Constant_Methodref_Info;
+        class Constant_Name_And_Type_Info;
+        class Constant_Pool_Info;
+        class Constant_String_Info;
+        class Constant_Utf8_Info;
+        class Constant_Value_Attribute;
+        class Deprecated_Attribute;
+        class Enclosing_Method_Attribute;
+        class Exceptions_Attribute;
+        class Exception_Table_Entry;
+        class Field_Info;
+        class Full_Frame;
+        class Header;
+        class Inner_Class_Reference;
+        class Inner_Classes_Attribute;
+        class Line_Number_Item;
+        class Line_Number_Table_Attribute;
+        class Local_Variable;
+        class Local_Variable_Table_Attribute;
+        class Method_Info;
+        class Object_Variable_Info;
+        class Reader;
+        class Same_Frame_Extended;
+        class Same_Locals_One_Stack_Item_Frame;
+        class Same_Locals_One_Stack_Item_Frame_Extended;
+        class Signature_Attribute;
+        class Source_File_Attribute;
+        class Stack_Map_Frame;
+        class Stack_Map_Table_Attribute;
+        class Synthetic_Attribute;
+        class Uninitialized_Variable_Info;
+        class Unknown_Attribute;
+        class Verification_Type_Info;
+    }
+
+    namespace java_types {
+
+        class Reader
+        {
+        public:
+            typedef boost::shared_ptr<java_module::Reader> ptr_t;
+        };
+
+        class Append_Frame
+        {
+        public:
+            typedef boost::shared_ptr<java_module::Append_Frame> ptr_t;
+        };
+
+        class Attribute_Info
+        {
+        public:
+            typedef boost::shared_ptr<java_module::Attribute_Info> ptr_t;
+            typedef boost::shared_ptr<java_module::Attribute_Info const> const_ptr_t;
+        };
+
+        class Chop_Frame
+        {
+        public:
+            typedef boost::shared_ptr<java_module::Chop_Frame> ptr_t;
+        };
+
+        class Class_File
+        {
+        public:
+            typedef boost::shared_ptr<java_module::Class_File> ptr_t;
+        };
+
+        class Deprecated_Attribute
+        {
+        public:
+            typedef boost::shared_ptr<java_module::Deprecated_Attribute> ptr_t;
+        };
+
+        class Exception_Table_Entry
+        {
+        public:
+            typedef boost::shared_ptr<java_module::Exception_Table_Entry> ptr_t;
+        };
+
+        class Code_Attribute
+        {
+        public:
+            typedef boost::shared_ptr<java_module::Code_Attribute> ptr_t;
+            typedef std::vector<boost::uint8_t> Code_List_t;
+            typedef std::vector< java_types::Attribute_Info::ptr_t > Attribute_Table_t;
+            typedef std::vector< Exception_Table_Entry::ptr_t > Exception_Table_t;
+        };
+
+        class Constant_Class_Info
+        {
+        public:
+            typedef boost::shared_ptr<java_module::Constant_Class_Info> ptr_t;
+        };
+
+        class Constant_Double_Info
+        {
+        public:
+            typedef boost::shared_ptr<java_module::Constant_Double_Info> ptr_t;
+        };
+
+        class Constant_Fieldref_Info
+        {
+        public:
+            typedef boost::shared_ptr<java_module::Constant_Fieldref_Info> ptr_t;
+        };
+
+        class Constant_Float_Info
+        {
+        public:
+            typedef boost::shared_ptr<java_module::Constant_Float_Info> ptr_t;
+        };
+
+        class Constant_Integer_Info
+        {
+        public:
+            typedef boost::shared_ptr<java_module::Constant_Integer_Info> ptr_t;
+        };
+
+        class Constant_InterfaceMethodref_Info
+        {
+        public:
+            typedef boost::shared_ptr<java_module::Constant_InterfaceMethodref_Info> ptr_t;
+        };
+
+        class Constant_Long_Info
+        {
+        public:
+            typedef boost::shared_ptr<java_module::Constant_Long_Info> ptr_t;
+        };
+
+        class Constant_Methodref_Info
+        {
+        public:
+            typedef boost::shared_ptr<java_module::Constant_Methodref_Info> ptr_t;
+        };
+
+        class Constant_Name_And_Type_Info
+        {
+        public:
+            typedef boost::shared_ptr<java_module::Constant_Name_And_Type_Info> ptr_t;
+        };
+
+        class Constant_Pool_Info
+        {
+        public:
+            typedef boost::shared_ptr<java_module::Constant_Pool_Info> ptr_t;
+        };
+
+        class Constant_String_Info
+        {
+        public:
+            typedef boost::shared_ptr<java_module::Constant_String_Info> ptr_t;
+        };
+
+        class Constant_Utf8_Info
+        {
+        public:
+            typedef boost::shared_ptr<java_module::Constant_Utf8_Info> ptr_t;
+            typedef boost::shared_ptr<java_module::Constant_Utf8_Info const> const_ptr_t;
+        };
+
+        class Constant_Value_Attribute
+        {
+        public:
+            typedef boost::shared_ptr<java_module::Constant_Value_Attribute> ptr_t;
+        };
+
+        class Enclosing_Method_Attribute
+        {
+        public:
+            typedef boost::shared_ptr<java_module::Enclosing_Method_Attribute> ptr_t;
+        };
+
+        class Exceptions_Attribute
+        {
+        public:
+            typedef boost::shared_ptr<java_module::Exceptions_Attribute> ptr_t;
+        };
+
+        class Field_Info
+        {
+        public:
+            typedef boost::shared_ptr<java_module::Field_Info> ptr_t;
+        };
+
+        class Full_Frame
+        {
+        public:
+            typedef boost::shared_ptr<java_module::Full_Frame> ptr_t;
+        };
+
+        class Header
+        {
+        public:
+            typedef boost::shared_ptr<java_module::Header> ptr_t;
+        };
+
+        class Inner_Class_Reference
+        {
+        public:
+            typedef boost::shared_ptr<java_module::Inner_Class_Reference> ptr_t;
+        };
+
+        class Inner_Classes_Attribute
+        {
+        public:
+            typedef boost::shared_ptr<java_module::Inner_Classes_Attribute> ptr_t;
+        };
+
+        class Line_Number_Item
+        {
+        public:
+            typedef boost::shared_ptr<java_module::Line_Number_Item> ptr_t;
+        };
+
+        class Line_Number_Table_Attribute
+        {
+        public:
+            typedef boost::shared_ptr<java_module::Line_Number_Table_Attribute> ptr_t;
+            typedef boost::shared_ptr<java_module::Line_Number_Table_Attribute const> const_ptr_t;
+        };
+
+        class Local_Variable
+        {
+        public:
+            typedef boost::shared_ptr<java_module::Local_Variable> ptr_t;
+        };
+
+        class Local_Variable_Table_Attribute
+        {
+        public:
+            typedef boost::shared_ptr<java_module::Local_Variable_Table_Attribute> ptr_t;
+        };
+
+        class Method_Info
+        {
+        public:
+            typedef boost::shared_ptr<java_module::Method_Info> ptr_t;
+        };
+
+        class Object_Variable_Info
+        {
+        public:
+            typedef boost::shared_ptr<java_module::Object_Variable_Info> ptr_t;
+        };
+
+        class Same_Frame_Extended
+        {
+        public:
+            typedef boost::shared_ptr<java_module::Same_Frame_Extended> ptr_t;
+        };
+
+        class Same_Locals_One_Stack_Item_Frame
+        {
+        public:
+            typedef boost::shared_ptr<java_module::Same_Locals_One_Stack_Item_Frame> ptr_t;
+        };
+
+        class Same_Locals_One_Stack_Item_Frame_Extended
+        {
+        public:
+            typedef boost::shared_ptr<java_module::Same_Locals_One_Stack_Item_Frame_Extended> ptr_t;
+        };
+
+        class Signature_Attribute
+        {
+        public:
+            typedef boost::shared_ptr<java_module::Signature_Attribute> ptr_t;
+        };
+
+        class Source_File_Attribute
+        {
+        public:
+            typedef boost::shared_ptr<java_module::Source_File_Attribute> ptr_t;
+        };
+
+        class Stack_Map_Frame
+        {
+        public:
+            typedef boost::shared_ptr<java_module::Stack_Map_Frame> ptr_t;
+        };
+
+        class Stack_Map_Table_Attribute
+        {
+        public:
+            typedef boost::shared_ptr<java_module::Stack_Map_Table_Attribute> ptr_t;
+        };
+
+        class Synthetic_Attribute
+        {
+        public:
+            typedef boost::shared_ptr<java_module::Synthetic_Attribute> ptr_t;
+        };
+
+        class Uninitialized_Variable_Info
+        {
+        public:
+            typedef boost::shared_ptr<java_module::Uninitialized_Variable_Info> ptr_t;
+        };
+
+        class Unknown_Attribute
+        {
+        public:
+            typedef boost::shared_ptr<java_module::Unknown_Attribute> ptr_t;
+            typedef std::vector<boost::uint8_t> Byte_List_t;
+        };
+
+        class Verification_Type_Info
+        {
+        public:
+            typedef boost::shared_ptr<java_module::Verification_Type_Info> ptr_t;
+        };
+
+        class Class_Header
+        {
+        public:
+            typedef boost::shared_ptr<java_module::Class_Header> ptr_t;
+            typedef std::vector<boost::uint16_t> Interfaces_List_t;
+            typedef std::map<boost::uint16_t, java_types::Constant_Pool_Info::ptr_t > Constant_Pool_Info_Map_t;
+            typedef std::map<boost::uint16_t, java_types::Field_Info::ptr_t > Field_Info_Map_t;
+            typedef std::map<boost::uint16_t, java_types::Method_Info::ptr_t > Method_Info_Map_t;
+            typedef std::map<boost::uint16_t, java_types::Attribute_Info::ptr_t > Attribute_Info_Map_t;
+        };
+
+    }
+
+} /* namespace libreverse */
+
+#endif /* JAVA_TYPES_H_ */

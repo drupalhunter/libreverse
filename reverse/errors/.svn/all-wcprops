@@ -1,0 +1,143 @@
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn_repos/hamilton/!svn/ver/279/torrisa/libreverse/trunk/libreverse/libreverse/errors
+END
+Reverse_Exception.h
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn_repos/hamilton/!svn/ver/257/torrisa/libreverse/trunk/libreverse/libreverse/errors/Reverse_Exception.h
+END
+Internal_Exception.h
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn_repos/hamilton/!svn/ver/279/torrisa/libreverse/trunk/libreverse/libreverse/errors/Internal_Exception.h
+END
+Meta_Exception.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn_repos/hamilton/!svn/ver/257/torrisa/libreverse/trunk/libreverse/libreverse/errors/Meta_Exception.cpp
+END
+CPU_Exception.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn_repos/hamilton/!svn/ver/257/torrisa/libreverse/trunk/libreverse/libreverse/errors/CPU_Exception.cpp
+END
+Data_Source_Exception.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn_repos/hamilton/!svn/ver/257/torrisa/libreverse/trunk/libreverse/libreverse/errors/Data_Source_Exception.cpp
+END
+errors.mpc
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn_repos/hamilton/!svn/ver/245/torrisa/libreverse/trunk/libreverse/libreverse/errors/errors.mpc
+END
+Meta_Exception.h
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn_repos/hamilton/!svn/ver/257/torrisa/libreverse/trunk/libreverse/libreverse/errors/Meta_Exception.h
+END
+CPU_Exception.h
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn_repos/hamilton/!svn/ver/257/torrisa/libreverse/trunk/libreverse/libreverse/errors/CPU_Exception.h
+END
+Data_Source_Exception.h
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn_repos/hamilton/!svn/ver/257/torrisa/libreverse/trunk/libreverse/libreverse/errors/Data_Source_Exception.h
+END
+File_Reader_Exception.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn_repos/hamilton/!svn/ver/257/torrisa/libreverse/trunk/libreverse/libreverse/errors/File_Reader_Exception.cpp
+END
+Component_Exception.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn_repos/hamilton/!svn/ver/257/torrisa/libreverse/trunk/libreverse/libreverse/errors/Component_Exception.cpp
+END
+Parsing_Exception.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn_repos/hamilton/!svn/ver/257/torrisa/libreverse/trunk/libreverse/libreverse/errors/Parsing_Exception.cpp
+END
+File_Reader_Exception.h
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn_repos/hamilton/!svn/ver/257/torrisa/libreverse/trunk/libreverse/libreverse/errors/File_Reader_Exception.h
+END
+Component_Exception.h
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn_repos/hamilton/!svn/ver/257/torrisa/libreverse/trunk/libreverse/libreverse/errors/Component_Exception.h
+END
+Configuration_Exception.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn_repos/hamilton/!svn/ver/257/torrisa/libreverse/trunk/libreverse/libreverse/errors/Configuration_Exception.cpp
+END
+IO_Exception.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn_repos/hamilton/!svn/ver/257/torrisa/libreverse/trunk/libreverse/libreverse/errors/IO_Exception.cpp
+END
+Parsing_Exception.h
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn_repos/hamilton/!svn/ver/257/torrisa/libreverse/trunk/libreverse/libreverse/errors/Parsing_Exception.h
+END
+API_Exception.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn_repos/hamilton/!svn/ver/257/torrisa/libreverse/trunk/libreverse/libreverse/errors/API_Exception.cpp
+END
+Reverse_Exception.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn_repos/hamilton/!svn/ver/257/torrisa/libreverse/trunk/libreverse/libreverse/errors/Reverse_Exception.cpp
+END
+Internal_Exception.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn_repos/hamilton/!svn/ver/279/torrisa/libreverse/trunk/libreverse/libreverse/errors/Internal_Exception.cpp
+END
+IO_Exception.h
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn_repos/hamilton/!svn/ver/257/torrisa/libreverse/trunk/libreverse/libreverse/errors/IO_Exception.h
+END
+Configuration_Exception.h
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn_repos/hamilton/!svn/ver/257/torrisa/libreverse/trunk/libreverse/libreverse/errors/Configuration_Exception.h
+END
+API_Exception.h
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn_repos/hamilton/!svn/ver/257/torrisa/libreverse/trunk/libreverse/libreverse/errors/API_Exception.h
+END

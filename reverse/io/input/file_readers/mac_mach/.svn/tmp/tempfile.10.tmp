@@ -1,0 +1,34 @@
+#ifndef SUB_FRAMEWORK_COMMAND_H
+#define SUB_FRAMEWORK_COMMAND_H
+
+#include "Load_Command.h"
+#include "Mach_Types.h"
+
+namespace libreverse { namespace mach_module {
+
+  class Sub_Framework_Command : public Load_Command {
+  public:
+
+    friend class Mach_File;
+
+    Sub_Framework_Command ( boost::uint32_t cmd, boost::uint32_t cmdsize );
+
+    virtual ~Sub_Framework_Command(){}
+
+    virtual void convert ( bool need_convert );
+
+    virtual std::string to_String (void);
+
+  private:
+
+    boost::uint32_t m_cmd;
+    boost::uint32_t m_cmdsize;
+    mach_types::LC_Str::ptr_t m_umbrella;
+
+  };
+
+} /* namespace mach_module */
+} /* namespace libreverse */
+
+
+#endif /* DYLIB_COMMAND_H */

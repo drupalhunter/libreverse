@@ -1,0 +1,7 @@
+project(api_tests) {
+	custom_only = 1
+	Define_Custom(MPC) {
+		command = echo
+		inputext = .mpc
+	}
+}

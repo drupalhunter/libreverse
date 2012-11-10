@@ -1,0 +1,85 @@
+/*  GRNN_Data_Map.cpp
+
+   Copyright (C) 2008 Stephen Torri
+
+   This file is part of Libreverse.
+
+   Libreverse is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published
+   by the Free Software Foundation; either version 3, or (at your
+   option) any later version.
+
+   Libreverse is distributed in the hope that it will be useful, but
+   WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see
+   <http://www.gnu.org/licenses/>.
+*/
+
+#include "GRNN_Data_Map.h"
+#include "libreverse/io/Preconditions.h"
+
+namespace libreverse
+{
+
+  namespace classifier
+  {
+    bool
+    GRNN_Data_Map::insert ( Types key, classifier_types::GRNN_Data_Entry::const_ptr_t data_obj )
+    {
+      bool result = false;
+      io::Preconditions::is_set ( data_obj );
+      
+      if ( m_data.find ( key ) == m_data.end() )
+	{
+	  m_data.insert ( std::make_pair ( key, data_obj ) );
+	  result = true;
+	}
+
+      return result;
+    }
+
+    classifier_types::GRNN_Data_Entry::const_ptr_t
+    GRNN_Data_Map::get_Entry ( Types key ) const
+    {
+
+      GRNN_Data_Map::Data_Type::const_iterator output = m_data.find ( key );
+
+      if ( output == m_data.end() )
+	{
+	  throw errors::Internal_Exception ( errors::Internal_Exception::INVALID_INDEX );
+	}
+
+      return (*output).second;
+    }
+
+    GRNN_Data_Map::Types
+    GRNN_Data_Map::get_Type ( std::string type_string )
+    {
+      Types result = GRNN_Data_Map::UNKNOWN;
+
+      if ( type_string.compare ( "java_class" ) == 0 )
+	{
+	  result = GRNN_Data_Map::JAVA_CLASS;
+	}
+      else if ( type_string.compare ( "windows_pe" ) == 0 )
+	{
+	  result = GRNN_Data_Map::WINDOWS_PE;
+	}
+      else if ( type_string.compare ( "linux_elf" ) == 0 )
+	{
+	  result = GRNN_Data_Map::LINUX_ELF;
+	}
+      else if ( type_string.compare ( "mac_mach_o" ) == 0 )
+	{
+	  result = GRNN_Data_Map::MAC_MACH_O;
+	}
+
+      return result;
+    }
+  } /* namespace classifier */
+
+} /* namespace libreverse */

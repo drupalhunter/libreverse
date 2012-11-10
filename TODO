@@ -1,0 +1,110 @@
+
+# NEED TO DO
+---------------------------------
+- make container for storing the individual component graphs for each formula file. We need a function that will
+  return a map that cannot be changed.
+
+- Add a formula validator that can assure that input formulas are correct before execution.
+
+- Add a command line terminal that allows the user to configure the library and run commands. E.g. scripts
+
+- Add the ability to load components from module files. That way someone can program a new model and link against the library without
+ having to figure out how to add their idea to the library.
+
+- Look at making the results of reading files serializable (e.g. Elf)
+
+- unless required pass containers around by iterators
+
+- Look into the boost parameter class for passing types
+
+- ensure only one class is defined per header
+
+- use make_shared for creating shared pointers
+
+- Restructure directories to emulate Boost
+
+- See how you can combine code in multiple directories into the same library with cmake.
+
+- Move Reverse_Impl class into the same library as Reverse class
+
+- Replace alloc::Create with boost::make_shared
+
+- Add macro for wrapping LIBREVERSE_DEBUG
+
+- Translate MPC into CMake
+
+- Get original program working
+
+- Get tests added to CMake projects
+
+- Add Windows Compiler Classifier Algorithm
+
+- Add Compiler Classifier Algorithm Factory
+
+- Finish Compiler Classifier Component
+
+- Add Makefile.am file for GRNN training data. End path should be
+  something like (/usr/share/data/libreverse/grnn_data)
+
+- Add way to locate the data directory. Perhaps the configurator
+  should have this information. See if there is a way to grab the
+  configure script data directory and use that so users can define
+  their desired location.
+
+- Add a GRNN data object that contains a list of the GRNN data. This
+  will be populated by an XML file that contains a key "type" and
+  value "filename". The path to the GRNN data is contained in the
+  general configuration file. This GRNN data list XML file should be
+  stored in the same location as the general configuration file. The
+  GRNN data object will be populated the first time a call is made to
+  the get_GRNN_Data() function in the Configurator. The get_GRNN_Data
+  call will access the Configurator to get the string representing the
+  location of the grnn data directory. The filename will be appended
+  to this string and returned. In addition to the path each GRNN data
+  entry will contain the sigman to be used.
+
+- Create template function for creating boost shared pointer
+  objects. This should wrapped things up so that we catch any
+  std::bad_alloc for example.
+
+# SHOULD DO
+---------------------------------
+Memory_Map:
+
+- Add function to allocate new space for file formats that do not
+  provide a base address and size of the image
+
+  e.g. mem_map_ptr->allocate (address1, size1);
+       mem_map_ptr->allocate (address2, size2);
+
+  NOTE: Verify that the previous method of determining size (number of
+  entries in list) still holds. That is there are no gaps in the
+  allocated memory space.
+
+- IO:Java_Class Reader:
+  - Finished Field_Access_Flags
+    - Send it what type the field access flags are releated to because there
+      are different rules for Classes, Interfaces, etc.
+  - Finish Method_Access_Flags
+  - Why do we have a string argument to get_Meta_Info in the Java class reader?
+
+- IO:Windows PE Exception Table Constants 
+  - Where did we get the names because we don't have values for the constants.
+
+# WANT TO DO
+---------------------------------
+- Handle Windows NE file headers
+
+- Handle C# bytecode files
+
+- Provide ability to read export name pointer table of the imported
+  DLL using hint to get name
+
+- For determining the file type we should only create a Memory_Map of
+  the size of the magic number for a target input file. This should
+  speed up detection significantly.
+
+- Elf: Remove stringstream uses where the stream property is not
+  used. For example returning the Elf Class in
+  Elf_Header_Eident::get_Elf_Class.
+

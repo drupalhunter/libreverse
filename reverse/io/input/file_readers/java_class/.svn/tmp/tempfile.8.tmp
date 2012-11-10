@@ -1,0 +1,87 @@
+#include "Header.h"
+#include "Class_Header.h"
+#include "libreverse/errors/IO_Exception.h"
+#include "libreverse/Trace.h"
+#include "libreverse/Reverse.h"
+
+using namespace libreverse::api;
+using namespace libreverse::trace;
+
+namespace libreverse { namespace java_module {
+
+    Header::Header()
+    {
+        Trace::write_Trace ( TraceArea::IO,
+                             TraceLevel::DETAIL,
+                             "Inside Header constructor" );
+    }
+
+    void Header::init ()
+    {
+        Trace::write_Trace ( TraceArea::IO,
+                             TraceLevel::DETAIL,
+                             "Inside Header::init" );
+    }
+
+    boost::uint32_t
+    Header::get_size () const
+    {
+        Trace::write_Trace ( TraceArea::IO,
+                             TraceLevel::DETAIL,
+                             "Inside Header::get_size" );
+
+        return static_cast<boost::uint32_t>(32);
+    }
+
+    void
+    Header::convert ()
+    {
+        Trace::write_Trace ( TraceArea::IO,
+                             TraceLevel::DETAIL,
+                             "Inside Header::convert" );
+    }
+
+    java_types::Class_Header::ptr_t
+    Header::get_Class_Header (void) const
+    {
+        Trace::write_Trace ( TraceArea::IO,
+                             TraceLevel::DETAIL,
+                             "Inside Header::get_Class_Header" );
+
+        return m_class_hdr;
+    }
+
+    void
+    Header::set_Class_Header ( java_types::Class_Header::ptr_t ch_ptr )
+    {
+        Trace::write_Trace ( TraceArea::IO,
+                             TraceLevel::DETAIL,
+                             "Entering Header::set_Class_Header" );
+
+        if ( ch_ptr.get() != 0 )
+            {
+                m_class_hdr = ch_ptr;
+            }
+        else
+            {
+                throw errors::IO_Exception
+                    ( errors::IO_Exception::NULL_POINTER );
+            }
+
+        Trace::write_Trace ( TraceArea::IO,
+                             TraceLevel::DETAIL,
+                             "Exiting Header::set_Class_Header" );
+    }
+
+    std::string const
+    Header::to_String ( void ) const
+    {
+        Trace::write_Trace ( TraceArea::IO,
+                             TraceLevel::DETAIL,
+                             "Inside Header::to_String" );
+
+        return m_class_hdr->to_String();
+    }
+
+} /* namespace java_module */
+} /* namespace libreverse */

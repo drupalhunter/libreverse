@@ -1,0 +1,38 @@
+#include "LC_Str.h"
+#include "libreverse/io/Byte_Converter.h"
+#include <boost/format.hpp>
+#include <sstream>
+
+namespace libreverse
+{
+    namespace mach_module
+    {
+
+        LC_Str::LC_Str()
+                : m_offset ( 0 ),
+                m_text ( "" )
+        {}
+
+        void
+        LC_Str::convert ( bool need_convert )
+        {
+            if ( need_convert )
+            {
+                io::Byte_Converter::convert ( m_offset );
+            }
+        }
+
+        std::string
+        LC_Str::to_String (void)
+        {
+            std::stringstream output;
+
+            output << "    LC_Str" << std::endl
+            << boost::format ("    Offset: 0x%1$X" ) % m_offset << std::endl
+            << boost::format ("    Text: %1% " ) % m_text;
+
+            return output.str();
+        }
+
+    } /* namespace mach_module */
+} /* namespace libreverse */

@@ -1,0 +1,178 @@
+project(io_elf) : install_headers {
+    staticname = io_elf
+    includes += $(top_srcdir)
+    after = reverse_exceptions
+
+    specific(vc8) {
+	dynamicflags += _SCL_SECURE_NO_WARNINGS
+	staticflags += _SCL_SECURE_NO_WARNINGS
+    }
+
+    Source_Files {
+    	Elf_Header_Eident.cpp
+	Elf_Note.cpp
+	Elf_Symbol_Info.cpp
+    	Elf_Version.cpp
+	Elf_Version_Aux.cpp
+    	Elf_Version_Need.cpp
+	Elf_Version_Need_Aux.cpp
+    	Elf_Version_Symbol.cpp
+	Elf_arm.cpp
+    	Elf_mmix.cpp
+	Elf_xtensa.cpp
+    	Elf_Dynamic_Header_32.cpp
+    	Elf_Dynamic_Header_64.cpp
+	Elf_Dynamic_Tag_32.cpp
+	Elf_Dynamic_Tag_64.cpp
+    	Elf_File_Header_32.cpp
+    	Elf_File_Header_64.cpp
+    	Elf_File_Header_Utils.cpp
+	Elf_File.cpp
+    	Elf_Header_32.cpp
+    	Elf_Header_64.cpp
+	Elf_Program_Header_32.cpp
+	Elf_Program_Header_64.cpp
+	Elf_Program_Header_Utils.cpp
+    	Elf_Reader_32.cpp
+    	Elf_Reader_64.cpp
+	Elf_Relocation_Add_32.cpp
+	Elf_Relocation_Add_64.cpp
+    	Elf_Relocation_32.cpp
+    	Elf_Relocation_64.cpp
+    	Elf_Relocation_Utils.cpp
+	Elf_Section_Header_32.cpp
+	Elf_Section_Header_64.cpp
+	Elf_Section_Header_Utils.cpp
+    	Elf_Symbol_32.cpp
+    	Elf_Symbol_64.cpp
+    	Elf_Symbol_Utils.cpp
+    }
+
+    Header_Files {
+    	Elf_Common.h
+    	Elf_Header_Eident.h
+    	Elf_Note.h
+    	Elf_Symbol_Info.h
+	Elf_Version.h
+    	Elf_Version_Aux.h
+	Elf_Version_Need.h
+    	Elf_Version_Need_Aux.h
+	Elf_Version_Symbol.h
+    	Elf_alpha.h
+	Elf_arc.h
+    	Elf_arm.h
+	Elf_avr.h
+        Elf_cris.h
+    	Elf_d10v.h
+	Elf_d30v.h
+    	Elf_dlx.h
+	Elf_fr30.h
+    	Elf_frv.h
+	Elf_h8.h
+    	Elf_hppa.h
+	Elf_i370.h
+    	Elf_i860.h
+	Elf_i960.h
+    	Elf_ia64.h
+	Elf_ip2k.h
+    	Elf_iq2000.h
+	Elf_ix86.h
+    	Elf_m32r.h
+	Elf_m68hc11.h
+        Elf_m68k.h
+    	Elf_mcore.h
+	Elf_mips.h
+    	Elf_mmix.h
+	Elf_mn10200.h
+    	Elf_mn10300.h
+	Elf_msp430.h
+    	Elf_or32.h
+	Elf_pj.h
+    	Elf_ppc.h
+	Elf_ppc64.h
+    	Elf_s390.h
+	Elf_sh.h
+    	Elf_sparc.h
+	Elf_v850.h
+    	Elf_vax.h
+	Elf_x86_64.h
+    	Elf_xstormy16.h
+	Elf_xtensa.h
+    	Elf_Dynamic_Header_32.h
+    	Elf_Dynamic_Header_64.h
+	Elf_Dynamic_Tag_32.h
+	Elf_Dynamic_Tag_64.h
+    	Elf_File_Header_32.h
+    	Elf_File_Header_64.h
+    	Elf_File_Header_Utils.h
+	Elf_File.h
+    	Elf_Header_32.h
+    	Elf_Header_64.h
+	Elf_Program_Header_32.h
+	Elf_Program_Header_64.h
+	Elf_Program_Header_Utils.h
+    	Elf_Reader_32.h
+    	Elf_Reader_64.h
+	Elf_Relocation_Add_32.h
+	Elf_Relocation_Add_64.h
+    	Elf_Relocation_32.h
+    	Elf_Relocation_64.h
+    	Elf_Relocation_Utils.h
+	Elf_Section_Header_32.h
+	Elf_Section_Header_64.h
+	Elf_Section_Header_Utils.h
+    	Elf_Symbol_32.h
+    	Elf_Symbol_64.h
+    	Elf_Symbol_Utils.h
+        Elf_Types.h
+    }
+
+    Inline_Files {
+    	Elf_alpha.inl
+	    Elf_arc.inl
+    	Elf_arm.inl
+	    Elf_avr.inl
+    	Elf_cris.inl
+	    Elf_d10v.inl
+    	Elf_d30v.inl
+	    Elf_dlx.inl
+    	Elf_fr30.inl
+	    Elf_frv.inl
+    	Elf_h8.inl
+	    Elf_hppa.inl
+    	Elf_i370.inl
+	    Elf_i860.inl
+    	Elf_i960.inl
+	    Elf_ia64.inl
+    	Elf_ip2k.inl
+	    Elf_iq2000.inl
+    	Elf_ix86.inl
+	    Elf_m32r.inl
+        Elf_m68hc11.inl
+    	Elf_m68k.inl
+	    Elf_mcore.inl
+    	Elf_mips.inl
+	    Elf_mmix.inl
+    	Elf_mn10200.inl
+	    Elf_mn10300.inl
+    	Elf_msp430.inl
+	    Elf_or32.inl
+    	Elf_pj.inl
+	    Elf_ppc.inl
+    	Elf_ppc64.inl
+	    Elf_s390.inl
+    	Elf_sh.inl
+	    Elf_sparc.inl
+    	Elf_v850.inl
+	    Elf_vax.inl
+    	Elf_x86_64.inl
+	    Elf_xstormy16.inl
+    	Elf_xtensa.inl
+    }
+}
+
+
+
+
+
+

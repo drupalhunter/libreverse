@@ -1,0 +1,35 @@
+project(reverse_exceptions) : install_headers {
+	sharedname = reverse_exceptions
+
+	includes += $(top_srcdir)
+
+	Source_Files {
+        API_Exception.cpp
+        Component_Exception.cpp
+        Configuration_Exception.cpp
+        CPU_Exception.cpp
+        Data_Source_Exception.cpp
+        File_Reader_Exception.cpp
+        Internal_Exception.cpp
+        IO_Exception.cpp
+        Meta_Exception.cpp
+        Parsing_Exception.cpp
+        Reverse_Exception.cpp
+	}
+
+	Header_Files {
+        API_Exception.h
+        Component_Exception.h
+        Configuration_Exception.h
+        CPU_Exception.h
+        Data_Source_Exception.h
+        File_Reader_Exception.h
+        Internal_Exception.h
+        IO_Exception.h
+        Meta_Exception.h
+        Parsing_Exception.h
+        Reverse_Exception.h
+	}
+}
+
+

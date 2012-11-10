@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn_repos/hamilton/!svn/ver/259/torrisa/libreverse/trunk/libreverse/formulas
+END
+formula_master.xml
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn_repos/hamilton/!svn/ver/120/torrisa/libreverse/trunk/libreverse/formulas/formula_master.xml
+END
+binary_arch_RTL.xml
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn_repos/hamilton/!svn/ver/120/torrisa/libreverse/trunk/libreverse/formulas/binary_arch_RTL.xml
+END
+binary_RTL.xml
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn_repos/hamilton/!svn/ver/154/torrisa/libreverse/trunk/libreverse/formulas/binary_RTL.xml
+END
+null_map.xml
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn_repos/hamilton/!svn/ver/120/torrisa/libreverse/trunk/libreverse/formulas/null_map.xml
+END
+binary_formula.xml
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn_repos/hamilton/!svn/ver/120/torrisa/libreverse/trunk/libreverse/formulas/binary_formula.xml
+END
+Makefile.am
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn_repos/hamilton/!svn/ver/259/torrisa/libreverse/trunk/libreverse/formulas/Makefile.am
+END
+binary_unpacker.xml
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn_repos/hamilton/!svn/ver/154/torrisa/libreverse/trunk/libreverse/formulas/binary_unpacker.xml
+END

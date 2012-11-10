@@ -1,0 +1,94 @@
+/*  Java_Decoder.h
+
+    Copyright (C) 2008 Stephen Torri
+
+    This file is part of Libreverse.
+
+    Libreverse is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published
+    by the Free Software Foundation; either version 3, or (at your
+    option) any later version.
+
+    Libreverse is distributed in the hope that it will be useful, but
+    WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see
+    <http://www.gnu.org/licenses/>.
+*/
+
+#ifndef JAVA_DECODER_H
+#define JAVA_DECODER_H
+
+#include "Decoder.h"
+#include "Decoder_Types.h"
+
+#include <stack>
+#include <string>
+#include <boost/cstdint.hpp>
+
+#include "libreverse/io/input/File_Readers/Java_Class/Java_Types.h"
+
+
+namespace libreverse { namespace decoder {
+
+    class Java_Decoder : public Decoder {
+    public:
+
+      Java_Decoder ( decoder_types::Java_Actions::ptr_t m_actions );
+
+      /* Decode the input data listed in the memory map into the desired
+	 output returned in a control flow graph */
+
+      virtual data_types::Control_Flow_Graph_Sequence::ptr_t execute ( std::string filename );
+
+    private:
+
+      void process_Code_Attribute ( java_types::Code_Attribute::ptr_t code_ptr,
+				    java_types::Method_Info::ptr_t method_ptr );
+
+      void process_Todo_List ( java_types::Code_Attribute::ptr_t code_ptr );
+
+      void process_Single_Opcodes ( boost::uint32_t& opcode_index, java_types::Code_Attribute::ptr_t code_ptr );
+
+      void process_16Bit_Single_Branch_Opcodes ( boost::uint32_t& opcode_index,
+						 java_types::Code_Attribute::ptr_t code_ptr,
+						 data_types::Basic_Block::ptr_t );
+
+      void process_32Bit_Single_Branch_Opcodes ( boost::uint32_t& opcode_index,
+						 java_types::Code_Attribute::ptr_t code_ptr,
+						 data_types::Basic_Block::ptr_t );
+
+      void process_Double_Branch_Opcodes ( boost::uint32_t& opcode_index,
+					   java_types::Code_Attribute::ptr_t code_ptr,
+					   data_types::Basic_Block::ptr_t );
+
+      boost::uint8_t read_8Bit_Value ( java_types::Code_Attribute::Code_List_t::const_iterator& pos,
+				       java_types::Code_Attribute::Code_List_t::const_iterator end );
+
+      boost::uint16_t read_16Bit_Value ( java_types::Code_Attribute::Code_List_t::const_iterator& pos,
+					 java_types::Code_Attribute::Code_List_t::const_iterator end );
+	
+      boost::uint32_t read_32Bit_Value ( java_types::Code_Attribute::Code_List_t::const_iterator& pos,
+					 java_types::Code_Attribute::Code_List_t::const_iterator end );
+
+      decoder_types::Java_Actions::ptr_t m_actions;
+
+      data_types::Control_Flow_Graph::ptr_t m_current_graph;
+
+      data_types::Control_Flow_Graph_Sequence::ptr_t m_graph_list;
+
+      typedef std::list<boost::uint32_t> Basic_Block_List_t;
+      Basic_Block_List_t m_todo_list;
+
+      Basic_Block_List_t m_processed_list;
+
+      java_types::Code_Attribute::Code_List_t::const_iterator m_read_head;
+    };
+    
+  } /* namespace decoder */
+} /* namespace libreverse */
+
+#endif /* JAVA_DECODER_H */

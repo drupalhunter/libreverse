@@ -1,0 +1,9 @@
+digraph G {
+0[label="A\nid=0"];
+1[label="B\nid=1"];
+2[label="A\nid=2"];
+3[label="A\nid=3"];
+0->1 ;
+0->2 ;
+1->3 ;
+}

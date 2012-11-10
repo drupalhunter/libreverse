@@ -1,0 +1,38 @@
+#include "Fvmlib_Command.h"
+#include "libreverse/io/Byte_Converter.h"
+#include <sstream>
+#include <boost/format.hpp>
+
+namespace libreverse
+{
+    namespace mach_module
+    {
+
+        Fvmlib_Command::Fvmlib_Command ( boost::uint32_t cmd, boost::uint32_t cmdsize )
+                : m_cmd ( cmd ),
+                m_cmdsize ( cmdsize )
+        {}
+
+        void
+        Fvmlib_Command::convert ( bool need_convert )
+        {
+            if ( need_convert )
+            {
+                io::Byte_Converter::convert ( m_cmd );
+                io::Byte_Converter::convert ( m_cmdsize );
+            }
+        }
+
+        std::string
+        Fvmlib_Command::to_String ( void )
+        {
+            std::stringstream output;
+
+            output << "Fvmlib Command:" << std::endl
+            << boost::format ( "  Command Id: %1%" ) % m_cmd << std::endl
+            << boost::format ( "  Command Size: %1%" ) % m_cmdsize << std::endl;
+
+            return output.str();
+        }
+    } /* namespace mach_module */
+} /* namespace libreverse */

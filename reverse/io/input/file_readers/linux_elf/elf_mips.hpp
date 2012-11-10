@@ -1,0 +1,927 @@
+/*  Elf_mips.h
+
+   Copyright (C) 2008 Stephen Torri
+
+   This file is part of Libreverse.
+
+   Libreverse is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published
+   by the Free Software Foundation; either version 3, or (at your
+   option) any later version.
+
+   Libreverse is distributed in the hope that it will be useful, but
+   WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see
+   <http://www.gnu.org/licenses/>.
+*/
+
+/* MIPS ELF support for BFD.
+   Copyright 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001
+   Free Software Foundation, Inc.
+
+   By Ian Lance Taylor, Cygnus Support, <ian@cygnus.com>, from
+   information in the System V Application Binary Interface, MIPS
+   Processor Supplement.
+
+   This file is part of BFD, the Binary File Descriptor library.
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  */
+
+/* This file holds definitions specific to the MIPS ELF ABI.  Note
+   that most of this is not actually implemented by BFD.  */
+
+#ifndef _ELF_MIPS_H
+#define _ELF_MIPS_H
+
+#include "Elf_Common.h"
+#include "io/Type_Mapper.h"
+#include <string>
+
+namespace libreverse { namespace elf_module {
+
+    class Elf_mips {
+    public:
+
+        static inline std::string get_Type (boost::uint32_t type);
+
+        /* Processor specific flags for the ELF header e_flags field.  */
+
+        /* At least one .noreorder directive appears in the source.  */
+        static const boost::uint32_t EF_MIPS_NOREORDER	= 0x00000001;
+
+        /* File contains position independent code.  */
+        static const boost::uint32_t EF_MIPS_PIC		= 0x00000002;
+
+        /* Code in file uses the standard calling sequence for calling
+           position independent code.  */
+        static const boost::uint32_t EF_MIPS_CPIC		= 0x00000004;
+
+        /* ???  Unknown flag, set in IRIX 6's BSDdup2.o in libbsd.a.  */
+        static const boost::uint32_t EF_MIPS_XGOT		= 0x00000008;
+
+        /* Code in file uses UCODE (obsolete) */
+        static const boost::uint32_t EF_MIPS_UCODE		= 0x00000010;
+
+        /* Code in file uses new ABI (-n32 on Irix 6).  */
+        static const boost::uint32_t EF_MIPS_ABI2		= 0x00000020;
+
+        /* Process the .MIPS.options section first by ld */
+        static const boost::uint32_t EF_MIPS_OPTIONS_FIRST	= 0x00000080;
+
+        /* Architectural Extensions used by this file */
+        static const boost::uint32_t EF_MIPS_ARCH_ASE	= 0x0f000000;
+
+        /* Use MDMX multimedia extensions */
+        static const boost::uint32_t EF_MIPS_ARCH_ASE_MDMX	= 0x08000000;
+
+        /* Use MIPS-16 ISA extensions */
+        static const boost::uint32_t EF_MIPS_ARCH_ASE_M16	= 0x04000000;
+
+        /* Indicates code compiled for a 64-bit machine in 32-bit mode.
+           (regs are 32-bits wide.) */
+        static const boost::uint32_t EF_MIPS_32BITMODE     = 0x00000100;
+
+        /* Four bit MIPS architecture field.  */
+        static const boost::uint32_t EF_MIPS_ARCH		= 0xf0000000;
+
+        /* -mips1 code.  */
+        static const boost::uint32_t E_MIPS_ARCH_1		= 0x00000000;
+
+        /* -mips2 code.  */
+        static const boost::uint32_t E_MIPS_ARCH_2		= 0x10000000;
+
+        /* -mips3 code.  */
+        static const boost::uint32_t E_MIPS_ARCH_3		= 0x20000000;
+
+        /* -mips4 code.  */
+        static const boost::uint32_t E_MIPS_ARCH_4		= 0x30000000;
+
+        /* -mips5 code.  */
+        static const boost::uint32_t E_MIPS_ARCH_5         = 0x40000000;
+
+        /* -mips32 code.  */
+        static const boost::uint32_t E_MIPS_ARCH_32        = 0x50000000;
+
+        /* -mips64 code.  */
+        static const boost::uint32_t E_MIPS_ARCH_64        = 0x60000000;
+
+        /* -mips32r2 code.  */
+        static const boost::uint32_t E_MIPS_ARCH_32R2      = 0x70000000;
+
+        /* The ABI of the file.  Also see EF_MIPS_ABI2 above. */
+        static const boost::uint32_t EF_MIPS_ABI		= 0x0000F000;
+
+        /* The original o32 abi. */
+        static const boost::uint32_t E_MIPS_ABI_O32        = 0x00001000;
+
+        /* O32 extended to work on 64 bit architectures */
+        static const boost::uint32_t E_MIPS_ABI_O64        = 0x00002000;
+
+        /* EABI in 32 bit mode */
+        static const boost::uint32_t E_MIPS_ABI_EABI32     = 0x00003000;
+
+        /* EABI in 64 bit mode */
+        static const boost::uint32_t E_MIPS_ABI_EABI64     = 0x00004000;
+
+
+        /* Machine variant if we know it.  This field was invented at Cygnus,
+           but it is hoped that other vendors will adopt it.  If some standard
+           is developed, this code should be changed to follow it. */
+        static const boost::uint32_t EF_MIPS_MACH		= 0x00FF0000;
+
+        /* Cygnus is choosing values between 80 and 9F;
+           00 - 7F should be left for a future standard;
+           the rest are open. */
+
+        static const boost::uint32_t E_MIPS_MACH_3900	= 0x00810000;
+        static const boost::uint32_t E_MIPS_MACH_4010	= 0x00820000;
+        static const boost::uint32_t E_MIPS_MACH_4100	= 0x00830000;
+        static const boost::uint32_t E_MIPS_MACH_4650	= 0x00850000;
+        static const boost::uint32_t E_MIPS_MACH_4120	= 0x00870000;
+        static const boost::uint32_t E_MIPS_MACH_4111	= 0x00880000;
+        static const boost::uint32_t E_MIPS_MACH_SB1       = 0x008a0000;
+        static const boost::uint32_t E_MIPS_MACH_5400	= 0x00910000;
+        static const boost::uint32_t E_MIPS_MACH_5500	= 0x00980000;
+
+        /* Processor specific section indices.  These sections do not actually
+           exist.  Symbols with a st_shndx field corresponding to one of these
+           values have a special meaning.  */
+
+        /* Defined and allocated common symbol.  Value is virtual address.  If
+           relocated, alignment must be preserved.  */
+        static const boost::uint16_t SHN_MIPS_ACOMMON	= 0xff00;
+
+        /* Defined and allocated text symbol.  Value is virtual address.
+           Occur in the dynamic symbol table of Alpha OSF/1 and Irix 5 executables.  */
+        static const boost::uint16_t SHN_MIPS_TEXT		= 0xff01;
+
+        /* Defined and allocated data symbol.  Value is virtual address.
+           Occur in the dynamic symbol table of Alpha OSF/1 and Irix 5 executables.  */
+        static const boost::uint16_t SHN_MIPS_DATA		= 0xff02;
+
+        /* Small common symbol.  */
+        static const boost::uint16_t SHN_MIPS_SCOMMON	= 0xff03;
+
+        /* Small undefined symbol.  */
+        static const boost::uint16_t SHN_MIPS_SUNDEFINED	= 0xff04;
+
+        /* Processor specific section types.  */
+
+        /* Section contains the set of dynamic shared objects used when
+           statically linking.  */
+        static const boost::uint32_t SHT_MIPS_LIBLIST	= 0x70000000;
+
+        /* I'm not sure what this is, but it's used on Irix 5.  */
+        static const boost::uint32_t SHT_MIPS_MSYM		= 0x70000001;
+
+        /* Section contains list of symbols whose definitions conflict with
+           symbols defined in shared objects.  */
+        static const boost::uint32_t SHT_MIPS_CONFLICT	= 0x70000002;
+
+        /* Section contains the global pointer table.  */
+        static const boost::uint32_t SHT_MIPS_GPTAB	= 0x70000003;
+
+        /* Section contains microcode information.  The exact format is
+           unspecified.  */
+        static const boost::uint32_t SHT_MIPS_UCODE	= 0x70000004;
+
+        /* Section contains some sort of debugging information.  The exact
+           format is unspecified.  It's probably ECOFF symbols.  */
+        static const boost::uint32_t SHT_MIPS_DEBUG	= 0x70000005;
+
+        /* Section contains register usage information.  */
+        static const boost::uint32_t SHT_MIPS_REGINFO	= 0x70000006;
+
+        /* ??? */
+        static const boost::uint32_t SHT_MIPS_PACKAGE	= 0x70000007;
+
+        /* ??? */
+        static const boost::uint32_t SHT_MIPS_PACKSYM	= 0x70000008;
+
+        /* ??? */
+        static const boost::uint32_t SHT_MIPS_RELD		= 0x70000009;
+
+        /* Section contains interface information.  */
+        static const boost::uint32_t SHT_MIPS_IFACE	= 0x7000000b;
+
+        /* Section contains description of contents of another section.  */
+        static const boost::uint32_t SHT_MIPS_CONTENT	= 0x7000000c;
+
+        /* Section contains miscellaneous options.  */
+        static const boost::uint32_t SHT_MIPS_OPTIONS	= 0x7000000d;
+
+        /* ??? */
+        static const boost::uint32_t SHT_MIPS_SHDR		= 0x70000010;
+
+        /* ??? */
+        static const boost::uint32_t SHT_MIPS_FDESC	= 0x70000011;
+
+        /* ??? */
+        static const boost::uint32_t SHT_MIPS_EXTSYM	= 0x70000012;
+
+        /* ??? */
+        static const boost::uint32_t SHT_MIPS_DENSE	= 0x70000013;
+
+        /* ??? */
+        static const boost::uint32_t SHT_MIPS_PDESC	= 0x70000014;
+
+        /* ??? */
+        static const boost::uint32_t SHT_MIPS_LOCSYM	= 0x70000015;
+
+        /* ??? */
+        static const boost::uint32_t SHT_MIPS_AUXSYM	= 0x70000016;
+
+        /* ??? */
+        static const boost::uint32_t SHT_MIPS_OPTSYM       = 0x70000017;
+
+        /* ??? */
+        static const boost::uint32_t SHT_MIPS_LOCSTR	= 0x70000018;
+
+        /* ??? */
+        static const boost::uint32_t SHT_MIPS_LINE		= 0x70000019;
+
+        /* ??? */
+        static const boost::uint32_t SHT_MIPS_RFDESC	= 0x7000001a;
+
+        /* Delta C++: symbol table */
+        static const boost::uint32_t SHT_MIPS_DELTASYM	= 0x7000001b;
+
+        /* Delta C++: instance table */
+        static const boost::uint32_t SHT_MIPS_DELTAINST	= 0x7000001c;
+
+        /* Delta C++: class table */
+        static const boost::uint32_t SHT_MIPS_DELTACLASS	= 0x7000001d;
+
+        /* DWARF debugging section.  */
+        static const boost::uint32_t SHT_MIPS_DWARF	= 0x7000001e;
+
+        /* Delta C++: declarations */
+        static const boost::uint32_t SHT_MIPS_DELTADECL	= 0x7000001f;
+
+        /* List of libraries the binary depends on.  Includes a time stamp, version
+           number.  */
+        static const boost::uint32_t SHT_MIPS_SYMBOL_LIB	= 0x70000020;
+
+        /* Events section.  */
+        static const boost::uint32_t SHT_MIPS_EVENTS	= 0x70000021;
+
+        /* ??? */
+        static const boost::uint32_t SHT_MIPS_TRANSLATE	= 0x70000022;
+
+        /* Special pixie sections */
+        static const boost::uint32_t SHT_MIPS_PIXIE	= 0x70000023;
+
+        /* Address translation table (for debug info) */
+        static const boost::uint32_t SHT_MIPS_XLATE	= 0x70000024;
+
+        /* SGI internal address translation table (for debug info) */
+        static const boost::uint32_t SHT_MIPS_XLATE_DEBUG	= 0x70000025;
+
+        /* Intermediate code */
+        static const boost::uint32_t SHT_MIPS_WHIRL	= 0x70000026;
+
+        /* C++ exception handling region info */
+        static const boost::uint32_t SHT_MIPS_EH_REGION	= 0x70000027;
+
+        /* Obsolete address translation table (for debug info) */
+        static const boost::uint32_t SHT_MIPS_XLATE_OLD	= 0x70000028;
+
+        /* Runtime procedure descriptor table exception information (ucode) ??? */
+        static const boost::uint32_t SHT_MIPS_PDR_EXCEPTION = 0x70000029;
+
+
+        /* A section of type SHT_MIPS_LIBLIST contains an array of the
+           following structure.  The sh_link field is the section index of the
+           string table.  The sh_info field is the number of entries in the
+           section.  */
+        /*
+          typedef struct
+          {
+          unsigned long l_name;   //!< String table index for name of shared object.
+          unsigned long l_time_stamp;  //!< Time stamp.
+          unsigned long l_checksum;  //!< Checksum of symbol names and common sizes.
+          unsigned long l_version;  //!< String table index for version.
+          unsigned long l_flags;  //!< Flags.
+          } Elf32_Lib;
+        */
+
+        /* The external version of Elf32_Lib.  */
+        typedef struct
+        {
+            unsigned char l_name[4];
+            unsigned char l_time_stamp[4];
+            unsigned char l_checksum[4];
+            unsigned char l_version[4];
+            unsigned char l_flags[4];
+        } Elf32_External_Lib;
+
+        /* The l_flags field of an Elf32_Lib structure may contain the
+           following flags.  */
+
+        /* Require an exact match at runtime.  */
+        static const boost::uint32_t LL_EXACT_MATCH	= 0x00000001;
+
+        /* Ignore version incompatibilities at runtime.  */
+        static const boost::uint32_t LL_IGNORE_INT_VER	= 0x00000002;
+
+        /* Require matching minor version number.  */
+        static const boost::uint32_t LL_REQUIRE_MINOR	= 0x00000004;
+
+        /* ??? */
+        static const boost::uint32_t LL_EXPORTS		= 0x00000008;
+
+        /* Delay loading of this library until really needed.  */
+        static const boost::uint32_t LL_DELAY_LOAD		= 0x00000010;
+
+        /* ??? Delta C++ stuff ??? */
+        static const boost::uint32_t LL_DELTA		= 0x00000020;
+
+
+        /* A section of type SHT_MIPS_CONFLICT is an array of indices into the
+           .dynsym section.  Each element has the following type.  */
+        //typedef unsigned long Elf32_Conflict;
+        //typedef unsigned char Elf32_External_Conflict[4];
+
+        //typedef unsigned long Elf64_Conflict;
+        //typedef unsigned char Elf64_External_Conflict[8];
+
+        /* A section of type SHT_MIPS_GPTAB contains information about how
+           much GP space would be required for different -G arguments.  This
+           information is only used so that the linker can provide informative
+           suggestions as to the best -G value to use.  The sh_info field is
+           the index of the section for which this information applies.  The
+           contents of the section are an array of the following union.  The
+           first element uses the gt_header field.  The remaining elements use
+           the gt_entry field.  */
+        /*
+          typedef union
+          {
+          struct
+          {
+          unsigned long gt_current_g_value;       //!< -G value actually used for this object file.
+          unsigned long gt_unused;      //!< Unused.
+          } gt_header;
+          struct
+          {
+          unsigned long gt_g_value;       //!< If this -G argument has been used...
+          unsigned long gt_bytes;      //!< ...this many GP section bytes would be required.
+          } gt_entry;
+          } Elf32_gptab;
+        */
+
+        /* The external version of Elf32_gptab.  */
+
+        /*
+          typedef union
+          {
+          struct
+          {
+          unsigned char gt_current_g_value[4];
+          unsigned char gt_unused[4];
+          } gt_header;
+          struct
+          {
+          unsigned char gt_g_value[4];
+          unsigned char gt_bytes[4];
+          } gt_entry;
+          } Elf32_External_gptab;
+        */
+
+        /* A section of type SHT_MIPS_REGINFO contains the following
+           structure.  */
+        /*
+          typedef struct
+          {
+          unsigned long ri_gprmask;   //!< Mask of general purpose registers used.
+          unsigned long ri_cprmask[4];   //!< Mask of co-processor registers used.
+          long ri_gp_value;   //!< GP register value for this object file.
+          } Elf32_RegInfo;
+        */
+
+        /* The external version of the Elf_RegInfo structure.  */
+        typedef struct
+        {
+            unsigned char ri_gprmask[4];
+            unsigned char ri_cprmask[4][4];
+            unsigned char ri_gp_value[4];
+        } Elf32_External_RegInfo;
+
+        /* MIPS ELF .reginfo swapping routines.  */
+        //extern void bfd_mips_elf32_swap_reginfo_in
+        //  PARAMS ((bfd *, const Elf32_External_RegInfo *, Elf32_RegInfo *));
+        //extern void bfd_mips_elf32_swap_reginfo_out
+        //  PARAMS ((bfd *, const Elf32_RegInfo *, Elf32_External_RegInfo *));
+
+        /* Processor specific section flags.  */
+
+        /* This section must be in the global data area.  */
+        static const boost::uint32_t SHF_MIPS_GPREL	= 0x10000000;
+
+        /* This section should be merged.  */
+        static const boost::uint32_t SHF_MIPS_MERGE	= 0x20000000;
+
+        /* This section contains address data of size implied by section
+           element size.  */
+        static const boost::uint32_t SHF_MIPS_ADDR		= 0x40000000;
+
+        /* This section contains string data.  */
+        static const boost::uint32_t SHF_MIPS_STRING	= 0x80000000;
+
+        /* This section may not be stripped.  */
+        static const boost::uint32_t SHF_MIPS_NOSTRIP	= 0x08000000;
+
+        /* This section is local to threads.  */
+        static const boost::uint32_t SHF_MIPS_LOCAL	= 0x04000000;
+
+        /* Linker should generate implicit weak names for this section.  */
+        static const boost::uint32_t SHF_MIPS_NAMES	= 0x02000000;
+
+        /* Section contais text/data which may be replicated in other sections.
+           Linker should retain only one copy.  */
+        static const boost::uint32_t SHF_MIPS_NODUPES	= 0x01000000;
+
+        /* Processor specific program header types.  */
+
+        /* Register usage information.  Identifies one .reginfo section.  */
+        static const boost::uint32_t PT_MIPS_REGINFO	= 0x70000000;
+
+        /* Runtime procedure table.  */
+        static const boost::uint32_t PT_MIPS_RTPROC	= 0x70000001;
+
+        /* .MIPS.options section.  */
+        static const boost::uint32_t PT_MIPS_OPTIONS	= 0x70000002;
+        
+        /* Processor specific dynamic array tags.  */
+
+        /* 32 bit version number for runtime linker interface.  */
+        static const boost::uint32_t DT_MIPS_RLD_VERSION	= 0x70000001;
+
+        /* Time stamp.  */
+        static const boost::uint32_t DT_MIPS_TIME_STAMP	= 0x70000002;
+
+        /* Checksum of external strings and common sizes.  */
+        static const boost::uint32_t DT_MIPS_ICHECKSUM	= 0x70000003;
+
+        /* Index of version string in string table.  */
+        static const boost::uint32_t DT_MIPS_IVERSION	= 0x70000004;
+
+        /* 32 bits of flags.  */
+        static const boost::uint32_t DT_MIPS_FLAGS		= 0x70000005;
+
+        /* Base address of the segment.  */
+        static const boost::uint32_t DT_MIPS_BASE_ADDRESS	= 0x70000006;
+
+        /* ??? */
+        static const boost::uint32_t DT_MIPS_MSYM		= 0x70000007;
+
+        /* Address of .conflict section.  */
+        static const boost::uint32_t DT_MIPS_CONFLICT	= 0x70000008;
+
+        /* Address of .liblist section.  */
+        static const boost::uint32_t DT_MIPS_LIBLIST	= 0x70000009;
+
+        /* Number of local global offset table entries.  */
+        static const boost::uint32_t DT_MIPS_LOCAL_GOTNO	= 0x7000000a;
+
+        /* Number of entries in the .conflict section.  */
+        static const boost::uint32_t DT_MIPS_CONFLICTNO	= 0x7000000b;
+
+        /* Number of entries in the .liblist section.  */
+        static const boost::uint32_t DT_MIPS_LIBLISTNO	= 0x70000010;
+
+        /* Number of entries in the .dynsym section.  */
+        static const boost::uint32_t DT_MIPS_SYMTABNO	= 0x70000011;
+
+        /* Index of first external dynamic symbol not referenced locally.  */
+        static const boost::uint32_t DT_MIPS_UNREFEXTNO	= 0x70000012;
+
+        /* Index of first dynamic symbol in global offset table.  */
+        static const boost::uint32_t DT_MIPS_GOTSYM	= 0x70000013;
+
+        /* Number of page table entries in global offset table.  */
+        static const boost::uint32_t DT_MIPS_HIPAGENO	= 0x70000014;
+
+        /* Address of run time loader map, used for debugging.  */
+        static const boost::uint32_t DT_MIPS_RLD_MAP	= 0x70000016;
+
+        /* Delta C++ class definition.  */
+        static const boost::uint32_t DT_MIPS_DELTA_CLASS	= 0x70000017;
+
+        /* Number of entries in DT_MIPS_DELTA_CLASS.  */
+        static const boost::uint32_t DT_MIPS_DELTA_CLASS_NO = 0x70000018;
+
+        /* Delta C++ class instances.  */
+        static const boost::uint32_t DT_MIPS_DELTA_INSTANCE = 0x70000019;
+
+        /* Number of entries in DT_MIPS_DELTA_INSTANCE.  */
+        static const boost::uint32_t DT_MIPS_DELTA_INSTANCE_NO = 0x7000001a;
+
+        /* Delta relocations.  */
+        static const boost::uint32_t DT_MIPS_DELTA_RELOC	= 0x7000001b;
+
+        /* Number of entries in DT_MIPS_DELTA_RELOC.  */
+        static const boost::uint32_t DT_MIPS_DELTA_RELOC_NO = 0x7000001c;
+
+        /* Delta symbols that Delta relocations refer to.  */
+        static const boost::uint32_t DT_MIPS_DELTA_SYM	= 0x7000001d;
+
+        /* Number of entries in DT_MIPS_DELTA_SYM.  */
+        static const boost::uint32_t DT_MIPS_DELTA_SYM_NO	= 0x7000001e;
+
+        /* Delta symbols that hold class declarations.  */
+        static const boost::uint32_t DT_MIPS_DELTA_CLASSSYM = 0x70000020;
+
+        /* Number of entries in DT_MIPS_DELTA_CLASSSYM.  */
+        static const boost::uint32_t DT_MIPS_DELTA_CLASSSYM_NO = 0x70000021;
+
+        /* Flags indicating information about C++ flavor.  */
+        static const boost::uint32_t DT_MIPS_CXX_FLAGS	= 0x70000022;
+
+        /* Pixie information (???).  */
+        static const boost::uint32_t DT_MIPS_PIXIE_INIT	= 0x70000023;
+
+        /* Address of .MIPS.symlib */
+        static const boost::uint32_t DT_MIPS_SYMBOL_LIB	= 0x70000024;
+
+        /* The GOT index of the first PTE for a segment */
+        static const boost::uint32_t DT_MIPS_LOCALPAGE_GOTIDX = 0x70000025;
+
+        /* The GOT index of the first PTE for a local symbol */
+        static const boost::uint32_t DT_MIPS_LOCAL_GOTIDX	= 0x70000026;
+
+        /* The GOT index of the first PTE for a hidden symbol */
+        static const boost::uint32_t DT_MIPS_HIDDEN_GOTIDX	= 0x70000027;
+
+        /* The GOT index of the first PTE for a protected symbol */
+        static const boost::uint32_t DT_MIPS_PROTECTED_GOTIDX = 0x70000028;
+
+        /* Address of `.MIPS.options'.  */
+        static const boost::uint32_t DT_MIPS_OPTIONS	= 0x70000029;
+
+        /* Address of `.interface'.  */
+        static const boost::uint32_t DT_MIPS_INTERFACE	= 0x7000002a;
+
+        /* ??? */
+        static const boost::uint32_t DT_MIPS_DYNSTR_ALIGN	= 0x7000002b;
+
+        /* Size of the .interface section.  */
+        static const boost::uint32_t DT_MIPS_INTERFACE_SIZE = 0x7000002c;
+
+        /* Size of rld_text_resolve function stored in the GOT.  */
+        static const boost::uint32_t DT_MIPS_RLD_TEXT_RESOLVE_ADDR	= 0x7000002d;
+
+        /* Default suffix of DSO to be added by rld on dlopen() calls.  */
+        static const boost::uint32_t DT_MIPS_PERF_SUFFIX	= 0x7000002e;
+
+        /* Size of compact relocation section (O32).  */
+        static const boost::uint32_t DT_MIPS_COMPACT_SIZE	= 0x7000002f;
+
+        /* GP value for auxiliary GOTs.  */
+        static const boost::uint32_t DT_MIPS_GP_VALUE	= 0x70000030;
+
+        /* Address of auxiliary .dynamic.  */
+        static const boost::uint32_t DT_MIPS_AUX_DYNAMIC	= 0x70000031;
+
+        /* Flags which may appear in a DT_MIPS_FLAGS entry.  */
+
+        /* No flags.  */
+        static const boost::uint32_t RHF_NONE		= 0x00000000;
+
+        /* Uses shortcut pointers.  */
+        static const boost::uint32_t RHF_QUICKSTART	= 0x00000001;
+
+        /* Hash size is not a power of two.  */
+        static const boost::uint32_t RHF_NOTPOT		= 0x00000002;
+
+        /* Ignore LD_LIBRARY_PATH.  */
+        static const boost::uint32_t RHS_NO_LIBRARY_REPLACEMENT = 0x00000004;
+
+        /* DSO address may not be relocated. */
+        static const boost::uint32_t RHF_NO_MOVE		= 0x00000008;
+
+        /* SGI specific features. */
+        static const boost::uint32_t RHF_SGI_ONLY		= 0x00000010;
+
+        /* Guarantee that .init will finish executing before any non-init
+           code in DSO is called. */
+        static const boost::uint32_t RHF_GUARANTEE_INIT	= 0x00000020;
+
+        /* Contains Delta C++ code. */
+        static const boost::uint32_t RHF_DELTA_C_PLUS_PLUS	= 0x00000040;
+
+        /* Guarantee that .init will start executing before any non-init
+           code in DSO is called. */
+        static const boost::uint32_t RHF_GUARANTEE_START_INIT = 0x00000080;
+
+        /* Generated by pixie. */
+        static const boost::uint32_t RHF_PIXIE		= 0x00000100;
+
+        /* Delay-load DSO by default. */
+        static const boost::uint32_t RHF_DEFAULT_DELAY_LOAD = 0x00000200;
+
+        /* Object may be requickstarted */
+        static const boost::uint32_t RHF_REQUICKSTART	= 0x00000400;
+
+        /* Object has been requickstarted */
+        static const boost::uint32_t RHF_REQUICKSTARTED	= 0x00000800;
+
+        /* Generated by cord. */
+        static const boost::uint32_t RHF_CORD		= 0x00001000;
+
+        /* Object contains no unresolved undef symbols. */
+        static const boost::uint32_t RHF_NO_UNRES_UNDEF	= 0x00002000;
+
+        /* Symbol table is in a safe order. */
+        static const boost::uint32_t RHF_RLD_ORDER_SAFE	= 0x00004000;
+
+        /* Special values for the st_other field in the symbol table.  These
+           are used in an Irix 5 dynamic symbol table.  */
+
+        static const boost::uint8_t STO_DEFAULT		= Elf_Common::STV_DEFAULT;
+        static const boost::uint8_t STO_INTERNAL		= Elf_Common::STV_INTERNAL;
+        static const boost::uint8_t STO_HIDDEN		= Elf_Common::STV_HIDDEN;
+        static const boost::uint8_t STO_PROTECTED		= Elf_Common::STV_PROTECTED;
+
+        /* This value is used for a mips16 .text symbol.  */
+        static const boost::uint16_t STO_MIPS16		= 0xf0;
+
+        /* The 64-bit MIPS ELF ABI uses an unusual reloc format.  Each
+           relocation entry specifies up to three actual relocations, all at
+           the same address.  The first relocation which required a symbol
+           uses the symbol in the r_sym field.  The second relocation which
+           requires a symbol uses the symbol in the r_ssym field.  If all
+           three relocations require a symbol, the third one uses a zero
+           value.  */
+
+        /* An entry in a 64 bit SHT_REL section.  */
+
+        /*
+          typedef struct
+          {
+          unsigned char r_offset[8];   //!< Address of relocation.
+          unsigned char r_sym[4];      //!< Symbol index
+          unsigned char r_ssym[1];     //!< Special symbol
+          unsigned char r_type3[1];    //!< Third relocation
+          unsigned char r_type2[1];    //!<< Second relocation.
+          unsigned char r_type[1];     //!<< First relocation.
+          } Elf64_Mips_External_Rel;
+        */
+
+        /*
+          typedef struct
+          {
+          bfd_vma r_offset;   //!< Address of relocation.
+          unsigned long r_sym; //!< Symbol index.
+          unsigned char r_ssym;  //!< Special symbol.
+          unsigned char r_type3;  //!< Third relocation.
+          unsigned char r_type2;  //!< Second relocation.
+          unsigned char r_type;  //!< First relocation.
+          } Elf64_Mips_Internal_Rel;
+        */
+
+        /* An entry in a 64 bit SHT_RELA section.  */
+
+        /*
+          typedef struct
+          {
+          unsigned char r_offset[8];  //!< Address of relocation.
+          unsigned char r_sym[4];   //!< Symbol index.
+          unsigned char r_ssym[1]; //!< Special symbol.
+          unsigned char r_type3[1];  //!< Third relocation.
+          unsigned char r_type2[1];  //!< Second relocation.
+          unsigned char r_type[1];  //!< First relocation.
+          unsigned char r_addend[8];   //!< Addend.
+          } Elf64_Mips_External_Rela;
+        */
+
+        /*
+          typedef struct
+          {
+          bfd_vma r_offset;   //!< Address of relocation.
+          unsigned long r_sym;   //!< Symbol index.
+          unsigned char r_ssym; //!< Special symbol.
+          unsigned char r_type3;  //!< Third relocation.
+          unsigned char r_type2;  //!< Second relocation.
+          unsigned char r_type;   //!< First relocation.
+          bfd_signed_vma r_addend;   //!< Addend.
+          } Elf64_Mips_Internal_Rela;
+        */
+
+        /* MIPS ELF 64 relocation info access macros.  */
+
+        static inline boost::uint32_t ELF64_MIPS_R_SSYM (Type_Mapper<64>::arch_t input);
+
+        static inline boost::uint32_t ELF64_MIPS_R_TYPE3 (Type_Mapper<64>::arch_t input);
+
+        static inline boost::uint32_t ELF64_MIPS_R_TYPE2 (Type_Mapper<64>::arch_t input);
+
+        static inline boost::uint32_t ELF64_MIPS_R_TYPE (Type_Mapper<64>::arch_t input);
+
+        /* Values found in the r_ssym field of a relocation entry.  */
+
+        /* No relocation.  */
+        static const boost::uint8_t RSS_UNDEF	= 0;
+
+        /* Value of GP.  */
+        static const boost::uint8_t RSS_GP		= 1;
+
+        /* Value of GP in object being relocated.  */
+        static const boost::uint8_t RSS_GP0	= 2;
+
+        /* Address of location being relocated.  */
+        static const boost::uint8_t RSS_LOC	= 3;
+
+        /* A SHT_MIPS_OPTIONS section contains a series of options, each of
+           which starts with this header.  */
+
+        typedef struct
+        {
+            /* Type of option.  */
+            unsigned char kind[1];
+            /* Size of option descriptor, including header.  */
+            unsigned char size[1];
+            /* Section index of affected section, or 0 for global option.  */
+            unsigned char section[2];
+            /* Information specific to this kind of option.  */
+            unsigned char info[4];
+        } Elf_External_Options;
+
+        typedef struct
+        {
+            /* Type of option.  */
+            unsigned char kind;
+            /* Size of option descriptor, including header.  */
+            unsigned char size;
+            /* Section index of affected section, or 0 for global option.  */
+            unsigned short section;
+            /* Information specific to this kind of option.  */
+            unsigned long info;
+        } Elf_Internal_Options;
+
+        /* MIPS ELF option header swapping routines.  */
+        //extern void bfd_mips_elf_swap_options_in
+        //  PARAMS ((bfd *, const Elf_External_Options *, Elf_Internal_Options *));
+        //extern void bfd_mips_elf_swap_options_out
+        //  PARAMS ((bfd *, const Elf_Internal_Options *, Elf_External_Options *));
+
+        /* Values which may appear in the kind field of an Elf_Options
+           structure.  */
+
+        /* Undefined.  */
+        static const boost::uint8_t ODK_NULL	= 0;
+
+        /* Register usage and GP value.  */
+        static const boost::uint8_t ODK_REGINFO	= 1;
+
+        /* Exception processing information.  */
+        static const boost::uint8_t ODK_EXCEPTIONS	= 2;
+
+        /* Section padding information.  */
+        static const boost::uint8_t ODK_PAD	= 3;
+
+        /* Hardware workarounds performed.  */
+        static const boost::uint8_t ODK_HWPATCH	= 4;
+
+        /* Fill value used by the linker.  */
+        static const boost::uint8_t ODK_FILL	= 5;
+
+        /* Reserved space for desktop tools.  */
+        static const boost::uint8_t ODK_TAGS	= 6;
+
+        /* Hardware workarounds, AND bits when merging.  */
+        static const boost::uint8_t ODK_HWAND	= 7;
+
+        /* Hardware workarounds, OR bits when merging.  */
+        static const boost::uint8_t ODK_HWOR	= 8;
+
+        /* GP group to use for text/data sections.  */
+        static const boost::uint8_t ODK_GP_GROUP	= 9;
+
+        /* ID information.  */
+        static const boost::uint8_t ODK_IDENT	= 10;
+
+        /* In the 32 bit ABI, an ODK_REGINFO option is just a Elf32_RegInfo
+           structure.  In the 64 bit ABI, it is the following structure.  The
+           info field of the options header is not used.  */
+
+        typedef struct
+        {
+            /* Mask of general purpose registers used.  */
+            unsigned char ri_gprmask[4];
+            /* Padding.  */
+            unsigned char ri_pad[4];
+            /* Mask of co-processor registers used.  */
+            unsigned char ri_cprmask[4][4];
+            /* GP register value for this object file.  */
+            unsigned char ri_gp_value[8];
+        } Elf64_External_RegInfo;
+
+        /*
+          typedef struct
+          {
+          unsigned long ri_gprmask;   //!< Mask of general purpose registers used.
+          unsigned long ri_pad;  //!< Padding.
+          unsigned long ri_cprmask[4];  //!< Mask of co-processor registers used.
+          bfd_vma ri_gp_value;   //!< GP register value for this object file.
+          } Elf64_Internal_RegInfo;
+        */
+
+        typedef struct
+        {
+            /* The hash value computed from the name of the corresponding
+               dynamic symbol.  */
+            unsigned char ms_hash_value[4];
+            /* Contains both the dynamic relocation index and the symbol flags
+               field.  The macros ELF32_MS_REL_INDEX and ELF32_MS_FLAGS are used
+               to access the individual values.  The dynamic relocation index
+               identifies the first entry in the .rel.dyn section that
+               references the dynamic symbol corresponding to this msym entry.
+               If the index is 0, no dynamic relocations are associated with the
+               symbol.  The symbol flags field is reserved for future use.  */
+            unsigned char ms_info[4];
+        } Elf32_External_Msym;
+
+        typedef struct
+        {
+            /* The hash value computed from the name of the corresponding
+               dynamic symbol.  */
+            unsigned long ms_hash_value;
+            /* Contains both the dynamic relocation index and the symbol flags
+               field.  The macros ELF32_MS_REL_INDEX and ELF32_MS_FLAGS are used
+               to access the individual values.  The dynamic relocation index
+               identifies the first entry in the .rel.dyn section that
+               references the dynamic symbol corresponding to this msym entry.
+               If the index is 0, no dynamic relocations are associated with the
+               symbol.  The symbol flags field is reserved for future use.  */
+            unsigned long ms_info;
+        } Elf32_Internal_Msym;
+
+        /* TODO: Convert these to functions
+           #define ELF32_MS_REL_INDEX(i) ((i) >> 8)
+           #define ELF32_MS_FLAGS(i)     (i) & 0xff)
+           #define ELF32_MS_INFO(r, f)   (((r) << 8) + ((f) & 0xff))
+        */
+
+        /* MIPS ELF reginfo swapping routines.  */
+        //extern void bfd_mips_elf64_swap_reginfo_in
+        //  PARAMS ((bfd *, const Elf64_External_RegInfo *, Elf64_Internal_RegInfo *));
+        //extern void bfd_mips_elf64_swap_reginfo_out
+        //  PARAMS ((bfd *, const Elf64_Internal_RegInfo *, Elf64_External_RegInfo *));
+
+        /* Masks for the info work of an ODK_EXCEPTIONS descriptor.  */
+        static const boost::uint8_t OEX_FPU_MIN	= 0x1f;	        /* FPEs which must be enabled.  */
+        static const boost::uint16_t OEX_FPU_MAX	= 0x1f00;	/* FPEs which may be enabled.  */
+        static const boost::uint32_t OEX_PAGE0	= 0x10000;	/* Page zero must be mapped.  */
+        static const boost::uint32_t OEX_SMM	= 0x20000;	/* Force sequential memory mode.  */
+        static const boost::uint32_t OEX_FPDBUG	= 0x40000;	/* Force precise floating-point exceptions (debug mode). */
+        static const boost::uint32_t OEX_DISMISS   = 0x80000;	/* Dismiss invalid address faults.  */
+
+        /* Masks of the FP exceptions for OEX_FPU_MIN and OEX_FPU_MAX.  */
+        static const boost::uint8_t OEX_FPU_INVAL	= 0x10;	/* Invalid operation exception.  */
+        static const boost::uint8_t OEX_FPU_DIV0	= 0x08;	/* Division by zero exception.  */
+        static const boost::uint8_t OEX_FPU_OFLO	= 0x04;	/* Overflow exception.  */
+        static const boost::uint8_t OEX_FPU_UFLO	= 0x02;	/* Underflow exception.  */
+        static const boost::uint8_t OEX_FPU_INEX	= 0x01;	/* Inexact exception.  */
+
+        /* Masks for the info word of an ODK_PAD descriptor.  */
+        static const boost::uint8_t OPAD_PREFIX	= 0x01;
+        static const boost::uint8_t OPAD_POFIX	= 0x02;
+        static const boost::uint8_t OPAD_SYMBOL	= 0x04;
+
+        /* Masks for the info word of an ODK_HWPATCH descriptor.  */
+        static const boost::uint32_t OHW_R4KEOP	= 0x00000001;	/* R4000 end-of-page patch.  */
+        static const boost::uint32_t OHW_R8KPFETCH	= 0x00000002;	/* May need R8000 prefetch patch.  */
+        static const boost::uint32_t OHW_R5KEOP	= 0x00000004;	/* R5000 end-of-page patch.  */
+        static const boost::uint32_t OHW_R5KCVTL	= 0x00000008;	/* R5000 cvt.[ds].l bug (clean == 1).  */
+        static const boost::uint32_t OHW_R10KLDL	= 0x00000010;	/* Needs R10K misaligned load patch. */
+
+        /* Masks for the info word of an ODK_IDENT/ODK_GP_GROUP descriptor.  */
+        static const boost::uint32_t OGP_GROUP	= 0x0000ffff;	/* GP group number.  */
+        static const boost::uint32_t OGP_SELF	= 0xffff0000;	/* Self-contained GP groups.  */
+
+        /* Masks for the info word of an ODK_HWAND/ODK_HWOR descriptor.  */
+        static const boost::uint32_t OHWA0_R4KEOP_CHECKED	= 0x00000001;
+        static const boost::uint32_t OHWA0_R4KEOP_CLEAN	= 0x00000002;
+    };
+} /* namespace elf_module */
+} /* namespace libreverse */
+
+#include "Elf_mips.inl"
+
+#endif /* _ELF_MIPS_H */

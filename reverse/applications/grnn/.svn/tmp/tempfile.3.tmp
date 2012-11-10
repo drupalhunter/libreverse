@@ -1,0 +1,304 @@
+/* Windows_Trainer_Dump_Algorithm.cpp
+
+   Copyright (C) 2008 Stephen Torri
+
+   This file is part of Libreverse.
+
+   Libreverse is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published
+   by the Free Software Foundation; either version 3, or (at your
+   option) any later version.
+
+   Libreverse is distributed in the hope that it will be useful, but
+   WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see
+   <http://www.gnu.org/licenses/>.
+*/
+#include "Windows_Trainer_Dump_Algorithm.h"
+
+#include "libreverse/data_containers/Data_Types.h"
+#include "libreverse/io/IO_Types.h"
+#include "libreverse/io/File_ID.h"
+#include "libreverse/io/input/File_Readers/Windows_PE/PE_File.h"
+#include "libreverse/io/input/File_Readers/Windows_PE/DOS_Header.h"
+#include "libreverse/io/input/File_Readers/Windows_PE/Coff_Header.h"
+#include "libreverse/io/input/File_Readers/Windows_PE/Header_32.h"
+#include "libreverse/io/input/File_Readers/Windows_PE/PE_Optional_Header_32.h"
+#include "libreverse/io/input/File_Readers/Windows_PE/PE_Header_32.h"
+#include "libreverse/io/input/File_Readers/Windows_PE/Header_64.h"
+#include "libreverse/io/input/File_Readers/Windows_PE/PE_Optional_Header_64.h"
+#include "libreverse/io/input/File_Readers/Windows_PE/PE_Header_64.h"
+
+#include <sstream>
+#include <iostream>
+#include <boost/format.hpp>
+
+namespace libreverse {
+  namespace classifier {
+
+    std::string
+    Windows_Trainer_Dump_Algorithm::process ( std::string filename )
+    {
+      std::stringstream output;
+
+      try
+	{
+	  libreverse::io_types::File_ID::ptr_t file_obj ( new libreverse::io::File_ID ( filename ) );
+	    
+	  libreverse::wpef_module::Reader_32 reader32_obj ( file_obj );
+
+	  if ( reader32_obj.support_File_Type() )
+	    {
+	      output << process_File ( reader32_obj );
+	    }
+	  else
+	    {
+	      libreverse::wpef_module::Reader_64 reader64_obj ( file_obj );
+
+	      if ( reader64_obj.support_File_Type() )
+		{
+		  output << process_File ( reader64_obj );
+		}
+	    }
+	}
+      catch ( std::exception &e )
+	{
+	  std::cout << boost::format("(ERROR) Cannot read %1%. Skipping the file. ") % filename << std::endl;
+	  std::cout << e.what() << std::endl;
+	}
+
+      return output.str();
+    }
+
+    std::string
+    Windows_Trainer_Dump_Algorithm::process_File ( libreverse::wpef_module::Reader_32& reader32_obj )
+    {
+      std::stringstream output;
+
+      reader32_obj.read_Headers();
+
+      libreverse::wpef_types::PE_File::ptr_t file_ptr = reader32_obj.get_File();
+
+      output << boost::format ( "  <File size=\"%1$d\">" ) % file_ptr->get_File_Size()
+	     << std::endl;
+
+      libreverse::wpef_types::Header_32::ptr_t hdr_ptr = reader32_obj.get_Header();
+
+      // get stats
+      //   - DOS (2 items)
+      libreverse::wpef_types::DOS_Header::ptr_t dos_ptr = hdr_ptr->get_DOS_Header();
+
+      //     - magic number (e_magic)
+      //     - file address of new exe header (e_lfanew)
+      output << boost::format ( "    <dos_magic_number>%1%</dos_magic_number>" ) % dos_ptr->get_Magic_Number() << std::endl
+	     << boost::format ( "    <exe_header_address>%1%</exe_header_address>" ) % dos_ptr->get_EXE_Header_Address() << std::endl;
+
+      //   - PE (23 items)
+      libreverse::wpef_types::PE_Header_32::const_ptr_t pe_hdr_ptr = hdr_ptr->get_PE_Header();
+
+      //     - p_magic (1)
+      output << boost::format ( "    <pe_magic_number>%1%</pe_magic_number>" ) % pe_hdr_ptr->get_Magic_Number() << std::endl;
+
+      //     - entire COFF header (7)
+      libreverse::wpef_types::COFF_Header::ptr_t coff_hdr_ptr = pe_hdr_ptr->get_COFF_Header();
+      output << boost::format ( "    <coff_machine>%1%</coff_machine>" ) % coff_hdr_ptr->get_Machine_Number() << std::endl
+	     << boost::format ( "    <coff_timestamp>%1%</coff_timestamp>" ) % coff_hdr_ptr->get_Time_Stamp_Number() << std::endl
+	     << boost::format ( "    <coff_number_of_symbols>%1%</coff_number_of_symbols>" ) % coff_hdr_ptr->get_Number_Of_Symbols ()
+	     << std::endl;
+
+      //     - Optional header (15)
+      libreverse::wpef_types::PE_Optional_Header_32::ptr_t pe_opt_hdr_ptr = pe_hdr_ptr->get_Optional_Header();
+
+      //       - m_magic
+      output << boost::format ( "    <pe_opt_magic_value>%1%</pe_opt_magic_value>" ) % pe_opt_hdr_ptr->get_Magic_Value() << std::endl;
+
+      //       - m_major_linker_version
+      //       - m_minor_linker_version
+      output << boost::format ( "    <pe_opt_linker_version>%1%.%2%</pe_opt_linker_version>" )
+	% static_cast<boost::uint16_t> ( pe_opt_hdr_ptr->get_Major_Linker_Version() )
+	% static_cast<boost::uint16_t> ( pe_opt_hdr_ptr->get_Minor_Linker_Version() ) << std::endl;
+
+      //       - m_size_of_code
+      output << boost::format ( "    <pe_opt_code_size>%1%</pe_opt_code_size>" ) % pe_opt_hdr_ptr->get_Size_Of_Code() << std::endl;
+
+      //       - m_size_of_init_data
+      output << boost::format ( "    <pe_opt_init_data_size>%1%</pe_opt_init_data_size>" )
+	% pe_opt_hdr_ptr->get_Size_Of_Init_Data() << std::endl;
+
+      //       - m_size_of_uninit_data
+      output << boost::format ( "    <pe_opt_uninit_data_size>%1%</pe_opt_uninit_data_size>" )
+	% pe_opt_hdr_ptr->get_Size_Of_Uninitialized_Data() << std::endl;
+
+      //       - m_addr_of_entry_point
+      output << boost::format ( "    <pe_opt_entry_point>%1%</pe_opt_entry_point>" )
+	% pe_opt_hdr_ptr->get_Entry_Point() << std::endl;
+
+      //       - m_base_of_code
+      output << boost::format ( "    <pe_opt_code_address>%1%</pe_opt_code_address>" )
+	% pe_opt_hdr_ptr->get_Base_Of_Code() << std::endl;
+
+      //       - m_major_operating_system_version
+      //       - m_minor_operating_system_version
+      output << boost::format ( "    <pe_opt_operating_system_version>%1%.%2%</pe_opt_operating_system_version>" )
+	% pe_opt_hdr_ptr->get_Major_Operating_System_Version()
+	% pe_opt_hdr_ptr->get_Minor_Operating_System_Version() << std::endl;
+
+      //       - m_major_image_version
+      //       - m_minor_image_version
+      output << boost::format ( "    <pe_opt_image_version>%1%.%2%</pe_opt_image_version>" )
+	% pe_opt_hdr_ptr->get_Major_Image_Version()
+	% pe_opt_hdr_ptr->get_Minor_Image_Version() << std::endl;
+
+      //       - m_major_subsystem_version
+      //       - m_minor_subsystem_version
+      output << boost::format ( "    <pe_opt_major_subsystem_version>%1%.%2%</pe_opt_major_subsystem_version>" )
+	% pe_opt_hdr_ptr->get_Major_Subsystem_Version()
+	% pe_opt_hdr_ptr->get_Minor_Subsystem_Version() << std::endl;
+
+      //       - m_size_of_image
+      output << boost::format ( "    <pe_opt_image_size>%1%</pe_opt_image_size>" )
+	% pe_opt_hdr_ptr->get_Size_Of_Image() << std::endl;
+
+      //       - m_size_of_headers
+      output << boost::format ( "    <pe_opt_header_size>%1%</pe_opt_header_size>" )
+	% pe_opt_hdr_ptr->get_Size_Of_Headers() << std::endl;
+
+      return output.str();
+    }
+
+    std::string
+    Windows_Trainer_Dump_Algorithm::process_File ( libreverse::wpef_module::Reader_64& reader64_obj )
+    {
+      std::stringstream output;
+    
+      reader64_obj.read_Headers();
+
+      libreverse::wpef_types::PE_File::ptr_t file_ptr = reader64_obj.get_File();
+
+      output << boost::format ( "  <File size=\"%1$d\">" ) % file_ptr->get_File_Size()
+	     << std::endl;
+
+      libreverse::wpef_types::Header_64::ptr_t hdr_ptr = reader64_obj.get_Header();
+
+      // get stats
+      //   - DOS (2 items)
+      libreverse::wpef_types::DOS_Header::ptr_t dos_ptr = hdr_ptr->get_DOS_Header();
+
+      //     - magic number (e_magic)
+      //     - file address of new exe header (e_lfanew)
+      output << boost::format ( "    <dos_magic_number>%1%</dos_magic_number>" ) % dos_ptr->get_Magic_Number() << std::endl
+	     << boost::format ( "    <exe_header_address>%1%</exe_header_address>" ) % dos_ptr->get_EXE_Header_Address() << std::endl;
+
+      //   - PE (23 items)
+      libreverse::wpef_types::PE_Header_64::const_ptr_t pe_hdr_ptr = hdr_ptr->get_PE_Header();
+
+      //     - p_magic (1)
+      output << boost::format ( "    <pe_magic_number>%1%</pe_magic_number>" ) % pe_hdr_ptr->get_Magic_Number() << std::endl;
+
+      //     - entire COFF header (7)
+      libreverse::wpef_types::COFF_Header::ptr_t coff_hdr_ptr = pe_hdr_ptr->get_COFF_Header();
+      output << boost::format ( "    <coff_machine>%1%</coff_machine>" ) % coff_hdr_ptr->get_Machine_Number() << std::endl
+	     << boost::format ( "    <coff_timestamp>%1%</coff_timestamp>" ) % coff_hdr_ptr->get_Time_Stamp_Number() << std::endl
+	     << boost::format ( "    <coff_number_of_symbols>%1%</coff_number_of_symbols>" ) % coff_hdr_ptr->get_Number_Of_Symbols ()
+	     << std::endl;
+
+      //     - Optional header (15)
+      libreverse::wpef_types::PE_Optional_Header_64::ptr_t pe_opt_hdr_ptr = pe_hdr_ptr->get_Optional_Header();
+
+      //       - m_magic
+      output << boost::format ( "    <pe_opt_magic_value>%1%</pe_opt_magic_value>" ) % pe_opt_hdr_ptr->get_Magic_Value() << std::endl;
+
+      //       - m_major_linker_version
+      //       - m_minor_linker_version
+      output << boost::format ( "    <pe_opt_linker_version>%1%.%2%</pe_opt_linker_version>" )
+	% pe_opt_hdr_ptr->get_Major_Linker_Version()
+	% pe_opt_hdr_ptr->get_Minor_Linker_Version() << std::endl;
+
+      //       - m_size_of_code
+      output << boost::format ( "    <pe_opt_code_size>%1%</pe_opt_code_size>" ) % pe_opt_hdr_ptr->get_Size_Of_Code() << std::endl;
+
+      //       - m_size_of_init_data
+      output << boost::format ( "    <pe_opt_init_data_size>%1%</pe_opt_init_data_size>" )
+	% pe_opt_hdr_ptr->get_Size_Of_Init_Data() << std::endl;
+
+      //       - m_size_of_uninit_data
+      output << boost::format ( "    <pe_opt_uninit_data_size>%1%</pe_opt_uninit_data_size>" )
+	% pe_opt_hdr_ptr->get_Size_Of_Uninitialized_Data() << std::endl;
+
+      //       - m_addr_of_entry_point
+      output << boost::format ( "    <pe_opt_entry_point>%1%</pe_opt_entry_point>" )
+	% pe_opt_hdr_ptr->get_Entry_Point() << std::endl;
+
+      //       - m_base_of_code
+      output << boost::format ( "    <pe_opt_code_address>%1%</pe_opt_code_address>" )
+	% pe_opt_hdr_ptr->get_Base_Of_Code() << std::endl;
+
+      //       - m_major_operating_system_version
+      //       - m_minor_operating_system_version
+      output << boost::format ( "    <pe_opt_operating_system_version>%1%.%2%</pe_opt_operating_system_version>" )
+	% pe_opt_hdr_ptr->get_Major_Operating_System_Version()
+	% pe_opt_hdr_ptr->get_Minor_Operating_System_Version() << std::endl;
+
+      //       - m_major_image_version
+      //       - m_minor_image_version
+      output << boost::format ( "    <pe_opt_image_version>%1%.%2%</pe_opt_image_version>" )
+	% pe_opt_hdr_ptr->get_Major_Image_Version()
+	% pe_opt_hdr_ptr->get_Minor_Image_Version() << std::endl;
+
+      //       - m_major_subsystem_version
+      //       - m_minor_subsystem_version
+      output << boost::format ( "    <pe_opt_major_subsystem_version>%1%.%2%</pe_opt_major_subsystem_version>" )
+	% pe_opt_hdr_ptr->get_Major_Subsystem_Version()
+	% pe_opt_hdr_ptr->get_Minor_Subsystem_Version() << std::endl;
+
+      //       - m_size_of_image
+      output << boost::format ( "    <pe_opt_image_size>%1%</pe_opt_image_size>" )
+	% pe_opt_hdr_ptr->get_Size_Of_Image() << std::endl;
+
+      //       - m_size_of_headers
+      output << boost::format ( "    <pe_opt_header_size>%1%</pe_opt_header_size>" )
+	% pe_opt_hdr_ptr->get_Size_Of_Headers() << std::endl;
+
+      return output.str();
+    }
+
+    void
+    Windows_Trainer_Dump_Algorithm::find_Files ( const boost::filesystem::path& dirpath,
+						 std::vector<std::string>& output_files )
+    {
+
+      if ( exists ( dirpath ) )
+	{
+	  boost::filesystem::directory_iterator end_itr; // default construction yields past the end
+
+	  for ( boost::filesystem::directory_iterator itr ( dirpath );
+		itr != end_itr;
+		++itr )
+	    {
+	      if ( is_directory ( *itr ) )
+		{
+		  find_Files ( *itr, output_files );
+		}
+	      else
+		{
+		  std::string name = itr->leaf();
+	      
+		  if ( name.find ( ".exe" ) != std::string::npos )
+		    {
+		      output_files.push_back ( itr->string() );
+		    }
+		  else if ( name.find ( ".dll" ) != std::string::npos )
+		    {
+		      output_files.push_back ( itr->string() );
+		    }
+		}
+	    }
+	}
+    }
+
+  } /* namespace classifier */
+} /* namespace libreverse */

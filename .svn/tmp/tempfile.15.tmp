@@ -1,0 +1,58 @@
+# NEED TO DO
+---------------------------------
+
+Add mpc file for formula directory. End path should be something like
+(/usr/share/data/libreverse/formulas)
+
+Add mpc file for GRNN training data. End path should be something like
+(/usr/share/data/libreverse/grnn_data)
+
+Add way to locate the data directory. Perhaps the configurator should
+have this information. See if there is a way to grab the configure
+script data directory and use that so users can define their desired
+location.
+
+Add a GRNN data object that contains a list of the GRNN data. This
+will be populated by an XML file that contains a key "type" and value
+"filename". The path to the GRNN data is contained in the general
+configuration file. This GRNN data list XML file should be stored in
+the same location as the general configuration file. The GRNN data
+object will be populated the first time a call is made to the
+get_GRNN_Data() function in the Configurator. The get_GRNN_Data call
+will access the Configurator to get the string representing the
+location of the grnn data directory. The filename will be appended to
+this string and returned. In addition to the path each GRNN data entry
+will contain the sigman to be used.
+
+Need accessor method to get the best solution after running
+'process()' with the Optimizer object.
+
+# SHOULD DO
+---------------------------------
+Memory_Map:
+- Add function to allocate new space for file formats that do not provide a base address and size of the image
+  e.g. mem_map_ptr->allocate (address1, size1);
+       mem_map_ptr->allocate (address2, size2);
+
+  NOTE: Verify that the previous method of determining size (number of entries in list) still holds. That is there are no gaps in the allocated memory space.
+
+- IO:Java_Class Reader:
+  - Finished Field_Access_Flags
+    - Send it what type the field access flags are releated to because there
+      are different rules for Classes, Interfaces, etc.
+  - Finish Method_Access_Flags
+  - Why do we have a string argument to get_Meta_Info in the Java class reader?
+
+- IO:Windows PE Exception Table Constants 
+  - Where did we get the names because we don't have values for the constants.
+
+# WANT TO DO
+---------------------------------
+- Handle Windows NE file headers
+- Handle C# bytecode files
+- Provide ability to read export name poitner table of the imported DLL using hint to get name
+- For determining the file type we should only create a Memory_Map of the size of the magic
+  number for a target input file. This should speed up detection significantly.
+
+- Elf: Remove stringstream uses where the stream property is not used. For example returning the Elf Class in Elf_Header_Eident::get_Elf_Class.
+

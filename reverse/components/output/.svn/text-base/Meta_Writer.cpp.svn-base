@@ -1,0 +1,289 @@
+/*  Meta_Writer.cpp
+
+   Copyright (C) 2008 Stephen Torri
+
+   This file is part of Libreverse.
+
+   Libreverse is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published
+   by the Free Software Foundation; either version 3, or (at your
+   option) any later version.
+
+   Libreverse is distributed in the hope that it will be useful, but
+   WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see
+   <http://www.gnu.org/licenses/>.
+*/
+
+#include "Meta_Writer.h"
+#include "libreverse/meta/Meta_Object.h"
+#include <iostream>
+#include "libreverse/io/input/File_Readers/Reader_Factory.h"
+#include "libreverse/io/input/File_Readers/File_Reader.h"
+#include "libreverse/errors/API_Exception.h"
+#include "libreverse/data_containers/Filename.h"
+#include "libreverse/infrastructure/data_source/Data_Object.h"
+#include "libreverse/infrastructure/Component_Data.h"
+#include "libreverse/infrastructure/Component_State.h"
+#include <boost/format.hpp>
+#include "libreverse/Trace.h"
+
+using namespace libreverse::api;
+using namespace libreverse::trace;
+
+namespace libreverse { namespace component {
+
+    const std::string Meta_Writer::m_name = "Meta_Writer";
+
+    Meta_Writer::Meta_Writer ()
+        : m_state_ptr ( new infrastructure::Component_State (0) )
+    {
+        Trace::write_Trace ( TraceArea::COMPONENTS,
+                             TraceLevel::DETAIL,
+                             boost::str ( boost::format ( "Inside Meta_Writer constructor (id=%d)")
+                                          % m_state_ptr->get_ID() ) );
+    }
+
+    Meta_Writer::Meta_Writer ( infrastructure_types::Component_State::ptr_t state_ptr )
+        : m_state_ptr ( state_ptr )
+    {
+        Trace::write_Trace ( TraceArea::COMPONENTS,
+                             TraceLevel::DETAIL,
+                             boost::str ( boost::format ( "Inside Meta_Writer constructor (id=%d)")
+                                          % m_state_ptr->get_ID() ) );
+    }
+
+    Meta_Writer::Meta_Writer ( Meta_Writer const& rhs )
+        : infrastructure::Component ( rhs ),
+          infrastructure::Component_Actor ( rhs ),
+          boost::enable_shared_from_this<Meta_Writer> ( rhs ),
+          m_state_ptr ( new infrastructure::Component_State ( *rhs.m_state_ptr ) )
+    {
+        Trace::write_Trace ( TraceArea::COMPONENTS,
+                             TraceLevel::DETAIL,
+                             boost::str ( boost::format ( "Inside Meta_Writer copy constructor (id=%d)")
+                                          % m_state_ptr->get_ID() ) );
+    }
+
+    Meta_Writer::~Meta_Writer ()
+    {
+        Trace::write_Trace ( TraceArea::COMPONENTS,
+                             TraceLevel::DETAIL,
+                             boost::str ( boost::format ( "Inside Meta_Writer destructor (id=%d)")
+                                          % m_state_ptr->get_ID() ) );
+    }
+
+    void
+    Meta_Writer::received_Input_Source_Data ( boost::uint32_t id )
+    {
+        Trace::write_Trace ( TraceArea::COMPONENTS,
+                             TraceLevel::DETAIL,
+                             boost::str ( boost::format ( "Entering Meta_Writer::received_Input_Source_Data (id=%d)")
+                                          % m_state_ptr->get_ID() ) );
+
+        std::cout <<
+            boost::format("Meta_Writer(%d)::init")
+            % m_state_ptr->get_ID()
+                  << std::endl;
+
+
+        m_state_ptr->received_Input_Source_Data ( id );
+
+        Trace::write_Trace ( TraceArea::COMPONENTS,
+                             TraceLevel::DETAIL,
+                             boost::str ( boost::format ( "Exiting Meta_Writer::received_Input_Source_Data (id=%d)")
+                                          % m_state_ptr->get_ID() ) );
+
+    }
+
+    void
+    Meta_Writer::add_Input_Source ( boost::uint32_t id )
+    {
+        Trace::write_Trace ( TraceArea::COMPONENTS,
+                             TraceLevel::DETAIL,
+                             boost::str ( boost::format ( "Entering Meta_Writer::add_Input_Source (id=%d)")
+                                          % m_state_ptr->get_ID() ) );
+
+        m_state_ptr->add_Input_Source ( id );
+
+        Trace::write_Trace ( TraceArea::COMPONENTS,
+                             TraceLevel::DETAIL,
+                             boost::str ( boost::format ( "Exiting Meta_Writer::add_Input_Source (id=%d)")
+                                          % m_state_ptr->get_ID() ) );
+
+    }
+
+    std::string
+    Meta_Writer::get_Name (void) const
+    {
+        Trace::write_Trace ( TraceArea::COMPONENTS,
+                             TraceLevel::DETAIL,
+                             boost::str ( boost::format ( "Inside Meta_Writer::get_Name (id=%d)")
+                                          % m_state_ptr->get_ID() ) );
+
+        return m_name;
+    }
+
+    void Meta_Writer::process ()
+    {
+        Trace::write_Trace ( TraceArea::COMPONENTS,
+                             TraceLevel::DETAIL,
+                             boost::str ( boost::format ( "Entering Meta_Writer::process (id=%d)")
+                                          % m_state_ptr->get_ID() ) );
+
+        infrastructure_types::Component_Data::ptr_t data_ptr = m_state_ptr->get_Data();
+
+        meta::Meta_Object::const_ptr_t meta_ptr = data_ptr->get_Input_Meta_Data();
+
+        std::cout << meta_ptr->to_String() << std::endl;
+
+        /**
+         * pass on input information
+         */
+        if ( data_ptr->is_Filename_Set() )
+            {
+                data_ptr->set_Output_Data ( data_ptr->get_Input_Filename() );
+            }
+        if ( data_ptr->is_Control_Flow_Graph_Sequence_Set() )
+            {
+                data_ptr->set_Output_Data ( data_ptr->get_Input_Control_Flow_Graph_Sequence() );
+            }
+        if ( data_ptr->is_Memory_Map_Set() )
+            {
+                data_ptr->set_Output_Data ( data_ptr->get_Input_Memory_Map() );
+            }
+
+        Trace::write_Trace ( TraceArea::COMPONENTS,
+                             TraceLevel::DETAIL,
+                             boost::str ( boost::format ( "Exiting Meta_Writer::process (id=%d)")
+                                          % m_state_ptr->get_ID() ) );
+
+    }
+
+    void
+    Meta_Writer::run ( infrastructure_types::Component_Graph::Data_Map_t* m_input_data )
+    {
+        Trace::write_Trace ( TraceArea::COMPONENTS,
+                             TraceLevel::DETAIL,
+                             boost::str ( boost::format ( "Entering Meta_Writer::run (id=%d)")
+                                          % m_state_ptr->get_ID() ) );
+
+        std::cout << std::endl
+                  << "--------------------------------" << std::endl
+                  << boost::format ( "%s(%d) - run" )
+            % m_name
+            % m_state_ptr->get_ID() << std::endl
+                  << "--------------------------------" << std::endl;
+
+        m_state_ptr->run ( this->shared_from_this(),
+                           m_input_data );        
+
+        std::cout << "--------------------------------" << std::endl
+                  << boost::format ( "%s(%d) - done" )
+            % m_name
+            % m_state_ptr->get_ID() << std::endl
+                  << "--------------------------------" << std::endl
+                  << std::endl;
+
+        Trace::write_Trace ( TraceArea::COMPONENTS,
+                             TraceLevel::DETAIL,
+                             boost::str ( boost::format ( "Exiting Meta_Writer::run (id=%d)")
+                                          % m_state_ptr->get_ID() ) );
+    }
+
+    infrastructure_types::Data_Source_Base::ptr_t
+    Meta_Writer::results (void)
+    {
+        Trace::write_Trace ( TraceArea::COMPONENTS,
+                             TraceLevel::DETAIL,
+                             boost::str ( boost::format ( "Inside Meta_Writer::results (id=%d)")
+                                          % m_state_ptr->get_ID() ) );
+
+        return m_state_ptr->results();
+    }
+
+    void
+    Meta_Writer::set_State ( boost::uint32_t mode )
+    {
+        Trace::write_Trace ( TraceArea::COMPONENTS,
+                             TraceLevel::DETAIL,
+                             boost::str ( boost::format ( "Inside Meta_Writer::set_State (id=%d)")
+                                          % m_state_ptr->get_ID() ) );
+
+        m_state_ptr->switch_State ( mode );
+    }
+
+    boost::uint32_t
+    Meta_Writer::get_ID (void) const
+    {
+        Trace::write_Trace ( TraceArea::COMPONENTS,
+                             TraceLevel::DETAIL,
+                             boost::str ( boost::format ( "Inside Meta_Writer::get_ID (id=%d)")
+                                          % m_state_ptr->get_ID() ) );
+
+        return m_state_ptr->get_ID();
+    }
+    
+    infrastructure_types::Component_Data::Input_Token_t::const_iterator
+    Meta_Writer::get_Source_List_Begin (void) const
+    {
+        Trace::write_Trace ( TraceArea::COMPONENTS,
+                             TraceLevel::DETAIL,
+                             boost::str ( boost::format ( "Inside Meta_Writer::get_Source_List_Begin (id=%d)")
+                                          % m_state_ptr->get_ID() ) );
+
+        return m_state_ptr->get_Source_List_Begin ();
+    }
+
+    infrastructure_types::Component_Data::Input_Token_t::const_iterator
+    Meta_Writer::get_Source_List_End (void) const
+    {
+        Trace::write_Trace ( TraceArea::COMPONENTS,
+                             TraceLevel::DETAIL,
+                             boost::str ( boost::format ( "Inside Meta_Writer::get_Source_List_End (id=%d)")
+                                          % m_state_ptr->get_ID() ) );
+
+        return m_state_ptr->get_Source_List_End ();
+    }
+
+    Meta_Writer&
+    Meta_Writer::operator= ( Meta_Writer const& rhs )
+    {
+        Trace::write_Trace ( TraceArea::COMPONENTS,
+                             TraceLevel::DETAIL,
+                             boost::str ( boost::format ( "Entering Meta_Writer::operator= (assignment) (id=%d)")
+                                          % m_state_ptr->get_ID() ) );
+
+        Meta_Writer temp ( rhs );
+        swap ( temp );
+
+        Trace::write_Trace ( TraceArea::COMPONENTS,
+                             TraceLevel::DETAIL,
+                             boost::str ( boost::format ( "Exiting Meta_Writer::operator= (assignment)  (id=%d)")
+                                          % m_state_ptr->get_ID() ) );
+
+        return *this;
+    }
+
+    void
+    Meta_Writer::swap ( Meta_Writer& rhs )
+    {
+        Trace::write_Trace ( TraceArea::COMPONENTS,
+                             TraceLevel::DETAIL,
+                             boost::str ( boost::format ( "Entering Meta_Writer::swap (id=%d)")
+                                          % m_state_ptr->get_ID() ) );
+
+        m_state_ptr.swap ( rhs.m_state_ptr );
+
+        Trace::write_Trace ( TraceArea::COMPONENTS,
+                             TraceLevel::DETAIL,
+                             boost::str ( boost::format ( "Exiting Meta_Writer::swap (id=%d)")
+                                          % m_state_ptr->get_ID() ) );
+
+    }
+} /* namespace component */
+} /* namespace libreverse */

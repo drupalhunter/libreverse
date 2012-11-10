@@ -1,0 +1,154 @@
+AC_INIT([libreverse], [0.7])
+AM_INIT_AUTOMAKE([tar-pax])
+
+AC_PROG_CXX
+AC_PROG_LIBTOOL
+
+AC_ARG_ENABLE(debug,
+    AC_HELP_STRING(--enable-debug, [Have GCC compile with symbols (Default = no)
+]),
+    enable_debug=$enableval, enable_debug=no)
+
+if test "$enable_debug" = "yes" ; then
+    GCC_CFLAGS="-ansi -pedantic -g -O0 -Wall -Werror -Wextra -Wno-long-long -DLIBREVERSE_DEBUG"
+    GCC_CXXFLAGS="-ansi -pedantic -g -O0 -Wall -Werror -Wextra -Wno-long-long -DLIBREVERSE_DEBUG -fno-inline -fno-implicit-inline-templates -fno-default-inline"
+else
+    GCC_CFLAGS="$CFLAGS -Werror -DNO_LIBREVERSE_DEBUG"
+    GCC_CXXFLAGS="$CXXFLAGS -Werror -DNO_LIBREVERSE_DEBUG"
+fi
+
+AC_ARG_ENABLE(debug-boost-pointers,
+	AC_HELP_STRING(--enable-debug-boost-pointers, [Turn debugging code for boost shared pointers]),
+	enable_debug_pointers=$enableval, enable_debug_pointers=no)
+
+if test "$enable_debug_pointers" = "yes"; then
+    GCC_CXXFLAGS="$GCC_CXXFLAGS -DBOOST_SP_ENABLE_DEBUG_HOOKS"
+fi
+
+AC_PROG_CC([gcc gcc3 cc])
+AC_PROG_CXX([g++ g++3 c++ CC])
+
+if test "$GCC" = "yes" ; then
+
+   valid_gcc=""
+   AC_MSG_CHECKING([Checking gcc version is 4.0 or higher])
+   if gcc_version=`$CC -dumpversion` > /dev/null 2>&1; then
+      major=`echo $gcc_version | cut -d. -f1`
+      minor=`echo $gcc_version | sed "s/@<:@-,a-z,A-Z@:>@.*//" | cut -d. -f2`
+      if test -z "$major"; then
+        valid_gcc=no
+      elif test "$major" -ge 4; then
+        valid_gcc=yes
+      else
+        valid_gcc=no
+      fi
+   else
+     valid_gcc=no
+   fi
+
+  if test "x$valid_gcc" = "xyes"; then
+    CFLAGS="$GCC_CFLAGS"
+    CXXFLAGS="$GCC_CXXFLAGS"
+    AC_MSG_RESULT([passed])
+  else
+    AC_MSG_ERROR([This project can only be built with gcc 4.0 or higher])
+  fi
+fi
+
+
+
+dnl The following check was found via goole from the FileZilla3 project.
+dnl
+dnl Link: http://filezilla.cvs.sourceforge.net/filezilla/FileZilla3/configure.in?revision=1.75&view=markup
+dnl
+AC_MSG_CHECKING([whether to use precompiled headers])
+
+use_precomp=""
+AC_ARG_ENABLE(precomp,
+              AC_HELP_STRING([--enable-precomp], [Use precompiled headers[default=no]]),
+              use_precomp="$enableval",
+              use_precomp="no")
+if test -z "$use_precomp"; then
+  if test "X$GCC" = Xyes; then
+    if gcc_version=`$CC -dumpversion` > /dev/null 2>&1; then
+      major=`echo $gcc_version | cut -d. -f1`
+      minor=`echo $gcc_version | sed "s/@<:@-,a-z,A-Z@:>@.*//" | cut -d. -f2`
+      if test -z "$major" || test -z "$minor"; then
+        use_precomp=no
+	  elif test "$major" -ge 4; then
+	    use_precomp=yes
+      else
+	    use_precomp=no
+      fi
+    else
+	  use_precomp=no
+    fi
+  else
+    use_precomp=no
+  fi
+fi
+
+if test "x$use_precomp" = "xyes"; then
+  AC_MSG_RESULT([yes])
+else
+  AC_MSG_RESULT([no])
+fi
+
+AM_CONDITIONAL(ENABLE_PRECOMP, test "x$use_precomp" = "xyes")
+
+AC_CONFIG_HEADERS([libreverse/include/config.h])
+
+if test "x$prefix" = "xNONE"; then
+   conf_prefix="/etc/"
+   formula_prefix="/usr/local/share/"
+else
+   conf_prefix="$prefix/etc/"
+   formula_prefix="$prefix/share/"
+fi
+
+AC_DEFINE_UNQUOTED(CONF_PREFIX,"$conf_prefix",[Prefix to where the configuration information is located.])
+
+AC_DEFINE_UNQUOTED(FORMULA_PREFIX,"$formula_prefix",[Prefix to where the formula files are located.])
+AC_DEFINE_UNQUOTED(PWD_PREFIX,"`pwd`",[Prefix to the top directory of the source code. [Testing only]])
+
+RS_BOOST([1.33.1],
+        [
+                has_boost="true"
+        ],
+        [
+                AC_MSG_ERROR([Libreverse requires the Boost C++ libraries!])
+        ])
+AM_CONDITIONAL(BUILD_BOOST, test x$has_boost = xtrue )
+
+RS_BOOST_DATETIME([],[AC_MSG_ERROR([Libreverse requires the boost_datetime for compiling tests])])
+
+AM_WITH_EXPAT
+
+AM_WITH_ICU
+
+AC_CONFIG_FILES([
+libreverse/errors/Makefile
+libreverse/infrastructure/data_source/Makefile
+libreverse/infrastructure/Makefile
+libreverse/infrastructure/visitor/Makefile
+libreverse/meta/Makefile
+libreverse/api/Makefile
+libreverse/api/tests/Makefile
+libreverse/components/input/Makefile
+libreverse/components/Makefile
+libreverse/components/output/Makefile
+libreverse/Makefile
+libreverse/data_containers/Makefile
+libreverse/io/input/File_Readers/Windows_PE/Makefile
+libreverse/io/input/File_Readers/Windows_PE/tests/Makefile
+libreverse/io/input/File_Readers/Makefile
+libreverse/io/input/File_Readers/Elf/Makefile
+libreverse/io/input/File_Readers/Java_Class/Makefile
+libreverse/io/input/File_Readers/Java_Class/tests/Makefile
+libreverse/io/input/File_Readers/Mach/Makefile
+libreverse/io/input/Makefile
+libreverse/io/Makefile
+libreverse/include/Makefile
+Makefile
+])
+AC_OUTPUT

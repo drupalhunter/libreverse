@@ -1,0 +1,31 @@
+#ifndef LOAD_COMMAND_H
+#define LOAD_COMMAND_H
+
+#include <boost/cstdint.hpp>
+#include <string>
+
+namespace libreverse
+{
+    namespace mach_module
+    {
+
+        class Load_Command
+        {
+            protected:
+
+                static const boost::uint8_t MAX_NAME_SIZE;
+
+                virtual ~Load_Command() {}
+
+            public:
+
+                virtual void convert ( bool value ) = 0;
+
+                virtual std::string to_String ( void ) = 0;
+        };
+
+    } /* namespace mach_module */
+} /* namespace libreverse */
+
+
+#endif /* LOAD_COMMAND_H */

@@ -1,0 +1,124 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{oz}
+\usepackage{fullpage}
+\usepackage{stmaryrd}
+
+\begin{document}
+
+\title{Libreverse - parserGenerator}
+\author{Stephen Torri\\torrisa@auburn.edu}
+\maketitle
+
+\begin{zed}
+  [CPU,Table,Token,Rule,NIL,Bit]
+\end{zed}
+
+\begin{class}{InternalData}
+\begin{state}
+cpu: CPU\\
+tableList: \pset Table \\
+tokenList: \pset Token \\
+ruleList: \pset Rule
+\end{state}\\
+\begin{init}
+cpu = NIL \\
+tableList = \emptyset\\
+tokenList = \emptyset\\
+ruleList = \emptyset
+\end{init}\\
+\begin{op}{setCPU}
+\Delta cpu\\
+newCPU?: CPU
+\where
+newCPU? \neq cpu\\
+cpu' = newCPU?
+\end{op}\\
+\begin{op}{addTable}
+\Delta(tableList)\\
+table?: Table\\
+\where
+table? \notin tableList\\
+tableList' = tableList \union \{table?\}
+\end{op}\\
+\begin{op}{addToken}
+\Delta(tokenList)\\
+token?: Token\\
+\where
+token? \notin tokenList\\
+tokenList' = tokenList \union \{token?\}
+\end{op}\\
+\begin{op}{addRule}
+\Delta(ruleList)\\
+rule?: Rule\\
+\where
+rule? \notin ruleList\\
+ruleList' = ruleList \union \{rule?\}
+\end{op}
+\end{class}
+
+\begin{class}{CPU}
+\begin{state}
+registers: \pset Register\\
+\end{state}\\
+\begin{init}
+registers = \emptyset
+\end{init}\\
+\begin{op}{addRegister}
+reg?: Register\\
+\where
+reg? \notin registers\\
+registers' = registers \union \{ reg? \}
+\end{op}
+\end{class}
+
+\begin{class}{Register}
+\begin{state}
+bits: \seq Bit\\
+indexes: String \rightarrow \nat\\
+maxLength: \nat\\
+name: String \\
+endian: Endian
+\where
+\#bits == maxLength \\
+endian \ddef little | big
+\end{state}\\
+\begin{init}
+name?: String\\
+index?: \nat\\
+\where
+bits = \seq Bits\\
+index? > 0\\
+indexes = name? \rightarrow index?\\
+maxLength = index?\\
+endian = little
+\end{init}\\
+\begin{op}{addSubIndex}
+\Delta indexes\\
+name?: String\\
+index?: \nat\\
+\where
+name? \notin \dom indexes\\
+0 \leq index? \leq maxLength\\
+indexes' = indexes \union \{ name? \rightarrow index? \}
+\end{op}\\
+\begin{op}{getBitSequence}
+name?: String\\
+result!: \seq Bits
+\where
+name? \in \dom indexes\\
+( (endian = little) \wedge (result! = reverseSubSeq( bits, indexes(name?) ) )\vee\\
+( (endian = big) \wedge (result! = SubSeq (bits, indexes(name?) ) )\\
+\#result! = indexes(name?)
+\end{op}\\
+\begin{axdef}{reverseSubSeq}
+: (\seq Bits \prod \nat) \tfun \seq Bits
+\where
+% Starting at end of Bits
+% - copy [n] bit
+% - set n = n -1
+% -
+\end{axdef}
+\end{class}
+
+\end{document}

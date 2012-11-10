@@ -1,0 +1,26 @@
+#ifndef FILETYPE_H
+#define FILETYPE_H
+
+namespace libreverse { namespace mach_module {
+
+  class Filetypes {
+  public:
+
+    enum Values {
+      MH_OBJECT,
+      MH_EXECUTE,
+      MH_BUNDLE,
+      MH_DYLIB,
+      MH_PRELOAD,
+      MH_CORE,
+      MH_DYLINKER,
+      MH_DSYM,
+    };
+
+  };
+
+} /* namespace mach_module */
+} /* namespace libreverse */
+
+
+#endif /* CPU_TYPE_H */

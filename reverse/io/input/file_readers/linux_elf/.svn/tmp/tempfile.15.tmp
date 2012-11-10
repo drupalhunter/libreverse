@@ -1,0 +1,378 @@
+#include "Elf_Program_Header_T.h"
+#include "libreverse/io/Byte_Converter.h"
+#include "Elf_Common.h"
+#include "Elf_mips.h"
+#include "Elf_hppa.h"
+#include "Elf_ia64.h"
+#include "libreverse/Trace.h"
+
+using namespace libreverse::api;
+using namespace libreverse::trace;
+
+namespace libreverse
+{
+    namespace elf_module
+    {
+
+        template <boost::uint32_t bitsize>
+        Elf_Program_Header<bitsize>::Elf_Program_Header ( boost::uint16_t e_machine )
+                : m_e_machine ( e_machine )
+        {
+            Trace::write_Trace ( TraceArea::IO,
+                                 TraceLevel::DETAIL,
+                                 "Inside Elf_Program_Header constructor" );
+        }
+
+        template <boost::uint32_t bitsize>
+        boost::uint32_t
+        Elf_Program_Header<bitsize>::get_size ( void ) const
+        {
+            Trace::write_Trace ( TraceArea::IO,
+                                 TraceLevel::DETAIL,
+                                 "Inside Elf_Program_Header::get_size" );
+
+            return bitsize;
+        }
+
+        template <boost::uint32_t bitsize>
+        void
+        Elf_Program_Header<bitsize>::convert ()
+        {
+            Trace::write_Trace ( TraceArea::IO,
+                                 TraceLevel::DETAIL,
+                                 "Entering Elf_Program_Header::convert" );
+
+            io::Byte_Converter::convert ( p_type );
+            io::Byte_Converter::convert ( p_offset );
+            io::Byte_Converter::convert ( p_vaddr );
+            io::Byte_Converter::convert ( p_paddr );
+            io::Byte_Converter::convert ( p_filesz );
+            io::Byte_Converter::convert ( p_memsz );
+            io::Byte_Converter::convert ( p_flags );
+            io::Byte_Converter::convert ( p_align );
+
+            Trace::write_Trace ( TraceArea::IO,
+                                 TraceLevel::DETAIL,
+                                 "Exiting Elf_Program_Header::convert" );
+        }
+
+        template <boost::uint32_t bitsize>
+        std::string Elf_Program_Header<bitsize>::to_String ( void )
+        {
+            Trace::write_Trace ( TraceArea::IO,
+                                 TraceLevel::DETAIL,
+                                 "Entering Elf_Program_Header::to_String" );
+
+            std::stringstream output_str;
+
+            // PRINT: type
+            output_str << boost::format ( "  %|-15| " ) % get_segment_type();
+
+            output_str << boost::format ( "0x%1%   " ) %
+            boost::io::group ( std::setfill ( '0' ),
+                               std::hex,
+                               std::setw ( 6 ),
+                               p_offset );
+
+            output_str << boost::format ( "0x%1%   " ) %
+            boost::io::group ( std::setfill ( '0' ),
+                               std::hex,
+                               std::setw ( 8 ),
+                               p_vaddr );
+
+            output_str << boost::format ( "0x%1%   " ) %
+            boost::io::group ( std::setfill ( '0' ),
+                               std::hex,
+                               std::setw ( 8 ),
+                               p_paddr );
+
+            output_str << boost::format ( "0x%1%  " ) %
+            boost::io::group ( std::setfill ( '0' ),
+                               std::hex,
+                               std::setw ( 5 ),
+                               p_filesz );
+
+            output_str << boost::format ( "0x%1%    " ) %
+            boost::io::group ( std::setfill ( '0' ),
+                               std::hex,
+                               std::setw ( 5 ),
+                               p_memsz );
+
+            if ( p_flags & Elf_Common::PF_R )
+            {
+                output_str << "R";
+            }
+            else
+            {
+                output_str << " ";
+            }
+
+            if ( p_flags & Elf_Common::PF_W )
+            {
+                output_str << "W";
+            }
+            else
+            {
+                output_str << " ";
+            }
+
+            if ( p_flags & Elf_Common::PF_X )
+            {
+                output_str << "E";
+            }
+            else
+            {
+                output_str << " ";
+            }
+
+            output_str << boost::format ( "  0x%|-5|" ) %
+            boost::io::group ( std::hex, p_align );
+
+            Trace::write_Trace ( TraceArea::IO,
+                                 TraceLevel::DETAIL,
+                                 "Exiting Elf_Program_Header::to_String" );
+
+            return output_str.str();
+        }
+
+        template <boost::uint32_t bitsize>
+        void
+        Elf_Program_Header<bitsize>::get_Text_String ( io_types::Text_Data::data_type* output )
+        {
+            Trace::write_Trace ( TraceArea::IO,
+                                 TraceLevel::DETAIL,
+                                 "Entering Elf_Section_Header::get_Text_String" );
+
+            // ADD text if we are a sh_type == SHT_PROGBITS and SHF_ALLOC + SHF_WRITE
+
+            Trace::write_Trace ( TraceArea::IO,
+                                 TraceLevel::DETAIL,
+                                 "Exiting Elf_Section_Header::get_Text_String" );
+        }
+
+
+        template <boost::uint32_t bitsize>
+        std::string Elf_Program_Header<bitsize>::get_segment_type ( void )
+        {
+            Trace::write_Trace ( TraceArea::IO,
+                                 TraceLevel::DETAIL,
+                                 "Entering Elf_Program_Header::get_segment_type" );
+
+            std::stringstream result;
+
+            switch ( p_type )
+            {
+                case Elf_Common::PT_NULL:           result << "NULL"; break;
+                case Elf_Common::PT_LOAD:           result << "LOAD"; break;
+                case Elf_Common::PT_DYNAMIC:      result << "DYNAMIC"; break;
+                case Elf_Common::PT_INTERP: result << "INTERP"; break;
+                case Elf_Common::PT_NOTE:           result << "NOTE"; break;
+                case Elf_Common::PT_SHLIB:  result << "SHLIB"; break;
+                case Elf_Common::PT_PHDR:           result << "PHDR"; break;
+                case Elf_Common::PT_TLS:            result << "TLS"; break;
+                case Elf_Common::PT_GNU_EH_FRAME: result << "GNU_EH_FRAME"; break;
+                case Elf_Common::PT_GNU_STACK:    result << "STACK"; break;
+                case Elf_Common::PT_GNU_RELRO:    result << "RELRO"; break;
+                case Elf_Common::PT_PAX_FLAGS:    result << "PAX_FLAGS"; break;
+                case Elf_Common::PT_SUNWBSS:      result << "SUNWBSS"; break;
+                case Elf_Common::PT_SUNWSTACK:    result << "SUNWSTACK"; break;
+
+                default:
+                    if ( ( p_type >= Elf_Common::PT_LOPROC ) && ( p_type <= Elf_Common::PT_HIPROC ) )
+                    {
+                        std::string type;
+                        switch ( m_e_machine )
+                        {
+                            case Elf_Common::EM_MIPS:
+                            case Elf_Common::EM_MIPS_RS3_LE:
+                                type = get_mips_segment_type ();
+                                break;
+                            case Elf_Common::EM_PARISC:
+                                type = get_parisc_segment_type ();
+                                break;
+                            case Elf_Common::EM_IA_64:
+                                type = get_ia64_segment_type ();
+                                break;
+                            default:
+                                break;
+                        }
+
+                        if ( ! type.empty() )
+                        {
+                            result << type;
+                        }
+                        else
+                        {
+                            result << boost::format ( "LOPROC+%1%" ) % ( p_type - Elf_Common::PT_LOPROC );
+                        }
+                    }
+                    else if ( ( p_type >= Elf_Common::PT_LOOS ) && ( p_type <= Elf_Common::PT_HIOS ) )
+                    {
+                        std::string type;
+
+                        switch ( m_e_machine )
+                        {
+                            case Elf_Common::EM_PARISC:
+                                type = get_parisc_segment_type ();
+                                break;
+                            case Elf_Common::EM_IA_64:
+                                type = get_ia64_segment_type ();
+                                break;
+                            default:
+                                break;
+                        }
+
+                        if ( ! type.empty() )
+                        {
+                            result << type;
+                        }
+                        else
+                        {
+                            result << boost::format ( "LOOS+%1%" ) % ( p_type - Elf_Common::PT_LOOS );
+                        }
+                    }
+                    else
+                    {
+                        result << boost::format ( "<unknown>: %1%" ) % p_type;
+                    }
+            }
+
+            Trace::write_Trace ( TraceArea::IO,
+                                 TraceLevel::DETAIL,
+                                 "Exiting Elf_Program_Header::get_segment_type" );
+
+            return result.str();
+        }
+
+        template <boost::uint32_t bitsize>
+        std::string Elf_Program_Header<bitsize>::get_mips_segment_type ( void )
+        {
+            Trace::write_Trace ( TraceArea::IO,
+                                 TraceLevel::DETAIL,
+                                 "Entering Elf_Program_Header::get_mips_segment_type" );
+
+            std::stringstream output;
+
+            switch ( p_type )
+            {
+                case Elf_mips::PT_MIPS_REGINFO: output << "REGINFO"; break;
+                case Elf_mips::PT_MIPS_RTPROC:  output << "RTPROC"; break;
+                case Elf_mips::PT_MIPS_OPTIONS: output << "OPTIONS"; break;
+                default: break;
+            }
+
+            Trace::write_Trace ( TraceArea::IO,
+                                 TraceLevel::DETAIL,
+                                 "Exiting Elf_Program_Header::get_mips_segment_type" );
+
+            return output.str();
+        }
+
+        template <boost::uint32_t bitsize>
+        std::string Elf_Program_Header<bitsize>::get_parisc_segment_type ( void )
+        {
+            Trace::write_Trace ( TraceArea::IO,
+                                 TraceLevel::DETAIL,
+                                 "Entering Elf_Program_Header::get_parisc_segment_type" );
+
+            std::stringstream output;
+
+            switch ( p_type )
+            {
+                case Elf_hppa::PT_HP_TLS:       output << "HP_TLS"; break;
+                case Elf_hppa::PT_HP_CORE_NONE:     output << "HP_CORE_NONE"; break;
+                case Elf_hppa::PT_HP_CORE_VERSION:  output << "HP_CORE_VERSION"; break;
+                case Elf_hppa::PT_HP_CORE_KERNEL:   output << "HP_CORE_KERNEL"; break;
+                case Elf_hppa::PT_HP_CORE_COMM:     output << "HP_CORE_COMM"; break;
+                case Elf_hppa::PT_HP_CORE_PROC:     output << "HP_CORE_PROC"; break;
+                case Elf_hppa::PT_HP_CORE_LOADABLE: output << "HP_CORE_LOADABLE"; break;
+                case Elf_hppa::PT_HP_CORE_STACK:    output << "HP_CORE_STACK"; break;
+                case Elf_hppa::PT_HP_CORE_SHM:      output << "HP_CORE_SHM"; break;
+                case Elf_hppa::PT_HP_CORE_MMF:      output << "HP_CORE_MMF"; break;
+                case Elf_hppa::PT_HP_PARALLEL:      output << "HP_PARALLEL"; break;
+                case Elf_hppa::PT_HP_FASTBIND:      output << "HP_FASTBIND"; break;
+                case Elf_hppa::PT_PARISC_ARCHEXT:   output << "PARISC_ARCHEXT"; break;
+                case Elf_hppa::PT_PARISC_UNWIND:    output << "PARISC_UNWIND"; break;
+                default: break;
+            }
+
+            Trace::write_Trace ( TraceArea::IO,
+                                 TraceLevel::DETAIL,
+                                 "Exiting Elf_Program_Header::get_parisc_segment_type" );
+
+            return output.str();
+        }
+
+        template <boost::uint32_t bitsize>
+        std::string Elf_Program_Header<bitsize>::get_ia64_segment_type ( void )
+        {
+            Trace::write_Trace ( TraceArea::IO,
+                                 TraceLevel::DETAIL,
+                                 "Entering Elf_Program_Header::get_ia64_segment_type" );
+
+            std::stringstream output;
+
+            switch ( p_type )
+            {
+                case Elf_ia64::PT_IA_64_ARCHEXT:      output << "IA_64_ARCHEXT"; break;
+                case Elf_ia64::PT_IA_64_UNWIND:   output << "IA_64_UNWIND"; break;
+                case Elf_hppa::PT_HP_TLS:         output << "HP_TLS"; break;
+                case Elf_ia64::PT_IA_64_HP_OPT_ANOT: output << "HP_OPT_ANNOT"; break;
+                case Elf_ia64::PT_IA_64_HP_HSL_ANOT: output << "HP_HSL_ANNOT"; break;
+                case Elf_ia64::PT_IA_64_HP_STACK:     output << "HP_STACK"; break;
+                default:
+                    break;
+            }
+
+            Trace::write_Trace ( TraceArea::IO,
+                                 TraceLevel::DETAIL,
+                                 "Exiting Elf_Program_Header::get_ia64_segment_type" );
+
+            return output.str();
+        }
+
+        template <boost::uint32_t bitsize>
+        boost::uint32_t
+        Elf_Program_Header<bitsize>::get_Type ( void ) const
+        {
+            Trace::write_Trace ( TraceArea::IO,
+                                 TraceLevel::DETAIL,
+                                 "Inside Elf_Program_Header::get_Type" );
+
+            return p_type;
+        }
+
+        template <boost::uint32_t bitsize>
+        bool
+        Elf_Program_Header<bitsize>::in_Range ( typename Type_Mapper<bitsize>::arch_t addr )
+        {
+            Trace::write_Trace ( TraceArea::IO,
+                                 TraceLevel::DETAIL,
+                                 "Inside Elf_Program_Header::in_Range" );
+
+            return ( addr >= p_vaddr ) && ( addr <= p_vaddr + p_filesz );
+        }
+
+        template <boost::uint32_t bitsize>
+        typename Type_Mapper<bitsize>::arch_t
+        Elf_Program_Header<bitsize>::get_Address_Offset ( void ) const
+        {
+            Trace::write_Trace ( TraceArea::IO,
+                                 TraceLevel::DETAIL,
+                                 "Inside Elf_Program_Header::get_Address_Offset" );
+
+            return p_vaddr - p_offset;
+        }
+
+        template <boost::uint32_t bitsize>
+        typename Type_Mapper<bitsize>::arch_t
+        Elf_Program_Header<bitsize>::get_Virtual_Address ( void ) const
+        {
+            Trace::write_Trace ( TraceArea::IO,
+                                 TraceLevel::DETAIL,
+                                 "Inside Elf_Program_Header::get_Virtual_Address" );
+
+            return p_vaddr;
+        }
+    } /* namespace elf_module */
+} /* namespace libreverse */

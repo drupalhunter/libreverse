@@ -1,0 +1,162 @@
+/*  Class_File.h
+
+   Copyright (C) 2008 Stephen Torri
+
+   This file is part of Libreverse.
+
+   Libreverse is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published
+   by the Free Software Foundation; either version 3, or (at your
+   option) any later version.
+
+   Libreverse is distributed in the hope that it will be useful, but
+   WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see
+   <http://www.gnu.org/licenses/>.
+*/
+
+#ifndef CLASS_FILE_H_
+#define CLASS_FILE_H_
+
+#include "libreverse/io/File.h"
+#include "libreverse/io/IO_Types.h"
+#include "Java_Types.h"
+#include "libreverse/io/Byte_Converter.h"
+#include <boost/enable_shared_from_this.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/format.hpp>
+
+namespace libreverse { namespace java_module {
+
+        /*!
+         * \class Class_File
+         *
+         * \brief Class_File contains all the elf specific functionality to
+         * read binary data from a target file.
+         *
+         * \date 2004
+         */
+        class Class_File : public boost::enable_shared_from_this<Class_File>
+        {
+        public:
+
+            /*! \brief Narrow? (Copy Constructor?)
+             *  \param f_ref Reference to the File object to copy
+             */
+            Class_File ( io_types::File_ID::const_ptr_t filename );
+
+            Class_File ( data_types::Memory_Map::ptr_t file_img_ptr,
+                         io_types::File_ID::const_ptr_t filename );
+
+            bool init (void);
+
+            /* Read ClassFile header from file */
+            void read_Class_Header ( java_types::Class_Header::ptr_t obj );
+
+            java_types::Attribute_Info::ptr_t
+            read_Attribute_Info ( java_types::Class_Header::ptr_t hdr_obj );
+
+            void read_Inner_Class_Reference ( java_types::Inner_Class_Reference::ptr_t obj,
+                                              java_types::Class_Header::ptr_t hdr_ptr );
+
+            void read_Line_Number_Item ( java_types::Line_Number_Item::ptr_t obj );
+
+            void read_Append_Frame ( java_types::Append_Frame::ptr_t obj );
+
+            void read_Source_File_Attribute ( java_types::Source_File_Attribute::ptr_t obj,
+                                              java_types::Class_Header::ptr_t hdr_ptr );
+
+            void read_Code_Attribute ( java_types::Code_Attribute::ptr_t obj,
+                                       java_types::Class_Header::ptr_t hdr_ptr );
+
+	    java_types::Exception_Table_Entry::ptr_t read_Exception_Table_Entry ( void );
+
+            void read_Deprecated_Attribute ( java_types::Deprecated_Attribute::ptr_t obj );
+
+            void read_Synthetic_Attribute ( java_types::Synthetic_Attribute::ptr_t obj );
+
+            void read_Unknown_Attribute ( java_types::Unknown_Attribute::ptr_t obj );
+
+            void read_Line_Number_Table_Attribute ( java_types::Line_Number_Table_Attribute::ptr_t obj );
+
+            void read_Signature_Attribute ( java_types::Signature_Attribute::ptr_t obj );
+
+            void read_Enclosing_Method_Attribute ( java_types::Enclosing_Method_Attribute::ptr_t obj );
+
+            void read_Inner_Classes_Attribute ( java_types::Inner_Classes_Attribute::ptr_t obj,
+                                                java_types::Class_Header::ptr_t hdr_obj );
+
+            void read_Exceptions_Attribute ( java_types::Exceptions_Attribute::ptr_t obj );
+
+            void read_Stack_Map_Table_Attribute ( java_types::Stack_Map_Table_Attribute::ptr_t obj );
+
+            void read_Constant_Value_Attribute ( java_types::Constant_Value_Attribute::ptr_t obj );
+
+            java_types::Local_Variable::ptr_t read_Local_Variable ( java_types::Class_Header::ptr_t hdr_ptr );
+
+            void read_Local_Variable_Table_Attribute ( java_types::Local_Variable_Table_Attribute::ptr_t obj,
+                                                       java_types::Class_Header::ptr_t hdr_ptr );
+
+            void read_Chop_Frame ( java_types::Chop_Frame::ptr_t obj );
+
+            void read_Constant_Class_Info ( java_types::Constant_Class_Info::ptr_t obj );
+
+            void read_Constant_Double_Info ( java_types::Constant_Double_Info::ptr_t obj );
+
+            void read_Constant_Fieldref_Info ( java_types::Constant_Fieldref_Info::ptr_t obj );
+
+            void read_Constant_Float_Info ( java_types::Constant_Float_Info::ptr_t obj );
+
+            void read_Constant_Name_And_Type_Info ( java_types::Constant_Name_And_Type_Info::ptr_t obj );
+
+            void read_Constant_InterfaceMethodref_Info ( java_types::Constant_InterfaceMethodref_Info::ptr_t obj );
+
+            void read_Constant_Methodref_Info ( java_types::Constant_Methodref_Info::ptr_t obj );
+
+            void read_Constant_String_Info ( java_types::Constant_String_Info::ptr_t obj );
+
+            void read_Constant_Utf8_Info ( java_types::Constant_Utf8_Info::ptr_t obj );
+
+            void read_Constant_Long_Info ( java_types::Constant_Long_Info::ptr_t obj );
+
+            void read_Constant_Integer_Info ( java_types::Constant_Integer_Info::ptr_t obj );
+
+            void read_Full_Frame ( java_types::Full_Frame::ptr_t obj );
+
+            void read_Object_Variable_Info ( java_types::Object_Variable_Info::ptr_t obj );
+
+            void read_Same_Frame_Extended ( java_types::Same_Frame_Extended::ptr_t obj );
+
+            void read_Same_Locals_One_Stack_Item_Frame ( java_types::Same_Locals_One_Stack_Item_Frame::ptr_t obj );
+
+            void read_Same_Locals_One_Stack_Item_Frame_Extended ( java_types::Same_Locals_One_Stack_Item_Frame_Extended::ptr_t obj );
+
+            void read_Uninitialized_Variable_Info ( java_types::Uninitialized_Variable_Info::ptr_t obj );
+
+            io::File const& get_File (void) const;
+
+        private:
+
+            /* Read Constant_Pool_Info object from file */
+            java_types::Constant_Pool_Info::ptr_t read_Constant_Pool_Info ( void );
+
+            void read_Field_Info ( java_types::Field_Info::ptr_t obj,
+                                   java_types::Class_Header::ptr_t hdr_obj );
+
+            void read_Method_Info ( java_types::Method_Info::ptr_t obj,
+                                    java_types::Class_Header::ptr_t hdr_obj );
+
+	    std::string get_String_From_Constant_Pool ( boost::uint16_t index,
+							java_types::Class_Header::ptr_t hdr_obj );
+	    
+            io::File m_file;
+        };
+
+    } /* namespace java_module */
+} /* namespace libreverse */
+
+#endif /* CLASS_FILE_H_ */

@@ -1,0 +1,28 @@
+project(stat_optimizer) : install_bin {
+    exename = stat_optimizer
+    after = reverse
+    includes += $(top_srcdir)
+
+    libs = reverse
+    lit_libs = boost_program_options boost_date_time
+
+    Source_Files {
+	stat_optimizer.cpp
+    }
+
+
+    Template_Files {
+    	Elf_Optimizer_Algorithm.cpp
+	Java_Optimizer_Algorithm.cpp
+	Optimizer_Algorithm_Factory.cpp
+	Windows_Optimizer_Algorithm.cpp
+    }
+
+    Header_Files {
+    	Elf_Optimizer_Algorithm.h
+	Java_Optimizer_Algorithm.h
+	Optimizer_Algorithm.h
+	Optimizer_Algorithm_Factory.h
+	Windows_Optimizer_Algorithm.h
+    }
+}

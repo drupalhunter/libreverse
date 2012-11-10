@@ -1,0 +1,7 @@
+digraph input {
+1 [label="File_Type_Detector(1)"];
+1 -> 20;
+20 [label="Compiler_Classifier(20)"];
+20 -> 5;
+5 [label="Meta_Writer(5)"];
+}

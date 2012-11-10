@@ -1,0 +1,78 @@
+/*  Control_Flow_Graph.h
+
+   Copyright (C) 2008 Stephen Torri
+
+   This file is part of Libreverse.
+
+   Libreverse is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published
+   by the Free Software Foundation; either version 3, or (at your
+   option) any later version.
+
+   Libreverse is distributed in the hope that it will be useful, but
+   WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see
+   <http://www.gnu.org/licenses/>.
+*/
+
+#ifndef CONTROL_FLOW_GRAPH_H
+#define CONTROL_FLOW_GRAPH_H
+
+#include <string>
+#include "Data_Types.h"
+
+namespace libreverse { namespace data_container {
+
+    class Control_Flow_Graph
+
+    {
+    public:
+
+      explicit Control_Flow_Graph ( std::string name );
+
+      Control_Flow_Graph ( Control_Flow_Graph const& rhs );
+
+      void add_Basic_Block ( data_types::Basic_Block::ptr_t input_block_ptr );
+
+      void add_Edge ( boost::uint32_t source_id,
+		      boost::uint32_t destination_id );
+
+      virtual ~Control_Flow_Graph (){}
+
+      data_types::Basic_Block::ptr_t get_Basic_Block ( data_types::Control_Flow_Graph::Vertex_t node ) const;
+
+      data_types::Control_Flow_Graph::Graph_t const& get_Graph (void) const;
+
+      bool empty () const;
+
+      Control_Flow_Graph& operator= ( Control_Flow_Graph const& rhs );
+
+      void swap ( Control_Flow_Graph& rhs );
+
+      std::string to_String (void) const;
+
+      data_types::Control_Flow_Graph::Vertex_t const& get_Vertex ( boost::uint32_t id ) const;
+
+      data_types::Control_Flow_Graph::Graph_t::vertices_size_type size () const;
+
+      std::string get_Name () const;
+
+    private:
+
+      std::string m_name;
+
+      data_types::Control_Flow_Graph::Graph_t m_graph;
+
+      data_types::Control_Flow_Graph::IdVertexMap_t m_index;
+      
+      data_types::Control_Flow_Graph::Basic_Block_Map_t m_basic_block_map;
+    };
+} /* namespace data_types */
+} /* namespace libreverse */
+
+#endif //CONTROL_FLOW_GRAPH_H
+

@@ -1,0 +1,39 @@
+project(components) {
+	staticname = components
+	after = comp_core comp_input comp_output
+	libs = comp_input comp_output
+    includes += $(top_srcdir)
+
+    specific(vc8) {
+	dynamicflags += _SCL_SECURE_NO_WARNINGS
+	staticflags += _SCL_SECURE_NO_WARNINGS
+    }
+
+	Source_Files {
+		Null_Component.cpp
+		Component_Factory.cpp
+	}
+
+	Header_Files {
+		Null_Component.h
+		Component_Factory.h
+	}
+
+	verbatim(automake,local) {
+
+		TEST_PROGS = \
+            test_null_component
+
+		check_PROGRAMS = $(TEST_PROGS)
+        TESTS = $(TEST_PROGS)
+
+        test_null_component_CXXFLAGS = -I$(top_srcdir)
+		test_null_component_SOURCES = test_null_component.cpp
+		test_null_component_DEPENDENCIES = $(top_builddir)/libreverse/libreverse.la
+		test_null_component_LDADD = -L$(top_builddir)/libreverse -lreverse \
+            -lexpat \
+            -lboost_date_time \
+            -lboost_unit_test_framework
+
+    }
+}

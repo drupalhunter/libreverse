@@ -1,0 +1,147 @@
+#ifndef ELF_HEADER_H_
+#define ELF_HEADER_H_
+
+#include <string>
+#include "libreverse/io/input/File_Readers/Base_Header.h"
+#include "Elf_File_Header_T.h"
+#include "Elf_Program_Header_T.h"
+#include "Elf_Section_Header_T.h"
+#include "Elf_Dynamic_Header_T.h"
+#include "Elf_Relocation_T.h"
+#include "Elf_Relocation_Add_T.h"
+#include <boost/shared_ptr.hpp>
+#include <vector>
+#include <map>
+
+namespace libreverse { namespace elf_module {
+
+    /*!
+     * \class Elf_Header
+     * \date 2003
+     * \author Stephen Torri
+     */
+    template <boost::uint32_t bitsize>
+    class Elf_Header : public header::Base_Header {
+
+    public:
+
+        /*!
+         * \brief Default Constructor
+         */
+        Elf_Header();
+
+        /*!
+         * \brief Default Destructor
+         */
+        virtual ~Elf_Header();
+
+        /*!
+         * \brief Initialize Elf_Header
+         */
+        virtual void init (void);
+
+        /*!
+         * \brief Get header bit size
+         * \return Unsigned integer representation of bit size
+         */
+        virtual boost::uint32_t get_size (void) const;
+
+        /*!
+         * \brief Convert the bit ordering from the target file bit ordering
+         * to the host system.
+         */
+        virtual void convert ();
+
+        /*!
+         * \brief String representation of Elf Header
+         * \return String output of header
+         */
+        std::string to_String (void);
+
+        /*!
+         * \brief Get the human readable strings from the header
+         * \return String output of header
+         */
+        void get_Text_String ( io_types::Text_Data::data_type* output );
+
+        const Elf_File_Header<bitsize>& get_File_Header (void) const;
+
+        void set_File_Header ( typename elf_types::Elf_File_Header<bitsize>::ptr_t hdr );
+
+        bool is_File_Header_Set (void) const;
+
+        Elf_Section_Header<bitsize> const& get_Section_Header ( boost::uint16_t index ) const;
+
+        Elf_Section_Header<bitsize> const& get_Section_Header ( std::string name ) const;
+
+        typename elf_types::Elf_Header<bitsize>::Section_Header_Map_t::const_iterator get_Section_Header_Begin (void) const;
+
+        typename elf_types::Elf_Header<bitsize>::Section_Header_Map_t::const_iterator get_Section_Header_End (void) const;
+
+        Elf_Program_Header<bitsize> const& get_Program_Header ( boost::uint32_t addr );
+
+        typename Type_Mapper<bitsize>::arch_t const get_Base_Address (void) const;
+
+        void push_Back_Section_Header ( typename elf_types::Elf_Section_Header<bitsize>::ptr_t const sec );
+
+        void push_Back_Program_Header ( typename elf_types::Elf_Program_Header<bitsize>::ptr_t const sec );
+
+        void push_Back_Symbol ( typename elf_types::Elf_Symbol<bitsize>::ptr_t const sec);
+
+        Elf_Symbol<bitsize> const& get_Symbol (typename Type_Mapper<bitsize>::arch_t index);
+
+        void push_Back_Relocation_Header ( typename elf_types::Elf_Relocation<bitsize>::ptr_t const rel );
+
+        void push_Back_Relocation_Add_Header ( typename elf_types::Elf_Relocation_Add<bitsize>::ptr_t const rel );
+
+        bool has_Section_Headers (void);
+
+        bool has_Program_Headers (void);
+
+        bool has_Symbols (void);
+
+        std::string const get_Program_Header_String (void);
+
+        /* NOTE: Possibly we can remove this function */
+        std::string const get_Symbol_Token_String ( char const* string_table );
+
+        std::string const get_Relocation_String (void);
+
+        std::string const get_Relocation_Add_String (void);
+
+    private:
+
+        /* Variables */
+
+        /*! \brief Elf File Header */
+        typename elf_types::Elf_File_Header<bitsize>::ptr_t m_file_hdr;
+
+        bool m_base_address_set;
+
+        typename Type_Mapper<bitsize>::arch_t m_base_address;
+
+        typename elf_types::Elf_Header<bitsize>::Program_Header_List_t m_prg_hdrs;
+        typename elf_types::Elf_Header<bitsize>::Program_Header_List_t m_instruction_prg_hdrs;
+
+        typename elf_types::Elf_Header<bitsize>::Section_Header_Map_t m_sec_hdrs;
+        typename elf_types::Elf_Header<bitsize>::Section_Header_Index_List_t m_sec_hdr_index;
+
+        /*! \brief Dynamic Header */
+        typename elf_types::Elf_Dynamic_Header<bitsize>::ptr_t m_dyn_hdr;
+
+        /*! \brief Symbol table */
+        typename elf_types::Elf_Header<bitsize>::Symbol_List_t m_symbol_table;
+
+        /*! \brief Relocations */
+        typename elf_types::Elf_Header<bitsize>::Relocation_List_t m_relocs;
+
+        typename elf_types::Elf_Header<bitsize>::Relocation_Add_List_t m_relocs_add;
+
+    };
+
+} /* namespace elf_module */
+} /* namespace libreverse */
+
+#include "Elf_Header_T.cpp"
+
+#endif /* ELF_HEADER_H_ */

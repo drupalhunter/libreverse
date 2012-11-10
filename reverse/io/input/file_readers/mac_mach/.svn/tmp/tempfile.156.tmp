@@ -1,0 +1,81 @@
+//
+// C++ Interface: CPU_X86_32
+//
+// Description:
+//
+//
+// Author: Stephen Torri,,, <storri@torri.org>, (C) 2007
+//
+// Copyright: See COPYING file that comes with this distribution
+//
+//
+#ifndef CPU_X86_32_H
+#define CPU_X86_32_H
+
+#include <string>
+#include "libreverse/errors/IO_Exception.h"
+
+namespace libreverse
+{
+    namespace mach_module
+    {
+        class CPU_X86_32
+        {
+            public:
+
+                enum Registers
+                {
+                    EAX = 0,
+                    EBX = 1,
+                    ECX = 2,
+                    EDX = 3,
+                    EDI = 4,
+                    ESI = 5,
+                    EBP = 6,
+                    ESP = 7,
+                    SS = 8,
+                    EFLAGS = 9,
+                    EIP = 10,
+                    DS = 11,
+                    ES = 12,
+                    FS = 13,
+                    GS = 14,
+                    MAX_COUNT = 15
+                };
+
+                static std::string get_Register_Name ( boost::uint32_t index )
+                {
+                    if ( index > Registers::GS )
+                    {
+                        throw errors::IO_Exception ( errors::IO_Exception::INVALID_INDEX );
+                    }
+
+                    std::string name = "";
+
+                    switch ( index )
+                    {
+                        case Registers::EAX: name = "EAX"; break;
+                        case Registers::EBX: name = "EBX"; break;
+                        case Registers::ECX: name = "ECX"; break;
+                        case Registers::EDX: name = "EDX"; break;
+                        case Registers::EDI: name = "EDI"; break;
+                        case Registers::ESI: name = "ESI"; break;
+                        case Registers::EBP: name = "EBP"; break;
+                        case Registers::ESP: name = "ESP"; break;
+                        case Registers::SS: name = "SS"; break;
+                        case Registers::EFLAGS: name = "EFLAGS"; break;
+                        case Registers::EIP: name = "EIP"; break;
+                        case Registers::DS: name = "DS"; break;
+                        case Registers::ES: name = "ES"; break;
+                        case Registers::FS: name = "FS"; break;
+                        case Registers::GS: name = "GS"; break;
+                    }
+
+                    return name;
+                }
+
+        };
+    }
+}
+
+#endif /* CPU_X86_32 */

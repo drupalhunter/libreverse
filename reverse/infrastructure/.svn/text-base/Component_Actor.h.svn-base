@@ -1,0 +1,64 @@
+/*  Component_Actor.h
+
+   Copyright (C) 2008 Stephen Torri
+
+   This file is part of Libreverse.
+
+   Libreverse is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published
+   by the Free Software Foundation; either version 3, or (at your
+   option) any later version.
+
+   Libreverse is distributed in the hope that it will be useful, but
+   WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see
+   <http://www.gnu.org/licenses/>.
+*/
+
+/* Component Actor interface
+
+   Copyright (C) 2008 Stephen Torri
+
+   This file is part of Libreverse.
+
+   Libreverse is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published
+   by the Free Software Foundation; either version 3, or (at your
+   option) any later version.
+
+   Libreverse is distributed in the hope that it will be useful, but
+   WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see
+   <http://www.gnu.org/licenses/>.
+*/
+#ifndef COMPONENT_ACTOR_H_
+#define COMPONENT_ACTOR_H_
+
+namespace libreverse { namespace infrastructure {
+
+    // Inherited by all Component objects (e.g. File Type Detector)
+    class Component_Actor {
+    public:
+
+        virtual ~Component_Actor(){}
+
+        // Performs the specific action
+        //
+        // \param data_ptr Used to grab information to start its work. The
+        // end results are placed in it for retrieval later.
+        virtual void process ( void ) = 0;
+
+    };
+
+} /* namespace infrastructure */
+} /* namespace libreverse */
+
+#endif /* COMPONENT_ACTOR_H_ */

@@ -1,0 +1,12 @@
+workspace(libreverse) {
+  libreverse/api
+  libreverse/components
+  libreverse/cpus
+  libreverse/data_containers
+  libreverse/exceptions
+  libreverse/formulas
+  libreverse/include
+  libreverse/infrastructure
+  libreverse/io
+  libreverse/meta
+}

@@ -1,0 +1,81 @@
+#include "PE_Resource_Directory_Entry.h"
+#include "Section_Flags.h"
+#include <iostream>
+#include <iomanip>
+#include "libreverse/io/Byte_Converter.h"
+#include <sstream>
+#include <boost/format.hpp>
+
+namespace libreverse
+{
+    namespace wpef_module
+    {
+
+        boost::uint8_t const PE_Resource_Directory_Entry::NAME = 0;
+        boost::uint8_t const PE_Resource_Directory_Entry::ID = 1;
+
+        PE_Resource_Directory_Entry::PE_Resource_Directory_Entry ( boost::uint8_t type )
+                :  m_name ( 0 ),
+                m_rva ( 0 ),
+                m_type ( type )
+        {}
+
+        std::string
+        PE_Resource_Directory_Entry::to_String ( void )
+        {
+            std::stringstream output_str;
+
+            output_str << "PE Resource Directory_Entry Section:" << std::endl;
+
+            output_str << boost::format ( "  Name:                 %1X" ) %
+            m_name
+            << std::endl;
+
+            output_str << boost::format ( "  Offset to data:       %1X" ) %
+            m_rva
+            << std::endl;
+
+            return output_str.str();
+
+        }
+
+        void PE_Resource_Directory_Entry::convert ()
+        {
+            io::Byte_Converter::convert ( m_name );
+            io::Byte_Converter::convert ( m_rva );
+        }
+
+        boost::uint32_t
+        PE_Resource_Directory_Entry::get_Name_Offset ( void ) const
+        {
+            return m_name;
+        }
+
+        boost::uint32_t
+        PE_Resource_Directory_Entry::get_Offset ( void ) const
+        {
+            return m_rva;
+        }
+
+        boost::uint32_t
+        PE_Resource_Directory_Entry::get_size ( void ) const
+        {
+            return static_cast<boost::uint32_t> ( 32 );
+        }
+
+        boost::uint8_t
+        PE_Resource_Directory_Entry::get_Type ( void ) const
+        {
+            return m_type;
+        }
+
+        bool
+        PE_Resource_Directory_Entry::is_Directory_Bit_Set ( void ) const
+        {
+            boost::uint32_t val = ( ( m_rva & 0x80000000 ) >> 31 );
+            return ( val == 1 );
+        }
+
+    } /* namespace wpef_module */
+} /* namespace libreverse */
+

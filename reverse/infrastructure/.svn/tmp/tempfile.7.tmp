@@ -1,0 +1,334 @@
+#include "Configuration_Parser.h"
+#include "libreverse/infrastructure/data_source/Database_Data_Source_Config.h"
+#include "libreverse/infrastructure/data_source/File_Data_Source_Config.h"
+#include "libreverse/infrastructure/data_source/Memory_Data_Source_Config.h"
+#include "libreverse/infrastructure/Configuration_Data.h"
+#include "config.h"
+#include <boost/filesystem/path.hpp>
+#include <boost/filesystem/operations.hpp>
+#include <boost/format.hpp>
+#include <iostream>
+#include <fstream>
+#include "libreverse/data_containers/Memory_Map.h"
+#include "libreverse/errors/Parsing_Exception.h"
+#include "libreverse/Trace.h"
+
+using namespace libreverse::api;
+using namespace libreverse::trace;
+
+namespace libreverse { namespace infrastructure {
+
+    Configuration_Parser::Configuration_Parser ( std::string file )
+        : m_file (""),
+          m_data_ptr (new Configuration_Data())
+    {
+        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
+			     TraceLevel::DETAIL,
+                             "Entering Configuration_Parser Constructor" );
+
+        if ( file.empty() )
+            {
+                m_file = std::string ( CONF_PREFIX
+                                       "libreverse/config.xml" );
+            }
+        else
+            {
+                m_file = file;
+            }
+
+        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
+			     TraceLevel::DETAIL,
+                             "Exiting Configuration_Parser Constructor" );
+
+    }
+
+    Configuration_Parser::~Configuration_Parser ()
+    {
+        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
+			     TraceLevel::DETAIL,
+                             "Entering Configuration_Parser destructor" );
+
+        if ( ! m_element_list.empty() )
+            {
+                
+                Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
+				     TraceLevel::WARN,
+				     boost::str ( boost::format("(WW) Found %d items still on the stack.")
+						  % m_element_list.size() ) );
+
+                while ( ! m_element_list.empty() )
+                    {
+                        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
+					     TraceLevel::WARN,
+					     boost::str ( boost::format("  %s")
+							  % m_element_list.top() ) ) ;
+                        
+                        m_element_list.pop();
+                    }
+            }
+
+        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
+			     TraceLevel::DETAIL,
+                             "Exiting Configuration_Parser destructor" );
+    }
+
+    // Parser
+    boost::shared_ptr<Configuration_Data>
+    Configuration_Parser::parse_Data (void)
+    {
+        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
+			     TraceLevel::DETAIL,
+                             "Entering Configuration_Parser::parse_Data" );
+
+        if ( ! boost::filesystem::exists ( m_file ) )
+            {
+                // Error creating
+                Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
+				     TraceLevel::ERROR,
+				     boost::str(boost::format
+						("Configuration_Parser::parse_Data - cannot find %s")
+						% m_file) );
+
+                // Throw exception
+                throw errors::Parsing_Exception
+                    ( errors::Parsing_Exception::MISSING_FILE );
+            }
+
+        std::ifstream input ( m_file.c_str() );
+
+        data_container::Memory_Map input_data ( input );
+
+        // Create parser
+        if ( ! this->createParser() )
+            {
+                // Error creating
+                Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
+				     TraceLevel::ERROR,
+				     "Configuration_Parser::parse_Data - error creating parser");
+
+                // Throw exception
+                throw errors::Parsing_Exception
+                    ( errors::Parsing_Exception::UNKNOWN_PARSING_ERROR );
+            }
+
+        // Parse file
+
+        if ( ! this->parse ( reinterpret_cast<const char*>(&(*input_data.begin())),
+                             input_data.size() ) )
+            {
+                Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
+				     TraceLevel::ERROR,
+				     boost::str(boost::format
+						("%s at line %d in %s")
+						% getErrorString ( getErrorCode() )
+						% getCurrentLineNumber()
+						% m_file ) );
+
+                // Throw exception
+                throw errors::Parsing_Exception
+                    ( errors::Parsing_Exception::INVALID_FORMAT );
+            }
+                           
+        this->destroyParser();
+
+        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
+			     TraceLevel::DETAIL,
+                             "Exiting Configuration_Parser::parse_Data" );
+
+        return m_data_ptr;
+    }
+
+    void
+    Configuration_Parser::startElement ( const std::string& element_name,
+                                         const Attribute_Map_t& )//attributes )
+    {
+        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
+			     TraceLevel::DETAIL,
+                             "Inside Configuration_Parser::startElement" );
+
+        m_element_list.push ( element_name );
+    }
+
+    void Configuration_Parser::charData ( const std::string& element_value )
+    {
+        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
+			     TraceLevel::DETAIL,
+                             "Entering Configuration_Parser::charData" );
+
+        std::string present_element = m_element_list.top();
+
+        if ( present_element.compare ( m_tag.TAG_FORMULA_DIRECTORY ) == 0 )
+            {
+                m_data_ptr->set_Formula_Directory ( element_value );
+            }
+        else if ( present_element.compare ( m_tag.TAG_FILE_PREFIX ) == 0 )
+            {
+                boost::shared_ptr<File_Data_Source_Config> file_ptr
+                    ( new File_Data_Source_Config ( element_value ) );
+
+                m_data_ptr->set_Transfer_Config ( file_ptr );
+            }
+        else if ( present_element.compare ( m_tag.TAG_MEMORY ) == 0 )
+            {
+                boost::shared_ptr<Memory_Data_Source_Config> mem_ptr
+                    ( new Memory_Data_Source_Config () );
+
+                m_data_ptr->set_Transfer_Config ( mem_ptr );
+            }
+        else if ( present_element.compare ( m_tag.TAG_HOST ) == 0 )
+            {
+                this->m_host = element_value;
+            }
+        else if ( present_element.compare ( m_tag.TAG_USER ) == 0 )
+            {
+                this->m_user = element_value;
+            }
+        else if ( present_element.compare ( m_tag.TAG_PASSWORD ) == 0 )
+            {
+                this->m_password = element_value;
+            }
+        /*
+        else if ( present_element.compare ( m_tag.TAG_DLL_DIRECTORY ) == 0 )
+            {
+                std::string dll_str = element_value;
+
+                m_data_ptr->set_DLL_Directory ( dll_str );
+
+                this->parse_DLL_Directory ();
+            }
+        */
+        else
+            {
+                // Do nothing
+            }
+
+        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
+			     TraceLevel::DETAIL,
+                             "Exiting Configuration_Parser::charData" );
+    }
+
+    void
+    Configuration_Parser::endElement ( const std::string& element_name )
+    {
+        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
+			     TraceLevel::DETAIL,
+                             "Entering Configuration_Parser::endElement" );
+
+        if ( element_name.compare ( m_tag.TAG_DATABASE ) == 0 )
+            {
+                boost::shared_ptr<Database_Data_Source_Config> db_ptr
+                    ( new Database_Data_Source_Config ( this->m_host,
+                                                        this->m_user,
+                                                        this->m_password ) );
+                
+                m_data_ptr->set_Transfer_Config ( db_ptr );
+            }
+
+        m_element_list.pop();
+
+        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
+			     TraceLevel::DETAIL,
+                             "Exiting Configuration_Parser::endElement" );
+
+    }
+
+    /*
+    void
+    Configuration_Parser::parse_DLL_Directory ( void )
+        throw ( errors::Configuration_Exception )
+    {
+        boost::filesystem::path dir_path ( m_data_ptr->get_DLL_Directory() );
+
+        if ( ! boost::filesystem::exists ( dir_path ) )
+            {
+                std::cerr << std::endl << "Could not find: "
+                          << dir_path.native_file_string() << std::endl;
+
+                std::cerr << boost::format("Exception throw in %s at line %d")
+                    % __FILE__
+                    % __LINE__
+                          << std::endl;
+
+                throw errors::Configuration_Exception
+                    ( errors::Configuration_Exception::DLL_PATH_ERROR );
+            }
+
+        if ( ! boost::filesystem::is_directory ( dir_path ) )
+            {
+                std::cerr << std::endl << "Given dll directory name is not a file system directory: "
+                          << dir_path.native_file_string() << std::endl;
+
+                std::cerr << boost::format("Exception throw in %s at line %d")
+                    % __FILE__
+                    % __LINE__
+                          << std::endl;
+
+                throw errors::Configuration_Exception
+                    ( errors::Configuration_Exception::DLL_PATH_ERROR );
+            }
+
+        boost::filesystem::directory_iterator end_itr;
+        for ( boost::filesystem::directory_iterator dir_itr ( dir_path );
+              dir_itr != end_itr;
+              ++dir_itr )
+            {
+                if ( ! boost::filesystem::is_directory ( *dir_itr ) )
+                    {
+                        // See if the file ends with '.dll'
+                        std::string name = (*dir_itr).string();
+                        if ( this->endsWith ( name, ".dll" ) )
+                            {
+//                                 m_data_ptr->add_DLL_Path ( (*dir_itr).leaf(),
+//                                                        (*dir_itr) );
+                            }
+                    }
+            }
+    }
+
+    bool
+    Configuration_Parser::endsWith( std::string& line, std::string target ) const
+    {
+        bool result = true;
+
+        unsigned int i = line.length();
+        unsigned int j = target.length();
+
+        if ( i >= j )
+            {
+                while ( j > 0 )
+                    {
+                        if ( line[i-1] != target[j-1] )
+                            {
+                                result = false;
+                j = 0;
+                            }
+                        else
+                            {
+                                --i;
+                                --j;
+                            }
+                    }
+            }
+        else // i < j is always false since the input line is less
+             // than the target. The line can never end with the
+             // target characters.
+            {
+                result = false;
+            }
+
+        return result;
+    }
+*/
+
+    std::string
+    Configuration_Parser::get_Configuration_File (void) const
+    {
+        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
+			     TraceLevel::DETAIL,
+                             "Inside Configuration_Parser::get_Configuration_File" );
+
+        return m_file;
+    }
+
+} /* namespace infrastructure */
+} /* namespace libreverse */

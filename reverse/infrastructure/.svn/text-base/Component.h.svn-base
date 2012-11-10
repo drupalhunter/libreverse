@@ -1,0 +1,85 @@
+/*  Component.h
+
+   Copyright (C) 2008 Stephen Torri
+
+   This file is part of Libreverse.
+
+   Libreverse is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published
+   by the Free Software Foundation; either version 3, or (at your
+   option) any later version.
+
+   Libreverse is distributed in the hope that it will be useful, but
+   WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see
+   <http://www.gnu.org/licenses/>.
+*/
+
+#ifndef COMPONENT_H_
+#define COMPONENT_H_
+
+#include "libreverse/errors/Component_Exception.h"
+#include <string>
+#include "Component_Types.h"
+
+namespace libreverse
+{
+    namespace infrastructure
+    {
+
+        class Component
+        {
+            public:
+                static boost::uint32_t const SOURCE_ID = 0 ;
+                static boost::uint32_t const WORKING_MODE = 1;
+                static boost::uint32_t const SOURCE_MODE = 0;
+
+                virtual ~Component() {}
+
+                /**
+                 * \brief Upsream Component is providing input
+                 *
+                 * This is used during the creation of the Component_Graph. Each
+                 * Component providing data to a child component must be provided
+                 * to the child. The child uses this information to check to see
+                 * if it has all its required inputs before running its analysis.
+                 *
+                 * \param id Identity of the Component providing input
+                 * \param data Input data.
+                 */
+                virtual void add_Input_Source ( boost::uint32_t id ) = 0;
+
+                /*! \brief This is used during the actual processing of the
+                 * Component_Graph. The parent Component, identified by id,
+                 * is done with its analysis and has recorded its results
+                 * into the Data_Map_t in the Graph_Visitor. The child Component
+                 * marks that it has received input from the parent Component.
+                 *
+                 * \param id Identity of the Component that finished analsysis
+                 */
+                virtual void received_Input_Source_Data ( boost::uint32_t id ) = 0;
+
+                virtual std::string get_Name ( void ) const = 0;
+
+                virtual void run ( infrastructure_types::Component_Graph::Data_Map_t* m_input_data ) = 0;
+
+                virtual boost::shared_ptr<Data_Source_Base> results ( void ) = 0;
+
+                virtual void set_State ( boost::uint32_t mode ) = 0;
+
+                virtual boost::uint32_t get_ID ( void ) const = 0;
+
+                virtual infrastructure_types::Component_Data::Input_Token_t::const_iterator get_Source_List_Begin ( void ) const = 0;
+
+                virtual infrastructure_types::Component_Data::Input_Token_t::const_iterator get_Source_List_End ( void ) const = 0;
+
+        };
+
+    } /* namespace infrastructure */
+} /* namespace libreverse */
+
+#endif /* COMPONENT_H_ */

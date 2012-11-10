@@ -1,0 +1,64 @@
+/*  Reverse_Exception.h
+
+   Copyright (C) 2008 Stephen Torri
+
+   This file is part of Libreverse.
+
+   Libreverse is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published
+   by the Free Software Foundation; either version 3, or (at your
+   option) any later version.
+
+   Libreverse is distributed in the hope that it will be useful, but
+   WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see
+   <http://www.gnu.org/licenses/>.
+*/
+
+#ifndef REVERSE_COMPONENT_EXCEPTION_H_
+#define REVERSE_COMPONENT_EXCEPTION_H_
+
+#include <exception>
+#include <boost/cstdint.hpp>
+
+namespace libreverse { namespace errors {
+
+    class Reverse_Exception : public virtual std::exception {
+    public:
+
+        Reverse_Exception ( boost::uint32_t message_id );
+
+        /*!
+         * \brief Destructor
+         */
+        virtual ~Reverse_Exception (void) throw(){}
+
+        /*!
+         * \brief Return the extra message accompanying the exception.
+         */
+        virtual const char* what (void) const throw () = 0;
+
+        /*!
+         * \brief Return tne name of the exception
+         */
+        virtual const char* name (void) const throw() = 0 ;
+
+        /*!
+         * \brief Return the id of the exception
+         */
+        boost::uint32_t const& id (void) const throw();
+
+    protected:
+
+        boost::uint32_t m_id;
+
+    };
+
+} /* namespace errors */
+} /* namespace libreverse */
+
+#endif /* REVERSE_COMPONENT_EXCEPTION_H_ */

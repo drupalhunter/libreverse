@@ -1,0 +1,28 @@
+#ifndef DYLIB_REFERENCE_H
+#define DYLIB_REFERENCE_H
+
+#include "Load_Command.h"
+
+namespace libreverse { namespace mach_module {
+
+  class Dylib_Reference {
+  public:
+
+    /*! \brief Default Constructor */
+    Dylib_Reference();
+
+  private:
+
+    /*! \brief An index into the symbol table for the symbol being referenced. */
+    boost::uint32_t m_isym; // bits: 0-23?
+
+    /*! \brief A constant for the type of reference being made. */
+    boost::uint32_t m_flags; // bits 24 - 31?
+
+  };
+
+} /* namespace mach_module */
+} /* namespace libreverse */
+
+
+#endif /* DYLIB_REFERENCE_H */

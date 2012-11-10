@@ -1,0 +1,189 @@
+/*  Code_Attribute.h
+
+   Copyright (C) 2008 Stephen Torri
+
+   This file is part of Libreverse.
+
+   Libreverse is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published
+   by the Free Software Foundation; either version 3, or (at your
+   option) any later version.
+
+   Libreverse is distributed in the hope that it will be useful, but
+   WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see
+   <http://www.gnu.org/licenses/>.
+*/
+
+#ifndef CODE_ATTRIBUTE_H_
+#define CODE_ATTRIBUTE_H_
+
+#include "Attribute_Info.h"
+#include "Java_Types.h"
+#include <boost/enable_shared_from_this.hpp>
+#include <string>
+#include <vector>
+
+/* Comments for the variables in the class are taken from
+   T. Lindholm and F. Yellin
+   The Java Virtual Machine Specification Second Edition
+   Sun Microsystems
+   1999
+*/
+
+namespace libreverse { namespace java_module {
+
+    /*!
+     * \class Code_Attribute
+     * \date 2007
+     * \author Stephen Torri
+     */
+    class Code_Attribute : public Attribute_Info,
+                           public boost::enable_shared_from_this<Code_Attribute>
+    {
+
+    public:
+
+        friend class Class_File;
+
+        /*!
+         * \brief Default Constructor
+         */
+        Code_Attribute ( boost::uint16_t index );
+
+        /*!
+         * \brief Default Destructor
+         */
+        virtual ~Code_Attribute(){}
+
+        /*!
+         * \brief String representation of JAVA Header
+         * \return String output of header
+         */
+        virtual std::string to_String ( boost::uint16_t index = 0 ) const;
+
+        virtual std::string get_Tag (void) const;
+
+        virtual void read_Input ( java_types::Class_File::ptr_t file_ptr,
+                                  java_types::Class_Header::ptr_t hdr_ptr );
+
+        virtual bool is_Type ( std::string id ) const;
+
+        boost::uint16_t get_Name_Index (void) const;
+
+        std::string get_Attribute_Name (void) const; 
+          
+        boost::uint32_t get_Attribute_Length (void) const;
+
+        boost::uint16_t get_Max_Stack (void) const;
+
+        boost::uint16_t get_Max_Locals (void) const;
+
+        boost::uint32_t get_Code_Length (void) const;
+
+        java_types::Code_Attribute::Code_List_t::const_iterator get_Code_Begin (void) const;
+
+        java_types::Code_Attribute::Code_List_t::const_iterator get_Code_End (void) const;
+
+        java_types::Code_Attribute::Code_List_t::const_iterator get_Code_Iterator ( boost::uint32_t index ) const;
+
+	boost::uint8_t get_Code ( boost::uint32_t index ) const;
+
+        boost::uint16_t get_Exception_Table_Length (void) const;
+
+        java_types::Code_Attribute::Exception_Table_t::const_iterator get_Exception_Table_Begin (void) const;
+
+        java_types::Code_Attribute::Exception_Table_t::const_iterator get_Exception_Table_End (void) const;
+
+        boost::uint16_t get_Attributes_Count (void) const;
+
+        java_types::Code_Attribute::Attribute_Table_t::const_iterator get_Attributes_Begin (void) const;
+
+        java_types::Code_Attribute::Attribute_Table_t::const_iterator get_Attributes_End (void) const;
+
+    private:
+
+        boost::uint16_t m_name_index;
+
+        std::string m_attribute_name;
+
+        boost::uint32_t m_attribute_length;
+
+        /*!
+         * \brief The value of the max_stack item gives the maximum
+         * depth of the operand stack of this method at any point
+         * during execution of the method.
+         */
+        boost::uint16_t m_max_stack;
+
+        /*!
+         * \brief The value of the max_stack item gives the maximum
+         * depth of the operand stack of this method at any point
+         * during execution of the method.
+         */
+        boost::uint16_t m_max_locals;
+
+        /*!
+         * \brief The value of the code_length item gives the number of
+         * bytes in the code array for this method. The value of
+         * code_length must be greater than zero; the code array must
+         * not be empty.
+         */
+        boost::uint32_t m_code_length;
+
+        /*!
+         * \brief The code array gives the actual bytes of Java virtual
+         * machine code that implement the method.
+         */
+        java_types::Code_Attribute::Code_List_t m_code;
+
+        /*!
+         * The value of the exception_table_length item gives the
+         * number of entries in the exception_table table.
+         */
+        boost::uint16_t m_exception_table_length;
+
+        /*!
+         * \brief Each entry in the exception_table array describes
+         * one exception handler in the code array. The order of the
+         * handlers in the exception_table array is
+         * significant.
+         */
+        java_types::Code_Attribute::Exception_Table_t m_exception_table;
+
+        /*!
+         * \brief The value of the attributes_count item indicates the
+         * number of attributes of the Code attribute.
+         */
+        boost::uint16_t m_attributes_count;
+
+        /*!
+         * \brief Each value of the attributes table must be an
+         * attribute structure.  A Code attribute can have any number
+         * of optional attributes associated with it.
+         *
+         * Currently, the LineNumberTable and
+         * LocalVariableTable,attributes which contain debugging
+         * information, as well as the StackMapTable attribute, are
+         * defined and used with the Code attribute.
+         *
+         * A Java virtual machine implementation is permitted to
+         * silently ignore any or all attributes in the attributes
+         * table of a Code attribute, except for the StackMapTable
+         * attribute, which must be recognized if the class file
+         * version number is 50.0 or above. Attributes not defined in
+         * this specification are not allowed to affect the semantics
+         * of the class file, but only to provide additional
+         * descriptive information.
+         */
+        java_types::Code_Attribute::Attribute_Table_t m_attributes;
+    };
+
+} /* namespace java_module */
+} /* namespace libreverse */
+
+#endif /* CODE_ATTRIBUTE_H_ */

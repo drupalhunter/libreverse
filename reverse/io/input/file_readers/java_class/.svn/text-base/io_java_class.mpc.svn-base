@@ -1,0 +1,153 @@
+project(io_java_class) : icu, install_headers {
+    staticname = io_java_class
+    includes += $(top_srcdir)
+    after = reverse_exceptions
+
+    specific(vc8) {
+        dynamicflags += _SCL_SECURE_NO_WARNINGS
+        staticflags += _SCL_SECURE_NO_WARNINGS
+    }
+
+    Source_Files {
+        Append_Frame.cpp
+	    Attribute_Info_Factory.cpp
+    	Attribute_Tags.cpp
+        Chop_Frame.cpp
+    	Class_Access_Flags.cpp
+    	Class_Access_Flags_Rules.cpp
+	Class_File.cpp
+    	Class_Header.cpp
+    	Code_Attribute.cpp
+	Constant_Class_Info.cpp
+    	Constant_Double_Info.cpp
+    	Constant_Fieldref_Info.cpp
+    	Constant_Float_Info.cpp
+    	Constant_Info_Factory.cpp
+    	Constant_Integer_Info.cpp
+	Constant_InterfaceMethodref_Info.cpp
+    	Constant_Long_Info.cpp
+	Constant_Methodref_Info.cpp
+    	Constant_Name_And_Type_Info.cpp
+    	Constant_Pool_Tags.cpp
+	Constant_String_Info.cpp
+    	Constant_Utf8_Info.cpp
+	Constant_Value_Attribute.cpp
+        Deprecated_Attribute.cpp
+    	Double_Variable_Info.cpp
+        Enclosing_Method_Attribute.cpp
+    	Exceptions_Attribute.cpp
+    	Exception_Table_Entry.cpp
+	Field_Access_Flags.cpp
+    	Field_Access_Flags_Rules.cpp
+	Field_Info.cpp
+        Float_Variable_Info.cpp
+        Full_Frame.cpp
+    	Header.cpp
+        Inner_Classes_Attribute.cpp
+        Inner_Class_Reference.cpp
+        Integer_Variable_Info.cpp
+	Java_Meta_Info.cpp
+        Line_Number_Item.cpp
+        Line_Number_Table_Attribute.cpp
+        Local_Variable.cpp
+        Local_Variable_Table_Attribute.cpp
+        Long_Variable_Info.cpp
+    	Method_Access_Flags.cpp
+	Method_Info.cpp
+        Null_Variable_Info.cpp
+        Object_Variable_Info.cpp
+    	Reader.cpp
+        Same_Frame.cpp
+        Same_Frame_Extended.cpp
+        Same_Locals_One_Stack_Item_Frame.cpp
+        Same_Locals_One_Stack_Item_Frame_Extended.cpp
+        Signature_Attribute.cpp
+    	Source_File_Attribute.cpp
+        Stack_Map_Frame_Factory.cpp
+        Stack_Map_Frame_Tags.cpp
+        Stack_Map_Table_Attribute.cpp
+        Synthetic_Attribute.cpp
+        Top_Variable_Info.cpp
+        Uninitialized_This_Variable_Info.cpp
+        Uninitialized_Variable_Info.cpp
+        Unknown_Attribute.cpp
+	Verification_Type_Factory.cpp
+    	Verification_Type_Tags.cpp
+    }
+
+    Header_Files {
+        Append_Frame.h
+    	Attribute_Info.h
+	    Attribute_Info_Factory.h
+    	Attribute_Tags.h
+        Chop_Frame.h
+	    Class_Access_Flags.h
+    	Class_Access_Flags_Rules.h
+	    Class_File.h
+	    Class_Header.h
+    	Code_Attribute.h
+	    Constant_Class_Info.h
+    	Constant_Double_Info.h
+	    Constant_Fieldref_Info.h
+    	Constant_Float_Info.h
+    	Constant_Info_Factory.h
+    	Constant_Integer_Info.h
+	    Constant_InterfaceMethodref_Info.h
+    	Constant_Long_Info.h
+	    Constant_Methodref_Info.h
+    	Constant_Name_And_Type_Info.h
+	    Constant_Pool_Info.h
+    	Constant_Pool_Tags.h
+	    Constant_String_Info.h
+    	Constant_Utf8_Info.h
+	    Constant_Value_Attribute.h
+        Deprecated_Attribute.h
+        Double_Variable_Info.h
+        Enclosing_Method_Attribute.h
+    	Exceptions_Attribute.h
+    	Exception_Table_Entry.h
+	    Field_Access_Flags.h
+    	Field_Access_Flags_Rules.h
+	    Field_Info.h
+        Float_Variable_Info.h
+        Full_Frame.h
+    	Header.h
+        Inner_Classes_Attribute.h
+        Inner_Class_Reference.h
+        Integer_Variable_Info.h
+	Java_Meta_Info.h
+        Java_Types.h
+        Line_Number_Item.h
+        Line_Number_Table_Attribute.h
+        Local_Variable.h
+        Local_Variable_Table_Attribute.h
+        Long_Variable_Info.h
+    	Method_Access_Flags.h
+	    Method_Info.h
+        Null_Variable_Info.h
+        Object_Variable_Info.h
+    	Reader.h
+        Same_Frame.h
+        Same_Frame_Extended.h
+        Same_Locals_One_Stack_Item_Frame.h
+        Same_Locals_One_Stack_Item_Frame_Extended.h
+        Signature_Attribute.h
+    	Source_File_Attribute.h
+    	Stack_Map_Frame.h
+        Stack_Map_Frame_Factory.h
+        Stack_Map_Frame_Tags.h
+        Stack_Map_Table_Attribute.h
+        Synthetic_Attribute.h
+        Top_Variable_Info.h
+        Uninitialized_This_Variable_Info.h
+        Uninitialized_Variable_Info.h
+        Unknown_Attribute.h
+    	Verification_Type_Factory.h
+	    Verification_Type_Info.h
+    	Verification_Type_Tags.h
+    }
+}
+
+
+
+

@@ -1,0 +1,61 @@
+/*  Configuration.h
+
+   Copyright (C) 2008 Stephen Torri
+
+   This file is part of Libreverse.
+
+   Libreverse is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published
+   by the Free Software Foundation; either version 3, or (at your
+   option) any later version.
+
+   Libreverse is distributed in the hope that it will be useful, but
+   WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see
+   <http://www.gnu.org/licenses/>.
+*/
+
+#ifndef CONFIGURATION_H
+#define CONFIGURATION_H
+
+#include <map>
+#include <boost/cstdint.hpp>
+#include <boost/enable_shared_from_this.hpp>
+
+namespace libreverse
+{
+  namespace classifier
+  {
+    
+    template <typename Data_Type>
+    class Configuration : public boost::enable_shared_from_this< Configuration<Data_Type> >
+    {
+    public:
+
+      Configuration ( bool default_value = true );
+        
+      Configuration ( const Configuration& rhs );
+        
+      void set_Attribute ( boost::uint32_t index, bool value );
+
+      bool get_Attribute ( boost::uint32_t index );
+
+      std::string to_String (void);
+        
+    private:
+
+      std::string bool_String ( bool value );
+        
+      std::map<boost::uint32_t, bool> m_attributes;
+    };
+
+  } /* namespace classifier */
+} /* namespace libreverse */
+
+#include "Configuration.cpp"
+
+#endif /* CONFIGURATION_H */

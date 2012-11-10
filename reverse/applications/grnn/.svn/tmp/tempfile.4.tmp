@@ -1,0 +1,169 @@
+
+#include <boost/program_options.hpp>
+#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/convenience.hpp>
+#include <boost/format.hpp>
+
+#include <fstream>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <sstream>
+
+#ifdef LIBREVERSE_DEBUG
+#include <libreverse/Reverse.h>
+#include <libreverse/Trace.h>
+#endif
+
+#include <libreverse/io/File_ID.h>
+#include <libreverse/io/input/File_Readers/Java_Class/Reader.h>
+#include <libreverse/io/input/File_Readers/Java_Class/Class_Header.h>
+#include <libreverse/io/input/File_Readers/Java_Class/Constant_Pool_Info.h>
+#include <libreverse/data_containers/Memory_Map.h>
+#include "Trainer_Dump_Algorithm.h"
+#include "Trainer_Dump_Algorithm_Factory.h"
+#include "libreverse/components/input/grnn/Classifier_Types.h"
+
+#ifdef LIBREVERSE_DEBUG
+using namespace libreverse::trace;
+#endif /* LIBREVERSE_DEBUG */
+
+using namespace libreverse::classifier;
+
+int main (int ac, char** av)
+{
+  // Get start directory name from options.
+  // IF not present start with present directory ('.')
+  boost::program_options::options_description desc("Allowed options");
+  desc.add_options()
+    ("help", "produce help message")
+    ("compiler_name", boost::program_options::value<std::string>(), "Unique string name describing the compiler")
+    ("compiler_id", boost::program_options::value<float>(), "Unique numerical id describing the compiler")
+    ("source_type", boost::program_options::value<std::string>(), "Kind of source file ( java_class, windows_pe, linux_elf, mac_mach_o )" )
+    ("directory", boost::program_options::value<std::string>(), "Directory to start searching");
+
+  boost::program_options::variables_map vm;
+
+  try {
+    boost::program_options::store(boost::program_options::parse_command_line(ac, av, desc), vm);
+    boost::program_options::notify(vm);
+  }
+  catch ( boost::program_options::unknown_option& )
+    {
+      std::cout << desc << std::endl;
+      return 1;
+    }
+  catch ( boost::program_options::invalid_command_line_syntax& ic )
+    {
+      std::cout << ic.what() << std::endl;
+      return 1;
+    }
+
+  if (vm.count("help")) {
+    std::cout << desc << std::endl;
+    return 1;
+  }
+
+  std::string directory_string = ".";
+
+  if (vm.count("directory"))
+    {
+      std::cout << "Directory to find files was set to....: "
+		<< vm["directory"].as<std::string>() << "." << std::endl;
+      
+      directory_string = vm["directory"].as<std::string>();
+    }
+
+  std::string compiler_name_string = "";
+
+  if (vm.count("compiler_name"))
+    {
+      std::cout << "Compiler name was set to................: "
+		<< vm["compiler_name"].as<std::string>() << "." << std::endl;
+	  
+      compiler_name_string = vm["compiler_name"].as<std::string>();
+    }
+  else
+    {
+      std::cout << "Compiler name tag must be specified. Use the flag --compiler_name <string> to set the tag" << std::endl;
+      return 1;
+    }
+
+  float compiler_id = 0.0;
+  if ( vm.count ( "compiler_id" ) )
+  {
+     std::cout << "Compiler id was set to................: "
+           << vm["compiler_id"].as<float>() << "." << std::endl;
+      
+     compiler_id = vm["compiler_id"].as<float>();
+  }
+  else
+  {
+     std::cout << "Compiler id tag must be specified. Use the flag --compiler_id <float number> to set the tag" << std::endl;
+     return 1;
+  }
+
+  std::string source_type = "";
+  if ( vm.count ( "source_type" ) )
+  {
+     std::cout << "Source_type was set to................: "
+	       << vm["source_type"].as<std::string>() << "." << std::endl;
+      
+     source_type = vm["source_type"].as<std::string>();
+  }
+  else
+  {
+     std::cout << "Source type tag must be specified. Use the flag --source_type <type> to set the tag" << std::endl;
+     return 1;
+  }
+
+#ifdef LIBREVERSE_DEBUG
+    Trace_State::Instance().set_Trace_Level ( libreverse::api::TraceLevel::DATA );
+    Trace_State::Instance().set_Trace_Area_Mask ( libreverse::api::TraceArea::IO );
+    Trace_State::Instance().open_Trace_File ();
+#endif
+
+  // open output file
+  std::stringstream filename;
+  filename << boost::str ( boost::format ( "test_data_%1%.xml") % compiler_name_string );
+
+  std::ofstream xml_file ( (filename.str()).c_str() );
+  xml_file << "<?xml version=\"1.0\"?>" << std::endl;
+  xml_file << boost::format("<Data compiler_id=\"%1$f\">") % compiler_id << std::endl;
+
+  GRNN_Data_Types::Value_Type source_value = GRNN_Data_Types::get_Type(source_type);
+
+  if ( source_value == GRNN_Data_Types::UNKNOWN )
+    {
+      std::cout << "Invalid input source type" << std::endl;
+      return 1;
+    }
+
+  // Get the algorithm for this file type
+  libreverse::classifier_types::Trainer_Dump_Algorithm::ptr_t alg_ptr =
+    ( Trainer_Dump_Algorithm_Factory::Instance() ).get_Algorithm ( source_value );
+
+  // Get list of target files found recursively from all directories below starting directory.
+  std::vector<std::string> target_files;
+  boost::filesystem::path dir_path ( directory_string );
+
+  alg_ptr->find_Files ( dir_path, target_files );
+
+  // For each file found
+  for ( std::vector<std::string>::const_iterator cpos = target_files.begin();
+	cpos != target_files.end();
+	++cpos )
+    {
+      xml_file << alg_ptr->process ( *cpos );
+    }
+
+  // close output file
+  xml_file << "</Data>" << std::endl;
+  xml_file.close();
+
+#ifdef LIBREVERSE_DEBUG
+  Trace_State::Instance().close_Trace_File ();
+#endif
+
+  return 0;
+}

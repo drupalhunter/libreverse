@@ -1,0 +1,345 @@
+#include "Arch_Type_Detector.h"
+#include "libreverse/meta/Meta_Object.h"
+#include <iostream>
+#include "libreverse/io/input/File_Readers/Reader_Factory.h"
+#include "libreverse/io/input/File_Readers/File_Reader.h"
+#include "libreverse/errors/API_Exception.h"
+#include "libreverse/data_containers/Filename.h"
+#include "libreverse/infrastructure/data_source/Data_Object.h"
+#include "libreverse/infrastructure/Component_Data.h"
+#include "libreverse/infrastructure/Component_State.h"
+#include <boost/format.hpp>
+#include "libreverse/Trace.h"
+
+using namespace libreverse::api;
+using namespace libreverse::trace;
+
+namespace libreverse { namespace component {
+
+    const std::string Arch_Type_Detector::NAME = "Arch_Type_Detector";
+
+    Arch_Type_Detector::Arch_Type_Detector ()
+        : m_state_ptr ( new infrastructure::Component_State ( 0 ) )
+    {
+        Trace::write_Trace
+            ( TraceArea::COMPONENTS,
+              TraceLevel::DETAIL,
+              boost::str ( boost::format ( "Inside Arch_Type_Detector constructor (id=%d)")
+                           % m_state_ptr->get_ID() ) );
+    }
+
+    Arch_Type_Detector::Arch_Type_Detector( infrastructure_types::Component_State::ptr_t input_ptr )
+        : m_state_ptr ( input_ptr )
+    {
+        Trace::write_Trace
+            ( TraceArea::COMPONENTS,
+              TraceLevel::DETAIL,
+              boost::str ( boost::format ( "Inside Arch_Type_Detector constructor (id=%d)")
+                           % m_state_ptr->get_ID() ) );
+    }
+
+    Arch_Type_Detector::Arch_Type_Detector ( Arch_Type_Detector const& rhs )
+        : infrastructure::Component ( rhs ),
+          infrastructure::Component_Actor ( rhs ),
+          boost::enable_shared_from_this<Arch_Type_Detector> ( rhs ),
+          m_state_ptr ( new infrastructure::Component_State ( *rhs.m_state_ptr ) )
+    {
+        Trace::write_Trace
+            ( TraceArea::COMPONENTS,
+              TraceLevel::DETAIL,
+              boost::str ( boost::format ( "Inside Arch_Type_Detector copy constructor (id=%d)")
+                           % m_state_ptr->get_ID() ) );
+    }
+
+    Arch_Type_Detector::~Arch_Type_Detector ()
+    {
+        Trace::write_Trace
+            ( TraceArea::COMPONENTS,
+              TraceLevel::DETAIL,
+              boost::str ( boost::format ( "Inside Arch_Type_Detector destructor (id=%d)")
+                           % m_state_ptr->get_ID() ) );
+    }
+
+
+    void
+    Arch_Type_Detector::received_Input_Source_Data ( boost::uint32_t id )
+    {
+        Trace::write_Trace
+            ( TraceArea::COMPONENTS,
+              TraceLevel::DETAIL,
+              boost::str ( boost::format ( "Entering Arch_Type_Detector::received_Input_Source_Data (id=%d)")
+                           % m_state_ptr->get_ID() ) );
+
+        std::cout <<
+            boost::format("Arch_Type_Detector(%d)::init")
+            % m_state_ptr->get_ID()
+                  << std::endl;
+
+
+        m_state_ptr->received_Input_Source_Data ( id );
+
+        Trace::write_Trace
+            ( TraceArea::COMPONENTS,
+              TraceLevel::DETAIL,
+              boost::str ( boost::format ( "Exiting Arch_Type_Detector::received_Input_Source_Data (id=%d)")
+                           % m_state_ptr->get_ID() ) );
+
+    }
+
+    void
+    Arch_Type_Detector::add_Input_Source ( boost::uint32_t id )
+    {
+        Trace::write_Trace
+            ( TraceArea::COMPONENTS,
+              TraceLevel::DETAIL,
+              boost::str ( boost::format ( "Entering Arch_Type_Detector::add_Input_Source (id=%d)")
+                           % m_state_ptr->get_ID() ) );
+
+        m_state_ptr->add_Input_Source ( id );
+
+        Trace::write_Trace
+            ( TraceArea::COMPONENTS,
+              TraceLevel::DETAIL,
+              boost::str ( boost::format ( "Exiting Arch_Type_Detector::add_Input_Source (id=%d)")
+                           % m_state_ptr->get_ID() ) );
+
+    }
+
+    std::string
+    Arch_Type_Detector::get_Name (void) const
+    {
+        Trace::write_Trace
+            ( TraceArea::COMPONENTS,
+              TraceLevel::DETAIL,
+              boost::str ( boost::format ( "Inside Arch_Type_Detector::get_Name (id=%d)")
+                           % m_state_ptr->get_ID() ) );
+
+        return NAME;
+    }
+
+    void Arch_Type_Detector::process ()
+    {
+        Trace::write_Trace
+            ( TraceArea::COMPONENTS,
+              TraceLevel::DETAIL,
+              boost::str ( boost::format ( "Entering Arch_Type_Detector::process (id=%d)")
+                           % m_state_ptr->get_ID() ) );
+
+        infrastructure_types::Component_Data::ptr_t data_ptr =
+            m_state_ptr->get_Data();
+
+        if ( ! data_ptr->is_Filename_Set() )
+            {
+                Trace::write_Trace
+                    ( TraceArea::COMPONENTS,
+                      TraceLevel::ERROR,
+                      "Unable to find the input file name." );
+
+                Trace::write_Trace
+                    ( TraceArea::COMPONENTS,
+                      TraceLevel::ERROR,
+                      "Cannot find the arch type without it." );
+
+                Trace::write_Trace
+                    ( TraceArea::COMPONENTS,
+                      TraceLevel::ERROR,
+                      boost::str ( boost::format("Exception throw in %s at line %d")
+                                   % __FILE__
+                                   % __LINE__ ) );
+
+                // At this point we have not found the filename somehow
+                // the Precondition visitor did not work. So we will
+                // will throw an exception
+                throw ( errors::API_Exception
+                        ( errors::API_Exception::INTERNAL_LIBRARY_ERROR ) );
+            }
+
+        data_types::Filename::const_ptr_t file_ptr =
+            data_ptr->get_Input_Filename();
+
+        io::File_Reader::ptr_t file_reader_ptr =
+            ( io::Reader_Factory::Instance() ).create_File_Reader ( file_ptr->to_String() );
+
+        // determine file type
+        std::string arch_type =
+            file_reader_ptr->get_Meta_Info ( io::File_Reader::ARCHITECTURE_TYPE );
+
+        std::cout << "Arch Type Found: " << arch_type << std::endl;
+
+        /**
+         * add input filename to output information
+         */
+        data_ptr->set_Output_Data ( file_ptr );
+        /**
+         * add file type to output meta information
+         */
+        meta::Meta_Object::ptr_t meta_ptr ( new meta::Meta_Object() );
+
+        meta_ptr->add ( "arch_type",
+                        arch_type,
+                        meta::Meta_Object::STRING );
+
+        data_ptr->set_Output_Meta_Data ( meta_ptr );
+
+        Trace::write_Trace
+            ( TraceArea::COMPONENTS,
+              TraceLevel::DETAIL,
+              boost::str ( boost::format ( "Exiting Arch_Type_Detector::process (id=%d)")
+                           % m_state_ptr->get_ID() ) );
+
+    }
+
+    void
+    Arch_Type_Detector::run ( infrastructure::Graph_Base::Data_Map_t* m_input_data )
+    {
+        Trace::write_Trace
+            ( TraceArea::COMPONENTS,
+              TraceLevel::DETAIL,
+              boost::str ( boost::format ( "Entering Arch_Type_Detector::run (id=%d)")
+                           % m_state_ptr->get_ID() ) );
+
+        std::cout << std::endl
+                  << "--------------------------------" << std::endl
+                  << boost::format ( "%s(%d) - run" )
+            % NAME
+            % m_state_ptr->get_ID() << std::endl
+                  << "--------------------------------" << std::endl;
+
+        m_state_ptr->run ( this->shared_from_this(),
+                           m_input_data );        
+
+        std::cout << "--------------------------------" << std::endl
+                  << boost::format ( "%s(%d) - done" )
+            % NAME
+            % m_state_ptr->get_ID() << std::endl
+                  << "--------------------------------" << std::endl
+                  << std::endl;
+
+        Trace::write_Trace
+            ( TraceArea::COMPONENTS,
+              TraceLevel::DETAIL,
+              boost::str ( boost::format ( "Exiting Arch_Type_Detector::run (id=%d)")
+                           % m_state_ptr->get_ID() ) );
+
+    }
+
+    infrastructure_types::Data_Source_Base::ptr_t
+    Arch_Type_Detector::results (void)
+    {
+        Trace::write_Trace
+            ( TraceArea::COMPONENTS,
+              TraceLevel::DETAIL,
+              boost::str ( boost::format ( "Inside Arch_Type_Detector::results (id=%d)")
+                           % m_state_ptr->get_ID() ) );
+
+        return m_state_ptr->results();
+    }
+
+    void
+    Arch_Type_Detector::set_State ( boost::uint32_t mode )
+    {
+        Trace::write_Trace
+            ( TraceArea::COMPONENTS,
+              TraceLevel::DETAIL,
+              boost::str ( boost::format ( "Entering Arch_Type_Detector::set_State (id=%d)")
+                           % m_state_ptr->get_ID() ) );
+
+        m_state_ptr->switch_State ( mode );
+
+        Trace::write_Trace
+            ( TraceArea::COMPONENTS,
+              TraceLevel::DETAIL,
+              boost::str ( boost::format ( "Exiting Arch_Type_Detector::set_State (id=%d)")
+                           % m_state_ptr->get_ID() ) );
+
+    }
+
+    boost::uint32_t
+    Arch_Type_Detector::get_ID (void) const
+    {
+        Trace::write_Trace
+            ( TraceArea::COMPONENTS,
+              TraceLevel::DETAIL,
+              boost::str ( boost::format ( "Inside Arch_Type_Detector::set_State (id=%d)")
+                           % m_state_ptr->get_ID() ) );
+
+        return m_state_ptr->get_ID();
+    }
+    
+    infrastructure_types::Component_Data::Input_Token_t::const_iterator
+    Arch_Type_Detector::get_Source_List_Begin (void) const
+    {
+        Trace::write_Trace
+            ( TraceArea::COMPONENTS,
+              TraceLevel::DETAIL,
+              boost::str ( boost::format ( "Inside Arch_Type_Detector::get_Source_List_Begin (id=%d)")
+                           % m_state_ptr->get_ID() ) );
+
+        return m_state_ptr->get_Source_List_Begin ();
+    }
+
+    infrastructure_types::Component_Data::Input_Token_t::const_iterator
+    Arch_Type_Detector::get_Source_List_End (void) const
+    {
+        Trace::write_Trace
+            ( TraceArea::COMPONENTS,
+              TraceLevel::DETAIL,
+              boost::str ( boost::format ( "Inside Arch_Type_Detector::get_Source_List_End (id=%d)")
+                           % m_state_ptr->get_ID() ) );
+
+        return m_state_ptr->get_Source_List_End ();
+    }
+
+    Arch_Type_Detector&
+    Arch_Type_Detector::operator= ( Arch_Type_Detector const& rhs )
+    {
+        Trace::write_Trace
+            ( TraceArea::COMPONENTS,
+              TraceLevel::DETAIL,
+              boost::str ( boost::format ( "Entering Arch_Type_Detector::operator= (assignment) (id=%d)")
+                           % m_state_ptr->get_ID() ) );
+
+        Arch_Type_Detector temp ( rhs );
+        swap ( temp );
+
+        Trace::write_Trace
+            ( TraceArea::COMPONENTS,
+              TraceLevel::DETAIL,
+              boost::str ( boost::format ( "Exiting Arch_Type_Detector::operator= (assignment) (id=%d)")
+                           % m_state_ptr->get_ID() ) );
+
+        return *this;
+    }
+
+    void
+    Arch_Type_Detector::swap ( Arch_Type_Detector& rhs )
+    {
+        Trace::write_Trace
+            ( TraceArea::COMPONENTS,
+              TraceLevel::DETAIL,
+              boost::str ( boost::format ( "Entering Arch_Type_Detector::swap (id=%d)")
+                           % m_state_ptr->get_ID() ) );
+
+        m_state_ptr.swap ( rhs.m_state_ptr );
+
+        Trace::write_Trace
+            ( TraceArea::COMPONENTS,
+              TraceLevel::DETAIL,
+              boost::str ( boost::format ( "Exiting Arch_Type_Detector::swap (id=%d)")
+                           % m_state_ptr->get_ID() ) );
+
+    }
+
+    infrastructure_types::Component::ptr_t
+    Arch_Type_Detector::operator() ( infrastructure_types::Component_State::ptr_t data_ptr )
+    {
+        Trace::write_Trace
+            ( TraceArea::COMPONENTS,
+              TraceLevel::DETAIL,
+              "Inside Arch_Type_Detector::operator()" );
+
+        return infrastructure_types::Component::ptr_t ( new Arch_Type_Detector ( data_ptr ) );
+    }
+
+} /* namespace component */
+} /* namespace libreverse */

@@ -1,0 +1,22 @@
+#include "Dylib_Module_64.h"
+
+namespace libreverse { namespace mach_module {
+
+  Dylib_Module_64::Dylib_Module_64 ()
+    : m_module_name ( 0 ),
+    m_iextdefsym ( 0 ),
+    m_nextdefsym ( 0 ),
+    m_irefsym ( 0 ),
+    m_nrefsym ( 0 ),
+    m_ilocalsym ( 0 ),
+    m_nlocalsym ( 0 ),
+    m_iextrel ( 0 ),
+    m_nextrel ( 0 ),
+    m_iinit_iterm ( 0 ),
+    m_ninit_iterm ( 0 ),
+    m_objc_module_info_addr ( 0 ),
+    m_objc_module_info_size ( 0 )
+  {}
+
+} /* namespace mach_module */
+} /* namespace libreverse */

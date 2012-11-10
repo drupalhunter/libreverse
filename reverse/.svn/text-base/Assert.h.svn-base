@@ -1,0 +1,204 @@
+/*  Assert.h
+
+   Copyright (C) 2008 Stephen Torri
+
+   This file is part of Libreverse.
+
+   Libreverse is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published
+   by the Free Software Foundation; either version 3, or (at your
+   option) any later version.
+
+   Libreverse is distributed in the hope that it will be useful, but
+   WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see
+   <http://www.gnu.org/licenses/>.
+*/
+
+#ifndef LIBREVERSE_ASSERT_H
+#define LIBREVERSE_ASSERT_H
+
+/* Idea taken from Dr. Doug Schmidt presentation titled
+   "Object-Oriented Design and Programming: Programming with
+   Assertions and Exceptions".  It was modified to use templates
+   instead of macros for checking types. */
+
+#include <boost/cstdint.hpp>
+#include <iostream>
+#include <sstream>
+#include <string>
+#include "Trace.h"
+
+namespace libreverse {  namespace assert {
+
+    template <typename Exception>
+    class __bool_assert {
+    public:
+    
+        __bool_assert ( bool bool_expression,
+                        const char* file,
+                        boost::int32_t line,
+                        std::string message )
+        {
+            libreverse::trace::Trace::write_Trace
+                ( libreverse::api::TraceArea::ERROR_HANDLING,
+                  libreverse::api::TraceLevel::DETAIL,
+                  "Entering __bool_assert" );
+
+            if ( ! bool_expression )
+                {
+                    throw Exception ( file,
+                                      line,
+                                      message );
+                }
+        }
+    };
+
+    template <typename Pointer_Type, typename Exception>
+    class __null_assert {
+    public:
+
+        __null_assert ( Pointer_Type* ptr,
+                        const char* file,
+                        boost::int32_t line,
+                        std::string message )
+        {
+            libreverse::trace::Trace::write_Trace
+                ( libreverse::api::TraceArea::ERROR_HANDLING,
+                  libreverse::api::TraceLevel::DETAIL,
+                  "Entering __null_assert" );
+
+            libreverse::trace::Trace::write_Trace
+                ( libreverse::api::TraceArea::ERROR_HANDLING,
+                  libreverse::api::TraceLevel::DETAIL,
+                  boost::str ( boost::format ( " The pointer value is equal to %X" ) % ptr ) );
+
+            if ( ! ptr )
+                {
+                    throw Exception ( file,
+                                      line,
+                                      message );
+                }
+        }
+    };
+    
+    class Bad_Assertion : public std::exception {
+    public:
+        Bad_Assertion ( std::string file,
+                        boost::int32_t line,
+                        std::string message )
+        {
+            libreverse::trace::Trace::write_Trace
+                ( libreverse::api::TraceArea::ERROR_HANDLING,
+                  libreverse::api::TraceLevel::DETAIL,
+                  "Entering Bad_Assertion constructor" );
+
+            std::stringstream output;
+            output << "Assertion failed: file " << file
+                   << ", line " << line;
+
+            if ( ! message.empty() )
+                {
+                    output << std::endl << message;
+                }
+
+            libreverse::trace::Trace::write_Trace
+                ( libreverse::api::TraceArea::ERROR_HANDLING,
+                  libreverse::api::TraceLevel::ERROR,
+                  output.str() );
+
+            abort();
+        }
+    };
+    
+    class Assert {
+    public:
+#ifdef LIBREVERSE_DEBUG
+        template <typename Exception>
+        static inline void bool_check ( bool expression,
+                                        std::string message = "" )
+        {
+            libreverse::trace::Trace::write_Trace
+                ( libreverse::api::TraceArea::ERROR_HANDLING,
+                  libreverse::api::TraceLevel::DETAIL,
+                  "Entering Assert::bool_check (Custom Exception)" );
+
+            __bool_assert<Exception>::__bool_assert ( expression,
+                                                      __FILE__,
+                                                      __LINE__ ,
+                                                      message );
+        }
+
+        static inline void bool_check ( bool expression,
+                                        std::string message = "" )
+        {
+            libreverse::trace::Trace::write_Trace
+                ( libreverse::api::TraceArea::ERROR_HANDLING,
+                  libreverse::api::TraceLevel::DETAIL,
+                  "Entering Assert::bool_check (Default Exception)" );
+
+            __bool_assert<Bad_Assertion>::__bool_assert ( expression,
+                                                          __FILE__,
+                                                          __LINE__ ,
+                                                          message );
+        }
+
+        template <typename Pointer_Type, typename Exception>
+        static inline void null_check ( Pointer_Type* expression,
+                                        std::string message = "" )
+        {
+            libreverse::trace::Trace::write_Trace
+                ( libreverse::api::TraceArea::ERROR_HANDLING,
+                  libreverse::api::TraceLevel::DETAIL,
+                  "Entering Assert::null_check (Custom Exception)" );
+
+            typename __null_assert<Pointer_Type, Exception>::__null_assert ( expression,
+                                                                             __FILE__,
+                                                                             __LINE__ ,
+                                                                             message );
+        }
+
+        template <typename Pointer_Type>
+        static inline void null_check ( Pointer_Type* expression,
+                                        std::string message = "" )
+        {
+            libreverse::trace::Trace::write_Trace
+                ( libreverse::api::TraceArea::ERROR_HANDLING,
+                  libreverse::api::TraceLevel::DETAIL,
+                  "Entering Assert::null_check (Default Exception)" );
+
+            typename __null_assert<Pointer_Type, Bad_Assertion>::__null_assert ( expression,
+                                                                                 __FILE__,
+                                                                                 __LINE__ ,
+                                                                                 message );
+        }
+#else
+        template <typename Exception>
+        static inline void bool_check ( bool,
+                                        std::string )
+        {}
+
+        static inline void bool_check ( bool,
+                                        std::string )
+        {}
+
+        template <typename Pointer_Type, typename Exception>
+        static inline void null_check ( Pointer_Type*,
+                                        std::string )
+        {}
+
+        template <typename Pointer_Type>
+        static inline void null_check ( Pointer_Type*,
+                                        std::string )
+        {}
+#endif /* LIBREVERSE_DEBUG */
+    };
+
+} /* namespace assert */
+} /* namespace libreverse */
+
+#endif /* LIBREVERSE_ASSERT_H */

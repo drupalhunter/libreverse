@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <!-- Overall Data Structure -->
+  <xs:element name="formula_map">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="node" type="NodeType" minOccurs="1" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+    <xs:key name="nodeId">
+      <xs:selector xpath="./node/id"/>
+      <xs:field xpath="@id"/>
+    </xs:key>
+    <xs:key name="predNodeRef">
+      <xs:selector xpath="./node/predecessors"/>
+      <xs:field xpath="@idref"/>
+    </xs:key>
+  </xs:element>
+
+  <xs:complexType name="NodeType">
+    <xs:sequence>
+      <xs:element name="predecessors" type="NodeReference"/>
+      <xs:element name="name" type="xs:string">
+        <xs:complexType>
+          <xs:attribute name="id" type="xs:NCName" use="required"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="NodeReference">
+    <xs:sequence>
+      <xs:element name="node_ref" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:attribute name="idref" type="xs:NCName" use="required"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+</xs:schema>

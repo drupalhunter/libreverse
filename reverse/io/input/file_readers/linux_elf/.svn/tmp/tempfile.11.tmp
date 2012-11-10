@@ -1,0 +1,346 @@
+#include "Elf_Relocation_T.h"
+#include "Elf_arm.h"
+#include "Elf_avr.h"
+#include "Elf_m32r.h"
+#include "Elf_ix86.h"
+#include "Elf_m68hc11.h"
+#include "Elf_m68k.h"
+#include "Elf_i960.h"
+#include "Elf_v850.h"
+#include "Elf_d10v.h"
+#include "Elf_d30v.h"
+#include "Elf_dlx.h"
+#include "Elf_sh.h"
+#include "Elf_mn10300.h"
+#include "Elf_mn10200.h"
+#include "Elf_fr30.h"
+#include "Elf_frv.h"
+#include "Elf_arc.h"
+#include "Elf_mcore.h"
+#include "Elf_mips.h"
+#include "Elf_ia64.h"
+#include "Elf_vax.h"
+#include "Elf_mmix.h"
+#include "Elf_msp430.h"
+#include "Elf_ppc64.h"
+#include "Elf_alpha.h"
+#include "Elf_h8.h"
+#include "Elf_cris.h"
+#include "Elf_i860.h"
+#include "Elf_x86_64.h"
+#include "Elf_i370.h"
+#include "Elf_or32.h"
+#include "Elf_s390.h"
+#include "Elf_xstormy16.h"
+#include "Elf_ip2k.h"
+#include "Elf_iq2000.h"
+#include "Elf_xtensa.h"
+#include "libreverse/Trace.h"
+
+using namespace libreverse::api;
+using namespace libreverse::trace;
+
+namespace libreverse
+{
+    namespace elf_module
+    {
+
+        template <boost::uint32_t bitsize>
+        Elf_Relocation<bitsize>::Elf_Relocation ( typename elf_types::Elf_File_Header<bitsize>::ptr_t file_hdr )
+                : r_offset ( 0 ),
+                r_info ( 0 ),
+                m_symbol_table_index ( 0 ),
+                m_reloc_type ( 0 ),
+                m_file_hdr ( file_hdr )
+        {
+            Trace::write_Trace ( TraceArea::IO,
+                                 TraceLevel::DETAIL,
+                                 "Inside Elf_Relocation constructor" );
+        }
+
+        template <boost::uint32_t bitsize>
+        void
+        Elf_Relocation<bitsize>::convert ()
+        {
+            Trace::write_Trace ( TraceArea::IO,
+                                 TraceLevel::DETAIL,
+                                 "Entering Elf_Relocation::convert" );
+
+            io::Byte_Converter::convert ( r_offset );
+            io::Byte_Converter::convert ( r_info );
+
+            Trace::write_Trace ( TraceArea::IO,
+                                 TraceLevel::DETAIL,
+                                 "Exiting Elf_Relocation::convert" );
+
+        }
+
+        template <boost::uint32_t bitsize>
+        std::string
+        Elf_Relocation<bitsize>::get_Section_Type_Name ()
+        {
+            Trace::write_Trace ( TraceArea::IO,
+                                 TraceLevel::DETAIL,
+                                 "Entering Elf_Relocation::get_Section_Type_Name" );
+
+            std::stringstream result;
+
+            switch ( m_file_hdr->get_Machine_Value() )
+            {
+                default:
+                    result << "";
+                    break;
+
+                case Elf_Common::EM_M32R:
+                case Elf_Common::EM_CYGNUS_M32R:
+                    result << Elf_m32r::get_Type ( static_cast<boost::uint32_t> ( m_reloc_type ) );
+                    break;
+
+                case Elf_Common::EM_386:
+                case Elf_Common::EM_486:
+                    result << Elf_ix86::get_Type ( static_cast<boost::uint32_t> ( m_reloc_type ) );
+                    break;
+
+                case Elf_Common::EM_68HC11:
+                case Elf_Common::EM_68HC12:
+                    result << Elf_m68hc11::get_Type ( static_cast<boost::uint32_t> ( m_reloc_type ) );
+                    break;
+
+                case Elf_Common::EM_68K:
+                    result << Elf_m68k::get_Type ( static_cast<boost::uint32_t> ( m_reloc_type ) );
+                    break;
+
+                case Elf_Common::EM_960:
+                    result << Elf_i960::get_Type ( static_cast<boost::uint32_t> ( m_reloc_type ) );
+                    break;
+
+                case Elf_Common::EM_AVR:
+                case Elf_Common::EM_AVR_OLD:
+                    result << Elf_avr::get_Type ( static_cast<boost::uint32_t> ( m_reloc_type ) );
+                    break;
+
+                case Elf_Common::EM_OLD_SPARCV9:
+                case Elf_Common::EM_SPARC32PLUS:
+                case Elf_Common::EM_SPARCV9:
+                case Elf_Common::EM_SPARC:
+                    result << Elf_sparc::get_Type ( static_cast<boost::uint32_t> ( m_reloc_type ) );
+                    break;
+
+                case Elf_Common::EM_V850:
+                case Elf_Common::EM_CYGNUS_V850:
+                    result << Elf_v850::get_Type ( static_cast<boost::uint32_t> ( m_reloc_type ) );
+                    break;
+
+                case Elf_Common::EM_D10V:
+                case Elf_Common::EM_CYGNUS_D10V:
+                    result << Elf_d10v::get_Type ( static_cast<boost::uint32_t> ( m_reloc_type ) );
+                    break;
+
+                case Elf_Common::EM_D30V:
+                case Elf_Common::EM_CYGNUS_D30V:
+                    result << Elf_d30v::get_Type ( static_cast<boost::uint32_t> ( m_reloc_type ) );
+                    break;
+
+                case Elf_Common::EM_DLX:
+                    result << Elf_dlx::get_Type ( static_cast<boost::uint32_t> ( m_reloc_type ) );
+                    break;
+
+                case Elf_Common::EM_SH:
+                    result << Elf_sh::get_Type ( static_cast<boost::uint32_t> ( m_reloc_type ) );
+                    break;
+
+                case Elf_Common::EM_MN10300:
+                case Elf_Common::EM_CYGNUS_MN10300:
+                    result << Elf_mn10300::get_Type ( static_cast<boost::uint32_t> ( m_reloc_type ) );
+                    break;
+
+                case Elf_Common::EM_MN10200:
+                case Elf_Common::EM_CYGNUS_MN10200:
+                    result << Elf_mn10200::get_Type ( static_cast<boost::uint32_t> ( m_reloc_type ) );
+                    break;
+
+                case Elf_Common::EM_FR30:
+                case Elf_Common::EM_CYGNUS_FR30:
+                    result << Elf_fr30::get_Type ( static_cast<boost::uint32_t> ( m_reloc_type ) );
+                    break;
+
+                case Elf_Common::EM_CYGNUS_FRV:
+                    result << Elf_frv::get_Type ( static_cast<boost::uint32_t> ( m_reloc_type ) );
+                    break;
+
+                case Elf_Common::EM_MCORE:
+                    result << Elf_mcore::get_Type ( static_cast<boost::uint32_t> ( m_reloc_type ) );
+                    break;
+
+                case Elf_Common::EM_MMIX:
+                    result << Elf_mmix::get_Type ( static_cast<boost::uint32_t> ( m_reloc_type ) );
+                    break;
+
+                case Elf_Common::EM_MSP430:
+                case Elf_Common::EM_MSP430_OLD:
+                    result << Elf_msp430::get_Type ( static_cast<boost::uint32_t> ( m_reloc_type ) );
+                    break;
+
+                case Elf_Common::EM_PPC:
+                    result << Elf_ppc::get_Type ( static_cast<boost::uint32_t> ( m_reloc_type ) );
+                    break;
+
+                case Elf_Common::EM_PPC64:
+                    result << Elf_ppc64::get_Type ( static_cast<boost::uint32_t> ( m_reloc_type ) );
+                    break;
+
+                case Elf_Common::EM_MIPS:
+                case Elf_Common::EM_MIPS_RS3_LE:
+                    if ( bitsize == 32 )
+                    {
+                        result << Elf_mips::get_Type ( static_cast<boost::uint32_t> ( m_reloc_type ) );
+                    }
+                    else
+                    {
+                        result << Elf_mips::get_Type
+                        ( Elf_mips::ELF64_MIPS_R_TYPE ( m_reloc_type ) );
+
+                        result << Elf_mips::get_Type
+                        ( Elf_mips::ELF64_MIPS_R_TYPE2 ( m_reloc_type ) );
+
+                        result << Elf_mips::get_Type
+                        ( Elf_mips::ELF64_MIPS_R_TYPE3 ( m_reloc_type ) );
+                    }
+                    break;
+
+                case Elf_Common::EM_ALPHA:
+                    result << Elf_alpha::get_Type ( static_cast<boost::uint32_t> ( m_reloc_type ) );
+                    break;
+
+                case Elf_Common::EM_ARM:
+                    result << Elf_arm::get_Type ( static_cast<boost::uint32_t> ( m_reloc_type ) );
+                    break;
+
+                case Elf_Common::EM_ARC:
+                    result << Elf_arc::get_Type ( static_cast<boost::uint32_t> ( m_reloc_type ) );
+                    break;
+
+                case Elf_Common::EM_PARISC:
+                    result << Elf_hppa::get_Type ( static_cast<boost::uint32_t> ( m_reloc_type ) );
+                    break;
+
+                case Elf_Common::EM_H8_300:
+                case Elf_Common::EM_H8_300H:
+                case Elf_Common::EM_H8S:
+                    result << Elf_h8::get_Type ( static_cast<boost::uint32_t> ( m_reloc_type ) );
+                    break;
+
+                case Elf_Common::EM_OPENRISC:
+                case Elf_Common::EM_OR32:
+                    result << Elf_or32::get_Type ( static_cast<boost::uint32_t> ( m_reloc_type ) );
+                    break;
+
+                case Elf_Common::EM_PJ:
+                case Elf_Common::EM_PJ_OLD:
+                    result << Elf_pj::get_Type ( static_cast<boost::uint32_t> ( m_reloc_type ) );
+                    break;
+                case Elf_Common::EM_IA_64:
+                    result << Elf_ia64::get_Type ( static_cast<boost::uint32_t> ( m_reloc_type ) );
+                    break;
+
+                case Elf_Common::EM_CRIS:
+                    result << Elf_cris::get_Type ( static_cast<boost::uint32_t> ( m_reloc_type ) );
+                    break;
+
+                case Elf_Common::EM_860:
+                    result << Elf_i860::get_Type ( static_cast<boost::uint32_t> ( m_reloc_type ) );
+                    break;
+
+                case Elf_Common::EM_X86_64:
+                    result << Elf_x86_64::get_Type ( static_cast<boost::uint32_t> ( m_reloc_type ) );
+                    break;
+
+                case Elf_Common::EM_S370:
+                    result << Elf_i370::get_Type ( static_cast<boost::uint32_t> ( m_reloc_type ) );
+                    break;
+
+                case Elf_Common::EM_S390_OLD:
+                case Elf_Common::EM_S390:
+                    result << Elf_s390::get_Type ( static_cast<boost::uint32_t> ( m_reloc_type ) );
+                    break;
+
+                case Elf_Common::EM_XSTORMY16:
+                    result << Elf_xstormy16::get_Type ( static_cast<boost::uint32_t> ( m_reloc_type ) );
+                    break;
+
+                case Elf_Common::EM_VAX:
+                    result << Elf_vax::get_Type ( static_cast<boost::uint32_t> ( m_reloc_type ) );
+                    break;
+
+                case Elf_Common::EM_IP2K:
+                case Elf_Common::EM_IP2K_OLD:
+                    result << Elf_ip2k::get_Type ( static_cast<boost::uint32_t> ( m_reloc_type ) );
+                    break;
+
+                case Elf_Common::EM_IQ2000:
+                    result << Elf_iq2000::get_Type ( static_cast<boost::uint32_t> ( m_reloc_type ) );
+                    break;
+
+                case Elf_Common::EM_XTENSA_OLD:
+                case Elf_Common::EM_XTENSA:
+                    result << Elf_xtensa::get_Type ( static_cast<boost::uint32_t> ( m_reloc_type ) );
+                    break;
+            }
+
+            Trace::write_Trace ( TraceArea::IO,
+                                 TraceLevel::DETAIL,
+                                 "Exiting Elf_Relocation::get_Section_Type_Name" );
+
+            return result.str();
+        }
+
+        template <boost::uint32_t bitsize>
+        std::string
+        Elf_Relocation<bitsize>::to_String()
+        {
+            Trace::write_Trace ( TraceArea::IO,
+                                 TraceLevel::DETAIL,
+                                 "Entering Elf_Relocation::to_String" );
+
+            std::stringstream output;
+
+            output << boost::format ( "0x%1% " ) %
+            boost::io::group ( std::setfill ( '0' ), std::hex, std::setw ( bitsize/4 ),
+                               r_offset );
+
+            output << boost::format ( "0x%1% " ) %
+            boost::io::group ( std::setfill ( '0' ), std::hex, std::setw ( bitsize/4 ),
+                               r_info );
+
+            output << get_Section_Type_Name ();
+
+            Trace::write_Trace ( TraceArea::IO,
+                                 TraceLevel::DETAIL,
+                                 "Exiting Elf_Relocation::to_String" );
+
+            return output.str();
+        }
+
+        template <boost::uint32_t bitsize>
+        boost::uint32_t const
+        Elf_Relocation<bitsize>::get_size()
+        {
+            Trace::write_Trace ( TraceArea::IO,
+                                 TraceLevel::DETAIL,
+                                 "Inside Elf_Relocation::get_size" );
+
+            return bitsize;
+        }
+
+        template <boost::uint32_t bitsize>
+        typename Type_Mapper<bitsize>::arch_t
+        Elf_Relocation<bitsize>::get_Symbol_Token_Index ( void )
+        {
+            Trace::write_Trace ( TraceArea::IO,
+                                 TraceLevel::DETAIL,
+                                 "Inside Elf_Relocation::get_Symbol_Token_Index" );
+
+            return m_symbol_table_index;
+        }
+    } /* namespace elf_module */
+} /* namespace libreverse */

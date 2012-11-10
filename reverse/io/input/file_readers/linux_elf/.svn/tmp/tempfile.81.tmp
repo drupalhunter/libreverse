@@ -1,0 +1,51 @@
+#include "Elf_d30v.h"
+#include <iostream>
+#include "libreverse/Trace.h"
+
+using namespace libreverse::api;
+using namespace libreverse::trace;
+
+namespace libreverse { namespace elf_module {
+
+    inline std::string
+    Elf_d30v::get_Type ( boost::uint32_t type )
+    {
+        Trace::write_Trace ( TraceArea::IO,
+                             TraceLevel::DETAIL,
+                             "Entering Elf_d30v::get_Type" );
+
+        std::string output = "";
+
+        switch (type)
+            {
+                /* Relocations.  */
+            case 0: output = "R_D30V_NONE"; break;
+            case 1: output = "R_D30V_6"; break;
+            case 2: output = "R_D30V_9_PCREL"; break;
+            case 3: output = "R_D30V_9_PCREL_R"; break;
+            case 4: output = "R_D30V_15"; break;
+            case 5: output = "R_D30V_15_PCREL"; break;
+            case 6: output = "R_D30V_15_PCREL_R"; break;
+            case 7: output = "R_D30V_21"; break;
+            case 8: output = "R_D30V_21_PCREL"; break;
+            case 9: output = "R_D30V_21_PCREL_R"; break;
+            case 10: output = "R_D30V_32"; break;
+            case 11: output = "R_D30V_32_PCREL"; break;
+            case 12: output = "R_D30V_32_NORMAL"; break;
+                
+            default:
+                {
+                    std::cerr << "Unknown d30v relocation type: " << type << std::endl;
+                    output = "unknown";
+                }
+            }
+
+        Trace::write_Trace ( TraceArea::IO,
+                             TraceLevel::DETAIL,
+                             "Exiting Elf_d30v::get_Type" );
+
+        return output;
+    }
+
+} /* namespace elf_module */
+} /* namespace libreverse */

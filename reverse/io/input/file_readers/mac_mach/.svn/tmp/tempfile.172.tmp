@@ -1,0 +1,40 @@
+#ifndef UUID_COMMAND_H
+#define UUID_COMMAND_H
+
+#include "Load_Command.h"
+#include <vector>
+
+namespace libreverse
+{
+    namespace mach_module
+    {
+
+        class UUID_Command : public Load_Command
+        {
+            public:
+
+                friend class Mach_File;
+
+                UUID_Command ( boost::uint32_t cmd, boost::uint32_t cmdsize );
+
+                virtual ~UUID_Command() {}
+
+                virtual void convert ( bool need_convert );
+
+                virtual std::string to_String ( void );
+
+            private:
+
+                static const boost::uint8_t MAX_SIZE;
+
+                boost::uint32_t m_cmd;
+                boost::uint32_t m_cmdsize;
+                std::vector<boost::uint8_t> m_uuid;
+
+        };
+
+    } /* namespace mach_module */
+} /* namespace libreverse */
+
+
+#endif /* UUID_COMMAND_H */

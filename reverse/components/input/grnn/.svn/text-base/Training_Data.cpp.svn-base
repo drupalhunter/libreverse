@@ -1,0 +1,293 @@
+/*  Training_Data.cpp
+
+   Copyright (C) 2008 Stephen Torri
+
+   This file is part of Libreverse.
+
+   Libreverse is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published
+   by the Free Software Foundation; either version 3, or (at your
+   option) any later version.
+
+   Libreverse is distributed in the hope that it will be useful, but
+   WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see
+   <http://www.gnu.org/licenses/>.
+*/
+
+//
+// C++ Implementation: Training_Data
+//
+// Description:
+//
+//
+// Author: Stephen Torri, Winard Britt <storri@dell>, (C) 2007
+//
+// Copyright: See COPYING file that comes with this distribution
+//
+//
+#include "Training_Data.h"
+#include "Configuration.h"
+#include "Variable_Map.h"
+
+#include <sstream>
+#include <iostream>
+#include <boost/format.hpp>
+
+#include "libreverse/Create.h"
+#include "libreverse/Reverse.h"
+#include "libreverse/errors/Internal_Exception.h"
+
+using namespace libreverse::alloc;
+using namespace libreverse::api;
+
+#ifdef LIBREVERSE_DEBUG
+using namespace libreverse::trace;
+#include "libreverse/Trace.h"
+#endif /* LIBREVERSE_DEBUG */
+
+namespace libreverse {
+
+  namespace classifier
+  {
+    template <typename Data_Type>
+    Training_Data<Data_Type>::Training_Data ()
+      : m_data ( Create::shared_pointer<Data_Type>() )
+    {
+
+#ifdef LIBREVERSE_DEBUG
+      Trace::write_Trace ( TraceArea::CLASSIFIER,
+			   TraceLevel::DETAIL,
+			   "Inside Training_Data constructor" );
+#endif /* LIBREVERSE_DEBUG */
+
+    }
+
+    template <typename Data_Type>
+    Training_Data<Data_Type>::~Training_Data ()
+    {
+
+#ifdef LIBREVERSE_DEBUG
+      Trace::write_Trace ( TraceArea::CLASSIFIER,
+			   TraceLevel::DETAIL,
+			   "Inside Training_Data destructor" );
+#endif /* LIBREVERSE_DEBUG */
+    }
+
+    template <typename Data_Type>
+    classifier_types::Variable_Map::map_type::const_iterator
+    Training_Data<Data_Type>::begin ( void ) const
+    {
+
+#ifdef LIBREVERSE_DEBUG
+      Trace::write_Trace ( TraceArea::CLASSIFIER,
+			   TraceLevel::DETAIL,
+			   "Inside Training_Data::begin (const)" );
+#endif /* LIBREVERSE_DEBUG */
+
+
+      return m_data->begin();
+    }
+
+    template <typename Data_Type>
+    classifier_types::Variable_Map::map_type::iterator
+    Training_Data<Data_Type>::begin ( void )
+    {
+
+#ifdef LIBREVERSE_DEBUG
+      Trace::write_Trace ( TraceArea::CLASSIFIER,
+			   TraceLevel::DETAIL,
+			   "Inside Training_Data::begin" );
+#endif /* LIBREVERSE_DEBUG */
+
+
+      return m_data->begin();
+    }
+
+    template <typename Data_Type>
+    classifier_types::Variable_Map::map_type::const_iterator
+    Training_Data<Data_Type>::end ( void ) const
+    {
+
+#ifdef LIBREVERSE_DEBUG
+      Trace::write_Trace ( TraceArea::CLASSIFIER,
+			   TraceLevel::DETAIL,
+			   "Inside Training_Data::end (const)" );
+#endif /* LIBREVERSE_DEBUG */
+
+
+      return m_data->end();
+    }
+
+    template <typename Data_Type>
+    classifier_types::Variable_Map::map_type::iterator
+    Training_Data<Data_Type>::end ( void )
+    {
+
+#ifdef LIBREVERSE_DEBUG
+      Trace::write_Trace ( TraceArea::CLASSIFIER,
+			   TraceLevel::DETAIL,
+			   "Inside Training_Data::end" );
+#endif /* LIBREVERSE_DEBUG */
+
+
+      return m_data->end();
+    }
+
+    template <typename Data_Type>
+    std::string
+    Training_Data<Data_Type>::get_Attribute_String_List ( typename classifier_types::Configuration<Data_Type>::ptr_t config )
+    {
+
+#ifdef LIBREVERSE_DEBUG
+      Trace::write_Trace ( TraceArea::CLASSIFIER,
+			   TraceLevel::DETAIL,
+			   "Entering Training_Data::get_Attribute_String_List" );
+#endif /* LIBREVERSE_DEBUG */
+
+
+      std::string output;
+
+      output = Data_Type::get_Attribute_String_List ( config );
+
+
+#ifdef LIBREVERSE_DEBUG
+      Trace::write_Trace ( TraceArea::CLASSIFIER,
+			   TraceLevel::DETAIL,
+			   "Exiting Training_Data::get_Attribute_String_List" );
+#endif /* LIBREVERSE_DEBUG */
+
+
+      return output;
+    }
+
+    template <typename Data_Type>
+    std::string
+    Training_Data<Data_Type>::to_String ( typename classifier_types::Configuration<Data_Type>::ptr_t config ) const
+    {
+
+#ifdef LIBREVERSE_DEBUG
+      Trace::write_Trace ( TraceArea::CLASSIFIER,
+			   TraceLevel::DETAIL,
+			   "Entering Training_Data::to_String" );
+#endif /* LIBREVERSE_DEBUG */
+
+
+      std::stringstream output;
+
+      output << "---- Training_Data ----" << std::endl;
+
+      output << m_data->to_String ( config );
+
+
+#ifdef LIBREVERSE_DEBUG
+      Trace::write_Trace ( TraceArea::CLASSIFIER,
+			   TraceLevel::DETAIL,
+			   "Exiting Training_Data::to_String" );
+#endif /* LIBREVERSE_DEBUG */
+
+
+      return output.str();
+    }
+
+    template <typename Data_Type>
+    std::string
+    Training_Data<Data_Type>::to_XML ( typename classifier_types::Configuration<Data_Type>::ptr_t config ) const
+    {
+
+#ifdef LIBREVERSE_DEBUG
+      Trace::write_Trace ( TraceArea::CLASSIFIER,
+			   TraceLevel::DETAIL,
+			   "Entering Training_Data::to_XML" );
+#endif /* LIBREVERSE_DEBUG */
+
+
+      std::stringstream output;
+
+      output << m_data->to_XML ( config );
+
+
+#ifdef LIBREVERSE_DEBUG
+      Trace::write_Trace ( TraceArea::CLASSIFIER,
+			   TraceLevel::DETAIL,
+			   "Exiting Training_Data::to_XML" );
+#endif /* LIBREVERSE_DEBUG */
+
+
+      return output.str();
+    }
+
+    template <typename Data_Type>
+    bool
+    Training_Data<Data_Type>::is_Valid (void) const
+    {
+
+#ifdef LIBREVERSE_DEBUG
+      Trace::write_Trace ( TraceArea::CLASSIFIER,
+			   TraceLevel::DETAIL,
+			   "Entering Training_Data::is_Valid" );
+#endif /* LIBREVERSE_DEBUG */
+
+
+      bool valid = true;
+
+      boost::uint32_t index = 0;
+
+      for ( boost::uint32_t key = 1;
+	    key < Data_Type::ATTRIBUTE_COUNT;
+	    ++key )
+	{
+	  if ( ! ( m_data->get_Attribute ( key ) >= 0.0 && m_data->get_Attribute ( key ) <= 1.0 ) )
+	    {
+
+#ifdef LIBREVERSE_DEBUG
+	      Trace::write_Trace ( TraceArea::CLASSIFIER,
+				   TraceLevel::ERROR,
+				   boost::str ( boost::format ( "Item #%1$d is not valid" )
+						% index ) );
+#endif /* LIBREVERSE_DEBUG */
+
+	      valid = false;
+	      break;
+	    }
+          
+	  ++index;
+	}
+
+
+#ifdef LIBREVERSE_DEBUG
+      Trace::write_Trace ( TraceArea::CLASSIFIER,
+			   TraceLevel::DETAIL,
+			   "Exiting Training_Data::is_Valid" );  
+#endif /* LIBREVERSE_DEBUG */
+
+       
+      return valid;
+    }
+
+    template <typename Data_Type>
+    void
+    Training_Data<Data_Type>::set_Attribute ( boost::uint32_t index, double value )
+    {
+      m_data->set_Attribute ( index, value );
+    }
+
+    template <typename Data_Type>
+    double
+    Training_Data<Data_Type>::get_Attribute ( boost::uint32_t index ) const
+    {
+      return m_data->get_Attribute ( index );
+    }
+
+    template <typename Data_Type>
+    bool
+    Training_Data<Data_Type>::empty ( void ) const
+    {
+      return m_data->empty();
+    }
+  } /* namespace classifier */
+} /* namespace libreverse */

@@ -1,0 +1,34 @@
+#include "Sub_Umbrella_Command.h"
+#include "libreverse/io/Byte_Converter.h"
+#include <sstream>
+#include <boost/format.hpp>
+#include "LC_Str.h"
+
+namespace libreverse
+{
+    namespace mach_module
+    {
+
+        Sub_Umbrella_Command::Sub_Umbrella_Command ( boost::uint32_t cmd, boost::uint32_t cmdsize )
+                : m_cmd ( cmd ),
+                m_cmdsize ( cmdsize )
+        {}
+
+        void
+        Sub_Umbrella_Command::convert ( bool )
+        {}
+
+        std::string
+        Sub_Umbrella_Command::to_String ( void )
+        {
+            std::stringstream output;
+
+            output << "Sub Umbrella Command:" << std::endl
+            << boost::format ( "  Command Id: %1%" ) % m_cmd << std::endl
+            << boost::format ( "  Command Size: %1%" ) % m_cmdsize << std::endl
+            << m_sub_umbrella->to_String();
+
+            return output.str();
+        }
+    } /* namespace mach_module */
+} /* namespace libreverse */

@@ -1,0 +1,51 @@
+#ifndef ELF_DYNAMIC_HEADER_H_
+#define ELF_DYNAMIC_HEADER_H_
+
+#include "Elf_Types.h"
+#include "libreverse/io/input/File_Readers/Base_Header.h"
+#include "libreverse/io/Type_Mapper.h"
+#include <string>
+#include <vector>
+#include <boost/shared_ptr.hpp>
+
+namespace libreverse { namespace elf_module {
+
+    /*!
+     * \class Elf_Dynamic_Header
+     * \date 2003
+     * \author Stephen Torri
+     */
+    template <boost::uint32_t bitsize>
+    class Elf_Dynamic_Header : public header::Base_Header {
+
+    public:
+
+        /*!
+         * \brief Return the bit size of the header (e.g. 32-bit)
+         * \return Header bit size
+         */
+        virtual boost::uint32_t get_size (void) const;
+
+        /*!
+         * \brief Convert bit ordering
+         * Convert the bit ordering from the target file bit ordering
+         * to the host system.
+         */
+        virtual void convert ();
+
+        /*!
+         * \brief Return the contents of Elf_Dynamic_Header as a screen
+         * \return String represenation of contents of Elf_Dynamic_Header
+         */
+        virtual std::string toString (void);
+
+        typename elf_types::Elf_Dynamic_Header<bitsize>::Tag_List_t m_dyn_tags;
+
+    };
+
+} /* namespace elf_module */
+} /* namespace libreverse */
+
+#include "Elf_Dynamic_Header_T.cpp"
+
+#endif /* ELF_DYNAMIC_HEADER_H_ */

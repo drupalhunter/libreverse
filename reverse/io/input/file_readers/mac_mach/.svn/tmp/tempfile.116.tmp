@@ -1,0 +1,50 @@
+#ifndef IDENT_COMMAND_H
+#define IDENT_COMMAND_H
+
+#include "Load_Command.h"
+#include <vector>
+
+namespace libreverse
+{
+    namespace mach_module
+    {
+
+        class Ident_Command : public Load_Command
+        {
+            public:
+
+                friend class Mach_File;
+
+                /*! \brief Constructor
+                 *  \param cmd Command ID ( LC_IDENT )
+                 *  \param cmdsize Command Size in bytes
+                 */
+                Ident_Command ( boost::uint32_t cmd, boost::uint32_t cmdsize );
+
+                /*! \brief Default Destructor */
+                virtual ~Ident_Command() {}
+
+                /*!
+                 * \brief Convert the byte order of the command values
+                 *
+                 * \param need_convert TRUE it is necessary to convert the byte_order otherwise nothing is done
+                 */
+                virtual void convert ( bool need_convert );
+
+                /*!
+                 * \brief Return a formatted string representation of the Ident_Command
+                 *
+                 * \return Formatted output string of Ident_Command object
+                 */
+                virtual std::string to_String ( void );
+
+            private:
+                boost::uint32_t m_cmd;
+                boost::uint32_t m_cmdsize;
+        };
+
+    } /* namespace mach_module */
+} /* namespace libreverse */
+
+
+#endif /* IDENT_COMMAND_H */

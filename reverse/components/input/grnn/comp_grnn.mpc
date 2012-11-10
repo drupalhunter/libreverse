@@ -1,0 +1,83 @@
+
+project(comp_grnn) {
+    staticname = comp_grnn
+    includes += $(top_srcdir)
+
+    specific(vc8) {
+	dynamicflags += _SCL_SECURE_NO_WARNINGS
+	staticflags += _SCL_SECURE_NO_WARNINGS
+    }
+
+    Source_Files {
+        Compiler_Classifier_Algorithm_Factory.cpp
+	Elf_Input_Tag_Names.cpp
+        Elf_Training_Data.cpp
+    	Elf_Training_Data_Parser.cpp
+    	GRNN_Data_Entry.cpp
+    	GRNN_Data_Map.cpp
+	GRNN_Data_Types.cpp
+	Java_Input_Tag_Names.cpp
+        Java_Training_Data.cpp
+    	Java_Training_Data_Parser.cpp
+	Java_Classifier_Algorithm.cpp
+	Variable_Map.cpp
+	Windows_Input_Tag_Names.cpp
+        Windows_Training_Data.cpp
+    	Windows_Training_Data_Parser.cpp
+    }
+
+    Header_Files {
+	Candidate_Solution.h
+        Compiler_Classifier_Algorithm_Factory.h
+	Configuration.h
+	Elf_Input_Tag_Names.h
+        Elf_Training_Data.h
+    	Elf_Training_Data_Parser.h
+	GRNN.h
+	GRNN_Data_Entry.h
+	GRNN_Data_Map.h
+	GRNN_Data_Types.h
+	IO.h
+	Java_Classifier_Algorithm.h
+	Java_Input_Tag_Names.h
+        Java_Training_Data.h
+    	Java_Training_Data_Parser.h
+	Optimizer.h
+	Selection_Policy.h
+	Statistical.h
+	Training_Data.h
+	Training_Set.h
+	Variable_Map.h
+	Windows_Input_Tag_Names.h
+        Windows_Training_Data.h
+    	Windows_Training_Data_Parser.h
+    }
+
+    Template_Files {
+	Candidate_Solution.cpp
+	Configuration.cpp
+	GRNN.cpp
+	IO.cpp
+	Optimizer.cpp
+	Selection_Policy.cpp
+	Statistical.cpp
+        Training_Data.cpp
+	Training_Set.cpp
+    }
+
+    verbatim(automake, local) {
+
+	TEST_PROGS = \
+		statistical_test
+
+	check_PROGRAMS = $(TEST_PROGS)
+	TESTS = $(TEST_PROGS)
+
+	statistical_test_CPPFLAGS = -I$(top_srcdir) -DLIBREVERSE_DEBUG
+	statistical_test_SOURCES = Statistical_Test.cpp statistical_test_driver.cpp
+	statistical_test_DEPENDENCIES = libcomp_grnn.la
+        statistical_test_LDADD = -L$(top_builddir)/libreverse -lreverse \
+                -lboost_date_time -lboost_unit_test_framework
+    }
+
+}

@@ -1,0 +1,172 @@
+/*  classifier.cpp
+
+   Copyright (C) 2008 Stephen Torri
+
+   This file is part of Libreverse.
+
+   Libreverse is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published
+   by the Free Software Foundation; either version 3, or (at your
+   option) any later version.
+
+   Libreverse is distributed in the hope that it will be useful, but
+   WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see
+   <http://www.gnu.org/licenses/>.
+*/
+
+#include <boost/program_options.hpp>
+#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/convenience.hpp>
+#include <boost/format.hpp>
+
+#include "IO.h"
+#include "Candidate_Solution.h"
+#include "Optimizer.h"
+#include "Trace.h"
+
+#include <iostream>
+
+using namespace classifier;
+
+void
+find_Data_Files ( const boost::filesystem::path& dirpath, std::list<std::string>& output_files )
+{
+
+    if ( exists ( dirpath ) )
+    {
+        boost::filesystem::directory_iterator end_itr; // default construction yields past the end
+
+        for ( boost::filesystem::directory_iterator itr ( dirpath );
+                itr != end_itr;
+                ++itr )
+        {
+            if ( ! is_directory ( *itr ) )
+            {
+                // If file name ends with '.class'
+                std::string name = itr->leaf();
+
+                if ( name.find ( ".xml" ) != std::string::npos )
+                {
+                    output_files.push_back ( itr->string() );
+                }
+            }
+        }
+    }
+}
+
+void parse_Options ( int argc,
+		     char** argv,
+		     std::string& directory,
+		     std::string& type,
+		     std::string& output_name )
+{
+    // Options
+  boost::program_options::options_description desc ( "Allowed options" );
+  desc.add_options()
+    ( "help", "produce help message" )
+    ( "type", "Type of classifier ( java / pe / elf / mach). Default: java" )
+    ( "output", "Output filename" )
+    ( "directory", boost::program_options::value<std::string>(), "Directory to start searching" );
+
+  boost::program_options::variables_map vm;
+
+  try
+    {
+      boost::program_options::store ( boost::program_options::parse_command_line ( argc, argv, desc ), vm );
+      boost::program_options::notify ( vm );
+    }
+  catch ( boost::program_options::unknown_option& )
+    {
+      std::cout << desc << std::endl;
+    }
+
+  if ( vm.count ( "help" ) )
+    {
+      std::cout << desc << std::endl;
+      exit ( 0 );
+    }
+
+  if ( vm.count ( "directory" ) )
+    {
+      std::cout << "Directory to find files was set to....: "
+		<< vm["directory"].as<std::string>() << "." << std::endl;
+
+      directory = vm["directory"].as<std::string>();
+    }
+
+  if ( vm.count ( "type" ) )
+    {
+      std::cout << "Type of classifier....................: "
+		<< vm["type"].as<std::string>() << "." << std::endl;
+
+      type = vm["type"].as<std::string>();
+    }
+
+  if ( vm.count ( "output" ) )
+    {
+      std::cout << "Output_Name of classifier....................: "
+		<< vm["output"].as<std::string>() << "." << std::endl;
+
+      output_name = vm["output"].as<std::string>();
+    }
+}
+
+int main ( int argc, char** argv )
+{
+#ifdef CLASSIFIER_DEBUG
+    Trace_State::Instance().set_Trace_Level ( TraceLevel::DATA );
+    Trace_State::Instance().set_Trace_Area_Mask ( TraceArea::OPTIMIZER | TraceArea::CANDIDATE_SOLUTION );
+    //Trace_State::Instance().set_Trace_Area_Mask ( TraceArea::PARSER );
+    Trace_State::Instance().open_Trace_File ();
+#endif
+
+    std::string directory_string = ".";
+    std::string type_string = "java";
+
+    // Handle command line options
+    parse_Options ( argc, argv, directory_string, type_string );
+
+    // Find files
+    std::list<std::string> data_files;
+    boost::filesystem::path dir_path ( directory_string );
+
+    // Target specific for file type (e.g. PE = .exe, Java = .class)
+    find_Data_Files ( dir_path, data_files );
+
+    try
+    {
+
+      Classifier::ptr_t class_ptr = (Classifier_Factory::Instance()).create ( type );
+
+      // Pass directory of where to search for files
+      class_ptr->init ( directory_string );
+
+      // Execute classifier
+      class_ptr->execute ();
+
+      // Write XML file
+      class_ptr->write_XML ();
+      // <Data>
+      //   <Sigma>0.555</Sigma>
+      //   <TrainingSet>
+      //      <Entry>
+      //        ... Contents of training set
+      //      </Entry>
+      //   </TrainingSet>
+      // </Data>
+    }
+    catch ( std::exception& e )
+    {
+        std::cerr << e.what() << std::endl;
+    }
+#ifdef CLASSIFIER_DEBUG
+    Trace_State::Instance().close_Trace_File ();
+#endif
+
+    return 0;
+}

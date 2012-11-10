@@ -1,0 +1,112 @@
+#include "Elf_arm.h"
+#include <iostream>
+#include "libreverse/Trace.h"
+
+using namespace libreverse::api;
+using namespace libreverse::trace;
+
+namespace libreverse {
+namespace elf_module {
+
+  inline const boost::uint32_t
+  Elf_arm::EF_ARM_EABI_VERSION ( boost::uint32_t flags )
+  {
+    return (flags & EF_ARM_EABIMASK);
+  }
+
+  inline const char* Elf_arm::get_Type ( boost::uint32_t type )
+  {
+    switch (type)
+      {
+      case 0: return "R_ARM_NONE"; break;
+      case 1: return "R_ARM_PC24"; break;
+      case 2: return "R_ARM_ABS32"; break;
+      case 3: return "R_ARM_REL32"; break;
+#ifdef OLD_ARM_ABI
+      case 4: return "R_ARM_ABS8"; break;
+      case 5: return "R_ARM_ABS16"; break;
+      case 6: return "R_ARM_ABS12"; break;
+      case 7: return "R_ARM_THM_ABS5"; break;
+      case 8: return "R_ARM_THM_PC22"; break;
+      case 9: return "R_ARM_SBREL32"; break;
+      case 10: return "R_ARM_AMP_VCALL9"; break;
+
+        /* Cygnus extension to abi: Thumb unconditional branch.  */
+      case 11: return "R_ARM_THM_PC11"; break;
+
+        /* Cygnus extension to abi: Thumb conditional branch.  */
+      case 12: return "R_ARM_THM_PC9"; break;
+      case 13: return "R_ARM_GNU_VTINHERIT"; break;
+      case 14: return "R_ARM_GNU_VTENTRY"; break;
+#else /* not OLD_ARM_ABI */
+      case 4: return "R_ARM_PC13"; break;
+      case 5: return "R_ARM_ABS16"; break;
+      case 6: return "R_ARM_ABS12"; break;
+      case 7: return "R_ARM_THM_ABS5"; break;
+      case 8: return "R_ARM_ABS8"; break;
+      case 9: return "R_ARM_SBREL32"; break;
+      case 10: return "R_ARM_THM_PC22"; break;
+      case 11: return "R_ARM_THM_PC8"; break;
+      case 12: return "R_ARM_AMP_VCALL9"; break;
+      case 13: return "R_ARM_SWI24"; break;
+      case 14: return "R_ARM_THM_SWI8"; break;
+      case 15: return "R_ARM_XPC25"; break;
+      case 16: return "R_ARM_THM_XPC22"; break;
+#endif /* not OLD_ARM_ABI */
+      case 20: return "R_ARM_COPY"; break;   /* Copy symbol at runtime.  */
+      case 21: return "R_ARM_GLOB_DAT"; break;   /* Create GOT entry.  */
+      case 22: return "R_ARM_JUMP_SLOT"; break;   /* Create PLT entry.  */
+      case 23: return "R_ARM_RELATIVE"; break;   /* Adjust by program base.  */
+      case 24: return "R_ARM_GOTOFF"; break;   /* 32 bit offset to GOT.  */
+
+        /* 32 bit PC relative offset to GOT.  */
+      case 25: return "R_ARM_GOTPC"; break;
+
+        /* 32 bit GOT entry.  */
+      case 26: return "R_ARM_GOT32"; break;
+
+        /* 32 bit PLT address.  */
+      case 27: return "R_ARM_PLT32"; break;
+#ifdef OLD_ARM_ABI
+      case 28: return "FIRST_INVALID_RELOC"; break;
+      case 249: return "LAST_INVALID_RELOC"; break;
+#else /* not OLD_ARM_ABI */
+      case 28: return "FIRST_INVALID_RELOC1"; break;
+      case 31: return "LAST_INVALID_RELOC1"; break;
+      case 32: return "R_ARM_ALU_PCREL7_0"; break;
+      case 33: return "R_ARM_ALU_PCREL15_8"; break;
+      case 34: return "R_ARM_ALU_PCREL23_15"; break;
+      case 35: return "R_ARM_LDR_SBREL11_0"; break;
+      case 36: return "R_ARM_ALU_SBREL19_12"; break;
+      case 37: return "R_ARM_ALU_SBREL27_20"; break;
+      case 38: return "FIRST_INVALID_RELOC2"; break;
+      case 39: return "LAST_INVALID_RELOC2"; break;
+      case 100: return "R_ARM_GNU_VTENTRY"; break;
+      case 101: return "R_ARM_GNU_VTINHERIT"; break;
+
+        /* Cygnus extension to abi: Thumb unconditional branch.  */
+      case 102: return "R_ARM_THM_PC11"; break;
+
+        /* Cygnus extension to abi: Thumb conditional branch.  */
+      case 103: return "R_ARM_THM_PC9"; break;
+      case 104: return "FIRST_INVALID_RELOC3"; break;
+      case 248: return "LAST_INVALID_RELOC3"; break;
+      case 249: return "R_ARM_RXPC25"; break;
+#endif /* not OLD_ARM_ABI */
+      case 250: return "R_ARM_RSBREL32"; break;
+      case 251: return "R_ARM_THM_RPC22"; break;
+      case 252: return "R_ARM_RREL32"; break;
+      case 253: return "R_ARM_RABS32"; break;
+      case 254: return "R_ARM_RPC24"; break;
+      case 255: return "R_ARM_RBASE"; break;
+      default:
+        {
+          std::cerr << "Unknown arm relocation type:"
+                    << type << std::endl;
+          return "unknown";
+        }
+
+      }
+  }
+} /* namespace elf_module */
+} /* namespace libreverse */

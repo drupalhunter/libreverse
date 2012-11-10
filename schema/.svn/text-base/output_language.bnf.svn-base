@@ -1,0 +1,69 @@
+(* output grammar in ENBF *)
+
+instruction = assignment | if statement
+
+assignment = lhs, equal symbol, rhs
+
+lhs = function
+
+rhs = expression | function
+
+function = name, start group symbol, function args, end group symbol
+
+name = character, *( character | number | underline symbol)
+
+function args = name, *(comma symbol, name)
+
+character = lowercase character | uppercase character
+
+expression = addition operation |
+	division operation |
+	logical and operation
+
+addition operation = (token value | function), addition symbol, (function | token value )
+
+division operation = (token value | function), division symbol, (function | token value | integer)
+
+logical and operation = (token value | function), and symbol, (function | token value )
+
+token value = dollar sign symbol, name, period symbol, name
+
+integer = number, *number
+
+if statement = 'if', start group symbol, expression, end group symbol, start repeat symbol, +instruction, end repeat symbol
+
+(* non-terminals *)
+
+equal symbol = ':='
+
+lowercase character = 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h' |
+	'i' | 'j' | 'k' | 'l' | 'm' | 'n' | 'o' | 'p' | 'q' | 'r' |
+	's' | 't' | 'u' | 'v' | 'w' | 'x' | 'y' | 'z'
+
+upercase character = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H' |
+	'I' | 'J' | 'K' | 'L' | 'M' | 'N' | 'O' | 'P' | 'Q' | 'R' |
+	'S' | 'T' | 'U' | 'V' | 'W' | 'X' | 'Y' | 'Z'
+
+number = '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '0'
+
+underline symbol = '_'
+
+start group symbol = '('
+
+end group symbol = ')'
+
+start repeat symbol = '{'
+
+end repeat symbol = '}'
+
+comma symbol = ','
+
+addition symbol = '+'
+
+dollar sign symbol = '$'
+
+period symbol = '.'
+
+division symbol = '/'
+
+and symbol = '&'

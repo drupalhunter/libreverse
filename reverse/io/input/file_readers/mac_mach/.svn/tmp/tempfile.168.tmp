@@ -1,0 +1,59 @@
+#ifndef DYLIB_H
+#define DYLIB_H
+
+#include <boost/cstdint.hpp>
+#include "Mach_Types.h"
+
+namespace libreverse
+{
+    namespace mach_module
+    {
+
+        class Dylib
+        {
+            public:
+
+                friend class Mach_File;
+
+                /*! \brief Default Constructor */
+                Dylib();
+
+                /*! \brief Default Destructor */
+                virtual ~Dylib() {}
+
+
+                /*!
+                 * \brief Convert the byte order of the Dylib object values
+                 *
+                 * \param need_convert TRUE it is necessary to convert the byte_order otherwise nothing is done
+                 */
+                void convert ( bool need_convert );
+
+                /*!
+                 * \brief Return a formatted string representation of the CPU state
+                 *
+                 * \return Formatted output string of CPU state
+                 */
+                virtual std::string to_String ( void );
+
+            private:
+
+                /*! \brief Name of the shared library */
+                mach_types::LC_Str::ptr_t m_name;
+
+                /*! \brief The date and time when the shared library was built */
+                boost::uint32_t m_timestamp;
+
+                /*! \brief The current version of the shared library */
+                boost::uint32_t m_current_version;
+
+                /*! \brief The compatibility version of the shared library */
+                boost::uint32_t m_compatibility_version;
+
+        };
+
+    } /* namespace mach_module */
+} /* namespace libreverse */
+
+
+#endif /* DYLIB_H */

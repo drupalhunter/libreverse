@@ -1,0 +1,89 @@
+#ifndef MEMORY_MAP_H_
+#define MEMORY_MAP_H_
+
+#include <boost/cstdint.hpp>
+#include <boost/scoped_ptr.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/format.hpp>
+#include <iostream>
+#include <iomanip>
+#include "io/exceptions/IO_Exception.hpp"
+#include "infrastructure/data_source/Data_Visitor_Item.hpp"
+
+namespace libreverse { namespace data_types {
+
+    class Memory_Map : public infrastructure::Data_Visitor_Item
+    {
+    public:
+        typedef char data_type;
+        typedef char const* const_iterator;
+        typedef data_type* iterator;
+        typedef boost::shared_ptr<Memory_Map> ptr;
+
+        Memory_Map ( boost::uint32_t const& size );
+
+        Memory_Map ( boost::uint64_t const& size );
+
+        Memory_Map ( Memory_Map const& rhs );
+
+        virtual ~Memory_Map();
+
+        template <typename Offset_Type>
+        void seek ( Offset_Type offset )
+        {
+            if (offset > m_size)
+                {
+                    std::cerr << "The offset given, " << offset
+                              << " is invalid. Its pointing to a "
+                              << std::endl
+                              << "memory location outside of space "
+                              << "allocated to"
+                              << std::endl
+                              << "this Memory Map. ("
+                              << m_size << ")"
+                              << std::endl;
+                    throw errors::IO_Exception
+                        ( errors::IO_Exception::OUT_OF_RANGE );
+                }
+            m_present_pos = m_base_addr + offset;
+
+            std::cout
+                << boost::format ("Memory_Map::seek - new present pos = %1p") %
+                *m_present_pos
+                << std::endl;
+        }
+
+        void read ( iterator dest_addr_ptr, boost::uint32_t const& len);
+
+        void copy ( const_iterator src_addr_ptr, boost::uint32_t const& len );
+
+        iterator begin();
+
+        const_iterator begin() const;
+
+        const_iterator end() const;
+
+        iterator get_Present_Position (void);
+
+        const_iterator get_Present_Position (void) const;
+
+        boost::uint32_t const& size (void) const;
+
+        virtual void
+        accept ( infrastructure::Data_Visitor* vstr_ptr );
+
+    private:
+
+        char* m_base_addr;
+
+        boost::uint32_t m_size;    // Size of memory
+
+        iterator m_present_pos;
+
+        iterator m_end_addr;
+    };
+
+} /* namespace data_types */
+} /* namespace libreverse */
+
+#endif /* MEMORY_MAP_H_ */

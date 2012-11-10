@@ -1,0 +1,44 @@
+project(data_containers) : install_headers {
+	staticname = data_containers
+    includes += $(top_srcdir)
+
+    specific(vc8) {
+	dynamicflags += _SCL_SECURE_NO_WARNINGS
+	staticflags += _SCL_SECURE_NO_WARNINGS
+    }
+
+	verbatim(automake, local) {
+
+		TEST_PROGS = \
+			test_memory_map
+
+		check_PROGRAMS = $(TEST_PROGS)
+		TESTS = $(TEST_PROGS)
+
+		test_memory_map_CPPFLAGS = -I$(top_srcdir)
+		test_memory_map_SOURCES = test_memory_map.cpp
+		test_memory_map_DEPENDENCIES = libdata_containers.la
+
+        test_memory_map_LDADD = -lboost_unit_test_framework \
+                -L$(top_builddir)/libreverse -lreverse \
+                -lboost_date_time
+	}
+
+	Source_Files {
+		Basic_Block.cpp
+		Control_Flow_Graph.cpp
+	        Data_Types.cpp
+		Filename.cpp
+		Memory_Map.cpp
+	}
+
+	Header_Files {
+		Basic_Block.h
+		Control_Flow_Graph.h
+		Data_Types.h
+		Filename.h
+		Memory_Map.h
+	}
+}
+
+

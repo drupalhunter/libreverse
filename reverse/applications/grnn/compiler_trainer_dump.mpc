@@ -1,0 +1,24 @@
+project(compiler_trainer_dump) : install_bin {
+    exename = compiler_trainer_dump
+    after = reverse
+    includes += $(top_srcdir)
+
+    libs = reverse
+    lit_libs = boost_program_options boost_date_time
+
+    Source_Files {
+	compiler_trainer_dump.cpp
+	Elf_Compiler_Dump_Algorithm.cpp
+	Java_Compiler_Dump_Algorithm.cpp
+	Compiler_Dump_Algorithm_Factory.cpp
+	Windows_Compiler_Dump_Algorithm.cpp
+    }
+
+    Header_Files {
+	Elf_Compiler_Dump_Algorithm.h
+	Java_Compiler_Dump_Algorithm.h
+	Compiler_Dump_Algorithm.h
+	Compiler_Dump_Algorithm_Factory.h
+	Windows_Compiler_Dump_Algorithm.h
+    }
+}

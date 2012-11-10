@@ -1,0 +1,1 @@
+dummy-dummy.o dummy-dummy.o: dummy.cpp

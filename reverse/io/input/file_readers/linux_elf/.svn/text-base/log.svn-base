@@ -1,0 +1,771 @@
+GNU Make 3.81
+Copyright (C) 2006  Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.
+There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE.
+
+This program built for i686-pc-linux-gnu
+Reading makefiles...
+Reading makefile `Makefile'...
+Reading makefile `.deps/libElf_la-Elf_Header_Eident.Plo' (search path) (no ~ expansion)...
+Reading makefile `.deps/libElf_la-Elf_Note.Plo' (search path) (no ~ expansion)...
+Reading makefile `.deps/libElf_la-Elf_String_Token.Plo' (search path) (no ~ expansion)...
+Reading makefile `.deps/libElf_la-Elf_Symbol_Info.Plo' (search path) (no ~ expansion)...
+Reading makefile `.deps/libElf_la-Elf_Version.Plo' (search path) (no ~ expansion)...
+Reading makefile `.deps/libElf_la-Elf_Version_Aux.Plo' (search path) (no ~ expansion)...
+Reading makefile `.deps/libElf_la-Elf_Version_Need.Plo' (search path) (no ~ expansion)...
+Reading makefile `.deps/libElf_la-Elf_Version_Need_Aux.Plo' (search path) (no ~ expansion)...
+Reading makefile `.deps/libElf_la-Elf_Version_Symbol.Plo' (search path) (no ~ expansion)...
+Reading makefile `.deps/libElf_la-Elf_arm.Plo' (search path) (no ~ expansion)...
+Reading makefile `.deps/libElf_la-Elf_mmix.Plo' (search path) (no ~ expansion)...
+Reading makefile `.deps/libElf_la-Elf_xtensa.Plo' (search path) (no ~ expansion)...
+Updating makefiles....
+ Considering target file `.deps/libElf_la-Elf_xtensa.Plo'.
+  Looking for an implicit rule for `.deps/libElf_la-Elf_xtensa.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_xtensa.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_xtensa.Plo.cpp'.
+  Trying pattern rule with stem `libElf_la-Elf_xtensa.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_xtensa.Plo.o'.
+  Trying pattern rule with stem `libElf_la-Elf_xtensa.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_xtensa.Plo,v'.
+  Trying pattern rule with stem `libElf_la-Elf_xtensa.Plo'.
+  Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_xtensa.Plo,v'.
+  Trying pattern rule with stem `libElf_la-Elf_xtensa.Plo'.
+  Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_xtensa.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_xtensa.Plo'.
+  Trying implicit prerequisite `.deps/s.libElf_la-Elf_xtensa.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_xtensa.Plo'.
+  Trying implicit prerequisite `.deps/SCCS/s.libElf_la-Elf_xtensa.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_xtensa.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_xtensa.Plo.cpp'.
+  Looking for a rule with intermediate file `.deps/libElf_la-Elf_xtensa.Plo.cpp'.
+   Avoiding implicit rule recursion.
+   Trying pattern rule with stem `libElf_la-Elf_xtensa.Plo.cpp'.
+   Trying implicit prerequisite `.deps/libElf_la-Elf_xtensa.Plo.cpp,v'.
+   Trying pattern rule with stem `libElf_la-Elf_xtensa.Plo.cpp'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_xtensa.Plo.cpp,v'.
+   Trying pattern rule with stem `libElf_la-Elf_xtensa.Plo.cpp'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_xtensa.Plo.cpp'.
+   Trying pattern rule with stem `libElf_la-Elf_xtensa.Plo.cpp'.
+   Trying implicit prerequisite `.deps/s.libElf_la-Elf_xtensa.Plo.cpp'.
+   Trying pattern rule with stem `libElf_la-Elf_xtensa.Plo.cpp'.
+   Trying implicit prerequisite `.deps/SCCS/s.libElf_la-Elf_xtensa.Plo.cpp'.
+  Trying pattern rule with stem `libElf_la-Elf_xtensa.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_xtensa.Plo.o'.
+  Looking for a rule with intermediate file `.deps/libElf_la-Elf_xtensa.Plo.o'.
+   Avoiding implicit rule recursion.
+   Trying pattern rule with stem `libElf_la-Elf_xtensa.Plo'.
+   Rejecting impossible implicit prerequisite `.deps/libElf_la-Elf_xtensa.Plo.cpp'.
+   Trying pattern rule with stem `libElf_la-Elf_xtensa.Plo.o'.
+   Trying implicit prerequisite `.deps/libElf_la-Elf_xtensa.Plo.o,v'.
+   Trying pattern rule with stem `libElf_la-Elf_xtensa.Plo.o'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_xtensa.Plo.o,v'.
+   Trying pattern rule with stem `libElf_la-Elf_xtensa.Plo.o'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_xtensa.Plo.o'.
+   Trying pattern rule with stem `libElf_la-Elf_xtensa.Plo.o'.
+   Trying implicit prerequisite `.deps/s.libElf_la-Elf_xtensa.Plo.o'.
+   Trying pattern rule with stem `libElf_la-Elf_xtensa.Plo.o'.
+   Trying implicit prerequisite `.deps/SCCS/s.libElf_la-Elf_xtensa.Plo.o'.
+  No implicit rule found for `.deps/libElf_la-Elf_xtensa.Plo'.
+  Finished prerequisites of target file `.deps/libElf_la-Elf_xtensa.Plo'.
+ No need to remake target `.deps/libElf_la-Elf_xtensa.Plo'.
+ Considering target file `.deps/libElf_la-Elf_mmix.Plo'.
+  Looking for an implicit rule for `.deps/libElf_la-Elf_mmix.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_mmix.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_mmix.Plo.cpp'.
+  Trying pattern rule with stem `libElf_la-Elf_mmix.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_mmix.Plo.o'.
+  Trying pattern rule with stem `libElf_la-Elf_mmix.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_mmix.Plo,v'.
+  Trying pattern rule with stem `libElf_la-Elf_mmix.Plo'.
+  Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_mmix.Plo,v'.
+  Trying pattern rule with stem `libElf_la-Elf_mmix.Plo'.
+  Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_mmix.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_mmix.Plo'.
+  Trying implicit prerequisite `.deps/s.libElf_la-Elf_mmix.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_mmix.Plo'.
+  Trying implicit prerequisite `.deps/SCCS/s.libElf_la-Elf_mmix.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_mmix.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_mmix.Plo.cpp'.
+  Looking for a rule with intermediate file `.deps/libElf_la-Elf_mmix.Plo.cpp'.
+   Avoiding implicit rule recursion.
+   Trying pattern rule with stem `libElf_la-Elf_mmix.Plo.cpp'.
+   Trying implicit prerequisite `.deps/libElf_la-Elf_mmix.Plo.cpp,v'.
+   Trying pattern rule with stem `libElf_la-Elf_mmix.Plo.cpp'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_mmix.Plo.cpp,v'.
+   Trying pattern rule with stem `libElf_la-Elf_mmix.Plo.cpp'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_mmix.Plo.cpp'.
+   Trying pattern rule with stem `libElf_la-Elf_mmix.Plo.cpp'.
+   Trying implicit prerequisite `.deps/s.libElf_la-Elf_mmix.Plo.cpp'.
+   Trying pattern rule with stem `libElf_la-Elf_mmix.Plo.cpp'.
+   Trying implicit prerequisite `.deps/SCCS/s.libElf_la-Elf_mmix.Plo.cpp'.
+  Trying pattern rule with stem `libElf_la-Elf_mmix.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_mmix.Plo.o'.
+  Looking for a rule with intermediate file `.deps/libElf_la-Elf_mmix.Plo.o'.
+   Avoiding implicit rule recursion.
+   Trying pattern rule with stem `libElf_la-Elf_mmix.Plo'.
+   Rejecting impossible implicit prerequisite `.deps/libElf_la-Elf_mmix.Plo.cpp'.
+   Trying pattern rule with stem `libElf_la-Elf_mmix.Plo.o'.
+   Trying implicit prerequisite `.deps/libElf_la-Elf_mmix.Plo.o,v'.
+   Trying pattern rule with stem `libElf_la-Elf_mmix.Plo.o'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_mmix.Plo.o,v'.
+   Trying pattern rule with stem `libElf_la-Elf_mmix.Plo.o'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_mmix.Plo.o'.
+   Trying pattern rule with stem `libElf_la-Elf_mmix.Plo.o'.
+   Trying implicit prerequisite `.deps/s.libElf_la-Elf_mmix.Plo.o'.
+   Trying pattern rule with stem `libElf_la-Elf_mmix.Plo.o'.
+   Trying implicit prerequisite `.deps/SCCS/s.libElf_la-Elf_mmix.Plo.o'.
+  No implicit rule found for `.deps/libElf_la-Elf_mmix.Plo'.
+  Finished prerequisites of target file `.deps/libElf_la-Elf_mmix.Plo'.
+ No need to remake target `.deps/libElf_la-Elf_mmix.Plo'.
+ Considering target file `.deps/libElf_la-Elf_arm.Plo'.
+  Looking for an implicit rule for `.deps/libElf_la-Elf_arm.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_arm.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_arm.Plo.cpp'.
+  Trying pattern rule with stem `libElf_la-Elf_arm.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_arm.Plo.o'.
+  Trying pattern rule with stem `libElf_la-Elf_arm.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_arm.Plo,v'.
+  Trying pattern rule with stem `libElf_la-Elf_arm.Plo'.
+  Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_arm.Plo,v'.
+  Trying pattern rule with stem `libElf_la-Elf_arm.Plo'.
+  Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_arm.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_arm.Plo'.
+  Trying implicit prerequisite `.deps/s.libElf_la-Elf_arm.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_arm.Plo'.
+  Trying implicit prerequisite `.deps/SCCS/s.libElf_la-Elf_arm.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_arm.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_arm.Plo.cpp'.
+  Looking for a rule with intermediate file `.deps/libElf_la-Elf_arm.Plo.cpp'.
+   Avoiding implicit rule recursion.
+   Trying pattern rule with stem `libElf_la-Elf_arm.Plo.cpp'.
+   Trying implicit prerequisite `.deps/libElf_la-Elf_arm.Plo.cpp,v'.
+   Trying pattern rule with stem `libElf_la-Elf_arm.Plo.cpp'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_arm.Plo.cpp,v'.
+   Trying pattern rule with stem `libElf_la-Elf_arm.Plo.cpp'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_arm.Plo.cpp'.
+   Trying pattern rule with stem `libElf_la-Elf_arm.Plo.cpp'.
+   Trying implicit prerequisite `.deps/s.libElf_la-Elf_arm.Plo.cpp'.
+   Trying pattern rule with stem `libElf_la-Elf_arm.Plo.cpp'.
+   Trying implicit prerequisite `.deps/SCCS/s.libElf_la-Elf_arm.Plo.cpp'.
+  Trying pattern rule with stem `libElf_la-Elf_arm.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_arm.Plo.o'.
+  Looking for a rule with intermediate file `.deps/libElf_la-Elf_arm.Plo.o'.
+   Avoiding implicit rule recursion.
+   Trying pattern rule with stem `libElf_la-Elf_arm.Plo'.
+   Rejecting impossible implicit prerequisite `.deps/libElf_la-Elf_arm.Plo.cpp'.
+   Trying pattern rule with stem `libElf_la-Elf_arm.Plo.o'.
+   Trying implicit prerequisite `.deps/libElf_la-Elf_arm.Plo.o,v'.
+   Trying pattern rule with stem `libElf_la-Elf_arm.Plo.o'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_arm.Plo.o,v'.
+   Trying pattern rule with stem `libElf_la-Elf_arm.Plo.o'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_arm.Plo.o'.
+   Trying pattern rule with stem `libElf_la-Elf_arm.Plo.o'.
+   Trying implicit prerequisite `.deps/s.libElf_la-Elf_arm.Plo.o'.
+   Trying pattern rule with stem `libElf_la-Elf_arm.Plo.o'.
+   Trying implicit prerequisite `.deps/SCCS/s.libElf_la-Elf_arm.Plo.o'.
+  No implicit rule found for `.deps/libElf_la-Elf_arm.Plo'.
+  Finished prerequisites of target file `.deps/libElf_la-Elf_arm.Plo'.
+ No need to remake target `.deps/libElf_la-Elf_arm.Plo'.
+ Considering target file `.deps/libElf_la-Elf_Version_Symbol.Plo'.
+  Looking for an implicit rule for `.deps/libElf_la-Elf_Version_Symbol.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_Version_Symbol.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_Version_Symbol.Plo.cpp'.
+  Trying pattern rule with stem `libElf_la-Elf_Version_Symbol.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_Version_Symbol.Plo.o'.
+  Trying pattern rule with stem `libElf_la-Elf_Version_Symbol.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_Version_Symbol.Plo,v'.
+  Trying pattern rule with stem `libElf_la-Elf_Version_Symbol.Plo'.
+  Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Version_Symbol.Plo,v'.
+  Trying pattern rule with stem `libElf_la-Elf_Version_Symbol.Plo'.
+  Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Version_Symbol.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_Version_Symbol.Plo'.
+  Trying implicit prerequisite `.deps/s.libElf_la-Elf_Version_Symbol.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_Version_Symbol.Plo'.
+  Trying implicit prerequisite `.deps/SCCS/s.libElf_la-Elf_Version_Symbol.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_Version_Symbol.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_Version_Symbol.Plo.cpp'.
+  Looking for a rule with intermediate file `.deps/libElf_la-Elf_Version_Symbol.Plo.cpp'.
+   Avoiding implicit rule recursion.
+   Trying pattern rule with stem `libElf_la-Elf_Version_Symbol.Plo.cpp'.
+   Trying implicit prerequisite `.deps/libElf_la-Elf_Version_Symbol.Plo.cpp,v'.
+   Trying pattern rule with stem `libElf_la-Elf_Version_Symbol.Plo.cpp'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Version_Symbol.Plo.cpp,v'.
+   Trying pattern rule with stem `libElf_la-Elf_Version_Symbol.Plo.cpp'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Version_Symbol.Plo.cpp'.
+   Trying pattern rule with stem `libElf_la-Elf_Version_Symbol.Plo.cpp'.
+   Trying implicit prerequisite `.deps/s.libElf_la-Elf_Version_Symbol.Plo.cpp'.
+   Trying pattern rule with stem `libElf_la-Elf_Version_Symbol.Plo.cpp'.
+   Trying implicit prerequisite `.deps/SCCS/s.libElf_la-Elf_Version_Symbol.Plo.cpp'.
+  Trying pattern rule with stem `libElf_la-Elf_Version_Symbol.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_Version_Symbol.Plo.o'.
+  Looking for a rule with intermediate file `.deps/libElf_la-Elf_Version_Symbol.Plo.o'.
+   Avoiding implicit rule recursion.
+   Trying pattern rule with stem `libElf_la-Elf_Version_Symbol.Plo'.
+   Rejecting impossible implicit prerequisite `.deps/libElf_la-Elf_Version_Symbol.Plo.cpp'.
+   Trying pattern rule with stem `libElf_la-Elf_Version_Symbol.Plo.o'.
+   Trying implicit prerequisite `.deps/libElf_la-Elf_Version_Symbol.Plo.o,v'.
+   Trying pattern rule with stem `libElf_la-Elf_Version_Symbol.Plo.o'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Version_Symbol.Plo.o,v'.
+   Trying pattern rule with stem `libElf_la-Elf_Version_Symbol.Plo.o'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Version_Symbol.Plo.o'.
+   Trying pattern rule with stem `libElf_la-Elf_Version_Symbol.Plo.o'.
+   Trying implicit prerequisite `.deps/s.libElf_la-Elf_Version_Symbol.Plo.o'.
+   Trying pattern rule with stem `libElf_la-Elf_Version_Symbol.Plo.o'.
+   Trying implicit prerequisite `.deps/SCCS/s.libElf_la-Elf_Version_Symbol.Plo.o'.
+  No implicit rule found for `.deps/libElf_la-Elf_Version_Symbol.Plo'.
+  Finished prerequisites of target file `.deps/libElf_la-Elf_Version_Symbol.Plo'.
+ No need to remake target `.deps/libElf_la-Elf_Version_Symbol.Plo'.
+ Considering target file `.deps/libElf_la-Elf_Version_Need_Aux.Plo'.
+  Looking for an implicit rule for `.deps/libElf_la-Elf_Version_Need_Aux.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_Version_Need_Aux.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_Version_Need_Aux.Plo.cpp'.
+  Trying pattern rule with stem `libElf_la-Elf_Version_Need_Aux.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_Version_Need_Aux.Plo.o'.
+  Trying pattern rule with stem `libElf_la-Elf_Version_Need_Aux.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_Version_Need_Aux.Plo,v'.
+  Trying pattern rule with stem `libElf_la-Elf_Version_Need_Aux.Plo'.
+  Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Version_Need_Aux.Plo,v'.
+  Trying pattern rule with stem `libElf_la-Elf_Version_Need_Aux.Plo'.
+  Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Version_Need_Aux.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_Version_Need_Aux.Plo'.
+  Trying implicit prerequisite `.deps/s.libElf_la-Elf_Version_Need_Aux.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_Version_Need_Aux.Plo'.
+  Trying implicit prerequisite `.deps/SCCS/s.libElf_la-Elf_Version_Need_Aux.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_Version_Need_Aux.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_Version_Need_Aux.Plo.cpp'.
+  Looking for a rule with intermediate file `.deps/libElf_la-Elf_Version_Need_Aux.Plo.cpp'.
+   Avoiding implicit rule recursion.
+   Trying pattern rule with stem `libElf_la-Elf_Version_Need_Aux.Plo.cpp'.
+   Trying implicit prerequisite `.deps/libElf_la-Elf_Version_Need_Aux.Plo.cpp,v'.
+   Trying pattern rule with stem `libElf_la-Elf_Version_Need_Aux.Plo.cpp'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Version_Need_Aux.Plo.cpp,v'.
+   Trying pattern rule with stem `libElf_la-Elf_Version_Need_Aux.Plo.cpp'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Version_Need_Aux.Plo.cpp'.
+   Trying pattern rule with stem `libElf_la-Elf_Version_Need_Aux.Plo.cpp'.
+   Trying implicit prerequisite `.deps/s.libElf_la-Elf_Version_Need_Aux.Plo.cpp'.
+   Trying pattern rule with stem `libElf_la-Elf_Version_Need_Aux.Plo.cpp'.
+   Trying implicit prerequisite `.deps/SCCS/s.libElf_la-Elf_Version_Need_Aux.Plo.cpp'.
+  Trying pattern rule with stem `libElf_la-Elf_Version_Need_Aux.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_Version_Need_Aux.Plo.o'.
+  Looking for a rule with intermediate file `.deps/libElf_la-Elf_Version_Need_Aux.Plo.o'.
+   Avoiding implicit rule recursion.
+   Trying pattern rule with stem `libElf_la-Elf_Version_Need_Aux.Plo'.
+   Rejecting impossible implicit prerequisite `.deps/libElf_la-Elf_Version_Need_Aux.Plo.cpp'.
+   Trying pattern rule with stem `libElf_la-Elf_Version_Need_Aux.Plo.o'.
+   Trying implicit prerequisite `.deps/libElf_la-Elf_Version_Need_Aux.Plo.o,v'.
+   Trying pattern rule with stem `libElf_la-Elf_Version_Need_Aux.Plo.o'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Version_Need_Aux.Plo.o,v'.
+   Trying pattern rule with stem `libElf_la-Elf_Version_Need_Aux.Plo.o'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Version_Need_Aux.Plo.o'.
+   Trying pattern rule with stem `libElf_la-Elf_Version_Need_Aux.Plo.o'.
+   Trying implicit prerequisite `.deps/s.libElf_la-Elf_Version_Need_Aux.Plo.o'.
+   Trying pattern rule with stem `libElf_la-Elf_Version_Need_Aux.Plo.o'.
+   Trying implicit prerequisite `.deps/SCCS/s.libElf_la-Elf_Version_Need_Aux.Plo.o'.
+  No implicit rule found for `.deps/libElf_la-Elf_Version_Need_Aux.Plo'.
+  Finished prerequisites of target file `.deps/libElf_la-Elf_Version_Need_Aux.Plo'.
+ No need to remake target `.deps/libElf_la-Elf_Version_Need_Aux.Plo'.
+ Considering target file `.deps/libElf_la-Elf_Version_Need.Plo'.
+  Looking for an implicit rule for `.deps/libElf_la-Elf_Version_Need.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_Version_Need.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_Version_Need.Plo.cpp'.
+  Trying pattern rule with stem `libElf_la-Elf_Version_Need.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_Version_Need.Plo.o'.
+  Trying pattern rule with stem `libElf_la-Elf_Version_Need.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_Version_Need.Plo,v'.
+  Trying pattern rule with stem `libElf_la-Elf_Version_Need.Plo'.
+  Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Version_Need.Plo,v'.
+  Trying pattern rule with stem `libElf_la-Elf_Version_Need.Plo'.
+  Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Version_Need.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_Version_Need.Plo'.
+  Trying implicit prerequisite `.deps/s.libElf_la-Elf_Version_Need.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_Version_Need.Plo'.
+  Trying implicit prerequisite `.deps/SCCS/s.libElf_la-Elf_Version_Need.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_Version_Need.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_Version_Need.Plo.cpp'.
+  Looking for a rule with intermediate file `.deps/libElf_la-Elf_Version_Need.Plo.cpp'.
+   Avoiding implicit rule recursion.
+   Trying pattern rule with stem `libElf_la-Elf_Version_Need.Plo.cpp'.
+   Trying implicit prerequisite `.deps/libElf_la-Elf_Version_Need.Plo.cpp,v'.
+   Trying pattern rule with stem `libElf_la-Elf_Version_Need.Plo.cpp'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Version_Need.Plo.cpp,v'.
+   Trying pattern rule with stem `libElf_la-Elf_Version_Need.Plo.cpp'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Version_Need.Plo.cpp'.
+   Trying pattern rule with stem `libElf_la-Elf_Version_Need.Plo.cpp'.
+   Trying implicit prerequisite `.deps/s.libElf_la-Elf_Version_Need.Plo.cpp'.
+   Trying pattern rule with stem `libElf_la-Elf_Version_Need.Plo.cpp'.
+   Trying implicit prerequisite `.deps/SCCS/s.libElf_la-Elf_Version_Need.Plo.cpp'.
+  Trying pattern rule with stem `libElf_la-Elf_Version_Need.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_Version_Need.Plo.o'.
+  Looking for a rule with intermediate file `.deps/libElf_la-Elf_Version_Need.Plo.o'.
+   Avoiding implicit rule recursion.
+   Trying pattern rule with stem `libElf_la-Elf_Version_Need.Plo'.
+   Rejecting impossible implicit prerequisite `.deps/libElf_la-Elf_Version_Need.Plo.cpp'.
+   Trying pattern rule with stem `libElf_la-Elf_Version_Need.Plo.o'.
+   Trying implicit prerequisite `.deps/libElf_la-Elf_Version_Need.Plo.o,v'.
+   Trying pattern rule with stem `libElf_la-Elf_Version_Need.Plo.o'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Version_Need.Plo.o,v'.
+   Trying pattern rule with stem `libElf_la-Elf_Version_Need.Plo.o'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Version_Need.Plo.o'.
+   Trying pattern rule with stem `libElf_la-Elf_Version_Need.Plo.o'.
+   Trying implicit prerequisite `.deps/s.libElf_la-Elf_Version_Need.Plo.o'.
+   Trying pattern rule with stem `libElf_la-Elf_Version_Need.Plo.o'.
+   Trying implicit prerequisite `.deps/SCCS/s.libElf_la-Elf_Version_Need.Plo.o'.
+  No implicit rule found for `.deps/libElf_la-Elf_Version_Need.Plo'.
+  Finished prerequisites of target file `.deps/libElf_la-Elf_Version_Need.Plo'.
+ No need to remake target `.deps/libElf_la-Elf_Version_Need.Plo'.
+ Considering target file `.deps/libElf_la-Elf_Version_Aux.Plo'.
+  Looking for an implicit rule for `.deps/libElf_la-Elf_Version_Aux.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_Version_Aux.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_Version_Aux.Plo.cpp'.
+  Trying pattern rule with stem `libElf_la-Elf_Version_Aux.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_Version_Aux.Plo.o'.
+  Trying pattern rule with stem `libElf_la-Elf_Version_Aux.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_Version_Aux.Plo,v'.
+  Trying pattern rule with stem `libElf_la-Elf_Version_Aux.Plo'.
+  Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Version_Aux.Plo,v'.
+  Trying pattern rule with stem `libElf_la-Elf_Version_Aux.Plo'.
+  Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Version_Aux.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_Version_Aux.Plo'.
+  Trying implicit prerequisite `.deps/s.libElf_la-Elf_Version_Aux.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_Version_Aux.Plo'.
+  Trying implicit prerequisite `.deps/SCCS/s.libElf_la-Elf_Version_Aux.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_Version_Aux.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_Version_Aux.Plo.cpp'.
+  Looking for a rule with intermediate file `.deps/libElf_la-Elf_Version_Aux.Plo.cpp'.
+   Avoiding implicit rule recursion.
+   Trying pattern rule with stem `libElf_la-Elf_Version_Aux.Plo.cpp'.
+   Trying implicit prerequisite `.deps/libElf_la-Elf_Version_Aux.Plo.cpp,v'.
+   Trying pattern rule with stem `libElf_la-Elf_Version_Aux.Plo.cpp'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Version_Aux.Plo.cpp,v'.
+   Trying pattern rule with stem `libElf_la-Elf_Version_Aux.Plo.cpp'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Version_Aux.Plo.cpp'.
+   Trying pattern rule with stem `libElf_la-Elf_Version_Aux.Plo.cpp'.
+   Trying implicit prerequisite `.deps/s.libElf_la-Elf_Version_Aux.Plo.cpp'.
+   Trying pattern rule with stem `libElf_la-Elf_Version_Aux.Plo.cpp'.
+   Trying implicit prerequisite `.deps/SCCS/s.libElf_la-Elf_Version_Aux.Plo.cpp'.
+  Trying pattern rule with stem `libElf_la-Elf_Version_Aux.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_Version_Aux.Plo.o'.
+  Looking for a rule with intermediate file `.deps/libElf_la-Elf_Version_Aux.Plo.o'.
+   Avoiding implicit rule recursion.
+   Trying pattern rule with stem `libElf_la-Elf_Version_Aux.Plo'.
+   Rejecting impossible implicit prerequisite `.deps/libElf_la-Elf_Version_Aux.Plo.cpp'.
+   Trying pattern rule with stem `libElf_la-Elf_Version_Aux.Plo.o'.
+   Trying implicit prerequisite `.deps/libElf_la-Elf_Version_Aux.Plo.o,v'.
+   Trying pattern rule with stem `libElf_la-Elf_Version_Aux.Plo.o'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Version_Aux.Plo.o,v'.
+   Trying pattern rule with stem `libElf_la-Elf_Version_Aux.Plo.o'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Version_Aux.Plo.o'.
+   Trying pattern rule with stem `libElf_la-Elf_Version_Aux.Plo.o'.
+   Trying implicit prerequisite `.deps/s.libElf_la-Elf_Version_Aux.Plo.o'.
+   Trying pattern rule with stem `libElf_la-Elf_Version_Aux.Plo.o'.
+   Trying implicit prerequisite `.deps/SCCS/s.libElf_la-Elf_Version_Aux.Plo.o'.
+  No implicit rule found for `.deps/libElf_la-Elf_Version_Aux.Plo'.
+  Finished prerequisites of target file `.deps/libElf_la-Elf_Version_Aux.Plo'.
+ No need to remake target `.deps/libElf_la-Elf_Version_Aux.Plo'.
+ Considering target file `.deps/libElf_la-Elf_Version.Plo'.
+  Looking for an implicit rule for `.deps/libElf_la-Elf_Version.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_Version.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_Version.Plo.cpp'.
+  Trying pattern rule with stem `libElf_la-Elf_Version.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_Version.Plo.o'.
+  Trying pattern rule with stem `libElf_la-Elf_Version.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_Version.Plo,v'.
+  Trying pattern rule with stem `libElf_la-Elf_Version.Plo'.
+  Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Version.Plo,v'.
+  Trying pattern rule with stem `libElf_la-Elf_Version.Plo'.
+  Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Version.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_Version.Plo'.
+  Trying implicit prerequisite `.deps/s.libElf_la-Elf_Version.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_Version.Plo'.
+  Trying implicit prerequisite `.deps/SCCS/s.libElf_la-Elf_Version.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_Version.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_Version.Plo.cpp'.
+  Looking for a rule with intermediate file `.deps/libElf_la-Elf_Version.Plo.cpp'.
+   Avoiding implicit rule recursion.
+   Trying pattern rule with stem `libElf_la-Elf_Version.Plo.cpp'.
+   Trying implicit prerequisite `.deps/libElf_la-Elf_Version.Plo.cpp,v'.
+   Trying pattern rule with stem `libElf_la-Elf_Version.Plo.cpp'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Version.Plo.cpp,v'.
+   Trying pattern rule with stem `libElf_la-Elf_Version.Plo.cpp'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Version.Plo.cpp'.
+   Trying pattern rule with stem `libElf_la-Elf_Version.Plo.cpp'.
+   Trying implicit prerequisite `.deps/s.libElf_la-Elf_Version.Plo.cpp'.
+   Trying pattern rule with stem `libElf_la-Elf_Version.Plo.cpp'.
+   Trying implicit prerequisite `.deps/SCCS/s.libElf_la-Elf_Version.Plo.cpp'.
+  Trying pattern rule with stem `libElf_la-Elf_Version.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_Version.Plo.o'.
+  Looking for a rule with intermediate file `.deps/libElf_la-Elf_Version.Plo.o'.
+   Avoiding implicit rule recursion.
+   Trying pattern rule with stem `libElf_la-Elf_Version.Plo'.
+   Rejecting impossible implicit prerequisite `.deps/libElf_la-Elf_Version.Plo.cpp'.
+   Trying pattern rule with stem `libElf_la-Elf_Version.Plo.o'.
+   Trying implicit prerequisite `.deps/libElf_la-Elf_Version.Plo.o,v'.
+   Trying pattern rule with stem `libElf_la-Elf_Version.Plo.o'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Version.Plo.o,v'.
+   Trying pattern rule with stem `libElf_la-Elf_Version.Plo.o'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Version.Plo.o'.
+   Trying pattern rule with stem `libElf_la-Elf_Version.Plo.o'.
+   Trying implicit prerequisite `.deps/s.libElf_la-Elf_Version.Plo.o'.
+   Trying pattern rule with stem `libElf_la-Elf_Version.Plo.o'.
+   Trying implicit prerequisite `.deps/SCCS/s.libElf_la-Elf_Version.Plo.o'.
+  No implicit rule found for `.deps/libElf_la-Elf_Version.Plo'.
+  Finished prerequisites of target file `.deps/libElf_la-Elf_Version.Plo'.
+ No need to remake target `.deps/libElf_la-Elf_Version.Plo'.
+ Considering target file `.deps/libElf_la-Elf_Symbol_Info.Plo'.
+  Looking for an implicit rule for `.deps/libElf_la-Elf_Symbol_Info.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_Symbol_Info.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_Symbol_Info.Plo.cpp'.
+  Trying pattern rule with stem `libElf_la-Elf_Symbol_Info.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_Symbol_Info.Plo.o'.
+  Trying pattern rule with stem `libElf_la-Elf_Symbol_Info.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_Symbol_Info.Plo,v'.
+  Trying pattern rule with stem `libElf_la-Elf_Symbol_Info.Plo'.
+  Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Symbol_Info.Plo,v'.
+  Trying pattern rule with stem `libElf_la-Elf_Symbol_Info.Plo'.
+  Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Symbol_Info.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_Symbol_Info.Plo'.
+  Trying implicit prerequisite `.deps/s.libElf_la-Elf_Symbol_Info.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_Symbol_Info.Plo'.
+  Trying implicit prerequisite `.deps/SCCS/s.libElf_la-Elf_Symbol_Info.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_Symbol_Info.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_Symbol_Info.Plo.cpp'.
+  Looking for a rule with intermediate file `.deps/libElf_la-Elf_Symbol_Info.Plo.cpp'.
+   Avoiding implicit rule recursion.
+   Trying pattern rule with stem `libElf_la-Elf_Symbol_Info.Plo.cpp'.
+   Trying implicit prerequisite `.deps/libElf_la-Elf_Symbol_Info.Plo.cpp,v'.
+   Trying pattern rule with stem `libElf_la-Elf_Symbol_Info.Plo.cpp'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Symbol_Info.Plo.cpp,v'.
+   Trying pattern rule with stem `libElf_la-Elf_Symbol_Info.Plo.cpp'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Symbol_Info.Plo.cpp'.
+   Trying pattern rule with stem `libElf_la-Elf_Symbol_Info.Plo.cpp'.
+   Trying implicit prerequisite `.deps/s.libElf_la-Elf_Symbol_Info.Plo.cpp'.
+   Trying pattern rule with stem `libElf_la-Elf_Symbol_Info.Plo.cpp'.
+   Trying implicit prerequisite `.deps/SCCS/s.libElf_la-Elf_Symbol_Info.Plo.cpp'.
+  Trying pattern rule with stem `libElf_la-Elf_Symbol_Info.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_Symbol_Info.Plo.o'.
+  Looking for a rule with intermediate file `.deps/libElf_la-Elf_Symbol_Info.Plo.o'.
+   Avoiding implicit rule recursion.
+   Trying pattern rule with stem `libElf_la-Elf_Symbol_Info.Plo'.
+   Rejecting impossible implicit prerequisite `.deps/libElf_la-Elf_Symbol_Info.Plo.cpp'.
+   Trying pattern rule with stem `libElf_la-Elf_Symbol_Info.Plo.o'.
+   Trying implicit prerequisite `.deps/libElf_la-Elf_Symbol_Info.Plo.o,v'.
+   Trying pattern rule with stem `libElf_la-Elf_Symbol_Info.Plo.o'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Symbol_Info.Plo.o,v'.
+   Trying pattern rule with stem `libElf_la-Elf_Symbol_Info.Plo.o'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Symbol_Info.Plo.o'.
+   Trying pattern rule with stem `libElf_la-Elf_Symbol_Info.Plo.o'.
+   Trying implicit prerequisite `.deps/s.libElf_la-Elf_Symbol_Info.Plo.o'.
+   Trying pattern rule with stem `libElf_la-Elf_Symbol_Info.Plo.o'.
+   Trying implicit prerequisite `.deps/SCCS/s.libElf_la-Elf_Symbol_Info.Plo.o'.
+  No implicit rule found for `.deps/libElf_la-Elf_Symbol_Info.Plo'.
+  Finished prerequisites of target file `.deps/libElf_la-Elf_Symbol_Info.Plo'.
+ No need to remake target `.deps/libElf_la-Elf_Symbol_Info.Plo'.
+ Considering target file `.deps/libElf_la-Elf_String_Token.Plo'.
+  Looking for an implicit rule for `.deps/libElf_la-Elf_String_Token.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_String_Token.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_String_Token.Plo.cpp'.
+  Trying pattern rule with stem `libElf_la-Elf_String_Token.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_String_Token.Plo.o'.
+  Trying pattern rule with stem `libElf_la-Elf_String_Token.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_String_Token.Plo,v'.
+  Trying pattern rule with stem `libElf_la-Elf_String_Token.Plo'.
+  Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_String_Token.Plo,v'.
+  Trying pattern rule with stem `libElf_la-Elf_String_Token.Plo'.
+  Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_String_Token.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_String_Token.Plo'.
+  Trying implicit prerequisite `.deps/s.libElf_la-Elf_String_Token.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_String_Token.Plo'.
+  Trying implicit prerequisite `.deps/SCCS/s.libElf_la-Elf_String_Token.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_String_Token.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_String_Token.Plo.cpp'.
+  Looking for a rule with intermediate file `.deps/libElf_la-Elf_String_Token.Plo.cpp'.
+   Avoiding implicit rule recursion.
+   Trying pattern rule with stem `libElf_la-Elf_String_Token.Plo.cpp'.
+   Trying implicit prerequisite `.deps/libElf_la-Elf_String_Token.Plo.cpp,v'.
+   Trying pattern rule with stem `libElf_la-Elf_String_Token.Plo.cpp'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_String_Token.Plo.cpp,v'.
+   Trying pattern rule with stem `libElf_la-Elf_String_Token.Plo.cpp'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_String_Token.Plo.cpp'.
+   Trying pattern rule with stem `libElf_la-Elf_String_Token.Plo.cpp'.
+   Trying implicit prerequisite `.deps/s.libElf_la-Elf_String_Token.Plo.cpp'.
+   Trying pattern rule with stem `libElf_la-Elf_String_Token.Plo.cpp'.
+   Trying implicit prerequisite `.deps/SCCS/s.libElf_la-Elf_String_Token.Plo.cpp'.
+  Trying pattern rule with stem `libElf_la-Elf_String_Token.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_String_Token.Plo.o'.
+  Looking for a rule with intermediate file `.deps/libElf_la-Elf_String_Token.Plo.o'.
+   Avoiding implicit rule recursion.
+   Trying pattern rule with stem `libElf_la-Elf_String_Token.Plo'.
+   Rejecting impossible implicit prerequisite `.deps/libElf_la-Elf_String_Token.Plo.cpp'.
+   Trying pattern rule with stem `libElf_la-Elf_String_Token.Plo.o'.
+   Trying implicit prerequisite `.deps/libElf_la-Elf_String_Token.Plo.o,v'.
+   Trying pattern rule with stem `libElf_la-Elf_String_Token.Plo.o'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_String_Token.Plo.o,v'.
+   Trying pattern rule with stem `libElf_la-Elf_String_Token.Plo.o'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_String_Token.Plo.o'.
+   Trying pattern rule with stem `libElf_la-Elf_String_Token.Plo.o'.
+   Trying implicit prerequisite `.deps/s.libElf_la-Elf_String_Token.Plo.o'.
+   Trying pattern rule with stem `libElf_la-Elf_String_Token.Plo.o'.
+   Trying implicit prerequisite `.deps/SCCS/s.libElf_la-Elf_String_Token.Plo.o'.
+  No implicit rule found for `.deps/libElf_la-Elf_String_Token.Plo'.
+  Finished prerequisites of target file `.deps/libElf_la-Elf_String_Token.Plo'.
+ No need to remake target `.deps/libElf_la-Elf_String_Token.Plo'.
+ Considering target file `.deps/libElf_la-Elf_Note.Plo'.
+  Looking for an implicit rule for `.deps/libElf_la-Elf_Note.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_Note.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_Note.Plo.cpp'.
+  Trying pattern rule with stem `libElf_la-Elf_Note.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_Note.Plo.o'.
+  Trying pattern rule with stem `libElf_la-Elf_Note.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_Note.Plo,v'.
+  Trying pattern rule with stem `libElf_la-Elf_Note.Plo'.
+  Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Note.Plo,v'.
+  Trying pattern rule with stem `libElf_la-Elf_Note.Plo'.
+  Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Note.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_Note.Plo'.
+  Trying implicit prerequisite `.deps/s.libElf_la-Elf_Note.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_Note.Plo'.
+  Trying implicit prerequisite `.deps/SCCS/s.libElf_la-Elf_Note.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_Note.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_Note.Plo.cpp'.
+  Looking for a rule with intermediate file `.deps/libElf_la-Elf_Note.Plo.cpp'.
+   Avoiding implicit rule recursion.
+   Trying pattern rule with stem `libElf_la-Elf_Note.Plo.cpp'.
+   Trying implicit prerequisite `.deps/libElf_la-Elf_Note.Plo.cpp,v'.
+   Trying pattern rule with stem `libElf_la-Elf_Note.Plo.cpp'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Note.Plo.cpp,v'.
+   Trying pattern rule with stem `libElf_la-Elf_Note.Plo.cpp'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Note.Plo.cpp'.
+   Trying pattern rule with stem `libElf_la-Elf_Note.Plo.cpp'.
+   Trying implicit prerequisite `.deps/s.libElf_la-Elf_Note.Plo.cpp'.
+   Trying pattern rule with stem `libElf_la-Elf_Note.Plo.cpp'.
+   Trying implicit prerequisite `.deps/SCCS/s.libElf_la-Elf_Note.Plo.cpp'.
+  Trying pattern rule with stem `libElf_la-Elf_Note.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_Note.Plo.o'.
+  Looking for a rule with intermediate file `.deps/libElf_la-Elf_Note.Plo.o'.
+   Avoiding implicit rule recursion.
+   Trying pattern rule with stem `libElf_la-Elf_Note.Plo'.
+   Rejecting impossible implicit prerequisite `.deps/libElf_la-Elf_Note.Plo.cpp'.
+   Trying pattern rule with stem `libElf_la-Elf_Note.Plo.o'.
+   Trying implicit prerequisite `.deps/libElf_la-Elf_Note.Plo.o,v'.
+   Trying pattern rule with stem `libElf_la-Elf_Note.Plo.o'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Note.Plo.o,v'.
+   Trying pattern rule with stem `libElf_la-Elf_Note.Plo.o'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Note.Plo.o'.
+   Trying pattern rule with stem `libElf_la-Elf_Note.Plo.o'.
+   Trying implicit prerequisite `.deps/s.libElf_la-Elf_Note.Plo.o'.
+   Trying pattern rule with stem `libElf_la-Elf_Note.Plo.o'.
+   Trying implicit prerequisite `.deps/SCCS/s.libElf_la-Elf_Note.Plo.o'.
+  No implicit rule found for `.deps/libElf_la-Elf_Note.Plo'.
+  Finished prerequisites of target file `.deps/libElf_la-Elf_Note.Plo'.
+ No need to remake target `.deps/libElf_la-Elf_Note.Plo'.
+ Considering target file `.deps/libElf_la-Elf_Header_Eident.Plo'.
+  Looking for an implicit rule for `.deps/libElf_la-Elf_Header_Eident.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_Header_Eident.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_Header_Eident.Plo.cpp'.
+  Trying pattern rule with stem `libElf_la-Elf_Header_Eident.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_Header_Eident.Plo.o'.
+  Trying pattern rule with stem `libElf_la-Elf_Header_Eident.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_Header_Eident.Plo,v'.
+  Trying pattern rule with stem `libElf_la-Elf_Header_Eident.Plo'.
+  Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Header_Eident.Plo,v'.
+  Trying pattern rule with stem `libElf_la-Elf_Header_Eident.Plo'.
+  Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Header_Eident.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_Header_Eident.Plo'.
+  Trying implicit prerequisite `.deps/s.libElf_la-Elf_Header_Eident.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_Header_Eident.Plo'.
+  Trying implicit prerequisite `.deps/SCCS/s.libElf_la-Elf_Header_Eident.Plo'.
+  Trying pattern rule with stem `libElf_la-Elf_Header_Eident.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_Header_Eident.Plo.cpp'.
+  Looking for a rule with intermediate file `.deps/libElf_la-Elf_Header_Eident.Plo.cpp'.
+   Avoiding implicit rule recursion.
+   Trying pattern rule with stem `libElf_la-Elf_Header_Eident.Plo.cpp'.
+   Trying implicit prerequisite `.deps/libElf_la-Elf_Header_Eident.Plo.cpp,v'.
+   Trying pattern rule with stem `libElf_la-Elf_Header_Eident.Plo.cpp'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Header_Eident.Plo.cpp,v'.
+   Trying pattern rule with stem `libElf_la-Elf_Header_Eident.Plo.cpp'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Header_Eident.Plo.cpp'.
+   Trying pattern rule with stem `libElf_la-Elf_Header_Eident.Plo.cpp'.
+   Trying implicit prerequisite `.deps/s.libElf_la-Elf_Header_Eident.Plo.cpp'.
+   Trying pattern rule with stem `libElf_la-Elf_Header_Eident.Plo.cpp'.
+   Trying implicit prerequisite `.deps/SCCS/s.libElf_la-Elf_Header_Eident.Plo.cpp'.
+  Trying pattern rule with stem `libElf_la-Elf_Header_Eident.Plo'.
+  Trying implicit prerequisite `.deps/libElf_la-Elf_Header_Eident.Plo.o'.
+  Looking for a rule with intermediate file `.deps/libElf_la-Elf_Header_Eident.Plo.o'.
+   Avoiding implicit rule recursion.
+   Trying pattern rule with stem `libElf_la-Elf_Header_Eident.Plo'.
+   Rejecting impossible implicit prerequisite `.deps/libElf_la-Elf_Header_Eident.Plo.cpp'.
+   Trying pattern rule with stem `libElf_la-Elf_Header_Eident.Plo.o'.
+   Trying implicit prerequisite `.deps/libElf_la-Elf_Header_Eident.Plo.o,v'.
+   Trying pattern rule with stem `libElf_la-Elf_Header_Eident.Plo.o'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Header_Eident.Plo.o,v'.
+   Trying pattern rule with stem `libElf_la-Elf_Header_Eident.Plo.o'.
+   Trying implicit prerequisite `.deps/RCS/libElf_la-Elf_Header_Eident.Plo.o'.
+   Trying pattern rule with stem `libElf_la-Elf_Header_Eident.Plo.o'.
+   Trying implicit prerequisite `.deps/s.libElf_la-Elf_Header_Eident.Plo.o'.
+   Trying pattern rule with stem `libElf_la-Elf_Header_Eident.Plo.o'.
+   Trying implicit prerequisite `.deps/SCCS/s.libElf_la-Elf_Header_Eident.Plo.o'.
+  No implicit rule found for `.deps/libElf_la-Elf_Header_Eident.Plo'.
+  Finished prerequisites of target file `.deps/libElf_la-Elf_Header_Eident.Plo'.
+ No need to remake target `.deps/libElf_la-Elf_Header_Eident.Plo'.
+ Considering target file `Makefile'.
+   Considering target file `Makefile.in'.
+     Considering target file `Makefile.am'.
+      Looking for an implicit rule for `Makefile.am'.
+      Trying pattern rule with stem `Makefile.am'.
+      Trying implicit prerequisite `Makefile.am.cpp'.
+      Trying pattern rule with stem `Makefile.am'.
+      Trying implicit prerequisite `Makefile.am.o'.
+      Trying pattern rule with stem `Makefile.am'.
+      Trying implicit prerequisite `Makefile.am,v'.
+      Trying pattern rule with stem `Makefile.am'.
+      Trying implicit prerequisite `RCS/Makefile.am,v'.
+      Trying pattern rule with stem `Makefile.am'.
+      Trying implicit prerequisite `RCS/Makefile.am'.
+      Trying pattern rule with stem `Makefile.am'.
+      Trying implicit prerequisite `s.Makefile.am'.
+      Trying pattern rule with stem `Makefile.am'.
+      Trying implicit prerequisite `SCCS/s.Makefile.am'.
+      Trying pattern rule with stem `Makefile.am'.
+      Trying implicit prerequisite `Makefile.am.cpp'.
+      Looking for a rule with intermediate file `Makefile.am.cpp'.
+       Avoiding implicit rule recursion.
+       Trying pattern rule with stem `Makefile.am.cpp'.
+       Trying implicit prerequisite `Makefile.am.cpp,v'.
+       Trying pattern rule with stem `Makefile.am.cpp'.
+       Trying implicit prerequisite `RCS/Makefile.am.cpp,v'.
+       Trying pattern rule with stem `Makefile.am.cpp'.
+       Trying implicit prerequisite `RCS/Makefile.am.cpp'.
+       Trying pattern rule with stem `Makefile.am.cpp'.
+       Trying implicit prerequisite `s.Makefile.am.cpp'.
+       Trying pattern rule with stem `Makefile.am.cpp'.
+       Trying implicit prerequisite `SCCS/s.Makefile.am.cpp'.
+      Trying pattern rule with stem `Makefile.am'.
+      Trying implicit prerequisite `Makefile.am.o'.
+      Looking for a rule with intermediate file `Makefile.am.o'.
+       Avoiding implicit rule recursion.
+       Trying pattern rule with stem `Makefile.am'.
+       Rejecting impossible implicit prerequisite `Makefile.am.cpp'.
+       Trying pattern rule with stem `Makefile.am.o'.
+       Trying implicit prerequisite `Makefile.am.o,v'.
+       Trying pattern rule with stem `Makefile.am.o'.
+       Trying implicit prerequisite `RCS/Makefile.am.o,v'.
+       Trying pattern rule with stem `Makefile.am.o'.
+       Trying implicit prerequisite `RCS/Makefile.am.o'.
+       Trying pattern rule with stem `Makefile.am.o'.
+       Trying implicit prerequisite `s.Makefile.am.o'.
+       Trying pattern rule with stem `Makefile.am.o'.
+       Trying implicit prerequisite `SCCS/s.Makefile.am.o'.
+      No implicit rule found for `Makefile.am'.
+      Finished prerequisites of target file `Makefile.am'.
+     No need to remake target `Makefile.am'.
+     Considering target file `../../../../../configure.ac'.
+      Looking for an implicit rule for `../../../../../configure.ac'.
+      Trying pattern rule with stem `configure.ac'.
+      Trying implicit prerequisite `../../../../../configure.ac.cpp'.
+      Trying pattern rule with stem `configure.ac'.
+      Trying implicit prerequisite `../../../../../configure.ac.o'.
+      Trying pattern rule with stem `configure.ac'.
+      Trying implicit prerequisite `../../../../../configure.ac,v'.
+      Trying pattern rule with stem `configure.ac'.
+      Trying implicit prerequisite `../../../../../RCS/configure.ac,v'.
+      Trying pattern rule with stem `configure.ac'.
+      Trying implicit prerequisite `../../../../../RCS/configure.ac'.
+      Trying pattern rule with stem `configure.ac'.
+      Trying implicit prerequisite `../../../../../s.configure.ac'.
+      Trying pattern rule with stem `configure.ac'.
+      Trying implicit prerequisite `../../../../../SCCS/s.configure.ac'.
+      Trying pattern rule with stem `configure.ac'.
+      Trying implicit prerequisite `../../../../../configure.ac.cpp'.
+      Looking for a rule with intermediate file `../../../../../configure.ac.cpp'.
+       Avoiding implicit rule recursion.
+       Trying pattern rule with stem `configure.ac.cpp'.
+       Trying implicit prerequisite `../../../../../configure.ac.cpp,v'.
+       Trying pattern rule with stem `configure.ac.cpp'.
+       Trying implicit prerequisite `../../../../../RCS/configure.ac.cpp,v'.
+       Trying pattern rule with stem `configure.ac.cpp'.
+       Trying implicit prerequisite `../../../../../RCS/configure.ac.cpp'.
+       Trying pattern rule with stem `configure.ac.cpp'.
+       Trying implicit prerequisite `../../../../../s.configure.ac.cpp'.
+       Trying pattern rule with stem `configure.ac.cpp'.
+       Trying implicit prerequisite `../../../../../SCCS/s.configure.ac.cpp'.
+      Trying pattern rule with stem `configure.ac'.
+      Trying implicit prerequisite `../../../../../configure.ac.o'.
+      Looking for a rule with intermediate file `../../../../../configure.ac.o'.
+       Avoiding implicit rule recursion.
+       Trying pattern rule with stem `configure.ac'.
+       Rejecting impossible implicit prerequisite `../../../../../configure.ac.cpp'.
+       Trying pattern rule with stem `configure.ac.o'.
+       Trying implicit prerequisite `../../../../../configure.ac.o,v'.
+       Trying pattern rule with stem `configure.ac.o'.
+       Trying implicit prerequisite `../../../../../RCS/configure.ac.o,v'.
+       Trying pattern rule with stem `configure.ac.o'.
+       Trying implicit prerequisite `../../../../../RCS/configure.ac.o'.
+       Trying pattern rule with stem `configure.ac.o'.
+       Trying implicit prerequisite `../../../../../s.configure.ac.o'.
+       Trying pattern rule with stem `configure.ac.o'.
+       Trying implicit prerequisite `../../../../../SCCS/s.configure.ac.o'.
+      No implicit rule found for `../../../../../configure.ac'.
+      Finished prerequisites of target file `../../../../../configure.ac'.
+     No need to remake target `../../../../../configure.ac'.
+     Considering target file `../../../../../aclocal.m4'.
+       Pruning file `../../../../../configure.ac'.
+      Finished prerequisites of target file `../../../../../aclocal.m4'.
+      Prerequisite `../../../../../configure.ac' is older than target `../../../../../aclocal.m4'.
+     No need to remake target `../../../../../aclocal.m4'.
+    Finished prerequisites of target file `Makefile.in'.
+    Prerequisite `Makefile.am' is older than target `Makefile.in'.
+    Prerequisite `../../../../../configure.ac' is older than target `Makefile.in'.
+    Prerequisite `../../../../../aclocal.m4' is older than target `Makefile.in'.
+   No need to remake target `Makefile.in'.
+   Considering target file `../../../../../config.status'.
+     Considering target file `../../../../../configure'.
+       Pruning file `../../../../../configure.ac'.
+       Pruning file `../../../../../aclocal.m4'.
+      Finished prerequisites of target file `../../../../../configure'.
+      Prerequisite `../../../../../configure.ac' is older than target `../../../../../configure'.
+      Prerequisite `../../../../../aclocal.m4' is older than target `../../../../../configure'.
+     No need to remake target `../../../../../configure'.
+    Finished prerequisites of target file `../../../../../config.status'.
+    Prerequisite `../../../../../configure' is older than target `../../../../../config.status'.
+   No need to remake target `../../../../../config.status'.
+  Finished prerequisites of target file `Makefile'.
+  Prerequisite `Makefile.in' is older than target `Makefile'.
+  Prerequisite `../../../../../config.status' is older than target `Makefile'.
+ No need to remake target `Makefile'.
+Updating goal targets....
+Considering target file `all'.
+ File `all' does not exist.
+  Considering target file `all-am'.
+   File `all-am' does not exist.
+    Pruning file `Makefile'.
+    Considering target file `libElf.la'.
+     File `libElf.la' does not exist.
+      Considering target file `libElf_la-Elf_Header_Eident.lo'.
+       File `libElf_la-Elf_Header_Eident.lo' does not exist.
+        Considering target file `Elf_Header_Eident.cpp'.
+         Looking for an implicit rule for `Elf_Header_Eident.cpp'.
+         Trying pattern rule with stem `Elf_Header_Eident.cpp'.
+         Trying implicit prerequisite `Elf_Header_Eident.cpp,v'.
+         Trying pattern rule with stem `Elf_Header_Eident.cpp'.
+         Trying implicit prerequisite `RCS/Elf_Header_Eident.cpp,v'.
+         Trying pattern rule with stem `Elf_Header_Eident.cpp'.
+         Trying implicit prerequisite `RCS/Elf_Header_Eident.cpp'.
+         Trying pattern rule with stem `Elf_Header_Eident.cpp'.
+         Trying implicit prerequisite `s.Elf_Header_Eident.cpp'.
+         Trying pattern rule with stem `Elf_Header_Eident.cpp'.
+         Trying implicit prerequisite `SCCS/s.Elf_Header_Eident.cpp'.
+         No implicit rule found for `Elf_Header_Eident.cpp'.
+         Finished prerequisites of target file `Elf_Header_Eident.cpp'.
+        No need to remake target `Elf_Header_Eident.cpp'.
+       Finished prerequisites of target file `libElf_la-Elf_Header_Eident.lo'.
+      Must remake target `libElf_la-Elf_Header_Eident.lo'.
+if /bin/sh ../../../../../libtool --tag=CXX --mode=compile g++ -DHAVE_CONFIG_H -I. -I. -I../../../../../src/include    -I../../../../../src  -g -O2 -MT libElf_la-Elf_Header_Eident.lo -MD -MP -MF ".deps/libElf_la-Elf_Header_Eident.Tpo" -c -o libElf_la-Elf_Header_Eident.lo `test -f 'Elf_Header_Eident.cpp' || echo './'`Elf_Header_Eident.cpp; \
+	then mv -f ".deps/libElf_la-Elf_Header_Eident.Tpo" ".deps/libElf_la-Elf_Header_Eident.Plo"; else rm -f ".deps/libElf_la-Elf_Header_Eident.Tpo"; exit 1; fi
+Putting child 0x08085be0 (libElf_la-Elf_Header_Eident.lo) PID 26051 on the chain.
+Live child 0x08085be0 (libElf_la-Elf_Header_Eident.lo) PID 26051 
+ g++ -DHAVE_CONFIG_H -I. -I. -I../../../../../src/include -I../../../../../src -g -O2 -MT libElf_la-Elf_Header_Eident.lo -MD -MP -MF .deps/libElf_la-Elf_Header_Eident.Tpo -c Elf_Header_Eident.cpp  -fPIC -DPIC -o .libs/libElf_la-Elf_Header_Eident.o
+ g++ -DHAVE_CONFIG_H -I. -I. -I../../../../../src/include -I../../../../../src -g -O2 -MT libElf_la-Elf_Header_Eident.lo -MD -MP -MF .deps/libElf_la-Elf_Header_Eident.Tpo -c Elf_Header_Eident.cpp -o libElf_la-Elf_Header_Eident.o >/dev/null 2>&1
+Reaping losing child 0x08085be0 PID 26051 
+make: *** [libElf_la-Elf_Header_Eident.lo] Error 1
+Removing child 0x08085be0 PID 26051 from chain.

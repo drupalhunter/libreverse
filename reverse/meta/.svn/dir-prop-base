@@ -1,0 +1,9 @@
+K 10
+svn:ignore
+V 68
+Makefile
+Static_Debug
+meta.vcproj.STEPHEN-522B4D3.storri.user
+*.lib
+
+END

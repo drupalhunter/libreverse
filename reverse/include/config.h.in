@@ -1,0 +1,8 @@
+/* Define to 1 if you have the Boost libraries */
+#cmakedefine HAVE_BOOST 1
+
+/* Define to 1 if you have the Expat library */
+#cmakedefine HAVE_EXPAT 1
+
+/* Define to 1 if you have ICU library */
+#cmakedefine HAVE_ICU 1

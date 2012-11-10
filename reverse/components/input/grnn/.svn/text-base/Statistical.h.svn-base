@@ -1,0 +1,134 @@
+/*  Statistical.h
+
+   Copyright (C) 2008 Stephen Torri
+
+   This file is part of Libreverse.
+
+   Libreverse is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published
+   by the Free Software Foundation; either version 3, or (at your
+   option) any later version.
+
+   Libreverse is distributed in the hope that it will be useful, but
+   WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see
+   <http://www.gnu.org/licenses/>.
+*/
+
+#ifndef STATISTICAL_H
+#define STATISTICAL_H
+
+#include "Training_Set.h"
+
+namespace libreverse
+{
+
+  namespace classifier
+  {
+    template <typename Data_Type>
+    class Statistical
+    {
+    public:
+
+      /* This reference to Test_Statistical is only for regression testing */
+      friend class Statistical_Test;
+    
+      Statistical ( double sigma,
+		    typename classifier_types::Training_Set<Data_Type>::Data_List_t const& training,
+		    typename classifier_types::Configuration<Data_Type>::ptr_t config );
+
+      /*! \brief Classify the training set
+       * \return classification value representing the optimal sigma
+       */
+      double execute ( typename classifier_types::Training_Set<Data_Type>::Data_List_t const& target );
+
+      /*! \brief Classify the training set
+       * \return classification value representing the Statistical's answer
+       */
+      double classify ( typename classifier_types::Training_Set<Data_Type>::Data_List_t::const_iterator& target_row );
+
+      double get_Mean_Distance_Squared ( void ) const;
+
+    private:
+
+      typedef std::vector<double> Double_List_t;
+      typedef std::map < double, Double_List_t > Compiler_Map_t;
+
+      /*!
+       * \brief Compute the training stats
+       */
+      void calculate_Training_Stats ( void );
+
+      void calculate_Column_Totals ( void );
+
+      void calculate_Column_Averages ( void );
+
+      void calculate_Column_Variances ( void );
+
+      void calculate_Column_Standard_Deviations ( void );
+
+      void calculate_Column_Bounds ( void );
+
+      /*!
+       * \brief Retrieve the list for a compiler. If it does not exist
+       * then an entry is created.
+       */
+      Double_List_t&  get_List ( Compiler_Map_t& map_ref, double compiler_id );
+
+      /*!
+       * \brief Retrieve thecolumn average list for a compiler. If it
+       * does not exist then an entry is created.
+       */
+      Double_List_t&  get_Average_List ( double compiler_id );
+
+      double m_sigma;
+      
+      double m_mean_distance_squared;
+
+      typename classifier_types::Training_Set<Data_Type>::Data_List_t const& m_training;
+
+      typename classifier_types::Configuration<Data_Type>::ptr_t m_config;
+
+      /*!
+       * \brief Map that keeps a total of each of the attributes for a particular compiler
+       */
+      Compiler_Map_t m_column_sum;
+
+      /*!
+       * \brief Map that keeps a count of the number of files for a particular compiler
+       */
+      Compiler_Map_t m_column_count;
+
+      /*!
+       * \brief Map that keeps the attribute averages for each compiler
+       */
+      Compiler_Map_t m_column_avg;
+
+      /*!
+       * \brief Map that keeps the variance of each attribute for each compiler
+       */
+      Compiler_Map_t m_column_var;
+
+      /*!
+       * \brief Map that keeps the standard deviation for each compiler attribute
+       */
+      Compiler_Map_t m_column_stdev;
+
+      /*!
+       * \brief Maps that keep the upper and lower bounds for each compiler attribute
+       */
+      Compiler_Map_t m_column_lb;
+      Compiler_Map_t m_column_ub;
+
+    };
+  
+  } /* namespace classifier */
+} /* namespace libreverse */
+
+#include "Statistical.cpp"
+
+#endif /* STATISTICAL_H */

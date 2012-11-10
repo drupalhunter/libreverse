@@ -1,0 +1,31 @@
+MOBY
+MIXDesGraph
+FORMAT_A
+com: ''
+pap:  wis: 1 xnu: 1 ynu: 1 end:
+set:  elw: 1 ena: '' vsi: 10@10 vno: 20@0 vna: '' vbw: 1 nov: 5 vpm: 0 end:
+ wsz: 500@400 grd: 10 ras: 40 scf: 1 1 vzs: 0 end:
+DEF: cof: 'ZComponentVertex'
+ ref: 'ZGroup' 'ZComponentVertex'
+ ref: 'ZParagraph' 'ZDesignVertex'
+ ref: 'ZCollection' 'ZDesignVertex'
+ ver: 'ZDesignVertex' 'ZAbbreviationDef'
+ ver: 'ZDesignVertex' 'ZAxiomDef'
+ ver: 'ZDesignVertex' 'ZBaseType'
+ ver: 'ZDesignVertex' 'ZCollection'
+ ver: 'ZDesignVertex' 'ZComment'
+ ver: 'ZDesignVertex' 'ZFreeType'
+ ver: 'ZDesignVertex' 'ZGenericDef'
+ ver: 'ZDesignVertex' 'ZHorizontalSchema'
+ ver: 'ZDesignVertex' 'ZNormalText'
+ ver: 'ZDesignVertex' 'ZSchema'
+ ver: 'ZComponentVertex' 'ZGroup'
+ ver: 'ZComponentVertex' 'ZParagraph'
+ end: 
+ZComponentVertex: idt: 1 nam: 'InternalData' dpt: 50@30 dnp: 40@50 sta: 3 end:
+ZComponentVertex: idt: 2 nam: 'CPU' dpt: 50@100 dnp: 50@100 sta: 2 end:
+ZComponentVertex: idt: 3 nam: 'Table' dpt: 120@100 dnp: 120@100 sta: 2 end:
+MIXDesEdge: nam: 'CPU' sou: 1 des: 2 dpt: 50@65 lpt: 50@40 lpt: 50@90 ver: 2 end:
+MIXDesEdge: nam: 'Table' sou: 1 des: 3 dpt: 85@65 lpt: 57@37 lpt: 113@93 ver: 3 end:
+roo: 1
+END:

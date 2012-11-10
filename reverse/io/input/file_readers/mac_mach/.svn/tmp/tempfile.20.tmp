@@ -1,0 +1,14 @@
+#include "Nlist.h"
+
+namespace libreverse { namespace mach_module {
+
+  Nlist::Nlist ()
+    : m_strx ( 0 ),
+      m_type ( 0 ),
+      m_sect ( 0 ),
+      m_desc ( 0 ),
+      m_value ( 0 )
+  {}
+
+} /* namespace mach_module */
+} /* namespace libreverse */

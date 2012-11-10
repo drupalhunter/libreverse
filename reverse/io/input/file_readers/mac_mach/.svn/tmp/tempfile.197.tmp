@@ -1,0 +1,75 @@
+#ifndef SEGMENT_COMMAND_H
+#define SEGMENT_COMMAND_H
+
+#include "Load_Command.h"
+#include <string>
+#include <vector>
+#include "Mach_Types.h"
+
+namespace libreverse
+{
+    namespace mach_module
+    {
+
+        class Segment_Command : public Load_Command
+        {
+            public:
+
+                friend class Mach_File;
+
+                Segment_Command ( boost::uint32_t cmd, boost::uint32_t cmdsize );
+
+                virtual ~Segment_Command() {}
+
+                virtual void convert ( bool need_convert );
+
+                virtual std::string to_String ( void );
+
+                boost::uint32_t get_Command ();
+                
+                boost::uint32_t get_Command_Size ();
+                
+                std::string get_Segment_Name ();
+
+                boost::uint32_t get_Virtual_Memory_Address ();
+
+                boost::uint32_t get_Virtual_Memory_Size ();
+
+                boost::uint32_t get_File_Offset ();
+
+                boost::uint32_t get_File_Size ();
+
+                boost::uint32_t get_Max_Protection ();
+
+                boost::uint32_t get_Init_Protection ();
+
+                boost::uint32_t get_Section_Count ();
+
+                boost::uint32_t get_Flags ();
+
+                void push_back ( mach_types::Section::ptr_t );
+
+            private:
+
+                boost::uint32_t m_cmd;
+                boost::uint32_t m_cmdsize;
+                std::string m_segname;
+                boost::uint32_t m_vmaddr;
+                boost::uint32_t m_vmsize;
+                boost::uint32_t m_fileoff;
+                boost::uint32_t m_filesize;
+                boost::uint32_t m_maxprot;
+                boost::uint32_t m_initprot;
+                boost::uint32_t m_nsects;
+                boost::uint32_t m_flags;
+
+                // List of Sections contained in this segment
+                typedef std::vector<mach_types::Section::ptr_t> Section_List_t;
+                Section_List_t m_sections;
+        };
+
+    } /* namespace mach_module */
+} /* namespace libreverse */
+
+
+#endif /* SEGMENT_COMMAND_H */

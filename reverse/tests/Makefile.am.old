@@ -1,0 +1,14 @@
+TEST_PROGS = \
+	test_reverse
+
+check_PROGRAMS = $(TEST_PROGS)
+TESTS = $(TEST_PROGS)
+
+test_reverse_CXXFLAGS = -I$(top_srcdir)/src $(BOOST_INCLUDES)
+test_reverse_SOURCES = test_reverse.cpp
+test_reverse_DEPENDENCIES = $(top_builddir)/src/libreverse.la
+
+test_reverse_LDFLAGS = \
+	-L$(top_builddir)/src -lreverse \
+	-lboost_date_time-mt \
+	-lboost_unit_test_framework-mt

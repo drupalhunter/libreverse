@@ -1,0 +1,68 @@
+/*  Component_Exception.h
+
+   Copyright (C) 2008 Stephen Torri
+
+   This file is part of Libreverse.
+
+   Libreverse is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published
+   by the Free Software Foundation; either version 3, or (at your
+   option) any later version.
+
+   Libreverse is distributed in the hope that it will be useful, but
+   WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see
+   <http://www.gnu.org/licenses/>.
+*/
+
+#ifndef COMPONENT_EXCEPTION_H_
+#define COMPONENT_EXCEPTION_H_
+
+#include "Reverse_Exception.h"
+
+namespace libreverse { namespace errors {
+
+    class Component_Exception : public virtual Reverse_Exception {
+    public:
+
+        enum ERROR_ID {
+            INPUT_LIMIT_EXCEEDED,
+            DATA_STORAGE_ERROR,
+            INVALID_INDEX,
+            INVALID_STATE,
+            NULL_POINTER
+        };
+
+        Component_Exception ( ERROR_ID message_id );
+
+        /*!
+         * \brief Destructor
+         */
+        virtual ~Component_Exception (void) throw(){}
+
+        /*!
+         * \brief Return the extra message accompanying the exception.
+         */
+        virtual const char* what (void) const throw ();
+
+        /*!
+         * \brief Return tne name of the exception
+         */
+        virtual const char* name (void) const throw();
+
+    private:
+
+        static const char* m_exception_name;
+
+        static const char* m_messages[];
+
+    };
+
+} /* namespace errors */
+} /* namespace libreverse */
+
+#endif /* COMPONENT_EXCEPTION_H_ */

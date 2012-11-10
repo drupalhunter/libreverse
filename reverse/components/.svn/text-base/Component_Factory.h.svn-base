@@ -1,0 +1,211 @@
+/*  Component_Factory.h
+
+   Copyright (C) 2008 Stephen Torri
+
+   This file is part of Libreverse.
+
+   Libreverse is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published
+   by the Free Software Foundation; either version 3, or (at your
+   option) any later version.
+
+   Libreverse is distributed in the hope that it will be useful, but
+   WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see
+   <http://www.gnu.org/licenses/>.
+*/
+
+#ifndef COMPONENT_FACTORY_H_
+#define COMPONENT_FACTORY_H_
+
+#include <map>
+#include <boost/shared_ptr.hpp>
+#include "libreverse/infrastructure/Component_Types.h"
+
+namespace libreverse { namespace infrastructure {
+
+  class Component_Factory {
+  public:
+
+	static Component_Factory& Instance()
+	{
+		static Component_Factory fact_ref;
+		return fact_ref;
+	}
+
+        /**
+         * \brief Create a new File Type Detector component
+         *
+         * \pre None
+         *
+         * \post Component pointer is non null
+         *
+         * \return Return a Component pointer to the new File Type Detector
+         */
+        infrastructure_types::Component::ptr_t
+        get_File_Type_Detector ( infrastructure_types::Component_State::ptr_t state_ptr );
+
+        /**
+         * \brief Create a new Arch Type Detector component
+         *
+         * \pre None
+         *
+         * \post Component pointer is non null
+         *
+         * \return Return a Component pointer to the new Arch Type Detector
+         */
+        infrastructure_types::Component::ptr_t
+        get_Arch_Type_Detector ( infrastructure_types::Component_State::ptr_t state_ptr );
+
+        /**
+         * \brief Create a new Meta Writer component
+         *
+         * \pre None
+         *
+         * \post Component pointer is non null
+         *
+         * \return Return a Component pointer to the new Meta Writer
+         */
+        infrastructure_types::Component::ptr_t
+        get_Meta_Writer ( infrastructure_types::Component_State::ptr_t state_ptr );
+
+        /**
+         * \brief Create a new Unpacker component
+         *
+         * \pre None
+         *
+         * \post Component pointer is non null
+         *
+         * \return Return a Component pointer to the new Unpacker
+         */
+        infrastructure_types::Component::ptr_t
+        get_Unpacker ( infrastructure_types::Component_State::ptr_t state_ptr );
+
+        /**
+         * \brief Create a new Code Section Detector component
+         *
+         * \pre None
+         *
+         * \post Component pointer is non null
+         *
+         * \return Return a Component pointer to the new Code Section Detector
+         */
+        infrastructure_types::Component::ptr_t
+        get_Code_Section ( infrastructure_types::Component_State::ptr_t state_ptr );
+
+        /**
+         * \brief Create a new Data Section Detector component
+         *
+         * \pre None
+         *
+         * \post Component pointer is non null
+         *
+         * \return Return a Component pointer to the new Data Section Detector
+         */
+        infrastructure_types::Component::ptr_t
+        get_Data_Section ( infrastructure_types::Component_State::ptr_t state_ptr );
+
+        /**
+         * \brief Create a new Entry Point Detector component
+         *
+         * \pre None
+         *
+         * \post Component pointer is non null
+         *
+         * \return Return a Component pointer to the new Entry Point Detector
+         */
+        infrastructure_types::Component::ptr_t
+        get_Entry_Point ( infrastructure_types::Component_State::ptr_t state_ptr );
+
+        /**
+         * \brief Create a new Null component
+         *
+         * \pre None
+         *
+         * \post Component pointer is non null
+         *
+         * \return Return a Component pointer to the new Null Component
+         */
+        infrastructure_types::Component::ptr_t
+        get_Null_Component ( infrastructure_types::Component_State::ptr_t state_ptr );
+
+        /**
+         * \brief Create a new Memory Map Producer component
+         *
+         * \pre None
+         *
+         * \post Component pointer is non null
+         *
+         * \return Return a Component pointer to the new Memory Map Producer
+         */
+        infrastructure_types::Component::ptr_t
+        get_Memory_Map_Producer ( infrastructure_types::Component_State::ptr_t state_ptr );
+
+        /**
+         * \brief Create a new File Header Printer component
+         *
+         * \pre None
+         *
+         * \post Component pointer is non null
+         *
+         * \return Return a Component pointer to the new File Header Printer
+         */
+        infrastructure_types::Component::ptr_t
+        get_File_Header_Printer ( infrastructure_types::Component_State::ptr_t state_ptr );
+
+        /**
+         * \brief Create a new Tevis Zero Filled Checker component
+         *
+         * \pre None
+         *
+         * \post Component pointer is non null
+         *
+         * \return Return a Component pointer to the new Tevis Zero Filled Checker
+         */
+        infrastructure_types::Component::ptr_t
+        get_Tevis_Zero_Filled_Checker ( infrastructure_types::Component_State::ptr_t state_ptr );
+
+        /**
+         * \brief Create a new Tevis Unknown Region Checker component
+         *
+         * \pre None
+         *
+         * \post Component pointer is non null
+         *
+         * \return Return a Component pointer to the new Tevis Unknown Region Checker
+         */
+        infrastructure_types::Component::ptr_t
+        get_Tevis_Unknown_Region_Checker ( infrastructure_types::Component_State::ptr_t state_ptr );
+
+        /**
+         * \brief Create a new Compiler Classifier component
+         *
+         * \pre None
+         *
+         * \post Component pointer is non null
+         *
+         * \return Return a Component pointer to the new Compiler Classifier
+         */
+        infrastructure_types::Component::ptr_t
+        get_Compiler_Classifier ( infrastructure_types::Component_State::ptr_t state_ptr );
+
+    private:
+
+      Component_Factory (){}
+
+      Component_Factory ( const Component_Factory& ){}
+      
+      Component_Factory& operator= ( const Component_Factory& ){}
+      
+      ~Component_Factory (){}
+
+    };
+
+} /* namespace infrastructure */
+} /* namespace libreverse */
+
+#endif /* COMPONENT_FACTORY_H_ */

@@ -1,0 +1,36 @@
+#ifndef DYLIB_TABLE_OF_CONTENTS_H
+#define DYLIB_TABLE_OF_CONTENTS_H
+
+#include <boost/cstdint.hpp>
+
+namespace libreverse
+{
+    namespace mach_module
+    {
+
+        class Dylib_Table_Of_Contents
+        {
+            public:
+
+                /*! \brief Default Constructor */
+                Dylib_Table_Of_Contents();
+
+            private:
+
+                /*! \brief An index into the symbol table indicating the defined external symbol to which this entry
+                 *         refers.
+                 */
+                boost::uint32_t m_symbol_index;
+
+                /*! \brief An index into the module table indicating the module in which this defined external symbol
+                 *         is defined.
+                 */
+                boost::uint32_t m_module_index;
+
+        };
+
+    } /* namespace mach_module */
+} /* namespace libreverse */
+
+
+#endif /* DYLIB_TABLE_OF_CONTENTS_H */

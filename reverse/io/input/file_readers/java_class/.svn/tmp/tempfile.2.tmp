@@ -1,0 +1,268 @@
+/*
+  Code for most of this file was obtained from the GNU Binutils
+  readelf.c file. Below is the copyright for the original code. The
+  original code was used as a inspiration on how to design an Elf
+  file reader. I give full credit of this excellent set of code to
+  the original developers. Thanks for the hard work.
+
+  Copyright 1998, 1999, 2000, 2001, 2002, 2003 Free Software Foundation, Inc.
+
+  Originally developed by Eric Youngdale <eric@andante.jic.com>
+  Modifications by Nick Clifton <nickc@redhat.com>
+
+  This file is part of GNU Binutils.
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
+*/
+
+#include "Reader.h"
+#include "Header.h"
+#include "Class_File.h"
+#include "Class_Header.h"
+#include "libreverse/io/File_ID.h"
+#include "libreverse/io/File.h"
+#include "libreverse/data_containers/Memory_Map.h"
+#include <sstream>
+#include <list>
+
+namespace libreverse { namespace java_module {
+
+    Reader::Reader ( io_types::File_ID::ptr_t target_file )
+        : m_file (new Class_File(target_file)),
+	  m_hdr_ptr ( new Header() )
+    {
+        Trace::write_Trace ( TraceArea::IO,
+                             TraceLevel::DETAIL,
+                             "Inside Reader (File_ID,bool,bool) constructor" );
+    }
+
+    Reader::~Reader (void)
+    {
+        Trace::write_Trace ( TraceArea::IO,
+                             TraceLevel::DETAIL,
+                             "Inside Reader destructor" );
+    }
+
+    void Reader::read_Class_Header (void)
+    {
+        Trace::write_Trace ( TraceArea::IO,
+                             TraceLevel::DETAIL,
+                             "Entering Reader::read_Class_Header" );
+
+        m_file->init();
+
+        java_types::Class_Header::ptr_t class_hdr_ptr = m_hdr_ptr->get_Class_Header();
+
+        if ( class_hdr_ptr.get() == 0 )
+            {
+                java_types::Class_Header::ptr_t new_class_hdr_ptr ( new Class_Header() );
+
+                m_file->read_Class_Header ( new_class_hdr_ptr );
+
+                Trace::write_Trace ( TraceArea::IO,
+                                     TraceLevel::DATA,
+                                     boost::str ( boost::format ( "Java Reader - read_Class_Header:\n%1%" ) % new_class_hdr_ptr->to_String() ) );
+
+                m_hdr_ptr->set_Class_Header ( new_class_hdr_ptr );
+            }
+
+        Trace::write_Trace ( TraceArea::IO,
+                             TraceLevel::DETAIL,
+                             "Exiting Reader::read_Class_Header" );
+    }
+
+    bool
+    Reader::support_File_Type ( void )
+    {
+        Trace::write_Trace ( TraceArea::IO,
+                             TraceLevel::DETAIL,
+                             "Entering Reader::support_File_Type" );
+
+        bool java_support = false;
+
+        java_types::Class_Header::ptr_t class_hdr_ptr = m_hdr_ptr->get_Class_Header();
+
+        if ( class_hdr_ptr.get() == 0 )
+            {
+                read_Class_Header ();
+
+                class_hdr_ptr = m_hdr_ptr->get_Class_Header();
+            }
+
+        if ( class_hdr_ptr->is_Java_File() )
+            {
+                java_support = true;
+            }
+
+        Trace::write_Trace ( TraceArea::IO,
+                             TraceLevel::DETAIL,
+                             "Exiting Reader::support_File_Type" );
+
+        return java_support;
+    }
+
+    std::string
+    Reader::get_Section_String ( std::string name ) const
+    {
+        Trace::write_Trace ( TraceArea::IO,
+                             TraceLevel::DETAIL,
+                             "Inside Reader::get_Section_String" );
+
+        return name;
+    }
+
+    std::string
+    Reader::get_File_Type (void) const
+    {
+        Trace::write_Trace ( TraceArea::IO,
+                             TraceLevel::DETAIL,
+                             "Inside Reader::get_File_Type" );
+
+        return "java:class";
+    }
+
+    std::string
+    Reader::get_Arch_Type (void) const
+    {
+        Trace::write_Trace ( TraceArea::IO,
+                             TraceLevel::DETAIL,
+                             "Inside Reader::get_Arch_Type" );
+
+    	return "java:bytecode";
+    }
+
+    data_types::Memory_Map::ptr_t
+    Reader::get_Memory_Map ( void )
+    {
+        Trace::write_Trace ( TraceArea::IO,
+                             TraceLevel::DETAIL,
+                             "Inside Reader::get_Memory_Map" );
+
+        return (m_file->get_File()).get_Map_Ptr();
+    }
+
+    std::string
+    Reader::to_String (void)
+    {
+        Trace::write_Trace ( TraceArea::IO,
+                             TraceLevel::DETAIL,
+                             "Entering Reader::to_String" );
+
+        this->read_Class_Header ();
+
+        std::string output = m_hdr_ptr->to_String();
+
+        Trace::write_Trace ( TraceArea::IO,
+                             TraceLevel::DETAIL,
+                             "Exiting Reader::to_String" );
+
+        return output;
+    }
+
+    io_types::Text_Data::data_type
+    Reader::get_Text_Strings ( void )
+    {
+        Trace::write_Trace ( TraceArea::IO,
+                             TraceLevel::DETAIL,
+                             "Entering Reader::get_Text_String" );
+
+        io_types::Text_Data::data_type output;
+
+        this->read_Class_Header ();
+
+        // Do work here to read human readable strings
+        java_types::Class_Header::ptr_t header_ptr = m_hdr_ptr->get_Class_Header();
+
+        output = header_ptr->get_Text_Strings();
+
+        Trace::write_Trace ( TraceArea::IO,
+                             TraceLevel::DETAIL,
+                             "Exiting Reader::get_Text_String" );
+
+        return output;
+    }
+
+    io_types::Text_Data::data_type
+    Reader::get_UTF16_Strings ( void )
+    {
+        Trace::write_Trace ( TraceArea::IO,
+                             TraceLevel::DETAIL,
+                             "Entering Reader::get_UTF16_String" );
+
+        io_types::Text_Data::data_type output;
+
+        // NOTE: Java stores its strings in a SUN UTF-8 format not the
+        // specification UTF-8. I do not think we need to process the
+        // class file looking for UTF-16 strings.
+
+        // Do work here to read human readable strings
+        Trace::write_Trace ( TraceArea::IO,
+                             TraceLevel::DETAIL,
+                             "Exiting Reader::get_UTF16_String" );
+
+        return output;
+    }
+
+    std::string
+    Reader::get_Meta_Info ( File_Reader::Action index,
+                            std::string )
+    {
+        Trace::write_Trace ( TraceArea::IO,
+                             TraceLevel::DETAIL,
+                             "Entering Reader::get_Meta_Info" );
+
+        std::string result = "";
+
+        switch ( index )
+            {
+            case File_Reader::FILE_TYPE:
+                {
+                    result = this->get_File_Type ();
+                    break;
+                }
+            case File_Reader::ARCHITECTURE_TYPE:
+                {
+                    result = this->get_Arch_Type ();
+                    break;
+                }
+
+            case File_Reader::ENTRY_POINT:
+            case File_Reader::BASE_ADDRESS:
+            case File_Reader::SECTION_OFFSET:
+            case File_Reader::SECTION_LENGTH:
+            default:
+                // Do nothing
+                break;
+            }
+
+        Trace::write_Trace ( TraceArea::IO,
+                             TraceLevel::DETAIL,
+                             "Exiting Reader::get_Meta_Info" );
+
+        return result;
+    }
+
+    void
+    Reader::read_Headers ( void )
+    {
+        Trace::write_Trace ( TraceArea::IO,
+                             TraceLevel::DETAIL,
+                             "Inside Reader::read_Headers" );
+
+        this->read_Class_Header();
+    }
+
+    java_types::Class_Header::ptr_t
+    Reader::get_Header (void)
+    {
+        Trace::write_Trace ( TraceArea::IO,
+                             TraceLevel::DETAIL,
+                             "Inside Reader::get_Header" );
+
+        return m_hdr_ptr->get_Class_Header();
+    }
+} /* namespace java_module */
+} /* namespace libreverse */

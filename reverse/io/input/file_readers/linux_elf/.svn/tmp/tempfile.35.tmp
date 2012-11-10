@@ -1,0 +1,166 @@
+#ifndef ELF_SECTION_HEADER_H_
+#define ELF_SECTION_HEADER_H_
+
+#include "libreverse/io/Type_Mapper.h"
+#include "libreverse/io/input/File_Readers/Base_Header.h"
+#include <boost/cstdint.hpp>
+#include <boost/shared_ptr.hpp>
+
+namespace libreverse { namespace elf_module {
+
+  /*!
+   * \class Elf_Section_Header
+   * \date 2003
+   * \author Stephen Torri
+   */
+  template <boost::uint32_t bitsize>
+  class Elf_Section_Header : public header::Base_Header {
+
+    friend class Elf_File<bitsize>;
+
+  public:
+
+    /*!
+     * \brief Default Constructor
+     */
+    Elf_Section_Header (void);
+
+    /*!
+     * \brief Constructor
+     * \param e_machine Target architecture
+     */
+    Elf_Section_Header (boost::uint16_t e_machine);
+
+    /*!
+     * \brief Convert the bit ordering from the target file bit ordering
+     * to the host system.
+     */
+    virtual void convert ();
+
+    /*!
+     * \brief Convert the header data into a string representation
+     * \return String representation of header data
+     */
+    virtual std::string to_String (void);
+
+      /*!
+       * \brief Get the human readable strings from the header
+       * \return String output of header
+       */
+      void get_Text_String ( io_types::Text_Data::data_type* output );
+
+
+    /*!
+     * \brief Return the bit size of the header (e.g. 32-bit)
+     * \return Bit size of header
+     */
+    virtual boost::uint32_t get_size(void) const;
+
+    const boost::uint32_t get_Section_Name_Index(void);
+
+    const typename Type_Mapper<bitsize>::arch_t& get_Section_Size(void);
+
+    const typename Type_Mapper<bitsize>::arch_t& get_Section_Offset(void);
+
+    void set_Section_String_Name (const std::string& name);
+
+    const std::string get_Section_String_Name (void);
+
+    const boost::uint32_t get_Section_Type (void);
+
+    const boost::uint32_t get_Next_Section_Index (void);
+
+    typename Type_Mapper<bitsize>::arch_t get_Section_Token_Size (void);
+
+  private:
+
+    //----------------------------------------
+    //            ELF HEADER variables
+    //----------------------------------------
+
+    /*! \brief Section name, index in string tbl */
+    boost::uint32_t sh_name;
+
+    /*! \brief Type of section */
+    boost::uint32_t sh_type;
+
+    /*! \brief Miscellaneous section attributes */
+    typename Type_Mapper<bitsize>::arch_t sh_flags;
+
+    /*! \brief Section virtual addr at execution */
+    typename Type_Mapper<bitsize>::arch_t sh_addr;
+
+    /*! \brief Section file offset */
+    typename Type_Mapper<bitsize>::arch_t sh_offset;
+
+    /*! \brief Size of section in bytes */
+    typename Type_Mapper<bitsize>::arch_t sh_size;
+
+    /*! \brief Index of another section */
+    boost::uint32_t sh_link;
+
+    /*! \brief Additional section information */
+    boost::uint32_t sh_info;
+
+    /*! \brief Section alignment */
+    typename Type_Mapper<bitsize>::arch_t sh_addralign;
+
+    /*! \brief Entry size if section holds table */
+    typename Type_Mapper<bitsize>::arch_t sh_entsize;
+
+    //----------------------------------------
+    //      ELF HEADER helper variables
+    //----------------------------------------
+    /*! \brief String name of header */
+    std::string m_str_name;
+
+    /*! \brief Machine architecture */
+    boost::uint16_t m_e_machine;
+
+    //----------------------------------------
+    //      ELF HEADER helper functions
+    //----------------------------------------
+    /*!
+     * \brief Return header flags
+     * \return String representation of flags
+     */
+    std::string get_flags(void);
+
+    /*!
+     * \brief Return type name
+     * \return String representation of section header type
+     */
+    std::string get_section_type_name (void);
+
+    /*!
+     * \brief Return MIPS type name
+     * \return String representation of section header type
+     */
+    std::string get_mips_section_type_name (void);
+
+    /*!
+     * \brief Return PARISC type name
+     * \return String representation of section header type
+     */
+    std::string get_parisc_section_type_name (void);
+
+    /*!
+     * \brief Return ia64 type name
+     * \return String representation of section header type
+     */
+    std::string get_ia64_section_type_name (void);
+
+    /*!
+     * \brief Return osabi name
+     * \return String representation of the osabi name
+     */
+    std::string get_osabi_name (unsigned int osabi);
+
+  };
+
+} /* namespace elf_module */
+} /* namespace libreverse */
+
+#include "Elf_Section_Header_T.cpp"
+
+#endif /* ELF_SECTION_HEADER_H_ */

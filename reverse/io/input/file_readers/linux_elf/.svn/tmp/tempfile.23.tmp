@@ -1,0 +1,69 @@
+#include "Elf_Dynamic_Header_T.h"
+#include "libreverse/io/Byte_Converter.h"
+#include "libreverse/Trace.h"
+#include "Elf_Dynamic_Tag_T.h"
+
+using namespace libreverse::api;
+using namespace libreverse::trace;
+
+namespace libreverse
+{
+    namespace elf_module
+    {
+
+        template <boost::uint32_t bitsize>
+        boost::uint32_t
+        Elf_Dynamic_Header<bitsize>::get_size () const
+        {
+            Trace::write_Trace ( TraceArea::IO,
+                                 TraceLevel::DETAIL,
+                                 "Inside Elf_Dynamic_Header::get_size" );
+
+            return bitsize;
+        }
+
+        template <boost::uint32_t bitsize>
+        void Elf_Dynamic_Header<bitsize>::convert ()
+        {
+            Trace::write_Trace ( TraceArea::IO,
+                                 TraceLevel::DETAIL,
+                                 "Entering Elf_Dynamic_Header::convert" );
+
+            for ( typename elf_types::Elf_Dynamic_Header<bitsize>::Tag_List_t::iterator pos = m_dyn_tags.begin();
+                    pos != m_dyn_tags.end();
+                    pos++ )
+            {
+                ( *pos )->Elf_Dynamic_Tag<bitsize>::convert();
+            }
+
+            Trace::write_Trace ( TraceArea::IO,
+                                 TraceLevel::DETAIL,
+                                 "Exiting Elf_Dynamic_Header::convert" );
+
+        }
+
+        template <boost::uint32_t bitsize>
+        std::string Elf_Dynamic_Header<bitsize>::toString ()
+        {
+            Trace::write_Trace ( TraceArea::IO,
+                                 TraceLevel::DETAIL,
+                                 "Entering Elf_Dynamic_Header::toString" );
+
+            std::stringstream output_str;
+
+            for ( typename elf_types::Elf_Dynamic_Header<bitsize>::Tag_List_t::iterator pos = m_dyn_tags.begin();
+                    pos != m_dyn_tags.end();
+                    ++pos )
+            {
+                output_str << ( *pos )->Elf_Dynamic_Tag<bitsize>::to_String();
+            }
+
+            Trace::write_Trace ( TraceArea::IO,
+                                 TraceLevel::DETAIL,
+                                 "Exiting Elf_Dynamic_Header::toString" );
+
+            return output_str.str();
+        }
+
+    } /* namespace elf_module */
+} /* namespace libreverse */

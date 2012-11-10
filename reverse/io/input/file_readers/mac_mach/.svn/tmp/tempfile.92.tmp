@@ -1,0 +1,67 @@
+#include "Section_Command_64.h"
+#include "libreverse/io/Byte_Converter.h"
+#include <sstream>
+#include <boost/format.hpp>
+
+namespace libreverse
+{
+    namespace mach_module
+    {
+
+        Section_Command_64::Section_Command_64 ( boost::uint32_t cmd, boost::uint32_t cmdsize )
+                : m_sectname ( MAX_NAME_SIZE ),
+                m_segname ( MAX_NAME_SIZE ),
+                m_cmd ( cmd ),
+                m_cmdsize ( cmdsize ),
+                m_addr ( 0 ),
+                m_size ( 0 ),
+                m_offset ( 0 ),
+                m_align ( 0 ),
+                m_reloff ( 0 ),
+                m_nreloc ( 0 ),
+                m_flags ( 0 ),
+                m_reserved1 ( 0 ),
+                m_reserved2 ( 0 )
+        {}
+
+        void
+        Section_Command_64::convert ( bool need_convert )
+        {
+            if ( need_convert )
+            {
+                io::Byte_Converter::convert ( m_cmd );
+                io::Byte_Converter::convert ( m_cmdsize );
+                io::Byte_Converter::convert ( m_addr );
+                io::Byte_Converter::convert ( m_size );
+                io::Byte_Converter::convert ( m_offset );
+                io::Byte_Converter::convert ( m_align );
+                io::Byte_Converter::convert ( m_reloff );
+                io::Byte_Converter::convert ( m_nreloc );
+                io::Byte_Converter::convert ( m_flags );
+                io::Byte_Converter::convert ( m_reserved1 );
+                io::Byte_Converter::convert ( m_reserved2 );
+            }
+        }
+
+        std::string
+        Section_Command_64::to_String ()
+        {
+            std::stringstream output;
+
+            output << "Section Command (64-bit):" << std::endl
+            << boost::format ( "  Command Id: %1%" ) % m_cmd << std::endl
+            << boost::format ( "  Command Size: %1%" ) % m_cmdsize << std::endl
+            << boost::format ( "  Virtual Memory Address: %1$X" ) % m_addr << std::endl
+            << boost::format ( "  Virtual Memory Size: %1%" ) % m_size << std::endl
+            << boost::format ( "  Offset: 0x%1$X" ) % m_offset << std::endl
+            << boost::format ( "  Align: 0x%1$X" ) % m_align << std::endl
+            << boost::format ( "  Relocation (File offset): 0x%1$X" ) % m_reloff << std::endl
+            << boost::format ( "  Number of relocations: %1%" ) % m_nreloc << std::endl
+            << boost::format ( "  Flags: %1$X" ) % m_flags << std::endl
+            << boost::format ( "  m_reserved1: %1%" ) % m_reserved1
+            << boost::format ( "  m_reserved2: %1%" ) % m_reserved2;
+
+            return output.str();
+        }
+    } /* namespace mach_module */
+} /* namespace libreverse */

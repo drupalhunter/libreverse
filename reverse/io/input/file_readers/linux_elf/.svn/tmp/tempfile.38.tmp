@@ -1,0 +1,102 @@
+#ifndef ELF_RELOCATION_ADD_H_
+#define ELF_RELOCATION_ADD_H_
+
+#include "libreverse/io/Type_Mapper.h"
+#include "libreverse/io/input/File_Readers/Base_Header.h"
+#include <boost/cstdint.hpp>
+#include <boost/shared_ptr.hpp>
+#include <string>
+
+namespace libreverse { namespace elf_module {
+
+    /*!
+     * \class Elf_Relocation_Add
+     * \date 2003
+     * \author Stephen Torri
+     */
+    template <boost::uint32_t bitsize>
+    class Elf_Relocation_Add : public header::Base_Header {
+
+        friend class Elf_File<bitsize>;
+
+    public:
+
+        Elf_Relocation_Add (typename elf_types::Elf_File_Header<bitsize>::ptr_t file_hdr);
+
+        /*!
+         * \brief Get header bit size
+         * \return Unsigned integer representation of bit size
+         */
+        virtual boost::uint32_t const get_size (void);
+
+        /*!
+         * \brief Convert the bit ordering from the target file bit ordering
+         * to the host system.
+         */
+        virtual void convert ();
+
+        /*!
+         * \brief String representation of Elf Header
+         * \return String output of header
+         */
+        std::string to_String (void);
+
+        /*!
+         * \brief Return type name
+         * \return String representation of section header type
+         */
+        std::string get_Section_Type_Name (void);
+
+        /*!
+         * \brief Return the index of the associated symbol in the symbol
+         * table
+         *
+         * \return Bit size of header
+         */
+        typename Type_Mapper<bitsize>::arch_t get_Symbol_Token_Index (void);
+
+    private:
+
+        /*!
+         * \brief This member gives the location at which to apply the
+         * relocation action. For a relocatable file, the value is the byte
+         * offset from the beginning of the section to the storage unit
+         * affected by the relocation. For an executable file or a shared
+         * object, the value is the virtual address of the storage unit
+         * affected by the relocation. (Elf)
+         */
+        typename Type_Mapper<bitsize>::arch_t r_offset;
+
+        /*!
+         * \brief This member gives both the symbol table index with respect
+         * to which the relocation must be made, and the type of relocation
+         * to apply. (Elf)
+         */
+        typename Type_Mapper<bitsize>::arch_t r_info;
+
+        /*!
+         * \brief This member specifies a constant addend used to compute the
+         * value to be stored into the relocatable field. (Elf)
+         */
+        typename Type_Mapper<bitsize>::arch_t r_addend;
+
+        /********************
+         * Helper variables
+         ********************/
+        typename Type_Mapper<bitsize>::arch_t m_symbol_table_index;
+
+        typename Type_Mapper<bitsize>::arch_t m_reloc_type;
+
+        /*!
+         * \brief Keep track of the File Header
+         */
+        typename elf_types::Elf_File_Header<bitsize>::ptr_t m_file_hdr;
+
+    };
+
+} /* namespace elf_module */
+} /* namespace libreverse */
+
+#include "Elf_Relocation_Add_T.cpp"
+
+#endif /* ELF_RELOCATION_ADD_H_ */

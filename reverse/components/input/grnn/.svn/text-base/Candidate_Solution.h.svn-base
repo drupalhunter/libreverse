@@ -1,0 +1,86 @@
+/*  Candidate_Solution.h
+
+   Copyright (C) 2008 Stephen Torri
+
+   This file is part of Libreverse.
+
+   Libreverse is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published
+   by the Free Software Foundation; either version 3, or (at your
+   option) any later version.
+
+   Libreverse is distributed in the hope that it will be useful, but
+   WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see
+   <http://www.gnu.org/licenses/>.
+*/
+
+#ifndef CANDIDATE_SOLUTION_H
+#define CANDIDATE_SOLUTION_H
+
+#include "Configuration.h"
+#include "Training_Set.h"
+#include "Classifier_Types.h"
+
+namespace libreverse
+{
+  namespace classifier
+  {
+
+    template <template <typename Data_Type> class Classifier_Type, typename Data_Type>
+    class Candidate_Solution
+    {
+    public:
+
+      Candidate_Solution ( double sigma = 0.002,
+			   double fitness = 0.0,
+			   typename classifier_types::Configuration<Data_Type>::ptr_t config =
+			   typename classifier_types::Configuration<Data_Type>::ptr_t ( new Configuration<Data_Type>() ) );
+
+
+      Candidate_Solution ( const Candidate_Solution& rhs );
+
+      void evaluate ( typename classifier_types::Training_Set<Data_Type>::ptr_t data );
+
+      void test ( typename classifier_types::Training_Set<Data_Type>::ptr_t data );
+
+      void set_Sigma ( double new_sigma );
+
+      double get_Sigma (void) const;
+        
+      double get_Fitness (void) const;
+
+      double get_Mean_Distance_Squared (void) const;
+
+      void set_Iteration_Count (boost::uint32_t);
+
+      boost::uint32_t get_Iteration_Count (void) const;
+
+      typename classifier_types::Configuration<Data_Type>::ptr_t get_Config (void);
+        
+      std::string to_String (void);
+        
+    private:
+
+      double m_sigma;
+
+      double m_fitness;
+
+      double m_mean_distance_squared;
+
+      boost::uint32_t m_iteration_count;
+
+      typename classifier_types::Configuration<Data_Type>::ptr_t m_config;
+    };
+
+  } /* namespace classifier */
+
+} /* namespace libreverse */
+
+#include "Candidate_Solution.cpp"
+
+#endif /* CANDIDATE_SOLUTION_H */

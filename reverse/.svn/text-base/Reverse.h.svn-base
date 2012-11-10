@@ -1,0 +1,173 @@
+
+/*  Reverse.h
+
+   Copyright (C) 2008 Stephen Torri
+
+   This file is part of Libreverse.
+
+   Libreverse is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published
+   by the Free Software Foundation; either version 3, or (at your
+   option) any later version.
+
+   Libreverse is distributed in the hope that it will be useful, but
+   WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see
+   <http://www.gnu.org/licenses/>.
+*/
+
+#ifndef REVERSE_H_
+#define REVERSE_H_
+
+#include <boost/cstdint.hpp>
+#include <string>
+
+/*!
+ * \class Reverse
+ * \date 2003
+ * \author Stephen Torri
+ */
+namespace libreverse { namespace api {
+
+    class TraceArea {
+    public:
+
+      enum Values {
+	NONE = 0x0,
+	IO = 0x1,
+	COMPONENTS = 0x2,
+	INFRASTRUCTURE = 0x4,
+	DATA_CONTAINERS = 0x8,
+	ERRORS = 0x10,
+	META = 0x20,
+	API = 0x40,
+	ERROR_HANDLING = 0x80,
+	CLASSIFIER = 0x100,
+	GRNN = 0x200,
+	GRNN_DATA = 0x400,
+	GRNN_PARSER = 0x800,
+	CANDIDATE_SOLUTION = 0x1000,
+	GRNN_OPTIMIZER = 0x2000,
+	INSTRUCTION_DECODER = 0x4000,
+	ALL = 0x7FFF
+      };
+
+    };
+
+    class TraceLevel {
+    public:
+      enum Values {
+	NONE = 0,
+	WARN = 10,
+	ERROR = 20,
+	INFO = 30,
+	DEBUG = 40,
+	DETAIL = 50,
+	DATA = 60
+      };
+    };
+
+    class Transfer_Types {
+    public:
+      
+      enum Values {
+	FILE = 0,
+	MEMORY = 1,
+	DATABASE = 2
+      };
+      
+    };
+
+    class Input_Types {
+    public:
+
+      enum Values {
+	BINARY = 0
+      };
+      
+    };
+
+    class Output_Types {
+    public:
+
+      enum Values {
+        CPLUSPLUS = 0,
+        C = 1,
+        JAVA = 2,
+        UML = 3
+      };
+
+    };
+
+    class Results {
+    public:
+
+      enum Values {
+	INVALID_INDEX = -2,
+        FAILURE = -1,
+        SUCCESS = 0
+      };
+
+    };
+
+    class Reverse
+    {
+
+    public:
+
+      /*!
+       * \brief Default Constructor
+       */
+      explicit Reverse();
+
+      /*!
+       * \brief Default Destructor
+       */
+      ~Reverse();
+
+      /*!
+       * \brief Initialize the Reverse objects
+       *
+       * \param target_file Input binary file
+       *
+       * \param input_type Input type guess
+       *
+       * \param language_type Output type for results
+       *
+       * \param trace_level The maximum level of tracing. If value
+       * equals None then no output will be recorded otherwise
+       * output of debugging information is cumulative (e.g. warning
+       * = lowest information, data = highest level recorded which
+       * includes all levels from warning on up).
+       *
+       * \param trace_mask The trace mask is the way to control what
+       * debugging information is recorded. If no value is given
+       * then the default action is to debug no areas even if the
+       * trace_level is set to anything other than None.
+       *
+       * For now the only input type we accept will be binary files. So the
+       * Component graphs generated with be a pairing of binary file and
+       * some output language type
+       */
+      boost::int32_t execute ( std::string target_file,
+			       Input_Types::Values input_type,
+			       Output_Types::Values language_type,
+			       TraceLevel::Values trace_level = TraceLevel::NONE,
+			       TraceArea::Values trace_mask = TraceArea::NONE );
+
+    private:
+
+      bool valid_Types ( boost::uint32_t lower_limit,
+			 boost::uint32_t upper_limit,
+			 boost::uint32_t value );
+    };
+
+  } /* namespace api */
+} /* namespace libreverse */
+
+#endif /* REVERSE_H_ */
+

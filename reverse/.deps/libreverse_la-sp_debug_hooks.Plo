@@ -1,0 +1,2 @@
+libreverse_la-sp_debug_hooks.lo libreverse_la-sp_debug_hooks.o:  \
+ sp_debug_hooks.cpp

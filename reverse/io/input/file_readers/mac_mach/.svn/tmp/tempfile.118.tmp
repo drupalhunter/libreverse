@@ -1,0 +1,16 @@
+#include "Scattered_Relocation_Info.h"
+
+namespace libreverse { namespace mach_module {
+
+  Scattered_Relocation_Info::Scattered_Relocation_Info()
+    : m_r_scattered ( false ),
+      m_r_address ( 0 ),
+      m_r_pcrel ( false ),
+      m_r_length ( 0 ),
+      m_r_type ( 0 ),
+      m_r_value ( false )
+  {}
+
+
+} /* namespace mach_module */
+} /* namespace libreverse */

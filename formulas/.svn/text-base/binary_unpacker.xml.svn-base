@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+
+<formula_map>
+  <node>
+    <name id="1">file_type</name>
+  </node>
+  <node>
+    <predecessors>
+      <node_ref idref="1"/>
+    </predecessors>
+    <name id="20">arch_type</name>
+  </node>
+  <node>
+    <predecessors>
+      <node_ref idref="1"/>
+    </predecessors>
+    <name id="30">data_section</name>
+  </node>
+  <node>
+    <predecessors>
+      <node_ref idref="1"/>
+    </predecessors>
+    <name id="40">code_section</name>
+  </node>
+  <node>
+    <predecessors>
+      <node_ref idref="20"/>
+    </predecessors>
+    <name id="50">tevis_zero_filled_checker</name>
+  </node>
+  <node>
+    <predecessors>
+      <node_ref idref="1"/>
+      <node_ref idref="20"/>
+      <node_ref idref="30"/>
+      <node_ref idref="40"/>
+      <node_ref idref="50"/>
+    </predecessors>
+    <name id="5">meta_writer</name>
+  </node>
+</formula_map>

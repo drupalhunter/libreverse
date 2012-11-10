@@ -1,0 +1,45 @@
+#include "Elf_dlx.h"
+#include <iostream>
+#include "libreverse/Trace.h"
+
+using namespace libreverse::api;
+using namespace libreverse::trace;
+
+namespace libreverse { namespace elf_module {
+
+    inline std::string
+    Elf_dlx::get_Type ( boost::uint32_t type )
+    {
+        Trace::write_Trace ( TraceArea::IO,
+                             TraceLevel::DETAIL,
+                             "Entering Elf_dlx::get_Type" );
+
+        std::string output = "";
+
+        switch(type)
+            {
+            case 0: output = "R_DLX_NONE"; break;
+            case 1: output = "R_DLX_RELOC_8"; break;
+            case 2: output = "R_DLX_RELOC_16"; break;
+            case 3: output = "R_DLX_RELOC_32"; break;
+            case 4: output = "R_DLX_GNU_VTINHERIT"; break;
+            case 5: output = "R_DLX_GNU_VTENTRY"; break;
+            case 6: output = "R_DLX_RELOC_16_HI"; break;
+            case 7: output = "R_DLX_RELOC_16_LO"; break;
+            case 8: output = "R_DLX_RELOC_16_PCREL"; break;
+            case 9: output = "R_DLX_RELOC_26_PCREL"; break;
+            default:
+                {
+                    std::cerr << "Unknown dlx relocaltion type: " << type << std::endl;
+                    output = "unknown";
+                }
+            }
+
+        Trace::write_Trace ( TraceArea::IO,
+                             TraceLevel::DETAIL,
+                             "Exiting Elf_dlx::get_Type" );
+
+        return output;
+    }
+} /* namespace elf_module */
+} /* namespace libreverse */

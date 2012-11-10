@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn_repos/hamilton/!svn/ver/356/torrisa/libreverse/trunk/libreverse/libreverse/api/tests
+END
+kernel32.dll
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn_repos/hamilton/!svn/ver/120/torrisa/libreverse/trunk/libreverse/libreverse/api/tests/kernel32.dll
+END
+test_one_node_per_section.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn_repos/hamilton/!svn/ver/257/torrisa/libreverse/trunk/libreverse/libreverse/api/tests/test_one_node_per_section.cpp
+END
+tests.mpc
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn_repos/hamilton/!svn/ver/356/torrisa/libreverse/trunk/libreverse/libreverse/api/tests/tests.mpc
+END
+test_basic_graph.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn_repos/hamilton/!svn/ver/356/torrisa/libreverse/trunk/libreverse/libreverse/api/tests/test_basic_graph.cpp
+END
+input.dot
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn_repos/hamilton/!svn/ver/120/torrisa/libreverse/trunk/libreverse/libreverse/api/tests/input.dot
+END
+one_node.xml
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn_repos/hamilton/!svn/ver/120/torrisa/libreverse/trunk/libreverse/libreverse/api/tests/one_node.xml
+END
+output.dot
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn_repos/hamilton/!svn/ver/120/torrisa/libreverse/trunk/libreverse/libreverse/api/tests/output.dot
+END
+Makefile.am.old
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn_repos/hamilton/!svn/ver/120/torrisa/libreverse/trunk/libreverse/libreverse/api/tests/Makefile.am.old
+END
+analysis.dot
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn_repos/hamilton/!svn/ver/150/torrisa/libreverse/trunk/libreverse/libreverse/api/tests/analysis.dot
+END
+test_reverse.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn_repos/hamilton/!svn/ver/356/torrisa/libreverse/trunk/libreverse/libreverse/api/tests/test_reverse.cpp
+END
+api_tests.vcproj
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn_repos/hamilton/!svn/ver/126/torrisa/libreverse/trunk/libreverse/libreverse/api/tests/api_tests.vcproj
+END
+two_node.xml
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn_repos/hamilton/!svn/ver/120/torrisa/libreverse/trunk/libreverse/libreverse/api/tests/two_node.xml
+END

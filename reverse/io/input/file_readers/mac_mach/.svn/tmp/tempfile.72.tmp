@@ -1,0 +1,8 @@
+#include "Mach_Data_T.h"
+
+int main (int, char**)
+{
+	libreverse::mach_module::Mach_Data<32> a;
+
+	return 0;
+}

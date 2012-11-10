@@ -1,0 +1,61 @@
+#ifndef FILE_READER_H_
+#define FILE_READER_H_
+
+#include "include/boost.h"
+#include "io/File.h"
+
+namespace libreverse { namespace io {
+
+    class File_Reader
+    {
+    public:
+
+        typedef boost::shared_ptr<File_Reader> ptr_t;
+
+        virtual ~File_Reader(){}
+
+        virtual bool support_File_Type ( io::File_ID::ptr_t obj_ptr ) = 0;
+
+        /* !\brief Return the File Type of the target file */
+        virtual std::string const get_File_Type (void) = 0;
+
+        /* !\brief Return the Architecture Type of the target file */
+        virtual std::string const get_Arch_Type (void) = 0;
+
+        virtual io::File::ptr_t get_File (void) = 0;
+
+        virtual std::string const get_Section_Offset
+        ( std::string const& name ) = 0;
+
+        virtual std::string const get_Section_Length
+        ( std::string const& name ) = 0;
+
+        virtual std::string const get_Entry_Point (void) = 0;
+
+        virtual std::string const get_Base_Address (void) = 0 ;
+
+        virtual data_types::Memory_Map::ptr_t get_Memory_Map ( void ) = 0;
+
+        virtual std::string const to_String (void) = 0;
+
+    private:
+
+        /*
+          This was put here in case we wanted to grab stuff by section
+          name (e.g. 'code' ). This can work for Elf and Windows PE
+          files but not Java. At least not yet. We do not know what
+          the equivalent section names are for Java class files since
+          the file format is not that well understood.
+        */
+        virtual std::string const get_Section_String
+        ( std::string const& name ) = 0;
+
+    };
+
+} /* namespace io */
+} /* namespace libreverse */
+
+// TODO: Make file readers serializable
+// BOOST_IS_ABSTRACT(libreverse::io::File_Reader)
+#endif /* FILE_READER_H_ */
+

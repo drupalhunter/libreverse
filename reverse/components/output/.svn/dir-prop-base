@@ -1,0 +1,9 @@
+K 10
+svn:ignore
+V 47
+Makefile
+*.user
+comp_outputsd.lib
+Static_Debug
+
+END

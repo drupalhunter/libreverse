@@ -1,0 +1,144 @@
+project(io_java_class)
+
+set ( IO_JAVA_CLASS_SOURCES
+  append_frame.cpp
+  attribute_info_factory.cpp
+  attribute_tags.cpp
+  chop_frame.cpp
+  class_access_flags.cpp
+  class_access_flags_rules.cpp
+  class_file.cpp
+  class_header.cpp
+  code_attribute.cpp
+  constant_class_info.cpp
+  constant_double_info.cpp
+  constant_fieldref_info.cpp
+  constant_float_info.cpp
+  constant_info_factory.cpp
+  constant_integer_info.cpp
+  constant_interfacemethodref_info.cpp
+  constant_long_info.cpp
+  constant_methodref_info.cpp
+  constant_name_and_type_info.cpp
+  constant_pool_tags.cpp
+  constant_string_info.cpp
+  constant_utf8_info.cpp
+  constant_value_attribute.cpp
+  deprecated_attribute.cpp
+  double_variable_info.cpp
+  enclosing_method_attribute.cpp
+  exception_table_entry.cpp
+  exceptions_attribute.cpp
+  field_access_flags.cpp
+  field_access_flags_rules.cpp
+  field_info.cpp
+  float_variable_info.cpp
+  full_frame.cpp
+  header.cpp
+  inner_class_reference.cpp
+  inner_classes_attribute.cpp
+  integer_variable_info.cpp
+  java_meta_info.cpp
+  line_number_item.cpp
+  line_number_table_attribute.cpp
+  local_variable.cpp
+  local_variable_table_attribute.cpp
+  long_variable_info.cpp
+  method_access_flags.cpp
+  method_info.cpp
+  null_variable_info.cpp
+  object_variable_info.cpp
+  reader.cpp
+  same_frame.cpp
+  same_frame_extended.cpp
+  same_locals_one_stack_item_frame.cpp
+  same_locals_one_stack_item_frame_extended.cpp
+  signature_attribute.cpp
+  source_file_attribute.cpp
+  stack_map_frame_factory.cpp
+  stack_map_frame_tags.cpp
+  stack_map_table_attribute.cpp
+  synthetic_attribute.cpp
+  top_variable_info.cpp
+  uninitialized_this_variable_info.cpp
+  uninitialized_variable_info.cpp
+  unknown_attribute.cpp
+  verification_type_factory.cpp
+  verification_type_tags.cpp )
+
+set ( IO_JAVA_CLASS_HEADERS
+  append_frame.hpp
+  attribute_info.hpp
+  attribute_info_factory.hpp
+  attribute_tags.hpp
+  chop_frame.hpp
+  class_access_flags.hpp
+  class_access_flags_rules.hpp
+  class_file.hpp
+  class_header.hpp
+  code_attribute.hpp
+  constant_class_info.hpp
+  constant_double_info.hpp
+  constant_fieldref_info.hpp
+  constant_float_info.hpp
+  constant_info_factory.hpp
+  constant_integer_info.hpp
+  constant_interfacemethodref_info.hpp
+  constant_long_info.hpp
+  constant_methodref_info.hpp
+  constant_name_and_type_info.hpp
+  constant_pool_info.hpp
+  constant_pool_tags.hpp
+  constant_string_info.hpp
+  constant_utf8_info.hpp
+  constant_value_attribute.hpp
+  deprecated_attribute.hpp
+  double_variable_info.hpp
+  enclosing_method_attribute.hpp
+  exception_table_entry.hpp
+  exceptions_attribute.hpp
+  field_access_flags.hpp
+  field_access_flags_rules.hpp
+  field_info.hpp
+  float_variable_info.hpp
+  full_frame.hpp
+  header.hpp
+  inner_class_reference.hpp
+  inner_classes_attribute.hpp
+  integer_variable_info.hpp
+  java_meta_info.hpp
+  java_types.hpp
+  line_number_item.hpp
+  line_number_table_attribute.hpp
+  local_variable.hpp
+  local_variable_table_attribute.hpp
+  long_variable_info.hpp
+  method_access_flags.hpp
+  method_info.hpp
+  null_variable_info.hpp
+  object_variable_info.hpp
+  reader.hpp
+  same_frame.hpp
+  same_frame_extended.hpp
+  same_locals_one_stack_item_frame.hpp
+  same_locals_one_stack_item_frame_extended.hpp
+  signature_attribute.hpp
+  source_file_attribute.hpp
+  stack_map_frame.hpp
+  stack_map_frame_factory.hpp
+  stack_map_frame_tags.hpp
+  stack_map_table_attribute.hpp
+  synthetic_attribute.hpp
+  top_variable_info.hpp
+  uninitialized_this_variable_info.hpp
+  uninitialized_variable_info.hpp
+  unknown_attribute.hpp
+  verification_type_factory.hpp
+  verification_type_info.hpp
+  verification_type_tags.hpp )
+
+include_directories ( ${REVERSE_SOURCE_DIR} )
+
+add_library ( io_java_class ${IO_JAVA_CLASS_SOURCES} ${IO_JAVA_CLASS_HEADERS} )
+
+

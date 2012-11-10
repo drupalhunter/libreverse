@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+
+<formula_list>
+  <formula>
+    <input>binary</input>
+    <output>C</output>
+    <input_formula>binary_RTL.xml</input_formula>
+    <analysis_formula>binary_arch_RTL.xml</analysis_formula>
+    <output_formula>binary_RTL.xml</output_formula>
+  </formula>
+  <formula>
+    <input>binary</input>
+    <output>C++</output>
+    <input_formula>binary_RTL.xml</input_formula>
+    <analysis_formula>binary_unpacker.xml</analysis_formula>
+    <output_formula>null_map.xml</output_formula>
+  </formula>
+</formula_list>
+

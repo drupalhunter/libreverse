@@ -1,0 +1,91 @@
+Directory to be searched....: java_data.
+Input source type....: java_class.
+Output file name for final training data....: final_java_class.
+------- PROCESS RESULT ----------
+---------------------------------------
+--------- Candidate Solution ----------
+---------------------------------------
+  Sigma.....0.0021938780
+  Fitness:..0.4533333333
+  Mean Distance Squared:..1.8377973193
+  Iteration Count:..1
+---- Configuration ----
+    Java_Training_Data #1
+Compiler_ID
+Filesize
+This_index
+Super_index
+Version
+Constant Pool count
+Constant UTF-8 count
+Constant UTF-8 ratio
+Reserved count
+Reserved ratio
+Constant Pool Integer count
+Constant Pool Integer ratio
+Constant Pool Float count
+Constant Pool Float ratio
+Constant Pool Long count
+Constant Pool Long ratio
+Constant Pool Double count
+Constant Pool Double ratio
+Constant Pool Class count
+Constant Pool Class ratio
+Constant Pool String count
+Constant Pool String ratio
+Constant Pool Fieldref count
+Constant Pool Fieldref ratio
+Constant Pool Methodref count
+Constant Pool Methodref ratio
+Constant Pool Interface Methodref count
+Constant Pool Interface Methodref ratio
+Constant Pool Name and Type count
+Constant Pool Name and Type ratio
+Field Count
+Method Count
+
+
+------- TEST RESULT ----------
+---------------------------------------
+--------- Candidate Solution ----------
+---------------------------------------
+  Sigma.....0.0021938780
+  Fitness:..0.4230769231
+  Mean Distance Squared:..2.0128205128
+  Iteration Count:..0
+---- Configuration ----
+    Java_Training_Data #1
+Compiler_ID
+Filesize
+This_index
+Super_index
+Version
+Constant Pool count
+Constant UTF-8 count
+Constant UTF-8 ratio
+Reserved count
+Reserved ratio
+Constant Pool Integer count
+Constant Pool Integer ratio
+Constant Pool Float count
+Constant Pool Float ratio
+Constant Pool Long count
+Constant Pool Long ratio
+Constant Pool Double count
+Constant Pool Double ratio
+Constant Pool Class count
+Constant Pool Class ratio
+Constant Pool String count
+Constant Pool String ratio
+Constant Pool Fieldref count
+Constant Pool Fieldref ratio
+Constant Pool Methodref count
+Constant Pool Methodref ratio
+Constant Pool Interface Methodref count
+Constant Pool Interface Methodref ratio
+Constant Pool Name and Type count
+Constant Pool Name and Type ratio
+Field Count
+Method Count
+
+

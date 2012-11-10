@@ -1,0 +1,17 @@
+project(data_visitor) {
+    staticname = data_visitor
+    includes += $(top_srcdir)
+
+    specific(vc8) {
+	dynamicflags += _SCL_SECURE_NO_WARNINGS
+	staticflags += _SCL_SECURE_NO_WARNINGS
+    }
+
+	Source_Files {
+		Control_Flow_Graph_Graphviz_Visitor.cpp
+	}
+
+	Header_Files {
+		Control_Flow_Graph_Graphviz_Visitor.h
+	}
+}

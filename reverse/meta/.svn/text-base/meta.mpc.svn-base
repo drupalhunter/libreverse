@@ -1,0 +1,19 @@
+project(meta) {
+	staticname = meta
+	after = reverse_exceptions
+	libs = reverse_exceptions
+   	includes += $(top_srcdir)
+
+    specific(vc8) {
+	dynamicflags += _SCL_SECURE_NO_WARNINGS
+	staticflags += _SCL_SECURE_NO_WARNINGS
+    }
+
+	Source_Files {
+		Meta_Object.cpp
+	}
+
+	Header_Files {
+		Meta_Object.h
+	}
+}

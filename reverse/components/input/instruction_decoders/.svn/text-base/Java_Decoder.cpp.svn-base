@@ -1,0 +1,2147 @@
+/*  Java_Decoder.cpp
+
+    Copyright (C) 2008 Stephen Torri
+
+    This file is part of Libreverse.
+
+    Libreverse is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published
+    by the Free Software Foundation; either version 3, or (at your
+    option) any later version.
+
+    Libreverse is distributed in the hope that it will be useful, but
+    WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see
+    <http://www.gnu.org/licenses/>.
+*/
+
+#include "Java_Decoder.h"
+#include "Java_Actions.h"
+#include "Java_Opcodes.h"
+
+#include "libreverse/data_containers/Basic_Block.h"
+#include "libreverse/data_containers/Control_Flow_Graph.h"
+#include "libreverse/data_containers/Control_Flow_Graph_Sequence.h"
+#include "libreverse/data_containers/Instruction.h"
+#include "libreverse/io/input/File_Readers/Java_Class/Attribute_Info.h"
+#include "libreverse/io/input/File_Readers/Java_Class/Attribute_Tags.h"
+#include "libreverse/io/input/File_Readers/Java_Class/Code_Attribute.h"
+#include "libreverse/io/input/File_Readers/Java_Class/Class_Header.h"
+#include "libreverse/io/input/File_Readers/Java_Class/Method_Info.h"
+#include "libreverse/io/input/File_Readers/Java_Class/Reader.h"
+#include "libreverse/io/input/File_Readers/Reader_Factory.h"
+#include "libreverse/io/File_ID.h"
+#include "libreverse/io/Preconditions.h"
+
+#include <sstream>
+#include <boost/format.hpp>
+
+#ifdef LIBREVERSE_DEBUG
+#include "libreverse/Trace.h"
+using namespace libreverse::api;
+using namespace libreverse::trace;
+#endif /* LIBREVERSE_DEBUG */
+
+namespace libreverse { namespace decoder {
+
+    Java_Decoder::Java_Decoder ( decoder_types::Java_Actions::ptr_t action_ptr )
+      : m_actions ( action_ptr ),
+	m_graph_list ( new data_container::Control_Flow_Graph_Sequence() )
+    {
+#ifdef LIBREVERSE_DEBUG
+      Trace::write_Trace ( TraceArea::INSTRUCTION_DECODER,
+			   TraceLevel::DETAIL,
+			   "Inside Java_Decoder constructor" );
+#endif /* LIBREVERSE_DEBUG */
+    }
+
+    data_types::Control_Flow_Graph_Sequence::ptr_t
+    Java_Decoder::execute ( std::string filename )
+    {
+#ifdef LIBREVERSE_DEBUG
+      Trace::write_Trace ( TraceArea::INSTRUCTION_DECODER,
+			   TraceLevel::DETAIL,
+			   "Entering Java_Decode::execute" );
+#endif /* LIBREVERSE_DEBUG */
+
+      io::Preconditions::is_set ( m_actions );
+
+      libreverse::io_types::File_ID::ptr_t file_obj ( new libreverse::io::File_ID ( filename ) );
+    
+
+      libreverse::java_module::Reader reader_obj ( file_obj );
+
+      reader_obj.read_Headers();
+
+      java_types::Class_Header::ptr_t class_hdr = reader_obj.get_Header();
+
+      boost::uint32_t method_count = 0;
+
+      // Get list of Code sections
+      for ( java_types::Class_Header::Method_Info_Map_t::const_iterator cpos = class_hdr->get_Method_Begin();
+	    cpos != class_hdr->get_Method_End();
+	    ++cpos )
+	{
+	  java_types::Method_Info::ptr_t method_ptr = (*cpos).second;
+
+#ifdef LIBREVERSE_DEBUG
+	  Trace::write_Trace ( TraceArea::INSTRUCTION_DECODER,
+			       TraceLevel::DETAIL,
+			       boost::str ( boost::format ( "Java_Decode::execute - reading Method #%1%" )
+					    % method_ptr->get_Name_String() ) );
+
+	  Trace::write_Trace ( TraceArea::INSTRUCTION_DECODER,
+			       TraceLevel::DETAIL,
+			       boost::str ( boost::format ( "Java_Decode::execute - Attribute count %1%" )
+					    % method_ptr->get_Attributes_Count() ) );
+
+#endif /* LIBREVERSE_DEBUG */
+
+	  // FOR EACH Code section
+	  for ( java_types::Class_Header::Attribute_Info_Map_t::const_iterator attrib_pos = method_ptr->attribute_Begin();
+		attrib_pos != method_ptr->attribute_End();
+		++attrib_pos )
+	    {
+	      java_types::Attribute_Info::ptr_t attrib_ptr = (*attrib_pos).second;
+
+#ifdef LIBREVERSE_DEBUG
+	      Trace::write_Trace ( TraceArea::INSTRUCTION_DECODER,
+				   TraceLevel::DETAIL,
+				   "Entering Java_Decode::execute - reading Attribute" );
+
+	      Trace::write_Trace ( TraceArea::INSTRUCTION_DECODER,
+				   TraceLevel::DATA,
+				   attrib_ptr->to_String() );
+
+#endif /* LIBREVERSE_DEBUG */
+
+	      if ( attrib_ptr->is_Type ( java_module::Attribute_Tags::CODE ) )
+		{
+
+		  /*---------------------------*/
+		  /*         SETUP             */
+		  /*---------------------------*/
+		  m_todo_list.clear();
+		  m_processed_list.clear();
+		  m_current_graph.reset ( new data_container::Control_Flow_Graph( method_ptr->get_Name_String() ) );
+
+		  /*---------------------------*/
+		  /*         PROCESS           */
+		  /*---------------------------*/
+		  // Get Code_List_t from Code Section
+		  java_types::Code_Attribute::ptr_t code_ptr = boost::dynamic_pointer_cast<java_module::Code_Attribute>(attrib_ptr);
+		
+		  // Parse Opcode from Code_List_t
+		  this->process_Code_Attribute ( code_ptr, method_ptr );
+
+		  // Save Control Flow Graph
+		  m_graph_list->add_Control_Flow_Graph ( m_current_graph );
+		}
+	    }
+
+	  // Increment to next count
+	  ++method_count;
+
+	}
+
+#ifdef LIBREVERSE_DEBUG
+      Trace::write_Trace ( TraceArea::INSTRUCTION_DECODER,
+			   TraceLevel::DETAIL,
+			   "Exiting Java_Decode::execute" );
+#endif /* LIBREVERSE_DEBUG */
+
+      return m_graph_list;
+    }
+
+    void
+    Java_Decoder::process_Code_Attribute ( java_types::Code_Attribute::ptr_t code_ptr,
+					   java_types::Method_Info::ptr_t method_ptr )
+    {
+#ifdef LIBREVERSE_DEBUG
+      Trace::write_Trace ( TraceArea::INSTRUCTION_DECODER,
+			   TraceLevel::DETAIL,
+			   "Entering Java_Decode::process_Code_Attribute" );
+#endif /* LIBREVERSE_DEBUG */
+
+      // Create Basic Block (0)
+      boost::uint32_t id = 0;
+      data_types::Basic_Block::ptr_t bb_ptr ( new data_container::Basic_Block ( id,
+										data_container::Instruction::JAVA_ASSEMBLY ) );
+      bb_ptr->add_Comment ( boost::str ( boost::format ( "Method: %1%" ) % method_ptr->get_Name_String() ) );
+
+      // Put 0 on todo list;
+      m_todo_list.push_back ( id );
+
+      // Add Basic Block (0) to graph
+      m_current_graph->add_Basic_Block ( bb_ptr );
+
+      // While m_todo_list is not empty
+      while ( ! m_todo_list.empty() )
+	{
+	  //   Read next entry from todo list
+	  boost::uint32_t next_entry = m_todo_list.front();
+
+	  //   Put next entry in processed list
+	  Basic_Block_List_t::iterator result = std::find ( m_processed_list.begin(),
+							    m_processed_list.end(),
+							    next_entry );
+	  if ( result == m_processed_list.end() )
+	    {
+	      m_processed_list.push_back ( next_entry );
+	    }
+
+	  //   call process_todo_list
+	  this->process_Todo_List ( code_ptr );
+	}
+
+#ifdef LIBREVERSE_DEBUG
+      Trace::write_Trace ( TraceArea::INSTRUCTION_DECODER,
+			   TraceLevel::DETAIL,
+			   "Exiting Java_Decode::process_Code_Attribute" );
+#endif /* LIBREVERSE_DEBUG */
+
+    }
+
+    void
+    Java_Decoder::process_Todo_List ( java_types::Code_Attribute::ptr_t code_ptr )
+    {
+
+#ifdef LIBREVERSE_DEBUG
+      Trace::write_Trace ( TraceArea::INSTRUCTION_DECODER,
+			   TraceLevel::DETAIL,
+			   "Enterng Java_Decode::process_Todo_List" );
+
+      std::stringstream output_todo_list;
+      std::stringstream output_processed_list;
+      boost::uint32_t list_size = m_todo_list.size();
+      boost::uint32_t end_of_list_position = list_size - 1;
+      boost::uint32_t index = 0;
+
+      // Collect all the entries in the todo list
+      for ( Java_Decoder::Basic_Block_List_t::const_iterator cpos = m_todo_list.begin();
+	    cpos != m_todo_list.end();
+	    ++cpos )
+	{
+	  output_todo_list << (*cpos);
+
+	  if ( index < end_of_list_position )
+	    {
+	      output_todo_list << " ";
+	    }
+
+	  ++index;
+	}
+
+      // Collect all the entries in the processed list
+      index = 0;
+      list_size = m_processed_list.size();
+      end_of_list_position = list_size - 1;
+      for ( Java_Decoder::Basic_Block_List_t::const_iterator cpos = m_processed_list.begin();
+	    cpos != m_processed_list.end();
+	    ++cpos )
+	{
+	  output_processed_list << (*cpos);
+
+	  if ( index < end_of_list_position )
+	    {
+	      output_processed_list << " ";
+	    }
+
+	  ++index;
+	}
+
+      Trace::write_Trace ( TraceArea::INSTRUCTION_DECODER,
+			   TraceLevel::DATA,
+			   boost::str ( boost::format ("Todo list: %1%" ) % output_todo_list.str() ) );
+      Trace::write_Trace ( TraceArea::INSTRUCTION_DECODER,
+			   TraceLevel::DATA,
+			   boost::str ( boost::format ("Processed list: %1%" ) % output_processed_list.str() ) );
+
+#endif /* LIBREVERSE_DEBUG */
+
+
+      // Pop first entry from todo list
+      boost::uint32_t next_entry = m_todo_list.front();
+      bool continue_working = true;
+
+      m_todo_list.pop_front();
+
+
+#ifdef LIBREVERSE_DEBUG
+      Trace::write_Trace ( TraceArea::INSTRUCTION_DECODER,
+			   TraceLevel::DATA,
+			   boost::str ( boost::format ( "Processing basic block: %1%" ) % next_entry ) );
+#endif /* LIBREVERSE_DEBUG */
+
+      
+      // Retrieve Basic Block(next_entry) from graph
+      data_types::Control_Flow_Graph::Vertex_t node = m_current_graph->get_Vertex ( next_entry );
+      data_types::Basic_Block::ptr_t current_bb_ptr =  m_current_graph->get_Basic_Block ( node );
+
+      // Set Current Block = Basic Block (next_entry)
+      m_actions->set_Current_Basic_Block ( current_bb_ptr );
+
+      while ( continue_working )
+	{
+	  // Get instruction at entry
+	  boost::uint8_t instruction = code_ptr->get_Code ( next_entry );
+
+	  // Process instruction
+	  switch ( instruction )
+	    {
+	    case Java_Opcodes::NOP:
+	    case Java_Opcodes::ACONST_NULL:
+	    case Java_Opcodes::ICONST_M1:
+	    case Java_Opcodes::ICONST_0:
+	    case Java_Opcodes::ICONST_1:
+	    case Java_Opcodes::ICONST_2:
+	    case Java_Opcodes::ICONST_3:
+	    case Java_Opcodes::ICONST_4:
+	    case Java_Opcodes::ICONST_5:
+	    case Java_Opcodes::LCONST_0:
+	    case Java_Opcodes::LCONST_1:
+	    case Java_Opcodes::FCONST_0:
+	    case Java_Opcodes::FCONST_1:
+	    case Java_Opcodes::FCONST_2:
+	    case Java_Opcodes::DCONST_0:
+	    case Java_Opcodes::DCONST_1:
+	    case Java_Opcodes::BIPUSH:
+	    case Java_Opcodes::SIPUSH:
+	    case Java_Opcodes::LDC:
+	    case Java_Opcodes::LDC_W:
+	    case Java_Opcodes::LDC2_W:
+	    case Java_Opcodes::ILOAD:
+	    case Java_Opcodes::LLOAD:
+	    case Java_Opcodes::FLOAD:
+	    case Java_Opcodes::DLOAD:
+	    case Java_Opcodes::ALOAD:
+	    case Java_Opcodes::ILOAD_0:
+	    case Java_Opcodes::ILOAD_1:
+	    case Java_Opcodes::ILOAD_2:
+	    case Java_Opcodes::ILOAD_3:
+	    case Java_Opcodes::LLOAD_0:
+	    case Java_Opcodes::LLOAD_1:
+	    case Java_Opcodes::LLOAD_2:
+	    case Java_Opcodes::LLOAD_3:
+	    case Java_Opcodes::FLOAD_0:
+	    case Java_Opcodes::FLOAD_1:
+	    case Java_Opcodes::FLOAD_2:
+	    case Java_Opcodes::FLOAD_3:
+	    case Java_Opcodes::DLOAD_0:
+	    case Java_Opcodes::DLOAD_1:
+	    case Java_Opcodes::DLOAD_2:
+	    case Java_Opcodes::DLOAD_3:
+	    case Java_Opcodes::ALOAD_0:
+	    case Java_Opcodes::ALOAD_1:
+	    case Java_Opcodes::ALOAD_2:
+	    case Java_Opcodes::ALOAD_3:
+	    case Java_Opcodes::IALOAD:
+	    case Java_Opcodes::LALOAD:
+	    case Java_Opcodes::FALOAD:
+	    case Java_Opcodes::DALOAD:
+	    case Java_Opcodes::AALOAD:
+	    case Java_Opcodes::BALOAD:
+	    case Java_Opcodes::CALOAD:
+	    case Java_Opcodes::SALOAD:
+	    case Java_Opcodes::ISTORE:
+	    case Java_Opcodes::LSTORE:
+	    case Java_Opcodes::FSTORE:
+	    case Java_Opcodes::DSTORE:
+	    case Java_Opcodes::ASTORE:
+	    case Java_Opcodes::ISTORE_0:
+	    case Java_Opcodes::ISTORE_1:
+	    case Java_Opcodes::ISTORE_2:
+	    case Java_Opcodes::ISTORE_3:
+	    case Java_Opcodes::LSTORE_0:
+	    case Java_Opcodes::LSTORE_1:
+	    case Java_Opcodes::LSTORE_2:
+	    case Java_Opcodes::LSTORE_3:
+	    case Java_Opcodes::FSTORE_0:
+	    case Java_Opcodes::FSTORE_1:
+	    case Java_Opcodes::FSTORE_2:
+	    case Java_Opcodes::FSTORE_3:
+	    case Java_Opcodes::DSTORE_0:
+	    case Java_Opcodes::DSTORE_1:
+	    case Java_Opcodes::DSTORE_2:
+	    case Java_Opcodes::DSTORE_3:
+	    case Java_Opcodes::ASTORE_0:
+	    case Java_Opcodes::ASTORE_1:
+	    case Java_Opcodes::ASTORE_2:
+	    case Java_Opcodes::ASTORE_3:
+	    case Java_Opcodes::IASTORE:
+	    case Java_Opcodes::LASTORE:
+	    case Java_Opcodes::FASTORE:
+	    case Java_Opcodes::DASTORE:
+	    case Java_Opcodes::AASTORE:
+	    case Java_Opcodes::BASTORE:
+	    case Java_Opcodes::CASTORE:
+	    case Java_Opcodes::SASTORE:
+	    case Java_Opcodes::POP:
+	    case Java_Opcodes::POP2:
+	    case Java_Opcodes::DUP:
+	    case Java_Opcodes::DUP_X1:
+	    case Java_Opcodes::DUP_X2:
+	    case Java_Opcodes::DUP2:
+	    case Java_Opcodes::DUP2_X1:
+	    case Java_Opcodes::DUP2_X2:
+	    case Java_Opcodes::SWAP:
+	    case Java_Opcodes::IADD:
+	    case Java_Opcodes::LADD:
+	    case Java_Opcodes::FADD:
+	    case Java_Opcodes::DADD:
+	    case Java_Opcodes::ISUB:
+	    case Java_Opcodes::LSUB:
+	    case Java_Opcodes::FSUB:
+	    case Java_Opcodes::DSUB:
+	    case Java_Opcodes::IMUL:
+	    case Java_Opcodes::LMUL:
+	    case Java_Opcodes::FMUL:
+	    case Java_Opcodes::DMUL:
+	    case Java_Opcodes::IDIV:
+	    case Java_Opcodes::LDIV:
+	    case Java_Opcodes::FDIV:
+	    case Java_Opcodes::DDIV:  
+	    case Java_Opcodes::IREM:
+	    case Java_Opcodes::LREM:
+	    case Java_Opcodes::FREM:
+	    case Java_Opcodes::DREM:
+	    case Java_Opcodes::INEG:
+	    case Java_Opcodes::LNEG:
+	    case Java_Opcodes::FNEG:
+	    case Java_Opcodes::DNEG:
+	    case Java_Opcodes::ISHL:
+	    case Java_Opcodes::LSHL:
+	    case Java_Opcodes::ISHR:
+	    case Java_Opcodes::LSHR:
+	    case Java_Opcodes::IUSHR:
+	    case Java_Opcodes::LUSHR:
+	    case Java_Opcodes::IAND:
+	    case Java_Opcodes::LAND:	  
+	    case Java_Opcodes::IOR:
+	    case Java_Opcodes::LOR:
+	    case Java_Opcodes::IXOR:
+	    case Java_Opcodes::LXOR:
+	    case Java_Opcodes::IINC:
+	    case Java_Opcodes::I2L:
+	    case Java_Opcodes::I2F:
+	    case Java_Opcodes::I2D:
+	    case Java_Opcodes::L2I:
+	    case Java_Opcodes::L2F:
+	    case Java_Opcodes::L2D:
+	    case Java_Opcodes::F2I:
+	    case Java_Opcodes::F2L:
+	    case Java_Opcodes::F2D:
+	    case Java_Opcodes::D2I:
+	    case Java_Opcodes::D2L:	  
+	    case Java_Opcodes::D2F:
+	    case Java_Opcodes::I2B:
+	    case Java_Opcodes::I2C:
+	    case Java_Opcodes::I2S:
+	    case Java_Opcodes::LCMP:
+	    case Java_Opcodes::FCMPL:
+	    case Java_Opcodes::FCMPG:
+	    case Java_Opcodes::DCMPL:
+	    case Java_Opcodes::DCMPG:
+	    case Java_Opcodes::RET:
+	    case Java_Opcodes::TABLESWITCH:
+	    case Java_Opcodes::LOOPUPSWITCH:
+	    case Java_Opcodes::GETSTATIC:
+	    case Java_Opcodes::PUTSTATIC:
+	    case Java_Opcodes::GETFIELD:
+	    case Java_Opcodes::PUTFIELD:
+	    case Java_Opcodes::INVOKEVIRTUAL:
+	    case Java_Opcodes::INVOKESPECIAL:
+	    case Java_Opcodes::INVOKESTATIC:
+	    case Java_Opcodes::INVOKVEINTERFACE:
+	    case Java_Opcodes::NEW:
+	    case Java_Opcodes::NEWARRAY:
+	    case Java_Opcodes::ANEWARRAY:
+	    case Java_Opcodes::ARRAYLENGTH:
+	    case Java_Opcodes::ATHROW:
+	    case Java_Opcodes::CHECKCAST:
+	    case Java_Opcodes::INSTANCEOF:
+	    case Java_Opcodes::MONITORENTER:
+	    case Java_Opcodes::MONITOREXIT:
+	    case Java_Opcodes::WIDE:
+	    case Java_Opcodes::MULTIANEWARRAY:
+	    case Java_Opcodes::BREAKPOINT:
+	    case Java_Opcodes::IMPDEP1:
+	    case Java_Opcodes::IMPDEP2:
+	      {
+		process_Single_Opcodes ( next_entry, code_ptr );
+
+		// Get next instruction index
+		//++next_entry;
+
+		// if next instruction index is in processed list OR we are past the end of the stream
+		Basic_Block_List_t::iterator processed_result = std::find ( m_processed_list.begin(),
+									    m_processed_list.end(),
+									    next_entry );
+		if ( processed_result != m_processed_list.end() )
+		  {
+		    m_current_graph->add_Edge ( current_bb_ptr->get_ID(), *processed_result );
+		    continue_working = false;
+		  }
+		else if ( next_entry == code_ptr->get_Code_Length() )
+		  {
+		    continue_working = false;
+		  }
+
+		break;
+	      }
+	    case Java_Opcodes::IRETURN:
+	    case Java_Opcodes::LRETURN:
+	    case Java_Opcodes::FRETURN:
+	    case Java_Opcodes::DRETURN:
+	    case Java_Opcodes::ARETURN:
+	    case Java_Opcodes::RETURN:
+	      {
+		process_Single_Opcodes ( next_entry, code_ptr );
+		continue_working = false;
+		break;
+	      }
+	    case Java_Opcodes::IFEQ:
+	    case Java_Opcodes::IFNE:
+	    case Java_Opcodes::IFLT:
+	    case Java_Opcodes::IFGE:
+	    case Java_Opcodes::IFGT:
+	    case Java_Opcodes::IFLE:
+	    case Java_Opcodes::IF_ICMPEQ:
+	    case Java_Opcodes::IF_ICMPNE:
+	    case Java_Opcodes::IF_ICMPLT:
+	    case Java_Opcodes::IF_ICMPGE:
+	    case Java_Opcodes::IF_ICMPGT:
+	    case Java_Opcodes::IF_ICMPLE:
+	    case Java_Opcodes::IF_ACMPEQ:
+	    case Java_Opcodes::IF_ACMPNE:
+	    case Java_Opcodes::IFNULL:
+	    case Java_Opcodes::IFNONNULL:
+	      {
+		process_Double_Branch_Opcodes ( next_entry, code_ptr, current_bb_ptr );
+		continue_working = false;
+		break;
+	      }
+	    case Java_Opcodes::GOTO:
+	    case Java_Opcodes::JSR:
+	      {
+		process_16Bit_Single_Branch_Opcodes ( next_entry, code_ptr, current_bb_ptr );
+		continue_working = false;
+		break;
+	      }
+
+	    case Java_Opcodes::GOTO_W:
+	    case Java_Opcodes::JSR_W:
+	      {
+		process_32Bit_Single_Branch_Opcodes ( next_entry, code_ptr, current_bb_ptr );
+		continue_working = false;
+		break;
+	      }
+	    case Java_Opcodes::XXXUNUSEDXXX:
+	    default:
+	      {
+		continue_working = false;
+		break;
+	      }
+	    }
+	}
+
+#ifdef LIBREVERSE_DEBUG
+      Trace::write_Trace ( TraceArea::INSTRUCTION_DECODER,
+			   TraceLevel::DETAIL,
+			   "Exiting Java_Decode::process_Todo_List" );
+#endif /* LIBREVERSE_DEBUG */
+    }
+  
+    void
+    Java_Decoder::process_Single_Opcodes ( boost::uint32_t& opcode_index, java_types::Code_Attribute::ptr_t code_ptr )
+    {
+#ifdef LIBREVERSE_DEBUG
+      Trace::write_Trace ( TraceArea::INSTRUCTION_DECODER,
+			   TraceLevel::DETAIL,
+			   "Entering Java_Decode::process_Single_Opcodes" );
+
+      Trace::write_Trace ( TraceArea::INSTRUCTION_DECODER,
+			   TraceLevel::DATA,
+			   boost::str ( boost::format ( "Opcode index: %1%" ) % opcode_index ) );
+#endif /* LIBREVERSE_DEBUG */
+
+      // Get instruction at entry
+      boost::uint8_t instruction = code_ptr->get_Code ( opcode_index );
+      java_types::Code_Attribute::Code_List_t::const_iterator read_head = code_ptr->get_Code_Iterator ( opcode_index );
+
+      // Process instruction
+      switch ( instruction )
+	{
+	case Java_Opcodes::NOP:
+	  {
+	    m_actions->handle_NOP ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::ACONST_NULL:
+	  {
+	    m_actions->handle_ACONST_NULL ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::ICONST_M1:
+	  {
+	    m_actions->handle_ICONST ( opcode_index, -1 );
+	    break;
+	  }
+	case Java_Opcodes::ICONST_0:
+	  {
+	    m_actions->handle_ICONST ( opcode_index, 0 );
+	    break;
+	  }
+	case Java_Opcodes::ICONST_1:
+	  {
+	    m_actions->handle_ICONST ( opcode_index, 1 );
+	    break;
+	  }
+	case Java_Opcodes::ICONST_2:
+	  {
+	    m_actions->handle_ICONST ( opcode_index, 2 );
+	    break;
+	  }
+	case Java_Opcodes::ICONST_3:
+	  {
+	    m_actions->handle_ICONST ( opcode_index, 3 );
+	    break;
+	  }
+	case Java_Opcodes::ICONST_4:
+	  {
+	    m_actions->handle_ICONST ( opcode_index, 4 );
+	    break;
+	  }
+	case Java_Opcodes::ICONST_5:
+	  {
+	    m_actions->handle_ICONST ( opcode_index, 5 );
+	    break;
+	  }
+	case Java_Opcodes::LCONST_0:
+	  {
+	    m_actions->handle_LCONST ( opcode_index, 0 );
+	    break;
+	  }
+	case Java_Opcodes::LCONST_1:
+	  {
+	    m_actions->handle_LCONST ( opcode_index, 1 );
+	    break;
+	  }
+	case Java_Opcodes::FCONST_0:
+	  {
+	    m_actions->handle_FCONST ( opcode_index, 0.0 );
+	    break;
+	  }
+	case Java_Opcodes::FCONST_1:
+	  {
+	    m_actions->handle_FCONST ( opcode_index, 1.0 );
+	    break;
+	  }
+	case Java_Opcodes::FCONST_2:
+	  {
+	    m_actions->handle_FCONST ( opcode_index, 2.0 );
+	    break;
+	  }
+	case Java_Opcodes::DCONST_0:
+	  {
+	    m_actions->handle_DCONST ( opcode_index, 0.0 );
+	    break;
+	  }
+	case Java_Opcodes::DCONST_1:
+	  {
+	    m_actions->handle_DCONST ( opcode_index, 1.0 );
+	    break;
+	  }
+	case Java_Opcodes::BIPUSH:
+	  {
+	    boost::uint8_t imm_byte = this->read_8Bit_Value ( read_head, code_ptr->get_Code_End() );
+	    m_actions->handle_BIPUSH ( opcode_index, imm_byte );
+	    break;
+	  }
+	case Java_Opcodes::SIPUSH:
+	  {
+	    boost::uint16_t value = this->read_16Bit_Value ( read_head, code_ptr->get_Code_End() );
+	    m_actions->handle_SIPUSH ( opcode_index, value );
+	    break;
+	  }
+	case Java_Opcodes::LDC:
+	  {
+	    // Read index
+	    boost::uint8_t index = this->read_8Bit_Value ( read_head, code_ptr->get_Code_End() );
+	    m_actions->handle_LDC ( opcode_index, index );
+	    break;
+	  }
+	case Java_Opcodes::LDC_W:
+	  {
+	    boost::uint16_t index = this->read_16Bit_Value ( read_head, code_ptr->get_Code_End() );
+	    m_actions->handle_LDC ( opcode_index, index );
+	    break;
+	  }
+	case Java_Opcodes::LDC2_W:
+	  {
+	    boost::uint16_t index = this->read_16Bit_Value ( read_head, code_ptr->get_Code_End() );
+	    m_actions->handle_LDC2_W ( opcode_index, index );
+	    break;
+	  }
+	case Java_Opcodes::ILOAD:
+	  {
+	    // Read index
+	    boost::uint8_t index = this->read_8Bit_Value ( read_head, code_ptr->get_Code_End() );
+	    m_actions->handle_ILOAD ( opcode_index, index );
+	    break;
+	  }
+	case Java_Opcodes::LLOAD:
+	  {
+	    // Read index
+	    boost::uint8_t index = this->read_8Bit_Value ( read_head, code_ptr->get_Code_End() );
+	    m_actions->handle_LLOAD ( opcode_index, index );
+	    break;
+	  }
+	case Java_Opcodes::FLOAD:
+	  {
+	    // Read index
+	    boost::uint8_t index = this->read_8Bit_Value ( read_head, code_ptr->get_Code_End() );
+	    m_actions->handle_FLOAD ( opcode_index, index );
+	    break;
+	  }
+	case Java_Opcodes::DLOAD:
+	  {
+	    // Read index
+	    boost::uint8_t index = this->read_8Bit_Value ( read_head, code_ptr->get_Code_End() );
+	    m_actions->handle_DLOAD ( opcode_index, index );
+	    break;
+	  }
+	case Java_Opcodes::ALOAD:
+	  {
+	    // Read index
+	    boost::uint8_t index = this->read_8Bit_Value ( read_head, code_ptr->get_Code_End() );
+	    m_actions->handle_ALOAD ( opcode_index, index );
+	    break;
+	  }
+	case Java_Opcodes::ILOAD_0:
+	  {
+	    m_actions->handle_ILOAD ( opcode_index, 0 );
+	    break;
+	  }
+	case Java_Opcodes::ILOAD_1:
+	  {
+	    m_actions->handle_ILOAD ( opcode_index, 1 );
+	    break;
+	  }
+	case Java_Opcodes::ILOAD_2:
+	  {
+	    m_actions->handle_ILOAD ( opcode_index, 2 );
+	    break;
+	  }
+	case Java_Opcodes::ILOAD_3:
+	  {
+	    m_actions->handle_ILOAD ( opcode_index, 3 );
+	    break;
+	  }
+	case Java_Opcodes::LLOAD_0:
+	  {
+	    m_actions->handle_LLOAD ( opcode_index, 0 );
+	    break;
+	  }
+	case Java_Opcodes::LLOAD_1:
+	  {
+	    m_actions->handle_LLOAD ( opcode_index, 1 );
+	    break;
+	  }
+
+	case Java_Opcodes::LLOAD_2:
+	  {
+	    m_actions->handle_LLOAD ( opcode_index, 2 );
+	    break;
+	  }
+	case Java_Opcodes::LLOAD_3:
+	  {
+	    m_actions->handle_LLOAD ( opcode_index, 3 );
+	    break;
+	  }
+	case Java_Opcodes::FLOAD_0:
+	  {
+	    m_actions->handle_FLOAD ( opcode_index, 0 );
+	    break;
+	  }
+	case Java_Opcodes::FLOAD_1:
+	  {
+	    m_actions->handle_FLOAD ( opcode_index, 1 );
+	    break;
+	  }
+	case Java_Opcodes::FLOAD_2:
+	  {
+	    m_actions->handle_FLOAD ( opcode_index, 2 );
+	    break;
+	  }
+	case Java_Opcodes::FLOAD_3:
+	  {
+	    m_actions->handle_FLOAD ( opcode_index, 3 );
+	    break;
+	  }
+	case Java_Opcodes::DLOAD_0:
+	  {
+	    m_actions->handle_DLOAD ( opcode_index, 0 );
+	    break;
+	  }
+	case Java_Opcodes::DLOAD_1:
+	  {
+	    m_actions->handle_DLOAD ( opcode_index, 1 );
+	    break;
+	  }
+	case Java_Opcodes::DLOAD_2:
+	  {
+	    m_actions->handle_DLOAD ( opcode_index, 2 );
+	    break;
+	  }
+	case Java_Opcodes::DLOAD_3:
+	  {
+	    m_actions->handle_DLOAD ( opcode_index, 3 );
+	    break;
+	  }
+	case Java_Opcodes::ALOAD_0:
+	  {
+	    m_actions->handle_ALOAD ( opcode_index, 0 );
+	    break;
+	  }
+	case Java_Opcodes::ALOAD_1:
+	  {
+	    m_actions->handle_ALOAD ( opcode_index, 1 );
+	    break;
+	  }
+	case Java_Opcodes::ALOAD_2:
+	  {
+	    m_actions->handle_ALOAD ( opcode_index, 2 );
+	    break;
+	  }
+	case Java_Opcodes::ALOAD_3:
+	  {
+	    m_actions->handle_ALOAD ( opcode_index, 3 );
+	    break;
+	  }
+	case Java_Opcodes::IALOAD:
+	  {
+	    m_actions->handle_IALOAD ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::LALOAD:
+	  {
+	    m_actions->handle_LALOAD ( opcode_index );
+	    break;
+	  }
+
+	case Java_Opcodes::FALOAD:
+	  {
+	    m_actions->handle_FALOAD ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::DALOAD:
+	  {
+	    m_actions->handle_DALOAD ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::AALOAD:
+	  {
+	    m_actions->handle_AALOAD ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::BALOAD:
+	  {
+	    m_actions->handle_BALOAD ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::CALOAD:
+	  {
+	    m_actions->handle_CALOAD ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::SALOAD:
+	  {
+	    m_actions->handle_SALOAD ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::ISTORE:
+	  {
+	    // Read index
+	    boost::uint8_t index = this->read_8Bit_Value ( read_head, code_ptr->get_Code_End() );
+	    m_actions->handle_ISTORE ( opcode_index, index );
+	    break;
+	  }
+	case Java_Opcodes::LSTORE:
+	  {
+	    // Read index
+	    boost::uint8_t index = this->read_8Bit_Value ( read_head, code_ptr->get_Code_End() );
+	    m_actions->handle_LSTORE ( opcode_index, index );
+	    break;
+	  }
+	case Java_Opcodes::FSTORE:
+	  {
+	    // Read index
+	    boost::uint8_t index = this->read_8Bit_Value ( read_head, code_ptr->get_Code_End() );
+	    m_actions->handle_FSTORE ( opcode_index, index );
+	    break;
+	  }
+	case Java_Opcodes::DSTORE:
+	  {
+	    // Read index
+	    boost::uint8_t index = this->read_8Bit_Value ( read_head, code_ptr->get_Code_End() );
+	    m_actions->handle_DSTORE ( opcode_index, index );
+	    break;
+	  }
+	case Java_Opcodes::ASTORE:
+	  {
+	    // Read index
+	    boost::uint8_t index = this->read_8Bit_Value ( read_head, code_ptr->get_Code_End() );
+	    m_actions->handle_ASTORE ( opcode_index, index );
+	    break;
+	  }
+	case Java_Opcodes::ISTORE_0:
+	  {
+	    m_actions->handle_ISTORE ( opcode_index, 0 );
+	    break;
+	  }
+	case Java_Opcodes::ISTORE_1:
+	  {
+	    m_actions->handle_ISTORE ( opcode_index, 1 );
+	    break;
+	  }
+	case Java_Opcodes::ISTORE_2:
+	  {
+	    m_actions->handle_ISTORE ( opcode_index, 2 );
+	    break;
+	  }
+	case Java_Opcodes::ISTORE_3:
+	  {
+	    m_actions->handle_ISTORE ( opcode_index, 3 );
+	    break;
+	  }
+	case Java_Opcodes::LSTORE_0:
+	  {
+	    m_actions->handle_LSTORE ( opcode_index, 0 );
+	    break;
+	  }
+	case Java_Opcodes::LSTORE_1:
+	  {
+	    m_actions->handle_LSTORE ( opcode_index, 1 );
+	    break;
+	  }
+	case Java_Opcodes::LSTORE_2:
+	  {
+	    m_actions->handle_LSTORE ( opcode_index, 2 );
+	    break;
+	  }
+	case Java_Opcodes::LSTORE_3:
+	  {
+	    m_actions->handle_LSTORE ( opcode_index, 3 );
+	    break;
+	  }
+	case Java_Opcodes::FSTORE_0:
+	  {
+	    m_actions->handle_FSTORE ( opcode_index, 0 );
+	    break;
+	  }
+	case Java_Opcodes::FSTORE_1:
+	  {
+	    m_actions->handle_FSTORE ( opcode_index, 1 );
+	    break;
+	  }
+	case Java_Opcodes::FSTORE_2:
+	  {
+	    m_actions->handle_FSTORE ( opcode_index, 2 );
+	    break;
+	  }
+	case Java_Opcodes::FSTORE_3:
+	  {
+	    m_actions->handle_FSTORE ( opcode_index, 3 );
+	    break;
+	  }
+	case Java_Opcodes::DSTORE_0:
+	  {
+	    m_actions->handle_DSTORE ( opcode_index, 0 );
+	    break;
+	  }
+	case Java_Opcodes::DSTORE_1:
+	  {
+	    m_actions->handle_DSTORE ( opcode_index, 1 );
+	    break;
+	  }
+	case Java_Opcodes::DSTORE_2:
+	  {
+	    m_actions->handle_DSTORE ( opcode_index, 2 );
+	    break;
+	  }
+	case Java_Opcodes::DSTORE_3:
+	  {
+	    m_actions->handle_DSTORE ( opcode_index, 3 );
+	    break;
+	  }
+	case Java_Opcodes::ASTORE_0:
+	  {
+	    m_actions->handle_ASTORE ( opcode_index, 0 );
+	    break;
+	  }
+	case Java_Opcodes::ASTORE_1:
+	  {
+	    m_actions->handle_ASTORE ( opcode_index, 1 );
+	    break;
+	  }
+	case Java_Opcodes::ASTORE_2:
+	  {
+	    m_actions->handle_ASTORE ( opcode_index, 2 );
+	    break;
+	  }
+	case Java_Opcodes::ASTORE_3:
+	  {
+	    m_actions->handle_ASTORE ( opcode_index, 3 );
+	    break;
+	  }
+	case Java_Opcodes::IASTORE:
+	  {
+	    m_actions->handle_IASTORE ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::LASTORE:
+	  {
+	    m_actions->handle_LASTORE ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::FASTORE:
+	  {
+	    m_actions->handle_FASTORE ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::DASTORE:
+	  {
+	    m_actions->handle_DASTORE ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::AASTORE:
+	  {
+	    m_actions->handle_AASTORE ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::BASTORE:
+	  {
+	    m_actions->handle_BASTORE ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::CASTORE:
+	  {
+	    m_actions->handle_CASTORE ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::SASTORE:
+	  {
+	    m_actions->handle_SASTORE ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::POP:
+	  {
+	    m_actions->handle_POP ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::POP2:
+	  {
+	    m_actions->handle_POP2 ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::DUP:
+	  {
+	    m_actions->handle_DUP ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::DUP_X1:
+	  {
+	    m_actions->handle_DUP_X1 ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::DUP_X2:
+	  {
+	    m_actions->handle_DUP_X2 ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::DUP2:
+	  {
+	    m_actions->handle_DUP2 ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::DUP2_X1:
+	  {
+	    m_actions->handle_DUP2_X1 ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::DUP2_X2:
+	  {
+	    m_actions->handle_DUP2_X2 ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::SWAP:
+	  {
+	    m_actions->handle_SWAP ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::IADD:
+	  {
+	    m_actions->handle_IADD ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::LADD:
+	  {
+	    m_actions->handle_LADD ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::FADD:
+	  {
+	    m_actions->handle_FADD ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::DADD:
+	  {
+	    m_actions->handle_DADD ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::ISUB:
+	  {
+	    m_actions->handle_ISUB ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::LSUB:
+	  {
+	    m_actions->handle_LSUB ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::FSUB:
+	  {
+	    m_actions->handle_FSUB ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::DSUB:
+	  {
+	    m_actions->handle_DSUB ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::IMUL:
+	  {
+	    m_actions->handle_IMUL ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::LMUL:
+	  {
+	    m_actions->handle_LMUL ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::FMUL:
+	  {
+	    m_actions->handle_FMUL ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::DMUL:
+	  {
+	    m_actions->handle_DMUL ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::IDIV:
+	  {
+	    m_actions->handle_IDIV ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::LDIV:
+	  {
+	    m_actions->handle_LDIV ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::FDIV:
+	  {
+	    m_actions->handle_FDIV ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::DDIV:
+	  {
+	    m_actions->handle_DDIV ( opcode_index );
+	    break;
+	  }
+
+	case Java_Opcodes::IREM:
+	  {
+	    m_actions->handle_IREM ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::LREM:
+	  {
+	    m_actions->handle_LREM ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::FREM:
+	  {
+	    m_actions->handle_FREM ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::DREM:
+	  {
+	    m_actions->handle_DREM ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::INEG:
+	  {
+	    m_actions->handle_INEG ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::LNEG:
+	  {
+	    m_actions->handle_LNEG ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::FNEG:
+	  {
+	    m_actions->handle_FNEG ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::DNEG:
+	  {
+	    m_actions->handle_DNEG ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::ISHL:
+	  {
+	    m_actions->handle_ISHL ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::LSHL:
+	  {
+	    m_actions->handle_LSHL ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::ISHR:
+	  {
+	    m_actions->handle_ISHR ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::LSHR:
+	  {
+	    m_actions->handle_LSHR ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::IUSHR:
+	  {
+	    m_actions->handle_IUSHR ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::LUSHR:
+	  {
+	    m_actions->handle_LUSHR ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::IAND:
+	  {
+	    m_actions->handle_IAND ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::LAND:
+	  {
+	    m_actions->handle_LAND ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::IOR:
+	  {
+	    m_actions->handle_IOR ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::LOR:
+	  {
+	    m_actions->handle_LOR ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::IXOR:
+	  {
+	    m_actions->handle_IXOR ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::LXOR:
+	  {
+	    m_actions->handle_LXOR ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::IINC:
+	  {
+	    // Index unsigned byte
+	    boost::uint8_t index = this->read_8Bit_Value ( read_head, code_ptr->get_Code_End() );
+
+	    // Signed byte
+	    boost::int8_t const_value = this->read_8Bit_Value ( read_head, code_ptr->get_Code_End() );
+
+	    m_actions->handle_IINC ( opcode_index, index, const_value );
+	    break;
+	  }
+	case Java_Opcodes::I2L:
+	  {
+	    m_actions->handle_I2L ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::I2F:
+	  {
+	    m_actions->handle_I2F ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::I2D:
+	  {
+	    m_actions->handle_I2D ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::L2I:
+	  {
+	    m_actions->handle_L2I ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::L2F:
+	  {
+	    m_actions->handle_L2F ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::L2D:
+	  {
+	    m_actions->handle_L2D ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::F2I:
+	  {
+	    m_actions->handle_F2I ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::F2L:
+	  {
+	    m_actions->handle_F2L ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::F2D:
+	  {
+	    m_actions->handle_F2D ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::D2I:
+	  {
+	    m_actions->handle_D2I ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::D2L:
+	  {
+	    m_actions->handle_D2L ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::D2F:
+	  {
+	    m_actions->handle_D2F ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::I2B:
+	  {
+	    m_actions->handle_I2B ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::I2C:
+	  {
+	    m_actions->handle_I2C ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::I2S:
+	  {
+	    m_actions->handle_I2S ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::LCMP:
+	  {
+	    m_actions->handle_LCMP ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::FCMPL:
+	  {
+	    m_actions->handle_FCMPL ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::FCMPG:
+	  {
+	    m_actions->handle_FCMPG ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::DCMPL:
+	  {
+	    m_actions->handle_DCMPL ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::DCMPG:
+	  {
+	    m_actions->handle_DCMPG ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::RET:
+	  {
+	    boost::uint8_t index = this->read_8Bit_Value ( read_head, code_ptr->get_Code_End() );
+
+	    m_actions->handle_RET ( opcode_index, index );
+	    break;
+	  }
+	case Java_Opcodes::TABLESWITCH:
+	  {
+	    while ( ( read_head - code_ptr->get_Code_Begin() ) % 4 != 0 )
+	      {
+		// Skip padding bytes
+		++read_head;
+	      }
+
+	    boost::uint32_t default_value = this->read_32Bit_Value ( read_head, code_ptr->get_Code_End() );
+
+	    boost::uint32_t low = this->read_32Bit_Value ( read_head, code_ptr->get_Code_End() );
+
+	    boost::uint32_t high = this->read_32Bit_Value ( read_head, code_ptr->get_Code_End() );
+
+	    boost::uint32_t offset_count = high - low + 1;
+
+	    std::vector<boost::uint32_t> offsets;
+
+	    for ( boost::uint32_t i = 0; i < offset_count; ++i )
+	      {
+		boost::uint32_t offset_value = this->read_32Bit_Value ( read_head, code_ptr->get_Code_End() );
+
+		offsets.push_back ( offset_value );
+	      }
+
+	    m_actions->handle_TABLESWITCH ( opcode_index, default_value, low, high, offsets );
+	    break;
+	  }
+	case Java_Opcodes::LOOPUPSWITCH:
+	  {
+	    while ( ( read_head - code_ptr->get_Code_Begin() ) % 4 != 0 )
+	      {
+		// Skip padding bytes
+		++read_head;
+	      }
+
+	    boost::uint32_t default_value = this->read_32Bit_Value ( read_head, code_ptr->get_Code_End() );
+
+	    boost::uint32_t npairs = this->read_32Bit_Value ( read_head, code_ptr->get_Code_End() );
+
+	    std::vector< std::pair<boost::uint32_t, boost::uint32_t> > npair_list;
+
+	    for ( boost::uint32_t i = 0; i < npairs; ++i )
+	      {
+		boost::uint32_t match = this->read_32Bit_Value ( read_head, code_ptr->get_Code_End() );
+		boost::uint32_t offset = this->read_32Bit_Value ( read_head, code_ptr->get_Code_End() );
+
+		npair_list.push_back ( std::make_pair ( match, offset ) );
+	      }
+
+	    m_actions->handle_LOOKUPSWITCH ( opcode_index, default_value, npair_list );
+	    break;
+	  }
+	case Java_Opcodes::IRETURN:
+	  {
+	    m_actions->handle_IRETURN ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::LRETURN:
+	  {
+	    m_actions->handle_LRETURN ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::FRETURN:
+	  {
+	    m_actions->handle_FRETURN ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::DRETURN:
+	  {
+	    m_actions->handle_DRETURN ( opcode_index );
+	    break;
+	  }
+
+	case Java_Opcodes::ARETURN:
+	  {
+	    m_actions->handle_ARETURN ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::RETURN:
+	  {
+	    m_actions->handle_RETURN ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::GETSTATIC:
+	  {
+	    boost::uint16_t index = this->read_16Bit_Value ( read_head, code_ptr->get_Code_End() );
+
+	    m_actions->handle_GETSTATIC ( opcode_index, index );
+
+	    break;
+	  }
+	case Java_Opcodes::PUTSTATIC:
+	  {
+	    boost::uint16_t index = this->read_16Bit_Value ( read_head, code_ptr->get_Code_End() );
+
+	    m_actions->handle_PUTSTATIC ( opcode_index, index );
+
+	    break;
+	  }
+	case Java_Opcodes::GETFIELD:
+	  {
+	    boost::uint16_t index = this->read_16Bit_Value ( read_head, code_ptr->get_Code_End() );
+
+	    m_actions->handle_GETFIELD ( opcode_index, index );
+
+	    break;
+	  }
+	case Java_Opcodes::PUTFIELD:
+	  {
+	    boost::uint16_t index = this->read_16Bit_Value ( read_head, code_ptr->get_Code_End() );
+
+	    m_actions->handle_PUTFIELD ( opcode_index, index );
+
+	    break;
+	  }
+	case Java_Opcodes::INVOKEVIRTUAL:
+	  {
+	    boost::uint16_t index = this->read_16Bit_Value ( read_head, code_ptr->get_Code_End() );
+
+	    m_actions->handle_INVOKEVIRTUAL ( opcode_index, index );
+
+	    break;
+	  }
+	case Java_Opcodes::INVOKESPECIAL:
+	  {
+	    boost::uint16_t index = this->read_16Bit_Value ( read_head, code_ptr->get_Code_End() );
+
+	    m_actions->handle_INVOKESPECIAL ( opcode_index, index );
+
+	    break;
+	  }
+	case Java_Opcodes::INVOKESTATIC:
+	  {
+	    boost::uint16_t index = this->read_16Bit_Value ( read_head, code_ptr->get_Code_End() );
+
+	    m_actions->handle_INVOKESTATIC ( opcode_index, index );
+
+	    break;
+	  }
+	case Java_Opcodes::INVOKVEINTERFACE:
+	  {
+	    boost::uint16_t index = this->read_16Bit_Value ( read_head, code_ptr->get_Code_End() );
+
+	    boost::uint8_t count = this->read_8Bit_Value ( read_head, code_ptr->get_Code_End() );
+
+	    // Skipping the next byte. Should always be zero.
+	    this->read_8Bit_Value ( read_head, code_ptr->get_Code_End() );
+
+	    m_actions->handle_INVOKVEINTERFACE ( opcode_index, index, count );
+
+	    break;
+	  }
+	case Java_Opcodes::NEW:
+	  {
+	    boost::uint16_t index = this->read_16Bit_Value ( read_head, code_ptr->get_Code_End() );
+
+	    m_actions->handle_NEW ( opcode_index, index );
+
+	    break;
+	  }
+	case Java_Opcodes::NEWARRAY:
+	  {
+	    boost::uint8_t atype = this->read_8Bit_Value ( read_head, code_ptr->get_Code_End() );
+
+	    m_actions->handle_NEWARRAY ( opcode_index, atype );
+
+	    break;
+	  }
+	case Java_Opcodes::ANEWARRAY:
+	  {
+	    boost::uint16_t index = this->read_16Bit_Value ( read_head, code_ptr->get_Code_End() );
+
+	    m_actions->handle_ANEWARRAY ( opcode_index, index );
+
+	    break;
+	  }
+	case Java_Opcodes::ARRAYLENGTH:
+	  {
+	    m_actions->handle_ARRAYLENGTH ( opcode_index );
+
+	    break;
+	  }
+	case Java_Opcodes::ATHROW:
+	  {
+	    m_actions->handle_ATHROW ( opcode_index );
+	    break;
+	  }
+
+	case Java_Opcodes::CHECKCAST:
+	  {
+	    boost::uint16_t index = this->read_16Bit_Value ( read_head, code_ptr->get_Code_End() );
+
+	    m_actions->handle_CHECKCAST ( opcode_index, index );
+
+	    break;
+	  }
+	case Java_Opcodes::INSTANCEOF:
+	  {
+	    boost::uint16_t index = this->read_16Bit_Value ( read_head, code_ptr->get_Code_End() );
+
+	    m_actions->handle_INSTANCEOF ( opcode_index, index );
+
+	    break;
+	  }
+	case Java_Opcodes::MONITORENTER:
+	  {
+	    m_actions->handle_MONITORENTER ( opcode_index );
+
+	    break;
+	  }
+	case Java_Opcodes::MONITOREXIT:
+	  {
+	    m_actions->handle_MONITOREXIT ( opcode_index );
+
+	    break;
+	  }
+	case Java_Opcodes::WIDE:
+	  {
+	    boost::uint8_t opcode = this->read_8Bit_Value ( read_head, code_ptr->get_Code_End() );
+
+	    switch ( opcode )
+	      {
+	      case Java_Opcodes::ILOAD:
+	      case Java_Opcodes::FLOAD:
+	      case Java_Opcodes::ALOAD:
+	      case Java_Opcodes::LLOAD:
+	      case Java_Opcodes::DLOAD:
+	      case Java_Opcodes::ISTORE:
+	      case Java_Opcodes::FSTORE:
+	      case Java_Opcodes::ASTORE:
+	      case Java_Opcodes::LSTORE:
+	      case Java_Opcodes::DSTORE:
+	      case Java_Opcodes::RETURN:
+		{
+		  boost::uint16_t index = this->read_16Bit_Value ( read_head, code_ptr->get_Code_End() );
+
+		  m_actions->handle_WIDE ( opcode_index, opcode, index );
+		}
+	      case Java_Opcodes::IINC:
+		{
+		  boost::uint16_t index = this->read_16Bit_Value ( read_head, code_ptr->get_Code_End() );
+
+		  boost::uint16_t const_byte = this->read_16Bit_Value ( read_head, code_ptr->get_Code_End() );
+
+		  m_actions->handle_WIDE_IINC ( opcode_index, index, const_byte );
+		}
+	      default:
+		{
+		  // Error
+		}
+	      }
+
+	    break;
+	  }
+	case Java_Opcodes::MULTIANEWARRAY:
+	  {
+	    boost::uint16_t index = this->read_16Bit_Value ( read_head, code_ptr->get_Code_End() );
+	      
+	    boost::uint8_t dimensions = this->read_8Bit_Value ( read_head, code_ptr->get_Code_End() );
+
+	    m_actions->handle_MULTIANEWARRAY ( opcode_index, index, dimensions );
+
+	    break;
+	  }
+	case Java_Opcodes::BREAKPOINT:
+	  {
+	    m_actions->handle_BREAKPOINT ( opcode_index );
+	    break;
+	  }
+
+	case Java_Opcodes::IMPDEP1:
+	  {
+	    m_actions->handle_IMPDEP1 ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::IMPDEP2:
+	  {
+	    m_actions->handle_IMPDEP2 ( opcode_index );
+	    break;
+	  }
+	case Java_Opcodes::XXXUNUSEDXXX:
+	default:
+	  break;
+	}
+
+      // Set the opcode_index to address of the next instruction
+      opcode_index = ( read_head - code_ptr->get_Code_Begin() + 1);
+
+#ifdef LIBREVERSE_DEBUG
+      Trace::write_Trace ( TraceArea::INSTRUCTION_DECODER,
+			   TraceLevel::DETAIL,
+			   "Exiting Java_Decode::parse_Single_Opcodes" );
+#endif /* LIBREVERSE_DEBUG */
+    }
+
+    void
+    Java_Decoder::process_16Bit_Single_Branch_Opcodes ( boost::uint32_t& opcode_index,
+							java_types::Code_Attribute::ptr_t code_ptr,
+							data_types::Basic_Block::ptr_t current_bb_ptr )
+    {
+
+#ifdef LIBREVERSE_DEBUG
+      Trace::write_Trace ( TraceArea::INSTRUCTION_DECODER,
+			   TraceLevel::DETAIL,
+			   "Entering Java_Decode::parse_16Bit_Single_Branch_Opcodes" );
+
+      Trace::write_Trace ( TraceArea::INSTRUCTION_DECODER,
+			   TraceLevel::DATA,
+			   boost::str ( boost::format ( "Opcode index: %1%" ) % opcode_index ) );
+#endif /* LIBREVERSE_DEBUG */
+
+
+      boost::uint8_t instruction = code_ptr->get_Code ( opcode_index );
+      java_types::Code_Attribute::Code_List_t::const_iterator read_head = code_ptr->get_Code_Iterator ( opcode_index );
+
+      // Calculate true index
+      boost::int16_t dest_index = this->read_16Bit_Value ( read_head, code_ptr->get_Code_End() )
+	+ opcode_index;
+
+#ifdef LIBREVERSE_DEBUG
+      Trace::write_Trace ( TraceArea::INSTRUCTION_DECODER,
+			   TraceLevel::DATA,
+			   boost::str ( boost::format ( "Dest index: %1%" ) % dest_index ) );
+#endif /* LIBREVERSE_DEBUG */
+    
+      // If true index is not in processed and todo list then add true index to todo list
+      Basic_Block_List_t::iterator processed_result = std::find ( m_processed_list.begin(),
+								  m_processed_list.end(),
+								  dest_index );
+      Basic_Block_List_t::iterator todo_result = std::find ( m_todo_list.begin(),
+							     m_todo_list.end(),
+							     dest_index );
+
+      if ( ( processed_result == m_processed_list.end() ) &&
+	   ( todo_result == m_todo_list.end() ) )
+	{
+	  // Add dest index to todo list
+	  m_todo_list.push_back ( dest_index );
+
+	  // Add Basic Block (true index) to graph
+	  data_types::Basic_Block::ptr_t dest_bb_ptr ( new data_container::Basic_Block ( dest_index,
+											 data_container::Instruction::JAVA_ASSEMBLY ) );
+
+
+#ifdef LIBREVERSE_DEBUG
+      Trace::write_Trace ( TraceArea::INSTRUCTION_DECODER,
+			   TraceLevel::DATA,
+			   "CFG before add" );
+
+      Trace::write_Trace ( TraceArea::INSTRUCTION_DECODER,
+			   TraceLevel::DATA,
+			   boost::str ( boost::format ( "%1%" ) % m_current_graph->to_String() ) );
+
+#endif /* LIBREVERSE_DEBUG */
+
+
+	  m_current_graph->add_Basic_Block ( dest_bb_ptr );
+
+
+#ifdef LIBREVERSE_DEBUG
+      Trace::write_Trace ( TraceArea::INSTRUCTION_DECODER,
+			   TraceLevel::DATA,
+			   "CFG after add" );
+
+      Trace::write_Trace ( TraceArea::INSTRUCTION_DECODER,
+			   TraceLevel::DATA,
+			   boost::str ( boost::format ( "%1%" ) % m_current_graph->to_String() ) );
+
+#endif /* LIBREVERSE_DEBUG */
+
+	}
+
+      //     Add edge from Basic Block(entry) -> Basic Block(true index)
+      m_current_graph->add_Edge ( current_bb_ptr->get_ID(), dest_index );
+
+      switch ( instruction )
+	{
+	case Java_Opcodes::GOTO:
+	  {
+	    m_actions->handle_GOTO ( opcode_index, dest_index );
+	    break;
+	  }
+	case Java_Opcodes::JSR:
+	  {
+	    m_actions->handle_JSR ( opcode_index, dest_index );
+	    break;
+	  }
+	}
+
+      opcode_index = read_head - code_ptr->get_Code_Begin() + 1;
+
+#ifdef LIBREVERSE_DEBUG
+      Trace::write_Trace ( TraceArea::INSTRUCTION_DECODER,
+			   TraceLevel::DETAIL,
+			   "Exiting Java_Decode::parse_16Bit_Single_Branch_Opcodes" );
+#endif /* LIBREVERSE_DEBUG */
+
+    }
+
+    void
+    Java_Decoder::process_32Bit_Single_Branch_Opcodes ( boost::uint32_t& opcode_index,
+							java_types::Code_Attribute::ptr_t code_ptr,
+							data_types::Basic_Block::ptr_t current_bb_ptr )
+    {
+#ifdef LIBREVERSE_DEBUG
+      Trace::write_Trace ( TraceArea::INSTRUCTION_DECODER,
+			   TraceLevel::DETAIL,
+			   "Entering Java_Decode::parse_32Bit_Single_Branch_Opcodes" );
+
+      Trace::write_Trace ( TraceArea::INSTRUCTION_DECODER,
+			   TraceLevel::DATA,
+			   boost::str ( boost::format ( "Opcode index: %1%" ) % opcode_index ) );
+#endif /* LIBREVERSE_DEBUG */
+
+      boost::uint8_t instruction = code_ptr->get_Code ( opcode_index );
+      java_types::Code_Attribute::Code_List_t::const_iterator read_head = code_ptr->get_Code_Iterator ( opcode_index );
+
+      // Calculate dest index
+      boost::int32_t dest_index = this->read_32Bit_Value ( read_head, code_ptr->get_Code_End() ) + opcode_index;
+    
+#ifdef LIBREVERSE_DEBUG
+      Trace::write_Trace ( TraceArea::INSTRUCTION_DECODER,
+			   TraceLevel::DATA,
+			   boost::str ( boost::format ( "Dest index: %1%" ) % dest_index ) );
+#endif /* LIBREVERSE_DEBUG */
+
+      // If true index is not in processed and todo list then add true index to todo list
+      Basic_Block_List_t::iterator processed_result = std::find ( m_processed_list.begin(),
+								  m_processed_list.end(),
+								  dest_index );
+      Basic_Block_List_t::iterator todo_result = std::find ( m_todo_list.begin(),
+							     m_todo_list.end(),
+							     dest_index );
+
+      if ( ( processed_result == m_processed_list.end() ) &&
+	   ( todo_result == m_todo_list.end() ) )
+	{
+	  // Add dest index to todo list
+	  m_todo_list.push_back ( dest_index );
+
+	  // Add Basic Block (true index) to graph
+	  data_types::Basic_Block::ptr_t dest_bb_ptr ( new data_container::Basic_Block ( dest_index,
+											 data_container::Instruction::JAVA_ASSEMBLY ) );
+	  m_current_graph->add_Basic_Block ( dest_bb_ptr );
+
+	}
+
+      //     Add edge from Basic Block(entry) -> Basic Block(true index)
+      m_current_graph->add_Edge ( current_bb_ptr->get_ID(), dest_index );
+
+      switch (instruction)
+	{
+	case Java_Opcodes::GOTO_W:
+	  {
+	    m_actions->handle_GOTO_W ( opcode_index, dest_index );
+	    break;
+	  }
+	case Java_Opcodes::JSR_W:
+	  {
+	    m_actions->handle_JSR_W ( opcode_index, dest_index );
+	    break;
+	  }
+	}
+
+      opcode_index = read_head - code_ptr->get_Code_Begin() + 1;
+
+#ifdef LIBREVERSE_DEBUG
+      Trace::write_Trace ( TraceArea::INSTRUCTION_DECODER,
+			   TraceLevel::DETAIL,
+			   "Exiting Java_Decode::parse_32Bit_Single_Branch_Opcodes" );
+#endif /* LIBREVERSE_DEBUG */
+    }
+
+    void
+    Java_Decoder::process_Double_Branch_Opcodes ( boost::uint32_t& opcode_index,
+						  java_types::Code_Attribute::ptr_t code_ptr,
+						  data_types::Basic_Block::ptr_t current_bb_ptr )
+    {
+#ifdef LIBREVERSE_DEBUG
+      Trace::write_Trace ( TraceArea::INSTRUCTION_DECODER,
+			   TraceLevel::DETAIL,
+			   "Entering Java_Decode::parse_Double_Branch_Opcodes" );
+
+      Trace::write_Trace ( TraceArea::INSTRUCTION_DECODER,
+			   TraceLevel::DATA,
+			   boost::str ( boost::format ( "Opcode index: %1%" ) % opcode_index ) );
+#endif /* LIBREVERSE_DEBUG */
+
+      boost::uint8_t instruction = code_ptr->get_Code ( opcode_index );
+      java_types::Code_Attribute::Code_List_t::const_iterator read_head = code_ptr->get_Code_Iterator ( opcode_index );
+
+      // Calculate true index
+      boost::uint16_t true_index = this->read_16Bit_Value ( read_head, code_ptr->get_Code_End() )
+	+ opcode_index;
+
+      // Calculate false index. This just happens to be the present location of the read head plus one
+      boost::uint16_t false_index = ( read_head - code_ptr->get_Code_Begin() + 1);
+
+#ifdef LIBREVERSE_DEBUG
+      Trace::write_Trace ( TraceArea::INSTRUCTION_DECODER,
+			   TraceLevel::DATA,
+			   boost::str ( boost::format ( "True index: %1%" ) % true_index ) );
+
+      Trace::write_Trace ( TraceArea::INSTRUCTION_DECODER,
+			   TraceLevel::DATA,
+			   boost::str ( boost::format ( "False index: %1%" ) % false_index ) );
+#endif /* LIBREVERSE_DEBUG */
+    
+      // If true index is not in processed and todo list then add true index to todo list
+      Basic_Block_List_t::iterator processed_result = std::find ( m_processed_list.begin(),
+								  m_processed_list.end(),
+								  true_index );
+      Basic_Block_List_t::iterator todo_result = std::find ( m_todo_list.begin(),
+							     m_todo_list.end(),
+							     true_index );
+
+      if ( ( processed_result == m_processed_list.end() ) &&
+	   ( todo_result == m_todo_list.end() ) )
+	{
+	  // Add true index to todo list
+	  m_todo_list.push_back ( true_index );
+
+	  // Add Basic Block (true index) to graph
+	  data_types::Basic_Block::ptr_t true_bb_ptr ( new data_container::Basic_Block ( true_index,
+											 data_container::Instruction::JAVA_ASSEMBLY ) );
+	  m_current_graph->add_Basic_Block ( true_bb_ptr );
+
+	}
+
+      // Id of the current basic bock
+
+      //     Add edge from Basic Block(entry) -> Basic Block(true index)
+      m_current_graph->add_Edge ( current_bb_ptr->get_ID(), true_index );
+
+      // If false index is not in processed and todo list then add false index to todo list
+      processed_result = std::find ( m_processed_list.begin(),
+				     m_processed_list.end(),
+				     false_index );
+      todo_result = std::find ( m_todo_list.begin(),
+				m_todo_list.end(),
+				false_index );
+
+      if ( ( processed_result == m_processed_list.end() ) &&
+	   ( todo_result == m_todo_list.end() ) )
+	{
+	  // Add false index to todo list
+	  m_todo_list.push_back ( false_index );
+
+	  // Add Basic Block (false index) to graph
+	  data_types::Basic_Block::ptr_t false_bb_ptr ( new data_container::Basic_Block ( false_index,
+											  data_container::Instruction::JAVA_ASSEMBLY ) );
+	  m_current_graph->add_Basic_Block ( false_bb_ptr );
+
+	}
+
+      // Add edge from Basic Block(entry) -> Basic Block(false index)
+      m_current_graph->add_Edge ( current_bb_ptr->get_ID(), false_index );
+
+      //     break;
+      switch ( instruction )
+	{
+	case Java_Opcodes::IFEQ:
+	  {
+	    m_actions->handle_IFEQ ( opcode_index, true_index );
+	    break;
+	  }
+	case Java_Opcodes::IFNE:
+	  {
+	    m_actions->handle_IFNE ( opcode_index, true_index );
+	    break;
+	  }
+	case Java_Opcodes::IFLT:
+	  {
+	    m_actions->handle_IFLT ( opcode_index, true_index );
+	    break;
+	  }
+	case Java_Opcodes::IFGE:
+	  {
+	    m_actions->handle_IFGE ( opcode_index, true_index );
+	    break;
+	  }
+	case Java_Opcodes::IFGT:
+	  {
+	    m_actions->handle_IFGT ( opcode_index, true_index );
+	    break;
+	  }
+	case Java_Opcodes::IFLE:
+	  {
+	    m_actions->handle_IFLE ( opcode_index, true_index );
+	    break;
+	  }
+	case Java_Opcodes::IF_ICMPEQ:
+	  {
+	    m_actions->handle_IF_ICMPEQ ( opcode_index, true_index );
+	    break;
+	  }
+	case Java_Opcodes::IF_ICMPNE:
+	  {
+	    m_actions->handle_IF_ICMPNE ( opcode_index, true_index );
+	    break;
+	  }
+	case Java_Opcodes::IF_ICMPLT:
+	  {
+	    m_actions->handle_IF_ICMPLT ( opcode_index, true_index );
+	    break;
+	  }
+	case Java_Opcodes::IF_ICMPGE:
+	  {
+	    m_actions->handle_IF_ICMPGE ( opcode_index, true_index );
+	    break;
+	  }
+	case Java_Opcodes::IF_ICMPGT:
+	  {
+	    m_actions->handle_IF_ICMPGT ( opcode_index, true_index );
+	    break;
+	  }
+	case Java_Opcodes::IF_ICMPLE:
+	  {
+	    m_actions->handle_IF_ICMPLE ( opcode_index, true_index );
+	    break;
+	  }
+	case Java_Opcodes::IF_ACMPEQ:
+	  {
+	    m_actions->handle_IF_ACMPEQ ( opcode_index, true_index );
+	    break;
+	  }
+	case Java_Opcodes::IF_ACMPNE:
+	  {
+	    m_actions->handle_IF_ACMPNE ( opcode_index, true_index );
+	    break;
+	  }
+	case Java_Opcodes::IFNULL:
+	  {
+	    m_actions->handle_IFNULL ( opcode_index, true_index );
+	    break;
+	  }
+	case Java_Opcodes::IFNONNULL:
+	  {
+	    m_actions->handle_IFNONNULL ( opcode_index, true_index );
+	    break;
+	  }
+	}
+
+      // The next instruction after an 'if' statement is the beginning
+      // of its false segment
+      opcode_index = false_index;
+
+#ifdef LIBREVERSE_DEBUG
+      Trace::write_Trace ( TraceArea::INSTRUCTION_DECODER,
+			   TraceLevel::DETAIL,
+			   "Exiting Java_Decode::parse_Double_Branch_Opcodes" );
+#endif /* LIBREVERSE_DEBUG */
+
+    }
+
+    boost::uint8_t
+    Java_Decoder::read_8Bit_Value ( java_types::Code_Attribute::Code_List_t::const_iterator& read_head,
+				    java_types::Code_Attribute::Code_List_t::const_iterator end )
+    {
+#ifdef LIBREVERSE_DEBUG
+      Trace::write_Trace ( TraceArea::INSTRUCTION_DECODER,
+			   TraceLevel::DETAIL,
+			   "Entering Java_Decode::read_8bit_Value" );
+#endif /* LIBREVERSE_DEBUG */
+
+      boost::uint8_t byte = 0;
+
+      if ( read_head != end )
+	{
+	  // Read next two immediate bytes
+	  ++read_head;
+	}
+
+      if ( read_head != end )
+	{
+	  byte = (*read_head);
+	}
+
+#ifdef LIBREVERSE_DEBUG
+      Trace::write_Trace ( TraceArea::INSTRUCTION_DECODER,
+			   TraceLevel::DETAIL,
+			   "Exiting Java_Decode::read_8bit_Value" );
+#endif /* LIBREVERSE_DEBUG */
+
+      return byte;
+    }
+  
+    boost::uint16_t
+    Java_Decoder::read_16Bit_Value ( java_types::Code_Attribute::Code_List_t::const_iterator& read_head,
+				     java_types::Code_Attribute::Code_List_t::const_iterator end )
+    {
+#ifdef LIBREVERSE_DEBUG
+      Trace::write_Trace ( TraceArea::INSTRUCTION_DECODER,
+			   TraceLevel::DETAIL,
+			   "Entering Java_Decode::read_16bit_Value" );
+#endif /* LIBREVERSE_DEBUG */
+
+      boost::uint8_t imm_byte1 = this->read_8Bit_Value ( read_head, end );
+      boost::uint8_t imm_byte2 = this->read_8Bit_Value ( read_head, end );
+
+#ifdef LIBREVERSE_DEBUG
+      Trace::write_Trace ( TraceArea::INSTRUCTION_DECODER,
+			   TraceLevel::DATA,
+			   boost::str ( boost::format ( "Exiting Java_Decode::read_16bit_Value - imm_byte1 = %1$X" )
+					% static_cast<boost::uint16_t>(imm_byte1) ) );
+
+      Trace::write_Trace ( TraceArea::INSTRUCTION_DECODER,
+			   TraceLevel::DATA,
+			   boost::str ( boost::format ( "Exiting Java_Decode::read_16bit_Value - imm_byte1 << 8 = %1$X" )
+					% static_cast<boost::uint16_t>(imm_byte1 << 8) ) );
+
+      Trace::write_Trace ( TraceArea::INSTRUCTION_DECODER,
+			   TraceLevel::DATA,
+			   boost::str ( boost::format ( "Exiting Java_Decode::read_16bit_Value - imm_byte2 = %1$X" )
+					% static_cast<boost::uint16_t>(imm_byte2) ) );
+#endif /* LIBREVERSE_DEBUG */
+
+
+      boost::uint16_t result = ( imm_byte1 << 8 ) | imm_byte2;
+
+#ifdef LIBREVERSE_DEBUG
+      Trace::write_Trace ( TraceArea::INSTRUCTION_DECODER,
+			   TraceLevel::DETAIL,
+			   "Exiting Java_Decode::read_16bit_Value" );
+#endif /* LIBREVERSE_DEBUG */
+
+      return result;
+    }
+
+    boost::uint32_t
+    Java_Decoder::read_32Bit_Value ( java_types::Code_Attribute::Code_List_t::const_iterator& read_head,
+				     java_types::Code_Attribute::Code_List_t::const_iterator end )
+    {
+#ifdef LIBREVERSE_DEBUG
+      Trace::write_Trace ( TraceArea::INSTRUCTION_DECODER,
+			   TraceLevel::DETAIL,
+			   "Entering Java_Decode::read_32bit_Value" );
+#endif /* LIBREVERSE_DEBUG */
+
+      boost::uint8_t imm_byte1 = this->read_8Bit_Value ( read_head, end );
+      boost::uint8_t imm_byte2 = this->read_8Bit_Value ( read_head, end );
+      boost::uint8_t imm_byte3 = this->read_8Bit_Value ( read_head, end );
+      boost::uint8_t imm_byte4 = this->read_8Bit_Value ( read_head, end );
+
+      boost::uint32_t result = ( imm_byte1 << 24 ) | ( imm_byte2 << 16 ) | ( imm_byte3 << 8 ) | imm_byte4;
+
+#ifdef LIBREVERSE_DEBUG
+      Trace::write_Trace ( TraceArea::INSTRUCTION_DECODER,
+			   TraceLevel::DETAIL,
+			   "Exiting Java_Decode::read_32bit_Value" );
+#endif /* LIBREVERSE_DEBUG */
+
+      return result;
+    }
+
+  } /* namespace decoder */
+} /* namespace libreverse */
+
+  
+  
+  
