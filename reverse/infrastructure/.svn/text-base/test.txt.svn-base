@@ -1,4 +1,0 @@
-source{0,"A"};
-node{1,"B",0};
-node{2,"A",0};
-node{3,"A",1};
