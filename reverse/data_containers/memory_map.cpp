@@ -35,7 +35,8 @@ using namespace libreverse::api;
 using namespace libreverse::trace;
 #endif /* LIBREVERSE_DEBUG */
 
-namespace libreverse { namespace data_container {
+namespace libreverse {
+  namespace data_containers {
 
     Memory_Map::Memory_Map ()
         : m_data (),
@@ -421,7 +422,7 @@ namespace libreverse { namespace data_container {
     }
 
     boost::int8_t
-    Memory_Map::copy ( boost::shared_ptr< const Memory_Map>& src_ptr,
+    Memory_Map::copy ( boost::shared_ptr < const Memory_Map> src_ptr,
                        boost::uint32_t length )
     {
 
@@ -715,6 +716,6 @@ namespace libreverse { namespace data_container {
 
     }
 
-} /* Namespace data_types */
+  } /* Namespace data_containers */
 } /* namespace libreverse */
 

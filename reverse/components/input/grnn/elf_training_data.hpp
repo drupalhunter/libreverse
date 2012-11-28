@@ -19,20 +19,22 @@
     <http://www.gnu.org/licenses/>.
 */
 
-#ifndef REVERSE_COMPONENTS_INPUT_GRNN_CLASSIFIER_TYPES_HPP_INCLUDED
-#define REVERSE_COMPONENTS_INPUT_GRNN_CLASSIFIER_TYPES_HPP_INCLUDED
+#ifndef REVERSE_COMPONENTS_INPUT_GRNN_ELF_TRAINING_DATA_HPP_INCLUDED
+#define REVERSE_COMPONENTS_INPUT_GRNN_ELF_TRAINING_DATA_HPP_INCLUDED
 
-#include <reverse/components/input/grnn/classifier_types.hpp>
 #include <reverse/components/input/grnn/variable_map.hpp>
 
 #include <boost/shared_ptr.hpp>
 #include <boost/cstdint.hpp>
+
 #include <string>
 
 namespace reverse {
   namespace components {
     namespace input {
       namespace grnn {
+
+	template <typename data_type> class configuration;
 
 	class elf_training_data
 	{
@@ -59,17 +61,17 @@ namespace reverse {
 
 	  ~elf_training_data();
 
-	  static std::string get_attribute_string_list ( classifier_types::configuration<elf_training_data>::ptr_t config );
+	  static std::string get_attribute_string_list ( boost::shared_ptr < const configuration < elf_training_data > > config );
 
-	  std::string to_string ( classifier_types::configuration<elf_training_data>::ptr_t config ) const;
+	  std::string to_string ( boost::shared_ptr < configuration < elf_training_data > > config ) const;
 
-	  std::string to_xml ( classifier_types::configuration<elf_training_data>::ptr_t config ) const;
+	  std::string to_xml ( boost::shared_ptr < configuration < elf_training_data > > config ) const;
       
-	  classifier_types::variable_map::map_type::const_iterator begin ( void ) const;
-	  classifier_types::variable_map::map_type::iterator begin ( void );
+	  variable_map::map_t::const_iterator begin ( void ) const;
+	  variable_map::map_t::iterator begin ( void );
 
-	  classifier_types::variable_map::map_type::const_iterator end ( void ) const;
-	  classifier_types::variable_map::map_type::iterator end ( void );
+	  variable_map::map_t::const_iterator end ( void ) const;
+	  variable_map::map_t::iterator end ( void );
 
 	  void set_attribute ( boost::uint32_t index, double value );
 
@@ -79,7 +81,7 @@ namespace reverse {
 
 	private:
 
-	  classifier::variable_map m_data;
+	  variable_map m_data;
 	};
 
       } // namespace grnn
@@ -87,5 +89,4 @@ namespace reverse {
   } // namespace components
 } // namespace reverse
 
-
-#endif // ifndef REVERSE_COMPONENTS_INPUT_GRNN_CLASSIFIER_TYPES_HPP_INCLUDED
+#endif // ifndef REVERSE_COMPONENTS_INPUT_GRNN_ELF_TRAINING_DATA_HPP_INCLUDED

@@ -22,9 +22,6 @@
 #ifndef REVERSE_COMPONENTS_INPUT_GRNN_TRAINING_DATA_HPP_INCLUDED
 #define REVERSE_COMPONENTS_INPUT_GRNN_TRAINING_DATA_HPP_INCLUDED
 
-
-#include <reverse/components/input/grnn/Classifier_Types.h>
-
 #include <boost/shared_ptr.hpp>
 #include <boost/cstdint.hpp>
 #include <boost/smart_ptr/make_shared.hpp>
@@ -39,44 +36,44 @@ namespace reverse {
     namespace input {
       namespace grnn {
 
-	template <typename DataType> class Configuration;
+	template <typename data_type> class configuration;
 
-	template <typename Data_Type>
-	class Training_Data
+	template <typename data_type>
+	class training_data
 	{
 	public:
 
-	  Training_Data ()
-	    : m_data ( boost::make_shared<Data_Type>() )
+	  training_data ()
+	    : m_data ( boost::make_shared<data_type>() )
 	  {
 
 #ifdef LIBREVERSE_DEBUG
-	    Trace::write_Trace ( TraceArea::CLASSIFIER,
-				 TraceLevel::DETAIL,
+	    trace::write_trace ( trace_area::classifier,
+				 trace_level::detail,
 				 "Inside Training_Data constructor" );
 #endif /* LIBREVERSE_DEBUG */
 
 	  }
 
-	  ~Training_Data()
+	  ~training_data()
 	  {
 
 #ifdef LIBREVERSE_DEBUG
-	    Trace::write_Trace ( TraceArea::CLASSIFIER,
-				 TraceLevel::DETAIL,
+	    trace::write_trace ( trace_area::classifier,
+				 trace_level::detail,
 				 "Inside Training_Data destructor" );
 #endif /* LIBREVERSE_DEBUG */
 	  }
 
-	  void set_Attribute ( boost::uint32_t key, double value )
+	  void set_attribute ( boost::uint32_t key, double value )
 	  {
-	    m_data->set_Attribute ( key, value );
+	    m_data->set_attribute ( key, value );
 	  }
 
 
-	  double get_Attribute ( boost::uint32_t key ) const
+	  double get_attribute ( boost::uint32_t key ) const
 	  {
-	    return m_data->get_Attribute ( key );
+	    return m_data->get_attribute ( key );
 	  }
 
 
@@ -86,27 +83,27 @@ namespace reverse {
 	  }
 
 
-	  static std::string get_Attribute_String_List
-	    ( boost::shared_ptr < reverse::components::input::grnn::Configuration<Data_Type> > config =
-	      boost::shared_ptr < reverse::components::input::grnn::Configuration<Data_Type> >
-	      ( new  reverse::components::input::grnn::Configuration<Data_Type>() ) )
+	  static std::string get_attribute_string_list
+	    ( boost::shared_ptr < reverse::components::input::grnn::configuration<data_type> > config =
+	      boost::shared_ptr < reverse::components::input::grnn::configuration<data_type> >
+	      ( new  reverse::components::input::grnn::configuration<data_type>() ) )
 	  {
 
 #ifdef LIBREVERSE_DEBUG
-	    Trace::write_Trace ( TraceArea::CLASSIFIER,
-				 TraceLevel::DETAIL,
+	    trace::write_trace ( trace_area::classifier,
+				 trace_level::detail,
 				 "Entering Training_Data::get_Attribute_String_List" );
 #endif /* LIBREVERSE_DEBUG */
 
 
 	    std::string output;
 
-	    output = Data_Type::get_Attribute_String_List ( config );
+	    output = data_type::get_attribute_string_list ( config );
 
 
 #ifdef LIBREVERSE_DEBUG
-	    Trace::write_Trace ( TraceArea::CLASSIFIER,
-				 TraceLevel::DETAIL,
+	    trace::write_trace ( trace_area::classifier,
+				 trace_level::detail,
 				 "Exiting Training_Data::get_Attribute_String_List" );
 #endif /* LIBREVERSE_DEBUG */
 
@@ -114,57 +111,54 @@ namespace reverse {
 	    return output;
 	  }
 
-
-	  std::string to_String ( boost::shared_ptr < reverse::components::input::grnn::Configuration<Data_Type> > config =
-				  boost::shared_ptr < reverse::components::input::grnn::Configuration<Data_Type> >
-				  ( new reverse::components::input::grnn::Configuration<Data_Type>() ) ) const
+	  std::string to_string ( boost::shared_ptr < reverse::components::input::grnn::configuration<data_type> > config =
+				  boost::shared_ptr < reverse::components::input::grnn::configuration<data_type> >
+				  ( new reverse::components::input::grnn::configuration<data_type>() ) ) const
 	  {
 
 #ifdef LIBREVERSE_DEBUG
-	    Trace::write_Trace ( TraceArea::CLASSIFIER,
-				 TraceLevel::DETAIL,
+	    trace::write_trace ( trace_area::classifier,
+				 trace_level::detail,
 				 "Entering Training_Data::to_String" );
 #endif /* LIBREVERSE_DEBUG */
 
 
 	    std::stringstream output;
 
-	    output << "---- Training_Data ----" << std::endl;
+	    output << "---- training_data ----" << std::endl;
 
-	    output << m_data->to_String ( config );
+	    output << m_data->to_string ( config );
 
 
 #ifdef LIBREVERSE_DEBUG
-	    Trace::write_Trace ( TraceArea::CLASSIFIER,
-				 TraceLevel::DETAIL,
+	    trace::write_trace ( trace_area::classifier,
+				 trace_level::detail,
 				 "Exiting Training_Data::to_String" );
 #endif /* LIBREVERSE_DEBUG */
 
-
 	    return output.str();
 	  }
-
       
-	  std::string to_XML ( boost::shared_ptr < reverse::components::input::grnn::Configuration<Data_Type> > config =
-			       boost::shared_ptr < reverse::components::input::grnn::Configuration<Data_Type> >
-			       ( new reverse::components::input::grnn::Configuration<Data_Type>() ) ) const
+	  std::string to_xml ( boost::shared_ptr < reverse::components::input::grnn::configuration<data_type> > config =
+			       boost::shared_ptr < reverse::components::input::grnn::configuration<data_type> >
+			       ( new reverse::components::input::grnn::configuration<data_type>() ) ) const
 	  {
 
 #ifdef LIBREVERSE_DEBUG
-	    Trace::write_Trace ( TraceArea::CLASSIFIER,
-				 TraceLevel::DETAIL,
+	    trace::write_trace ( trace_area::classifier,
+				 trace_level::detail,
 				 "Entering Training_Data::to_XML" );
 #endif /* LIBREVERSE_DEBUG */
 
 
 	    std::stringstream output;
 
-	    output << m_data->to_XML ( config );
+	    output << m_data->to_xml ( config );
 
 
 #ifdef LIBREVERSE_DEBUG
-	    Trace::write_Trace ( TraceArea::CLASSIFIER,
-				 TraceLevel::DETAIL,
+	    trace::write_trace ( trace_area::classifier,
+				 trace_level::detail,
 				 "Exiting Training_Data::to_XML" );
 #endif /* LIBREVERSE_DEBUG */
 
@@ -177,8 +171,8 @@ namespace reverse {
 	  {
 
 #ifdef LIBREVERSE_DEBUG
-	    Trace::write_Trace ( TraceArea::CLASSIFIER,
-				 TraceLevel::DETAIL,
+	    trace::write_trace ( trace_area::classifier,
+				 trace_level::detail,
 				 "Inside Training_Data::begin (const)" );
 #endif /* LIBREVERSE_DEBUG */
 
@@ -190,8 +184,8 @@ namespace reverse {
 	  {
 
 #ifdef LIBREVERSE_DEBUG
-	    Trace::write_Trace ( TraceArea::CLASSIFIER,
-				 TraceLevel::DETAIL,
+	    trace::write_trace ( trace_area::classifier,
+				 trace_level::detail,
 				 "Inside Training_Data::begin" );
 #endif /* LIBREVERSE_DEBUG */
 
@@ -203,8 +197,8 @@ namespace reverse {
 	  {
 
 #ifdef LIBREVERSE_DEBUG
-	    Trace::write_Trace ( TraceArea::CLASSIFIER,
-				 TraceLevel::DETAIL,
+	    trace::write_trace ( trace_area::classifier,
+				 trace_level::detail,
 				 "Inside Training_Data::end (const)" );
 #endif /* LIBREVERSE_DEBUG */
 
@@ -216,8 +210,8 @@ namespace reverse {
 	  {
 
 #ifdef LIBREVERSE_DEBUG
-	    Trace::write_Trace ( TraceArea::CLASSIFIER,
-				 TraceLevel::DETAIL,
+	    trace::write_trace ( trace_area::classifier,
+				 trace_level::detail,
 				 "Inside Training_Data::end" );
 #endif /* LIBREVERSE_DEBUG */
 
@@ -225,31 +219,29 @@ namespace reverse {
 	    return m_data->end();
 	  }
 
-
-	  bool is_Valid (void) const
+	  bool is_valid (void) const
 	  {
 
 #ifdef LIBREVERSE_DEBUG
-	    Trace::write_Trace ( TraceArea::CLASSIFIER,
-				 TraceLevel::DETAIL,
+	    trace::write_trace ( trace_area::classifier,
+				 trace_level::detail,
 				 "Entering Training_Data::is_Valid" );
 #endif /* LIBREVERSE_DEBUG */
-
 
 	    bool valid = true;
 
 	    boost::uint32_t index = 0;
 
 	    for ( boost::uint32_t key = 1;
-		  key < Data_Type::ATTRIBUTE_COUNT;
+		  key < data_type::attribute_count;
 		  ++key )
 	      {
-		if ( ! ( m_data->get_Attribute ( key ) >= 0.0 && m_data->get_Attribute ( key ) <= 1.0 ) )
+		if ( ! ( m_data->get_attribute ( key ) >= 0.0 && m_data->get_attribute ( key ) <= 1.0 ) )
 		  {
 
 #ifdef LIBREVERSE_DEBUG
-		    Trace::write_Trace ( TraceArea::CLASSIFIER,
-					 TraceLevel::ERROR,
+		    trace::write_trace ( trace_area::classifier,
+					 trace_level::error,
 					 boost::str ( boost::format ( "Item #%1$d is not valid" )
 						      % index ) );
 #endif /* LIBREVERSE_DEBUG */
@@ -263,8 +255,8 @@ namespace reverse {
 
 
 #ifdef LIBREVERSE_DEBUG
-	    Trace::write_Trace ( TraceArea::CLASSIFIER,
-				 TraceLevel::DETAIL,
+	    trace::write_trace ( trace_area::classifier,
+				 trace_level::detail,
 				 "Exiting Training_Data::is_Valid" );  
 #endif /* LIBREVERSE_DEBUG */
 
@@ -275,7 +267,7 @@ namespace reverse {
 
 	private:
 
-	  boost::shared_ptr<Data_Type> m_data;
+	  boost::shared_ptr<data_type> m_data;
 	};
 
       } // namespace input

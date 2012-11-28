@@ -46,7 +46,7 @@ namespace reverse {
 
         virtual void read_headers (void) = 0;
 
-        virtual boost::shared_ptr<data_container::memory_map> get_memory_map ( void ) = 0;
+        virtual boost::shared_ptr < data_containers::memory_map > get_memory_map ( void ) = 0;
 
 	virtual std::string get_file_type (void) = 0;
 

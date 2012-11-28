@@ -1,22 +1,22 @@
 /*  XMLExpatParser.h
 
-   Copyright (C) 2008 Stephen Torri
+    Copyright (C) 2008 Stephen Torri
 
-   This file is part of Libreverse.
+    This file is part of Libreverse.
 
-   Libreverse is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published
-   by the Free Software Foundation; either version 3, or (at your
-   option) any later version.
+    Libreverse is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published
+    by the Free Software Foundation; either version 3, or (at your
+    option) any later version.
 
-   Libreverse is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
+    Libreverse is distributed in the hope that it will be useful, but
+    WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with this program.  If not, see
-   <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see
+    <http://www.gnu.org/licenses/>.
 */
 
 // ----------------------------------------------------------------------------
@@ -24,16 +24,17 @@
 // -  XMLExpatParser
 // ----------------------------------------------------------------------------
 
-#ifndef __XMLEXPATPARSER_H
-#define __XMLEXPATPARSER_H
+#ifndef REVERSE_COMPONENTS_INPUT_GRNN_XML_EXPAT_PARSER_HPP_INCLUDED
+#define REVERSE_COMPONENTS_INPUT_GRNN_XML_EXPAT_PARSER_HPP_INCLUDED
 
 //#pragma warning(disable : 4786)
 
-#include <string>
-#include <map>
 #include "expat.h"
 
-typedef std::map< std::string, std::string > Attribute_Map_t;
+#include <string>
+#include <map>
+
+typedef std::map< std::string, std::string > attribute_map_t;
 
 // ----------------------------------------------------------------------------
 // class XMLExpatParser
@@ -72,140 +73,153 @@ typedef std::map< std::string, std::string > Attribute_Map_t;
 //
 //   Do not need to call destroy() because it will get called by destructor.
 // ----------------------------------------------------------------------------
-class XMLExpatParser
-{
-public:
 
-    explicit XMLExpatParser();
-    virtual ~XMLExpatParser();
+namespace reverse {
+  namespace components {
+    namespace input {
+      namespace grnn {
 
-    // ----------------------------------------------------------------------------
-    // Overridable callbacks
-    // --------------------------------------------------------------------------
+	class xml_expat_parser
+	{
+	public:
+	  
+	  explicit xml_expat_parser();
+	  virtual ~xml_expat_parser();
 
-    // Parametser
-    // - first: starting element name
-    // - second: list of attributes
-    virtual void startElement ( const std::string&, const Attribute_Map_t& )
-    {}
+	  // ----------------------------------------------------------------------------
+	  // Overridable callbacks
+	  // --------------------------------------------------------------------------
 
-    // Parameter
-    // - first: ending element name
-    virtual void endElement ( const std::string& )
-    {}
+	  // Parametser
+	  // - first: starting element name
+	  // - second: list of attributes
+	  virtual void start_element ( const std::string&, const attribute_map_t& )
+	  {}
 
-    // Parameter
-    // - first: character data
-    virtual void charData ( const std::string& )
-    {}
+	  // Parameter
+	  // - first: ending element name
+	  virtual void end_element ( const std::string& )
+	  {}
 
-    virtual void startCdataSection()
-    {}
-    virtual void endCdataSection()
-    {}
+	  // Parameter
+	  // - first: character data
+	  virtual void char_data ( const std::string& )
+	  {}
 
-    // ----------------------------------------------------------------------------
-    // Create parser
-    // --------------------------------------------------------------------------
-    bool createParser();
+	  virtual void start_cdata_section()
+	  {}
 
-    // ----------------------------------------------------------------------------
-    // Destroy parser
-    // --------------------------------------------------------------------------
-    void destroyParser();
+	  virtual void end_cdata_section()
+	  {}
 
-    // ----------------------------------------------------------------------------
-    // Parsing function
-    // --------------------------------------------------------------------------
-    int  parse ( const char* buffer, int len );
+	  // ----------------------------------------------------------------------------
+	  // Create parser
+	  // --------------------------------------------------------------------------
+	  bool create_parser();
 
-    // ----------------------------------------------------------------------------
-    // Informational functions
-    // --------------------------------------------------------------------------
-    XML_Error
-    getErrorCode()
-    {
-        return XML_GetErrorCode ( m_pXMLExpatParser );
-    }
+	  // ----------------------------------------------------------------------------
+	  // Destroy parser
+	  // --------------------------------------------------------------------------
+	  void destroy_parser();
 
+	  // ----------------------------------------------------------------------------
+	  // Parsing function
+	  // --------------------------------------------------------------------------
+	  int parse ( const char* buffer, int len );
 
-    const char* getErrorString ( XML_Error nErrorCode )
-    {
-        return XML_ErrorString ( nErrorCode );
-    }
-
-    int         getCurrentLineNumber()
-    {
-        return XML_GetCurrentLineNumber ( m_pXMLExpatParser );
-    }
-    int         getCurrentColumnNumber()
-    {
-        return XML_GetCurrentColumnNumber ( m_pXMLExpatParser ) + 1;
-    }
-
-    // ----------------------------------------------------------------------------
-    // Helper functions
-    // --------------------------------------------------------------------------
-    int         getDepth()
-    {
-        return m_nDepth;
-    }
-    bool        getIgnoreWhiteSpace()
-    {
-        return m_bIgnoreWhiteSpace;
-    }
-    void        setIgnoreWhiteSpace ( bool b )
-    {
-        m_bIgnoreWhiteSpace = b;
-    }
-    bool        isCharDataInCdataSection()
-    {
-        return m_bIsCharDataInCdataSection;
-    }
-    static bool isBlank ( const char *c );
-
-private:
-
-    // ----------------------------------------------------------------------------
-    // Expat callbacks
-    // --------------------------------------------------------------------------
-    static void startElementCallback ( void *userData, const XML_Char* name, const XML_Char** atts );
-    static void endElementCallback ( void *userData, const XML_Char* name );
-    static void charDataCallback ( void *userData, const XML_Char* s, int len );
-    static void startCdataSectionCallback ( void *userData );
-    static void endCdataSectionCallback ( void *userData );
-
-private:
-
-    // Holds the Expat XML Parser.
-    XML_Parser m_pXMLExpatParser;
-
-    // Holds pointer to the xml characters to parse.
-    char* m_pXmlBuffer;
-
-    // Holds the xml start tag name.
-    static std::string m_sStartElement;
-
-    // Holds the xml end tag name.
-    static std::string m_sEndElement;
-
-    // Holds the xml character data.
-    static std::string m_sCharData;
-
-    // Holds the xml start tag attributes
-    static Attribute_Map_t m_attributes;
-
-    // Holds depth of current xml tag. Root element has depth = 1.
-    static long m_nDepth;
-
-    // True if the parser should ignore whitespace.
-    static bool m_bIgnoreWhiteSpace;
-
-    // True if the charData was inside of a CDATA section.
-    static bool m_bIsCharDataInCdataSection;
-};
+	  // ----------------------------------------------------------------------------
+	  // Informational functions
+	  // --------------------------------------------------------------------------
+	  XML_Error
+	  get_error_code()
+	  {
+	    return XML_GetErrorCode ( m_pXMLExpatParser );
+	  }
 
 
-#endif
+	  const char* get_error_string ( XML_Error nErrorCode )
+	  {
+	    return XML_ErrorString ( nErrorCode );
+	  }
+
+	  int get_current_line_number()
+	  {
+	    return XML_GetCurrentLineNumber ( m_pXMLExpatParser );
+	  }
+	  int get_current_column_number()
+	  {
+	    return XML_GetCurrentColumnNumber ( m_pXMLExpatParser ) + 1;
+	  }
+
+	  // ----------------------------------------------------------------------------
+	  // Helper functions
+	  // --------------------------------------------------------------------------
+	  int get_depth()
+	  {
+	    return m_depth;
+	  }
+	  bool get_ignore_white_space()
+	  {
+	    return m_ignore_whitespace;
+	  }
+	  void set_ignore_white_space ( bool b )
+	  {
+	    m_ignore_whitespace = b;
+	  }
+	  bool is_char_data_in_cdata_section()
+	  {
+	    return m_is_char_data_in_cdata_section;
+	  }
+
+	  static bool is_blank ( const char *c );
+
+	private:
+
+	  // ----------------------------------------------------------------------------
+	  // Expat callbacks
+	  // --------------------------------------------------------------------------
+	  static void start_element_callback ( void *userData, const XML_Char* name, const XML_Char** atts );
+	  static void end_element_callback ( void *userData, const XML_Char* name );
+	  static void char_data_callback ( void *userData, const XML_Char* s, int len );
+	  static void start_cdata_section_callback ( void *userData );
+	  static void end_cdata_section_callback ( void *userData );
+
+	private:
+
+	  // Holds the Expat XML Parser.
+	  XML_Parser m_pXMLExpatParser;
+
+	  // Holds pointer to the xml characters to parse.
+	  char* m_pxmlbuffer;
+
+	  // Holds the xml start tag name.
+	  static std::string m_start_element;
+
+	  // Holds the xml end tag name.
+	  static std::string m_end_element;
+
+	  // Holds the xml character data.
+	  static std::string m_char_data;
+
+	  // Holds the xml start tag attributes
+	  static attribute_map_t m_attributes;
+
+	  // Holds depth of current xml tag. Root element has depth = 1.
+	  static long m_depth;
+
+	  // True if the parser should ignore whitespace.
+	  static bool m_ignore_whitespace;
+
+	  // True if the charData was inside of a CDATA section.
+	  static bool m_is_char_data_in_cdata_section;
+	};
+
+      } // namespace grnn
+    } // namespace input
+  } // namespace components
+} // namespace reverse
+
+
+#endif // REVERSE_COMPONENTS_INPUT_GRNN_XML_EXPAT_PARSER_HPP_INCLUDED
 
 

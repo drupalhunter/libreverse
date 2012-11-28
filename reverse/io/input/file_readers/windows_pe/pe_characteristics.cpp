@@ -1,243 +1,253 @@
 /*  PE_Characteristics.cpp
 
-   Copyright (C) 2008 Stephen Torri
+    Copyright (C) 2008 Stephen Torri
 
-   This file is part of Libreverse.
+    This file is part of Libreverse.
 
-   Libreverse is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published
-   by the Free Software Foundation; either version 3, or (at your
-   option) any later version.
+    Libreverse is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published
+    by the Free Software Foundation; either version 3, or (at your
+    option) any later version.
 
-   Libreverse is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
+    Libreverse is distributed in the hope that it will be useful, but
+    WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with this program.  If not, see
-   <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see
+    <http://www.gnu.org/licenses/>.
 */
 
-#include "PE_Characteristics.h"
+#include <reverse/io/input/file_readers/windows_pe/pe_characteristics.hpp>
+
 #include <sstream>
 #include <iostream>
 
-namespace libreverse { namespace wpef_module {
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace windows_pe {
 
-    const boost::uint16_t
-    PE_Characteristics::PE_IMAGE_FILE_RELOCS_STRIPPED = 0x0001;
 
-    const boost::uint16_t
-    PE_Characteristics::PE_IMAGE_FILE_EXECUTABLE_IMAGE = 0x0002;
+	  const boost::uint16_t
+	  pe_characteristics::pe_image_file_relocs_stripped = 0x0001;
 
-    const boost::uint16_t
-    PE_Characteristics::PE_IMAGE_FILE_LINE_NUMS_STRIPPED = 0x0004;
+	  const boost::uint16_t
+	  pe_characteristics::pe_image_file_executable_image = 0x0002;
 
-    const boost::uint16_t
-    PE_Characteristics::PE_IMAGE_FILE_LOCAL_SYMS_STRIPPED = 0x0008;
+	  const boost::uint16_t
+	  pe_characteristics::pe_image_file_line_nums_stripped = 0x0004;
 
-    const boost::uint16_t
-    PE_Characteristics::PE_IMAGE_FILE_AGGRESSIVE_WS_TRIM = 0x0010;
+	  const boost::uint16_t
+	  pe_characteristics::pe_image_file_local_syms_stripped = 0x0008;
 
-    const boost::uint16_t
-    PE_Characteristics::PE_IMAGE_FILE_LARGE_ADDRESS_AWARE = 0x0020;
+	  const boost::uint16_t
+	  pe_characteristics::pe_image_file_aggressive_ws_trim = 0x0010;
 
-    const boost::uint16_t
-    PE_Characteristics::PE_IMAGE_FILE_RESERVED_BIT = 0x0040;
+	  const boost::uint16_t
+	  pe_characteristics::pe_image_file_large_address_aware = 0x0020;
 
-    const boost::uint16_t
-    PE_Characteristics::PE_IMAGE_FILE_BYTES_REVERSED_LO = 0x0080;
+	  const boost::uint16_t
+	  pe_characteristics::pe_image_file_reserved_bit = 0x0040;
 
-    const boost::uint16_t
-    PE_Characteristics::PE_IMAGE_FILE_32BIT_MACHINE = 0x0100;
+	  const boost::uint16_t
+	  pe_characteristics::pe_image_file_bytes_reversed_lo = 0x0080;
 
-    const boost::uint16_t
-    PE_Characteristics::PE_IMAGE_FILE_DEBUG_STRIPPED = 0x0200;
+	  const boost::uint16_t
+	  pe_characteristics::pe_image_file_32bit_machine = 0x0100;
 
-    const boost::uint16_t
-    PE_Characteristics::PE_IMAGE_FILE_REMOVABLE_RUN_FROM_SWAP = 0x0400;
+	  const boost::uint16_t
+	  pe_characteristics::pe_image_file_debug_stripped = 0x0200;
 
-    const boost::uint16_t
-    PE_Characteristics::PE_IMAGE_FILE_NET_RUN_FROM_SWAP = 0x0800;
+	  const boost::uint16_t
+	  pe_characteristics::pe_image_file_removable_run_from_swap = 0x0400;
 
-    const boost::uint16_t
-    PE_Characteristics::PE_IMAGE_FILE_SYSTEM = 0x1000;
+	  const boost::uint16_t
+	  pe_characteristics::pe_image_file_net_run_from_swap = 0x0800;
 
-    const boost::uint16_t
-    PE_Characteristics::PE_IMAGE_FILE_DLL = 0x2000;
+	  const boost::uint16_t
+	  pe_characteristics::pe_image_file_system = 0x1000;
 
-    const boost::uint16_t
-    PE_Characteristics::PE_IMAGE_FILE_UP_SYSTEM_ONLY = 0x4000;
+	  const boost::uint16_t
+	  pe_characteristics::pe_image_file_dll = 0x2000;
 
-    const boost::uint16_t
-    PE_Characteristics::PE_IMAGE_FILE_BYTES_REVERSED_HI = 0x8000;
+	  const boost::uint16_t
+	  pe_characteristics::pe_image_file_up_system_only = 0x4000;
 
-    std::string
-    PE_Characteristics::get_String_Name ( boost::uint16_t val )
-    {
-        std::string result;
+	  const boost::uint16_t
+	  pe_characteristics::pe_image_file_bytes_reversed_hi = 0x8000;
 
-        switch ( val )
-            {
-            case PE_IMAGE_FILE_RELOCS_STRIPPED:
+	  std::string
+	  pe_characteristics::get_string_name ( boost::uint16_t val )
+	  {
+	    std::string result;
+
+	    switch ( val )
+	      {
+	      case pe_image_file_relocs_stripped:
                 {
-                    result = "PE:relocs_stripped";
-                    break;
+		  result = "pe:relocs_stripped";
+		  break;
                 }
-            case PE_IMAGE_FILE_EXECUTABLE_IMAGE:
+	      case pe_image_file_executable_image:
                 {
-                    result = "PE:executable_image";
-                    break;
+		  result = "pe:executable_image";
+		  break;
                 }
-            case PE_IMAGE_FILE_LINE_NUMS_STRIPPED:
+	      case pe_image_file_line_nums_stripped:
                 {
-                    result = "PE:line_nums_strippes";
-                    break;
+		  result = "pe:line_nums_strippes";
+		  break;
                 }
-            case PE_IMAGE_FILE_LOCAL_SYMS_STRIPPED:
+	      case pe_image_file_local_syms_stripped:
                 {
-                    result = "PE:local_syms_stripped";
-                    break;
+		  result = "pe:local_syms_stripped";
+		  break;
                 }
-            case PE_IMAGE_FILE_AGGRESSIVE_WS_TRIM:
+	      case pe_image_file_aggressive_ws_trim:
                 {
-                    result = "PE:aggressive_ws_trim";
-                    break;
+		  result = "pe:aggressive_ws_trim";
+		  break;
                 }
-            case PE_IMAGE_FILE_LARGE_ADDRESS_AWARE:
+	      case pe_image_file_large_address_aware:
                 {
-                    result = "PE:large_address_aware";
-                    break;
+		  result = "pe:large_address_aware";
+		  break;
                 }
-            case PE_IMAGE_FILE_RESERVED_BIT:
+	      case pe_image_file_reserved_bit:
                 {
-                    result = "PE:reverse_bit";
-                    break;
+		  result = "pe:reverse_bit";
+		  break;
                 }
-            case PE_IMAGE_FILE_BYTES_REVERSED_LO:
+	      case pe_image_file_bytes_reversed_lo:
                 {
-                    result = "PE:bytes_reversed_lo";
-                    break;
+		  result = "pe:bytes_reversed_lo";
+		  break;
                 }
-            case PE_IMAGE_FILE_32BIT_MACHINE:
+	      case pe_image_file_32bit_machine:
                 {
-                    result = "PE:32bit_machine";
-                    break;
+		  result = "pe:32bit_machine";
+		  break;
                 }
-            case PE_IMAGE_FILE_DEBUG_STRIPPED:
+	      case pe_image_file_debug_stripped:
                 {
-                    result = "PE:debug_stripped";
-                    break;
+		  result = "pe:debug_stripped";
+		  break;
                 }
-            case PE_IMAGE_FILE_REMOVABLE_RUN_FROM_SWAP:
+	      case pe_image_file_removable_run_from_swap:
                 {
-                    result = "PE:removable_run_from_swap";
-                    break;
+		  result = "pe:removable_run_from_swap";
+		  break;
                 }
-            case PE_IMAGE_FILE_NET_RUN_FROM_SWAP:
+	      case pe_image_file_net_run_from_swap:
                 {
-                    result = "PE:net_run_from_swap";
-                    break;
+		  result = "pe:net_run_from_swap";
+		  break;
                 }
-            case PE_IMAGE_FILE_SYSTEM:
+	      case pe_image_file_system:
                 {
-                    result = "PE:system_file";
-                    break;
+		  result = "pe:system_file";
+		  break;
                 }
-            case PE_IMAGE_FILE_DLL:
+	      case pe_image_file_dll:
                 {
-                    result = "PE:dynamic_link_library";
-                    break;
+		  result = "pe:dynamic_link_library";
+		  break;
                 }
-            case PE_IMAGE_FILE_UP_SYSTEM_ONLY:
+	      case pe_image_file_up_system_only:
                 {
-                    result = "PE:uniprocessor_system_only";
-                    break;
+		  result = "pe:uniprocessor_system_only";
+		  break;
                 }
-            case PE_IMAGE_FILE_BYTES_REVERSED_HI:
+	      case pe_image_file_bytes_reversed_hi:
                 {
-                    result = "PE:bytes_reversed_hi";
-                    break;
+		  result = "pe:bytes_reversed_hi";
+		  break;
                 }
-            }
+	      }
 
-        return result;
-    }
+	    return result;
+	  }
 
 
-    std::string
-    PE_Characteristics::get_String_Name_List ( boost::uint16_t val )
-    {
-        std::stringstream output;
+	  std::string
+	  pe_characteristics::get_string_name_list ( boost::uint16_t val )
+	  {
+	    std::stringstream output;
 
-        if ( val & PE_IMAGE_FILE_RELOCS_STRIPPED )
-            {
-                output << "    PE:relocs_stripped" << std::endl;
-            }
-        if ( val & PE_IMAGE_FILE_EXECUTABLE_IMAGE )
-            {
-                output << "    PE:executable_image" << std::endl;
-            }
-        if ( val & PE_IMAGE_FILE_LINE_NUMS_STRIPPED )
-            {
-                output << "    PE:line_nums_stripped" << std::endl;
-            }
-        if ( val & PE_IMAGE_FILE_LOCAL_SYMS_STRIPPED )
-            {
-                output << "    PE:local_syms_stripped" << std::endl;
-            }
-        if ( val & PE_IMAGE_FILE_AGGRESSIVE_WS_TRIM )
-            {
-                output << "    PE:aggressive_ws_trim" << std::endl;
-            }
-        if ( val & PE_IMAGE_FILE_LARGE_ADDRESS_AWARE )
-            {
-                output << "    PE:large_address_aware" << std::endl;
-            }
-        if ( val & PE_IMAGE_FILE_RESERVED_BIT )
-            {
-                output << "    PE:reverse_bit" << std::endl;
-            }
-        if ( val & PE_IMAGE_FILE_BYTES_REVERSED_LO )
-            {
-                output << "    PE:bytes_reversed_lo" << std::endl;
-            }
-        if ( val & PE_IMAGE_FILE_32BIT_MACHINE )
-            {
-                output << "    PE:32bit_machine" << std::endl;
-            }
-        if ( val & PE_IMAGE_FILE_DEBUG_STRIPPED )
-            {
-                output << "    PE:debug_stripped" << std::endl;
-            }
-        if ( val & PE_IMAGE_FILE_REMOVABLE_RUN_FROM_SWAP )
-            {
-                output << "    PE:removable_run_from_swap" << std::endl;
-            }
-        if ( val & PE_IMAGE_FILE_NET_RUN_FROM_SWAP )
-            {
-                output << "    PE:net_run_from_swap" << std::endl;
-            }
-        if ( val & PE_IMAGE_FILE_SYSTEM )
-            {
-                output << "    PE:system_file" << std::endl;
-            }
-        if ( val & PE_IMAGE_FILE_DLL )
-            {
-                output << "    PE:dynamic_link_library" << std::endl;
-            }
-        if ( val & PE_IMAGE_FILE_UP_SYSTEM_ONLY )
-            {
-                output << "    PE:uniprocessor_system_only" << std::endl;
-            }
-        if ( val & PE_IMAGE_FILE_BYTES_REVERSED_HI )
-            {
-                output << "    PE:bytes_reversed_hi" << std::endl;
-            }
+	    if ( val & pe_image_file_relocs_stripped )
+	      {
+                output << "    pe:relocs_stripped" << std::endl;
+	      }
+	    if ( val & pe_image_file_executable_image )
+	      {
+                output << "    pe:executable_image" << std::endl;
+	      }
+	    if ( val & pe_image_file_line_nums_stripped )
+	      {
+                output << "    pe:line_nums_stripped" << std::endl;
+	      }
+	    if ( val & pe_image_file_local_syms_stripped )
+	      {
+                output << "    pe:local_syms_stripped" << std::endl;
+	      }
+	    if ( val & pe_image_file_aggressive_ws_trim )
+	      {
+                output << "    pe:aggressive_ws_trim" << std::endl;
+	      }
+	    if ( val & pe_image_file_large_address_aware )
+	      {
+                output << "    pe:large_address_aware" << std::endl;
+	      }
+	    if ( val & pe_image_file_reserved_bit )
+	      {
+                output << "    pe:reverse_bit" << std::endl;
+	      }
+	    if ( val & pe_image_file_bytes_reversed_lo )
+	      {
+                output << "    pe:bytes_reversed_lo" << std::endl;
+	      }
+	    if ( val & pe_image_file_32bit_machine )
+	      {
+                output << "    pe:32bit_machine" << std::endl;
+	      }
+	    if ( val & pe_image_file_debug_stripped )
+	      {
+                output << "    pe:debug_stripped" << std::endl;
+	      }
+	    if ( val & pe_image_file_removable_run_from_swap )
+	      {
+                output << "    pe:removable_run_from_swap" << std::endl;
+	      }
+	    if ( val & pe_image_file_net_run_from_swap )
+	      {
+                output << "    pe:net_run_from_swap" << std::endl;
+	      }
+	    if ( val & pe_image_file_system )
+	      {
+                output << "    pe:system_file" << std::endl;
+	      }
+	    if ( val & pe_image_file_dll )
+	      {
+                output << "    pe:dynamic_link_library" << std::endl;
+	      }
+	    if ( val & pe_image_file_up_system_only )
+	      {
+                output << "    pe:uniprocessor_system_only" << std::endl;
+	      }
+	    if ( val & pe_image_file_bytes_reversed_hi )
+	      {
+                output << "    pe:bytes_reversed_hi" << std::endl;
+	      }
 
-        return output.str();
-    }
+	    return output.str();
+	  }
 
-} /* namespace wpef_module */
-} /* namespace libreverse */
+	} // namespace windows_pe
+      } // namespace file_readers
+    } // namespace input
+  } // namespace io
+} // namespace reverse
+

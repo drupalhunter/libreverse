@@ -28,7 +28,7 @@
   Common Object File Format - Revision 8, May 16, 2006.
 */
 
-#include <reverse/io/input/File_Readers/Windows_PE/PE_Exception_Table_Entry.h>
+#include <reverse/io/input/file_readers/windows_pe/pe_exception_table_entry.hpp>
 
 #include <boost/enable_shared_from_this.hpp>
 #include <boost/shared_ptr.hpp>
@@ -41,48 +41,48 @@ namespace reverse {
       namespace file_readers {
 	namespace windows_pe {
 
-    class AMD_IA_64_Exception_Table_Entry : public PE_Exception_Table_Entry,
-                                            public boost::enable_shared_from_this < AMD_IA_64_Exception_Table_Entry >
-    {
-    public:
+	  class amd_ia_64_exception_table_entry : public pe_exception_table_entry,
+						  public boost::enable_shared_from_this < amd_ia_64_exception_table_entry >
+	  {
+	  public:
 
-      friend class PE_File;
+	    friend class pe_file;
 
-      /*!
-       * \brief Default Constructor
-       */
-      AMD_IA_64_Exception_Table_Entry();
+	    /*!
+	     * \brief Default Constructor
+	     */
+	    amd_ia_64_exception_table_entry();
 
-      /*!
-       * \brief Default Destructor
-       */
-      virtual ~AMD_IA_64_Exception_Table_Entry(){}
+	    /*!
+	     * \brief Default Destructor
+	     */
+	    virtual ~amd_ia_64_exception_table_entry(){}
 
-      virtual void read_Entry ( wpef_types::PE_File::ptr_t file_ref );
+	    virtual void read_entry ( boost::shared_ptr < pe_file > file_ref );
 
-      /*!
-       * \brief Convert the header data into a string representation
-       * \return String representation of header data
-       */
-      virtual std::string to_String (void);
+	    /*!
+	     * \brief Convert the header data into a string representation
+	     * \return String representation of header data
+	     */
+	    virtual std::string to_string (void);
 
-      /*!
-       * \brief Convert the bit order of the stored data if host and data
-       * endian types differ
-       *
-       * \param host_endian Endian type of host
-       * \param data_endian Endian type of data
-       */
-      virtual void convert ();
+	    /*!
+	     * \brief Convert the bit order of the stored data if host and data
+	     * endian types differ
+	     *
+	     * \param host_endian Endian type of host
+	     * \param data_endian Endian type of data
+	     */
+	    virtual void convert ();
 
-    private:
+	  private:
 
-      boost::uint32_t m_begin_address;
+	    boost::uint32_t m_begin_address;
 
-      boost::uint32_t m_end_address;
+	    boost::uint32_t m_end_address;
 
-      boost::uint32_t m_unwind_information;
-    };
+	    boost::uint32_t m_unwind_information;
+	  };
 
 	} // namespace windows_pe
       } // namespace file_readers

@@ -22,8 +22,8 @@
 #ifndef REVERSE_COMPONENTS_INPUT_GRNN_CONFIGURATION_HPP_INCLUDED
 #define REVERSE_COMPONENTS_INPUT_GRNN_CONFIGURATION_HPP_INCLUDED
 
-#include <reverse/errors/Internal_Exception.h>
-#include <reverse/components/input/grnn/Training_Data.h>
+#include <reverse/errors/internal_exception.hpp>
+#include <reverse/components/input/grnn/training_data.hpp>
 
 #include <boost/cstdint.hpp>
 #include <boost/enable_shared_from_this.hpp>
@@ -36,138 +36,128 @@ namespace reverse {
     namespace input {
       namespace grnn {
     
-	template <typename Data_Type>
-	class Configuration : public boost::enable_shared_from_this< Configuration<Data_Type> >
+	template <typename data_type>
+	class configuration : public boost::enable_shared_from_this< configuration<data_type> >
 	{
 	public:
 	  
-	Configuration ( bool default_value = true )
+	  configuration ( bool default_value = true )
 	  {
 	  
 #ifdef LIBREVERSE_DEBUG
-	    Trace::write_Trace ( TraceArea::GRNN_DATA,
-				 TraceLevel::DETAIL,
+	    trace::write_trace ( trace_area::grnn_data,
+				 trace_level::detail,
 				 "Entering Configuration constructor" );
 #endif /* LIBREVERSE_DEBUG */
 	  
 	    for ( boost::uint32_t i = 0;
-		  i < Data_Type::ATTRIBUTE_COUNT;
+		  i < data_type::attribute_count;
 		  ++i )
 	      {
 		m_attributes[i] = default_value;
 	      }
 	  
 #ifdef LIBREVERSE_DEBUG
-	    Trace::write_Trace ( TraceArea::GRNN_DATA,
-				 TraceLevel::DETAIL,
+	    trace::write_trace ( trace_area::grnn_data,
+				 trace_level::detail,
 				 "Exiting Configuration constructor" );
 #endif /* LIBREVERSE_DEBUG */
 	  
 	  }
 
-	Configuration ( const Configuration& rhs )
-	  : boost::enable_shared_from_this< Configuration<Data_Type> > ( rhs ),
-	  m_attributes ( rhs.m_attributes )
-	    {
+	  configuration ( const configuration& rhs )
+	    : boost::enable_shared_from_this< configuration<data_type> > ( rhs ),
+	      m_attributes ( rhs.m_attributes )
+	  {
 #ifdef LIBREVERSE_DEBUG
-	      Trace::write_Trace ( TraceArea::GRNN_DATA,
-				   TraceLevel::DETAIL,
-				   "Inside Configuration copy constructor" );
+	    trace::write_trace ( trace_area::grnn_data,
+				 trace_level::detail,
+				 "Inside Configuration copy constructor" );
 #endif /* LIBREVERSE_DEBUG */
-	    }
+	  }
 
         
-	void set_Attribute ( boost::uint32_t index, bool value )
-	{
-
-#ifdef LIBREVERSE_DEBUG
-	  Trace::write_Trace ( TraceArea::GRNN_DATA,
-			       TraceLevel::DETAIL,
-			       "Entering Configuration::set_Attribute" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-	  if ( index > m_attributes.size() )
-	    {
-	      throw errors::Internal_Exception ( errors::Internal_Exception::INVALID_INDEX );
-	    }
-
-	  m_attributes[index] = value;
-
-
-#ifdef LIBREVERSE_DEBUG
-	  Trace::write_Trace ( TraceArea::GRNN_DATA,
-			       TraceLevel::DETAIL,
-			       "Exiting Configuration::set_Attribute" );
-#endif /* LIBREVERSE_DEBUG */
-
-	}
-
-
-	bool get_Attribute ( boost::uint32_t index )
-	{
-
-#ifdef LIBREVERSE_DEBUG
-	  Trace::write_Trace ( TraceArea::GRNN_DATA,
-			       TraceLevel::DETAIL,
-			       "Entering Configuration::get_Attribute" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-	  if ( index > m_attributes.size() )
-	    {
-	      throw errors::Internal_Exception ( errors::Internal_Exception::INVALID_INDEX );
-	    }
-
-
-#ifdef LIBREVERSE_DEBUG
-	  Trace::write_Trace ( TraceArea::GRNN_DATA,
-			       TraceLevel::DETAIL,
-			       "Exiting Configuration::set_Attribute" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-	  return m_attributes[index];
-	}
-
-
-	std::string to_String (void)
+	  void set_attribute ( boost::uint32_t index, bool value )
 	  {
 
 #ifdef LIBREVERSE_DEBUG
-	    Trace::write_Trace ( TraceArea::GRNN_DATA,
-				 TraceLevel::DETAIL,
+	    trace::write_trace ( trace_area::grnn_data,
+				 trace_level::detail,
+				 "Entering Configuration::set_Attribute" );
+#endif /* LIBREVERSE_DEBUG */
+
+	    if ( index > m_attributes.size() )
+	      {
+		throw errors::internal_exception ( errors::internal_exception::invalid_index );
+	      }
+
+	    m_attributes[index] = value;
+
+#ifdef LIBREVERSE_DEBUG
+	    trace::write_trace ( trace_area::grnn_data,
+				 trace_level::detail,
+				 "Exiting Configuration::set_Attribute" );
+#endif /* LIBREVERSE_DEBUG */
+
+	  }
+
+	  bool get_attribute ( boost::uint32_t index )
+	  {
+
+#ifdef LIBREVERSE_DEBUG
+	    trace::write_trace ( trace_area::grnn_data,
+				 trace_level::detail,
+				 "Entering Configuration::get_Attribute" );
+#endif /* LIBREVERSE_DEBUG */
+
+	    if ( index > m_attributes.size() )
+	      {
+		throw errors::internal_exception ( errors::internal_exception::invalid_index );
+	      }
+
+#ifdef LIBREVERSE_DEBUG
+	    trace::write_trace ( trace_area::grnn_data,
+				 trace_level::detail,
+				 "Exiting Configuration::set_Attribute" );
+#endif /* LIBREVERSE_DEBUG */
+
+	    return m_attributes[index];
+	  }
+
+
+	  std::string to_string (void)
+	  {
+
+#ifdef LIBREVERSE_DEBUG
+	    trace::write_trace ( trace_area::grnn_data,
+				 trace_level::detail,
 				 "Entering Configuration::to_String" );
 #endif /* LIBREVERSE_DEBUG */
 
 	    std::stringstream output;
-	    output << "---- Configuration ----" << std::endl;
+	    output << "---- configuration ----" << std::endl;
 	    output << "    ";
-	    output << Training_Data<Data_Type>::get_Attribute_String_List ( this->shared_from_this() );
-
+	    output << training_data<data_type>::get_attribute_string_list ( this->shared_from_this() );
 
 #ifdef LIBREVERSE_DEBUG
-	    Trace::write_Trace ( TraceArea::GRNN_DATA,
-				 TraceLevel::DETAIL,
+	    trace::write_trace ( trace_area::grnn_data,
+				 trace_level::detail,
 				 "Exiting Configuration::to_String" );
 #endif /* LIBREVERSE_DEBUG */
 
-
 	    return output.str();
 	  }
-
         
-      private:
+	private:
 
-	std::string bool_String ( bool value )
+	  std::string bool_string ( bool value )
 	  {
 
 #ifdef LIBREVERSE_DEBUG
-	    Trace::write_Trace ( TraceArea::GRNN_DATA,
-				 TraceLevel::DETAIL,
+	    trace::write_trace ( trace_area::grnn_data,
+				 trace_level::detail,
 				 "Entering Configuration::bool_String" );
 #endif /* LIBREVERSE_DEBUG */
-
 
 	    std::string result = "";
 
@@ -182,8 +172,8 @@ namespace reverse {
 
 
 #ifdef LIBREVERSE_DEBUG
-	    Trace::write_Trace ( TraceArea::GRNN_DATA,
-				 TraceLevel::DETAIL,
+	    trace::write_trace ( trace_area::grnn_data,
+				 trace_level::detail,
 				 "Exiting Configuration::bool_String" );
 #endif /* LIBREVERSE_DEBUG */
 
@@ -192,8 +182,8 @@ namespace reverse {
 	  }
 
         
-	std::map<boost::uint32_t, bool> m_attributes;
-      };
+	  std::map<boost::uint32_t, bool> m_attributes;
+	};
 
       } // namespace grnn
     } // namespace input

@@ -1,26 +1,26 @@
 /*  PE_Import_Directory.h
 
-   Copyright (C) 2008 Stephen Torri
+    Copyright (C) 2008 Stephen Torri
 
-   This file is part of Libreverse.
+    This file is part of Libreverse.
 
-   Libreverse is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published
-   by the Free Software Foundation; either version 3, or (at your
-   option) any later version.
+    Libreverse is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published
+    by the Free Software Foundation; either version 3, or (at your
+    option) any later version.
 
-   Libreverse is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
+    Libreverse is distributed in the hope that it will be useful, but
+    WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with this program.  If not, see
-   <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see
+    <http://www.gnu.org/licenses/>.
 */
 
-#ifndef IMPORT_DIRECTORY_H_
-#define IMPORT_DIRECTORY_H_
+#ifndef REVERSE_IO_INPUT_FILE_READERS_WINDOWS_PE_PE_IMPORT_DIRECTORY_HPP_INCLUDED
+#define REVERSE_IO_INPUT_FILE_READERS_WINDOWS_PE_PE_IMPORT_DIRECTORY_HPP_INCLUDED
 
 /*
   All comments and hexidecimal values in this header, marked with
@@ -28,103 +28,112 @@
   Common Object File Format - Revision 8, May 16, 2006.
 */
 
+#include <reverse/io/input/file_readers/base_header.hpp>
+
 #include <boost/shared_ptr.hpp>
+
 #include <string>
-#include "io/input/File_Readers/Base_Header.h"
 #include <list>
-#include "PE_Types.h"
 
-namespace libreverse { namespace wpef_module {
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace windows_pe {
 
-    class PE_Import_Directory : public libreverse::header::Base_Header {
-    public:
+	  class pe_import_directory : public io::input::base_header {
+	  public:
+	    
+	    friend class pe_file;
+	    
+	    pe_import_directory ();
 
-        friend class PE_File;
+	    virtual ~pe_import_directory(){}
 
-        PE_Import_Directory ();
+	    /*!
+	     * \brief Return the bit size of this header
+	     * \return Bit size of header
+	     */
+	    virtual boost::uint32_t get_size (void) const;
 
-        virtual ~PE_Import_Directory(){}
+	    /*!
+	     * \brief Convert the header data into a string representation
+	     * \return String representation of header data
+	     */
+	    virtual std::string to_string (void) const;
 
-        /*!
-         * \brief Return the bit size of this header
-         * \return Bit size of header
-         */
-        virtual boost::uint32_t get_size (void) const;
+	    /*!
+	     * \brief Convert the bit order of the stored data
+	     */
+	    virtual void convert ();
 
-        /*!
-         * \brief Convert the header data into a string representation
-         * \return String representation of header data
-         */
-        virtual std::string to_String (void) const;
+	    void set_dll_name ( std::string name );
 
-        /*!
-         * \brief Convert the bit order of the stored data
-         */
-        virtual void convert ();
+	    void add_function_name ( boost::uint16_t hint, std::string name );
 
-        void set_DLL_Name ( std::string name );
+	    void add_ordinal ( boost::uint32_t val );
 
-        void add_Function_Name ( boost::uint16_t hint, std::string name );
+	    boost::uint32_t get_name_rva (void) const;
 
-        void add_Ordinal ( boost::uint32_t val );
+	    boost::uint32_t get_import_lookup_table (void) const;
 
-        boost::uint32_t get_Name_RVA (void) const;
+	    boost::uint32_t get_import_address_table (void) const;
 
-        boost::uint32_t get_Import_Lookup_Table (void) const;
+	    boost::uint32_t get_timestamp (void) const;
 
-        boost::uint32_t get_Import_Address_Table (void) const;
+	    boost::uint32_t get_forwarder_chain (void) const;
 
-        boost::uint32_t get_Timestamp (void) const;
+	    bool const is_null (void) const;
 
-        boost::uint32_t get_Forwarder_Chain (void) const;
+	  private:
 
-        bool const is_Null (void) const;
+	    /*
+	      MS_PE_COFF: The RVA of the import lookup table. This table
+	      contains a name or ordinal for each import. (The name
+	      "Characteristics" is used in Winnt.h, but no longer
+	      describes this field.)
+	    */
+	    boost::uint32_t m_import_lookup_table;
 
-    private:
+	    /*
+	      MS_PE_COFF: The stamp that is set to zero until the image is
+	      bound. After the image is bound, this field is set to the
+	      time/data stamp of the DLL.
+	    */
+	    boost::uint32_t m_timestamp;
 
-        /*
-          MS_PE_COFF: The RVA of the import lookup table. This table
-          contains a name or ordinal for each import. (The name
-          "Characteristics" is used in Winnt.h, but no longer
-          describes this field.)
-        */
-        boost::uint32_t m_import_lookup_table;
+	    /*
+	      MS_PE_COFF: The index of the first forwarder reference.
+	    */
+	    boost::uint32_t m_forwarder_chain;
 
-        /*
-          MS_PE_COFF: The stamp that is set to zero until the image is
-          bound. After the image is bound, this field is set to the
-          time/data stamp of the DLL.
-        */
-        boost::uint32_t m_timestamp;
+	    /*
+	      MS_PE_COFF: The address of an ASCII string that contains the
+	      name of the DLL. This address is relative to the image base.
+	    */
+	    boost::uint32_t m_name_rva;
 
-        /*
-          MS_PE_COFF: The index of the first forwarder reference.
-		*/
-        boost::uint32_t m_forwarder_chain;
+	    /*
+	      MS_PE_COFF: The RVA of the import address table. The
+	      contents of this table are identical to the contents of the
+	      import lookup table until the image is bound.
+	    */
+	    boost::uint32_t m_import_address_table;
 
-        /*
-          MS_PE_COFF: The address of an ASCII string that contains the
-          name of the DLL. This address is relative to the image base.
-        */
-        boost::uint32_t m_name_rva;
+	    std::string m_name;
 
-        /*
-          MS_PE_COFF: The RVA of the import address table. The
-          contents of this table are identical to the contents of the
-          import lookup table until the image is bound.
-        */
-        boost::uint32_t m_import_address_table;
+	    typedef std::list< std::pair<boost::uint16_t,std::string > > dll_list_t;
+	    dll_list_t m_import_dll_list;
 
-        std::string m_name;
+	    typedef std::list<boost::uint32_t> ordinal_list_t;
+	    ordinal_list_t m_ordinal_list;
+	  };
 
-        typedef std::list< std::pair<boost::uint16_t,std::string > > DLL_List_t;
-        DLL_List_t m_import_dll_list;
+ 	} // namespace windows_pe
+      } // namespace file_readers
+    } // namespace input
+  } // namespace io
+} // namespace reverse
 
-        typedef std::list<boost::uint32_t> Ordinal_List_t;
-        Ordinal_List_t m_ordinal_list;
-    };
 
-} /* namespace wpef_module */
-} /* namespace libreverse */
-
-#endif /* IMPORT_DIRECTORY_H_ */
+#endif // ifndef REVERSE_IO_INPUT_FILE_READERS_WINDOWS_PE_PE_IMPORT_DIRECTORY_HPP_INCLUDED

@@ -31,7 +31,7 @@
 #include <map>
 
 namespace reverse {
-  namespace data_container {
+  namespace data_containers {
 
     class memory_map : public boost::enable_shared_from_this<memory_map>
     {
@@ -206,7 +206,7 @@ namespace reverse {
        *
        * \post The present position is set to the new location.
        */
-      boost::int8_t copy ( boost::shared_ptr< const memory_map>& src_ptr,
+      boost::int8_t copy ( boost::shared_ptr< const memory_map> src_ptr,
 			   boost::uint32_t length );
 
       /**
@@ -265,7 +265,7 @@ namespace reverse {
       
     };
 
-  } // namespace data_container
+  } // namespace data_containers
 } // namespace reverse
 
 #endif // #ifndef REVERSE_DATA_CONTAINERS_MEMORY_MAP_HPP_INCLUDED

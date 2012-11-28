@@ -285,7 +285,7 @@ namespace reverse {
             return m_file_img->end();
         }
 
-        data_types::Memory_Map::ptr_t
+      boost::shared_ptr < data_containers::memory_map >
         File::get_Map_Ptr ( void ) const
         {
 

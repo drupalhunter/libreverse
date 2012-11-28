@@ -30,7 +30,6 @@
 #include <fstream>
 
 namespace reverse {
-  namespace trace {
 
     /* Idea taken from http://www.codeproject.com/debug/xytrace.asp
      * (28 Jan 2002 - Xiangyang Liu)
@@ -93,7 +92,6 @@ namespace reverse {
 				std::string message );
     };
 
-  } // namespace trace
 } // namespace reverse
 
 #endif // #ifndef REVERSE_TRACE_HPP_INCLUDED

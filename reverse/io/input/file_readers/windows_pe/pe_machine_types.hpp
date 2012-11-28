@@ -1,26 +1,26 @@
 /*  PE_Machine_Types.h
 
-   Copyright (C) 2008 Stephen Torri
+    Copyright (C) 2008 Stephen Torri
 
-   This file is part of Libreverse.
+    This file is part of Libreverse.
 
-   Libreverse is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published
-   by the Free Software Foundation; either version 3, or (at your
-   option) any later version.
+    Libreverse is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published
+    by the Free Software Foundation; either version 3, or (at your
+    option) any later version.
 
-   Libreverse is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
+    Libreverse is distributed in the hope that it will be useful, but
+    WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with this program.  If not, see
-   <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see
+    <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PE_MACHINE_TYPES_H
-#define PE_MACHINE_TYPES_H
+#ifndef REVERSE_IO_INPUT_FILE_READERS_WINDOWS_PE_PE_MACHINE_TYPES_HPP_INCLUDED
+#define REVERSE_IO_INPUT_FILE_READERS_WINDOWS_PE_PE_MACHINE_TYPES_HPP_INCLUDED
 
 /*
   All comments and hexidecimal values in this header are taken from the
@@ -31,78 +31,87 @@
 #include <string>
 #include <boost/cstdint.hpp>
 
-namespace libreverse { namespace wpef_module {
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace windows_pe {
 
-    class PE_Machine_Types {
-    public:
 
-        enum Values {
+	  class pe_machine_types {
+	  public:
 
-            // 0x0: The contents of this field are assumed to be applicable to
-            // any machine type.
-            IMAGE_FILE_MACHINE_UNKNOWN = 0x0,
+	    enum values {
 
-            // 0x1D3: Matsushita AM33
-            IMAGE_FILE_MACHINE_AM33 = 0x1D3,
+	      // 0x0: the contents of this field are assumed to be applicable to
+	      // any machine type.
+	      image_file_machine_unknown = 0x0,
 
-            // 0x8664: x64
-            IMAGE_FILE_MACHINE_AMD64 = 0x8664,
+	      // 0x1d3: matsushita am33
+	      image_file_machine_am33 = 0x1d3,
+
+	      // 0x8664: x64
+	      image_file_machine_amd64 = 0x8664,
             
-            // 0xebc: EFI byte code
-            IMAGE_FILE_MACHINE_EBC = 0xEBC,
+	      // 0xebc: efi byte code
+	      image_file_machine_ebc = 0xebc,
 
-            // 0x14c: Intel 386 or later processors and compatible processors.
-            IMAGE_FILE_MACHINE_I386 = 0x14C,
+	      // 0x14c: intel 386 or later processors and compatible processors.
+	      image_file_machine_i386 = 0x14c,
 
-            // 0x200: Intel Itanium processor family
-            IMAGE_FILE_MACHINE_IA64 = 0x200,
+	      // 0x200: intel itanium processor family
+	      image_file_machine_ia64 = 0x200,
 
-            // 0x9041: Mitsubishi M32R little endian
-            IMAGE_FILE_MACHINE_M32R = 0x9041,
+	      // 0x9041: mitsubishi m32r little endian
+	      image_file_machine_m32r = 0x9041,
 
-            // 0x266: MIPS16
-            IMAGE_FILE_MACHINE_MIPS16 = 0x266,
+	      // 0x266: mips16
+	      image_file_machine_mips16 = 0x266,
 
-            // 0x366: MIPS with FPU
-            IMAGE_FILE_MACHINE_MIPSFPU = 0x366,
+	      // 0x366: mips with fpu
+	      image_file_machine_mipsfpu = 0x366,
 
-            // 0x466: MIPS16 with FPU
-            IMAGE_FILE_MACHINE_MIPSFPU16 = 0x466,
+	      // 0x466: mips16 with fpu
+	      image_file_machine_mipsfpu16 = 0x466,
 
-            // 0x1f0: Power PC little endian
-            IMAGE_FILE_MACHINE_POWERPC = 0x1F0,
+	      // 0x1f0: power pc little endian
+	      image_file_machine_powerpc = 0x1f0,
 
-            // 0x1f1: Power PC with floating point support
-            IMAGE_FILE_MACHINE_POWERPCFP = 0x1F1,
+	      // 0x1f1: power pc with floating point support
+	      image_file_machine_powerpcfp = 0x1f1,
 
-            // 0x166: MIPS little endian
-            IMAGE_FILE_MACHINE_R4000 = 0x166,
+	      // 0x166: mips little endian
+	      image_file_machine_r4000 = 0x166,
 
-            // 0x1a2: Hitachi SH3
-            IMAGE_FILE_MACHINE_SH3 = 0x1A2,
+	      // 0x1a2: hitachi sh3
+	      image_file_machine_sh3 = 0x1a2,
 
-            // 0x1a3: Hitachi SH3 DSP
-            IMAGE_FILE_MACHINE_SH3DSP = 0x1A3,
+	      // 0x1a3: hitachi sh3 dsp
+	      image_file_machine_sh3dsp = 0x1a3,
 
-            // 0x1a6: Hitachi SH4
-            IMAGE_FILE_MACHINE_SH4 = 0x1A6,
+	      // 0x1a6: hitachi sh4
+	      image_file_machine_sh4 = 0x1a6,
 
-            // 0x1a8: Hitachi SH5
-            IMAGE_FILE_MACHINE_SH5 = 0x1A8,
+	      // 0x1a8: hitachi sh5
+	      image_file_machine_sh5 = 0x1a8,
 
-            // 0x1c2: Thumb
-            IMAGE_FILE_MACHINE_THUMB = 0x1C2,
+	      // 0x1c2: thumb
+	      image_file_machine_thumb = 0x1c2,
 
-            // 0x169: MIPS little-endian WCE v2 SV2
-            IMAGE_FILE_MACHINE_WCEMIP = 0x169
-        };
+	      // 0x169: mips little-endian wce v2 sv2
+	      image_file_machine_wcemip = 0x169
+	    };
 
-        static std::string get_String_Name ( boost::uint16_t val );
+	    static std::string get_string_name ( boost::uint16_t val );
 
-        static bool is_Valid_Value ( boost::uint16_t val );
-    };
+	    static bool is_valid_value ( boost::uint16_t val );
+	  };
 
-} /* namespace wpef_module */
-} /* namespace libreverse */
+	} // namespace windows_pe
+      } // namespace file_readers
+    } // namespace input
+  } // namespace io
+} // namespace reverse
 
-#endif /* PE_MACHINE_TYPES_H */
+
+#endif // ifndef REVERSE_IO_INPUT_FILE_READERS_WINDOWS_PE_PE_MACHINE_TYPES_HPP_INCLUDED

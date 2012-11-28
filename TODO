@@ -1,6 +1,8 @@
 
 # NEED TO DO
 ---------------------------------
+- replace C style arrays with boost array
+
 - make container for storing the individual component graphs for each formula file. We need a function that will
   return a map that cannot be changed.
 

@@ -19,99 +19,104 @@
     <http://www.gnu.org/licenses/>.
 */
 
-#include "ARM_POWERPC_SH_Exception_Table_Entry_32.h"
-#include "PE_File.h"
+#include <reverse/io/input/file_readers/windows_pe/arm_powerpc_sh_exception_table_entry_32.hpp>
+#include <reverse/io/input/file_readers/windows_pe/pe_file.hpp>
 
 #include <boost/format.hpp>
 #include <sstream>
 
-#include "Trace.h"
+#include <reverse/trace.hpp>
 
-using namespace libreverse::api;
-using namespace libreverse::trace;
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace windows_pe {
 
-namespace libreverse { namespace wpef_module {
+	  arm_powerpc_sh_exception_table_entry_32::arm_powerpc_sh_exception_table_entry_32 ()
+	    : m_begin_address ( 0 ),
+	      m_prolog_length ( 0 ),
+	      m_function_length ( 0 ),
+	      m_32bit_flag ( false ),
+	      m_exception_flag ( false )
+	  {
+	    trace::write_trace ( trace_area::io,
+				 trace_level::detail,
+				 "Inside ARM_POWERPC_SH_Exception_Table_Entry () constructor" );
+	  }
 
-    ARM_POWERPC_SH_Exception_Table_Entry_32::ARM_POWERPC_SH_Exception_Table_Entry_32 ()
-      : m_begin_address ( 0 ),
-	m_prolog_length ( 0 ),
-	m_function_length ( 0 ),
-	m_32bit_flag ( false ),
-	m_exception_flag ( false )
-    {
-      Trace::write_Trace ( TraceArea::IO,
-			   TraceLevel::DETAIL,
-			   "Inside ARM_POWERPC_SH_Exception_Table_Entry () constructor" );
-    }
+	  void
+	  arm_powerpc_sh_exception_table_entry_32::read_entry ( boost::shared_ptr < pe_file > file_ptr )
+	  {
+	    trace::write_trace ( trace_area::io,
+				 trace_level::detail,
+				 "Entering ARM_POWERPC_SH_Exception_Table_Entry::read_Entry" );
 
-    void
-    ARM_POWERPC_SH_Exception_Table_Entry_32::read_Entry ( wpef_types::PE_File::ptr_t file_ptr )
-    {
-      Trace::write_Trace ( TraceArea::IO,
-			   TraceLevel::DETAIL,
-			   "Entering ARM_POWERPC_SH_Exception_Table_Entry::read_Entry" );
+	    file_ptr->read_arm_powerpc_sh_exception ( this->shared_from_this() );
 
-      file_ptr->read_ARM_POWERPC_SH_Exception ( this->shared_from_this() );
+	    trace::write_trace ( trace_area::io,
+				 trace_level::detail,
+				 "Exiting ARM_POWERPC_SH_Exception_Table_Entry::read_Entry" );
+	  }
 
-      Trace::write_Trace ( TraceArea::IO,
-			   TraceLevel::DETAIL,
-			   "Exiting ARM_POWERPC_SH_Exception_Table_Entry::read_Entry" );
-    }
+	  std::string
+	  arm_powerpc_sh_exception_table_entry_32::to_string (void)
+	  {
+	    trace::write_trace ( trace_area::io,
+				 trace_level::detail,
+				 "Entering ARM_POWERPC_SH_Exception_Table_Entry::to_String" );
 
-    std::string
-    ARM_POWERPC_SH_Exception_Table_Entry_32::to_String (void)
-    {
-      Trace::write_Trace ( TraceArea::IO,
-			   TraceLevel::DETAIL,
-			   "Entering ARM_POWERPC_SH_Exception_Table_Entry::to_String" );
+	    std::stringstream output;
 
-      std::stringstream output;
+	    output << boost::format("   begin address: 0x%|1X|") % m_begin_address
+		   << std::endl
+		   << boost::format("   prolog length: 0x%|1X|") % static_cast<boost::uint16_t>(m_prolog_length)
+		   << std::endl
+		   << boost::format("   function length: 0x%|1X|") % m_function_length
+		   << std::endl
+		   << "  32bit flag: ";
 
-      output << boost::format("   begin address: 0x%|1X|") % m_begin_address
-	     << std::endl
-	     << boost::format("   prolog length: 0x%|1X|") % static_cast<boost::uint16_t>(m_prolog_length)
-	     << std::endl
-	     << boost::format("   function length: 0x%|1X|") % m_function_length
-	     << std::endl
-	     << "  32bit flag: ";
+	    if ( m_32bit_flag )
+	      {
+		output << "TRUE" << std::endl;
+	      }
+	    else
+	      {
+		output << "FALSE" << std::endl;
+	      }
 
-      if ( m_32bit_flag )
-	{
-	  output << "TRUE" << std::endl;
-	}
-      else
-	{
-	  output << "FALSE" << std::endl;
-	}
+	    output << "  Exception flag set: ";
 
-      output << "  Exception flag set: ";
+	    if ( m_exception_flag )
+	      {
+		output << "TRUE" << std::endl;
+	      }
+	    else
+	      {
+		output << "FALSE" << std::endl;
+	      }
 
-      if ( m_exception_flag )
-	{
-	  output << "TRUE" << std::endl;
-	}
-      else
-	{
-	  output << "FALSE" << std::endl;
-	}
+	    trace::write_trace ( trace_area::io,
+				 trace_level::detail,
+				 "Exiting ARM_POWERPC_SH_Exception_Table_Entry::to_String" );
 
-      Trace::write_Trace ( TraceArea::IO,
-			   TraceLevel::DETAIL,
-			   "Exiting ARM_POWERPC_SH_Exception_Table_Entry::to_String" );
+	    return output.str();
+	  }
 
-      return output.str();
-    }
+	  void
+	  arm_powerpc_sh_exception_table_entry_32::convert ()
+	  {
+	    trace::write_trace ( trace_area::io,
+				 trace_level::detail,
+				 "Entering ARM_POWERPC_SH_Exception_Table_Entry::convert" );
+	    /* There is no need to convert a ARM binary exception table
+	       entry since both the ARM (target) and Intel (host running
+	       libreverse) are both little endian */
+	  }
 
-    void
-    ARM_POWERPC_SH_Exception_Table_Entry_32::convert ()
-    {
-      Trace::write_Trace ( TraceArea::IO,
-			   TraceLevel::DETAIL,
-			   "Entering ARM_POWERPC_SH_Exception_Table_Entry::convert" );
-      /* There is no need to convert a ARM binary exception table
-	 entry since both the ARM (target) and Intel (host running
-	 libreverse) are both little endian */
-    }
+  	} // namespace windows_pe
+      } // namespace file_readers
+    } // namespace input
+  } // namespace io
+} // namespace reverse
 
-  } /* namespace wpef_module */
-} /* namespace libreverse */

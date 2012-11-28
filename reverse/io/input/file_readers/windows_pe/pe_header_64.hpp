@@ -1,122 +1,132 @@
 /*  PE_Header_64.h
 
-   Copyright (C) 2008 Stephen Torri
+    Copyright (C) 2008 Stephen Torri
 
-   This file is part of Libreverse.
+    This file is part of Libreverse.
 
-   Libreverse is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published
-   by the Free Software Foundation; either version 3, or (at your
-   option) any later version.
+    Libreverse is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published
+    by the Free Software Foundation; either version 3, or (at your
+    option) any later version.
 
-   Libreverse is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
+    Libreverse is distributed in the hope that it will be useful, but
+    WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with this program.  If not, see
-   <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see
+    <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PE_HEADER_64_H_
-#define PE_HEADER_64_H_
+#ifndef REVERSE_IO_INPUT_FILE_READERS_WINDOWS_PE_PE_HEADER_64_HPP_INCLUDED
+#define REVERSE_IO_INPUT_FILE_READERS_WINDOWS_PE_PE_HEADER_64_HPP_INCLUDED
 
-#include "PE_Types.h"
+#include <reverse/io/input/file_readers/base_header.hpp>
 
-#include "io/input/File_Readers/Base_Header.h"
-#include "io/IO_Types.h"
+#include <boost/shared_ptr.hpp>
 
 #include <string>
 
-namespace libreverse { namespace wpef_module {
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace windows_pe {
 
-    /*!
-     * \class PE_Header_64
-     * \date 2003
-     * \author Stephen Torri
+	  class coff_header;
+	  class pe_optional_header_64;
 
-     * Header variables names taken from
-     * http://www.csn.ul.ie/~caolan/publink/winresdump/winresdump/
-     *        doc/pefile.html
-     * Copyright 1996,1997 Johannes Plachy
-     *
-     * A major thanks to Johannes Plachy for such an excellent
-     * description of the PE format
-     */
-    class PE_Header_64 : public libreverse::header::Base_Header {
-    public:
+	  /*!
+	   * \class PE_Header_64
+	   * \date 2003
+	   * \author Stephen Torri
 
-        friend class PE_File;
+	   * Header variables names taken from
+	   * http://www.csn.ul.ie/~caolan/publink/winresdump/winresdump/
+	   *        doc/pefile.html
+	   * Copyright 1996,1997 Johannes Plachy
+	   *
+	   * A major thanks to Johannes Plachy for such an excellent
+	   * description of the PE format
+	   */
+	  class pe_header_64 : public io::input::base_header {
+	  public:
 
-        /* Functions */
+	    friend class pe_file;
 
-        /*!
-         * \brief Default Constructor
-         */
-        PE_Header_64 ();
+	    /* Functions */
 
-        /*!
-         * \brief Default Destructor
-         */
-        virtual ~PE_Header_64 (){}
+	    /*!
+	     * \brief Default Constructor
+	     */
+	    pe_header_64 ();
 
-        /*!
-         * \brief Return the bit size of this header
-         * \return Bit size of header
-         */
-        virtual boost::uint32_t get_size (void) const;
+	    /*!
+	     * \brief Default Destructor
+	     */
+	    virtual ~pe_header_64 (){}
 
-        /*!
-         * \brief Convert the header data into a string representation
-         * \return String representation of header data
-         */
-        virtual std::string to_String (void);
+	    /*!
+	     * \brief Return the bit size of this header
+	     * \return Bit size of header
+	     */
+	    virtual boost::uint32_t get_size (void) const;
 
-        /*!
-         * \brief Convert the bit order of the stored data if host and data
-         * endian types differ
-         */
-        virtual void convert ();
+	    /*!
+	     * \brief Convert the header data into a string representation
+	     * \return String representation of header data
+	     */
+	    virtual std::string to_string (void);
 
-        bool needs_Convert ();
+	    /*!
+	     * \brief Convert the bit order of the stored data if host and data
+	     * endian types differ
+	     */
+	    virtual void convert ();
 
-        bool is_PE_File (void) const;
+	    bool needs_convert ();
 
-        std::string get_File_Type (void) const;
+	    bool is_pe_file (void) const;
 
-        std::string get_Arch_Type (void) const;
+	    std::string get_file_type (void) const;
 
-        wpef_types::COFF_Header::ptr_t get_COFF_Header (void) const;
+	    std::string get_arch_type (void) const;
 
-        void set_COFF_Header ( wpef_types::COFF_Header::ptr_t c_ptr );
+	    boost::shared_ptr < coff_header > get_coff_header (void) const;
 
-        wpef_types::PE_Optional_Header_64::ptr_t get_Optional_Header (void) const;
+	    void set_coff_header ( boost::shared_ptr < coff_header > c_ptr );
 
-        void set_Optional_Header ( wpef_types::PE_Optional_Header_64::ptr_t o_ptr );
+	    boost::shared_ptr < pe_optional_header_64 > get_optional_header (void) const;
 
-        bool is_Valid () const;
+	    void set_optional_header ( boost::shared_ptr < pe_optional_header_64 > o_ptr );
 
-        boost::uint32_t get_Magic_Number (void) const;
+	    bool is_valid () const;
 
-        static boost::uint16_t const PE_MAGIC_SIGNATURE;
-        static boost::uint16_t const LE_MAGIC_SIGNATURE;
-        static boost::uint16_t const NE_MAGIC_SIGNATURE;
+	    boost::uint32_t get_magic_number (void) const;
 
-    private:
+	    static boost::uint16_t const pe_magic_signature;
+	    static boost::uint16_t const le_magic_signature;
+	    static boost::uint16_t const ne_magic_signature;
 
-        /* Data */
-        boost::uint32_t p_magic;
+	  private:
 
-        /* PE COFF Header */
-        wpef_types::COFF_Header::ptr_t m_coff_hdr_ptr;
+	    /* Data */
+	    boost::uint32_t p_magic;
 
-        /* PE Optional Header */
-        wpef_types::PE_Optional_Header_64::ptr_t m_opt_hdr_ptr;
+	    /* PE COFF Header */
+	    boost::shared_ptr < coff_header > m_coff_hdr_ptr;
 
-    };
+	    /* PE Optional Header */
+	    boost::shared_ptr < pe_optional_header_64 > m_opt_hdr_ptr;
 
-} /* namespace wpef_module */
-} /* namespace libreverse */
+	  };
 
-#endif /* PE_HEADER_64_H_ */
+	} // namespace windows_pe
+      } // namespace file_readers
+    } // namespace input
+  } // namespace io
+} // namespace reverse
+
+
+#endif // ifndef REVERSE_IO_INPUT_FILE_READERS_WINDOWS_PE_PE_HEADER_64_HPP_INCLUDED

@@ -28,60 +28,71 @@
   Common Object File Format - Revision 8, May 16, 2006.
 */
 
-#include <boost/shared_ptr.hpp>
-#include <string>
-#include "PE_Exception_Table_Entry.h"
+#include <reverse/io/input/file_readers/windows_pe/pe_exception_table_entry.hpp>
+
 #include <boost/enable_shared_from_this.hpp>
+#include <boost/shared_ptr.hpp>
 
-namespace libreverse { namespace wpef_module {
+#include <string>
 
-    class PE_File;
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace windows_pe {
 
-    class ARM_POWERPC_SH_Exception_Table_Entry_64 : public PE_Exception_Table_Entry,
-						    public boost::enable_shared_from_this < ARM_POWERPC_SH_Exception_Table_Entry_64 >
-    {
-    public:
+	  class pe_file;
 
-      friend class PE_File;
+	  class arm_powerpc_sh_exception_table_entry_64 : public pe_exception_table_entry,
+							  public boost::enable_shared_from_this < arm_powerpc_sh_exception_table_entry_64 >
+	  {
+	  public:
 
-      /*!
-       * \brief Default Constructor
-       */
-      ARM_POWERPC_SH_Exception_Table_Entry_64();
+	    friend class pe_file;
 
-      /*!
-       * \brief Default Destructor
-       */
-      virtual ~ARM_POWERPC_SH_Exception_Table_Entry_64 (){}
+	    /*!
+	     * \brief Default Constructor
+	     */
+	    arm_powerpc_sh_exception_table_entry_64();
 
-      virtual void read_Entry ( wpef_types::PE_File::ptr_t file_ptr );
+	    /*!
+	     * \brief Default Destructor
+	     */
+	    virtual ~arm_powerpc_sh_exception_table_entry_64 (){}
 
-      /*!
-       * \brief Convert the header data into a string representation
-       * \return String representation of header data
-       */
-      virtual std::string to_String (void);
+	    virtual void read_entry ( boost::shared_ptr < pe_file > file_ptr );
 
-      /*!
-       * \brief Convert the bit order of the stored data if host and data
-       * endian types differ
-       *
-       */
-      virtual void convert ();
+	    /*!
+	     * \brief Convert the header data into a string representation
+	     * \return String representation of header data
+	     */
+	    virtual std::string to_string (void);
 
-    private:
+	    /*!
+	     * \brief Convert the bit order of the stored data if host and data
+	     * endian types differ
+	     *
+	     */
+	    virtual void convert ();
 
-      boost::uint32_t m_begin_address;
+	  private:
 
-      boost::uint8_t m_prolog_length;
+	    boost::uint32_t m_begin_address;
 
-      boost::uint32_t m_function_length;
+	    boost::uint8_t m_prolog_length;
 
-      bool m_32bit_flag;
+	    boost::uint32_t m_function_length;
 
-      bool m_exception_flag;
-    };
-  } /* namespace wpef_module */
-} /* namespace libreverse */
+	    bool m_32bit_flag;
+
+	    bool m_exception_flag;
+	  };
+  
+  	} // namespace windows_pe
+      } // namespace file_readers
+    } // namespace input
+  } // namespace io
+} // namespace reverse
+
 
 #endif /* ARM_POWERPC_SH_EXCEPTION_TABLE_ENTRY_H_ */

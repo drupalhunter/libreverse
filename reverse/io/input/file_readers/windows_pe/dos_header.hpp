@@ -1,200 +1,210 @@
 /*  DOS_Header.h
 
-   Copyright (C) 2008 Stephen Torri
+    Copyright (C) 2008 Stephen Torri
 
-   This file is part of Libreverse.
+    This file is part of Libreverse.
 
-   Libreverse is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published
-   by the Free Software Foundation; either version 3, or (at your
-   option) any later version.
+    Libreverse is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published
+    by the Free Software Foundation; either version 3, or (at your
+    option) any later version.
 
-   Libreverse is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
+    Libreverse is distributed in the hope that it will be useful, but
+    WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with this program.  If not, see
-   <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see
+    <http://www.gnu.org/licenses/>.
 */
 
-#ifndef WPEF_DOS_HEADER_H_
-#define WPEF_DOS_HEADER_H_
+#ifndef REVERSE_IO_INPUT_FILE_READERS_WINDOWS_PE_DOS_HEADER_HPP_INCLUDED
+#define REVERSE_IO_INPUT_FILE_READERS_WINDOWS_PE_DOS_HEADER_HPP_INCLUDED
 
-#include <string>
-#include <vector>
-#include "io/input/File_Readers/Base_Header.h"
-#include "io/IO_Types.h"
-#include "PE_Types.h"
+#include <reverse/io/input/file_readers/base_header.hpp>
+
 #include <boost/shared_ptr.hpp>
 #include <boost/cstdint.hpp>
 
-namespace libreverse { namespace wpef_module {
+#include <string>
+#include <vector>
 
-    /*!
-     * \class DOS_Header
-     * \date 2003
-     * \author Stephen Torri
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace windows_pe {
 
-     * Header variables names taken from
-     * http://www.csn.ul.ie/~caolan/publink/winresdump/winresdump/doc/pefile.html
-     * Copyright 1996,1997 Johannes Plachy
-     *
-     * A major thanks to Johannes Plachy for such an excellent description of the PE format
-     */
-    class DOS_Header : public libreverse::header::Base_Header {
-    public:
+	  class dos_relocation_header;
 
-        friend class PE_File;
+	  /*!
+	   * \class DOS_Header
+	   * \date 2003
+	   * \author Stephen Torri
 
-        static boost::uint8_t const RES_SIZE = 4;
-        static boost::uint8_t const RES2_SIZE = 26;
+	   * Header variables names taken from
+	   * http://www.csn.ul.ie/~caolan/publink/winresdump/winresdump/doc/pefile.html
+	   * Copyright 1996,1997 Johannes Plachy
+	   *
+	   * A major thanks to Johannes Plachy for such an excellent description of the PE format
+	   */
+	  class dos_header : public io::input::base_header {
+	  public:
 
-        /* Functions */
+	    friend class pe_file;
 
-        /*!
-         * \brief Default Constructor
-         */
-        DOS_Header();
+	    static boost::uint8_t const res_size = 4;
+	    static boost::uint8_t const res2_size = 26;
 
-        /*!
-         * \brief Default Destructor
-         */
-        virtual ~DOS_Header(){}
+	    /* Functions */
 
-        /*!
-         * \brief Convert the header data into a string representation
-         * \return String representation of header data
-         */
-        std::string to_String (void);
+	    /*!
+	     * \brief Default Constructor
+	     */
+	    dos_header();
 
-        /*!
-         * \brief Convert the bit order of the stored data
-         */
-        virtual void convert ();
+	    /*!
+	     * \brief Default Destructor
+	     */
+	    virtual ~dos_header(){}
 
-        bool needs_Convert ();
+	    /*!
+	     * \brief Convert the header data into a string representation
+	     * \return String representation of header data
+	     */
+	    std::string to_string (void);
 
-        bool is_DOS_File (void) const;
+	    /*!
+	     * \brief Convert the bit order of the stored data
+	     */
+	    virtual void convert ();
 
-        bool has_PE_Header (void) const;
+	    bool needs_convert ();
 
-        std::string get_File_Type (void) const;
+	    bool is_dos_file (void) const;
 
-        std::string get_Arch_Type (void) const;
+	    bool has_pe_header (void) const;
 
-        /* Returns the relocation information
-           first value: Number of relocations
-           second value: Offset position where relocation entries begin
-        */
-        std::pair<boost::uint16_t,boost::uint16_t> get_Relocation_Info (void) const;
+	    std::string get_file_type (void) const;
 
-        void add_Reloc_Hdr ( wpef_types::DOS_Relocation_Header::ptr_t obj );
+	    std::string get_arch_type (void) const;
 
-        boost::uint32_t get_PE_Offset (void) const;
+	    /* Returns the relocation information
+	       first value: Number of relocations
+	       second value: Offset position where relocation entries begin
+	    */
+ 	    std::pair<boost::uint16_t,boost::uint16_t> get_relocation_info (void) const;
 
-        boost::uint16_t get_Magic_Number (void) const;
+	    void add_reloc_hdr ( boost::shared_ptr < dos_relocation_header > obj );
 
-        boost::uint16_t get_Size_Of_Last_Page (void) const;
+	    boost::uint32_t get_pe_offset (void) const;
 
-        boost::uint16_t get_Page_Total (void) const;
+	    boost::uint16_t get_magic_number (void) const;
 
-        boost::uint16_t get_Number_Of_Relocations (void) const;
+	    boost::uint16_t get_size_of_last_page (void) const;
 
-        boost::uint16_t get_Header_Size (void) const;
+	    boost::uint16_t get_page_total (void) const;
 
-        boost::uint16_t get_Minimum_Alloc (void) const;
+	    boost::uint16_t get_number_of_relocations (void) const;
 
-        boost::uint16_t get_Maximum_Alloc (void) const;
+	    boost::uint16_t get_header_size (void) const;
 
-        boost::uint16_t get_Initial_SS (void) const;
+	    boost::uint16_t get_minimum_alloc (void) const;
 
-        boost::uint16_t get_Initial_SP (void) const;
+	    boost::uint16_t get_maximum_alloc (void) const;
 
-        boost::uint16_t get_Checksum (void) const;
+	    boost::uint16_t get_initial_ss (void) const;
 
-        boost::uint16_t get_IP_Value (void) const;
+	    boost::uint16_t get_initial_sp (void) const;
 
-        boost::uint16_t get_Initial_CS (void) const;
+	    boost::uint16_t get_checksum (void) const;
 
-        boost::uint16_t get_File_Address (void) const;
+	    boost::uint16_t get_ip_value (void) const;
 
-        boost::uint16_t get_Overlay_Number (void) const;
+	    boost::uint16_t get_initial_cs (void) const;
 
-        boost::uint8_t const* get_Reserved_Word (void) const;
+	    boost::uint16_t get_file_address (void) const;
 
-        boost::uint16_t get_Behavior_Bits (void) const;
+	    boost::uint16_t get_overlay_number (void) const;
 
-        boost::uint8_t const* get_Reserved_Word2 (void) const;
+	    boost::uint8_t const* get_reserved_word (void) const;
 
-        boost::uint32_t get_EXE_Header_Address (void) const;
+	    boost::uint16_t get_behavior_bits (void) const;
 
-        static boost::uint16_t const DOS_MAGIC_SIGNATURE;
+	    boost::uint8_t const* get_reserved_word2 (void) const;
 
-    private:
+	    boost::uint32_t get_exe_header_address (void) const;
 
-        /* Data */
+	    static boost::uint16_t const dos_magic_signature;
 
-        /*! \brief  WPEF "magic number".
-         *
-         * The initial bytes mark the file as an object file and provide
-         * machine-indepenedent data with which to decode and interpret the
-         * file's contents.[WPEF Format]
-         */
+	  private:
+
+	    /* Data */
+
+	    /*! \brief  WPEF "magic number".
+	     *
+	     * The initial bytes mark the file as an object file and provide
+	     * machine-indepenedent data with which to decode and interpret the
+	     * file's contents.[WPEF Format]
+	     */
 
 
-        /* Typically these values are 'ZM' or 'MZ' */
-        boost::uint16_t e_magic;
+	    /* Typically these values are 'ZM' or 'MZ' */
+	    boost::uint16_t e_magic;
 
-        // Number of bytes in last 512-byte page of executable
-        boost::uint16_t e_cblp;
+	    // Number of bytes in last 512-byte page of executable
+	    boost::uint16_t e_cblp;
 
-        // Total number of 512-byte pages in executable (includes and
-        // partial last page
-        boost::uint16_t e_cp;
+	    // Total number of 512-byte pages in executable (includes and
+	    // partial last page
+	    boost::uint16_t e_cp;
 
-        // Number of relocation entries
-        boost::uint16_t e_crlc;
+	    // Number of relocation entries
+	    boost::uint16_t e_crlc;
 
-        // Header size in paragraphs
-        boost::uint16_t e_cparhdr;
+	    // Header size in paragraphs
+	    boost::uint16_t e_cparhdr;
 
-        // Minimum paragraphs of memory required to allocate in
-        // addition to the executable's size
-        boost::uint16_t e_minalloc;
+	    // Minimum paragraphs of memory required to allocate in
+	    // addition to the executable's size
+	    boost::uint16_t e_minalloc;
 
-        // Mimum paragraphs of memory required to allocate in addition
-        // to the executable's size
-        boost::uint16_t e_maxalloc;
+	    // Mimum paragraphs of memory required to allocate in addition
+	    // to the executable's size
+	    boost::uint16_t e_maxalloc;
 
-        boost::uint16_t e_ss;            // Initial (relative) SS value
+	    boost::uint16_t e_ss;            // Initial (relative) SS value
 
-        boost::uint16_t e_sp;            // Initial SP value
+	    boost::uint16_t e_sp;            // Initial SP value
 
-        boost::uint16_t e_csum;          // Checksum
+	    boost::uint16_t e_csum;          // Checksum
 
-        boost::uint16_t e_ip;            // Initial IP value
+	    boost::uint16_t e_ip;            // Initial IP value
 
-        boost::uint16_t e_cs;            // Initial (relative) CS value
+	    boost::uint16_t e_cs;            // Initial (relative) CS value
 
-        boost::uint16_t e_lfarlc;        // File address of relocation table
+	    boost::uint16_t e_lfarlc;        // File address of relocation table
 
-        boost::uint16_t e_ovno;          // Overlay number
+	    boost::uint16_t e_ovno;          // Overlay number
 
-        boost::uint8_t e_res[RES_SIZE]; // Reserved words
+	    boost::uint8_t e_res[res_size]; // reserved words
 
-        boost::uint16_t e_behavior_bits;
+	    boost::uint16_t e_behavior_bits;
 
-        boost::uint8_t e_res2[RES2_SIZE]; // Reserved words
+	    boost::uint8_t e_res2[res2_size]; // reserved words
 
-        boost::uint32_t e_lfanew;        // File address of new exe header
+	    boost::uint32_t e_lfanew;        // File address of new exe header
 
-        typedef std::vector< wpef_types::DOS_Relocation_Header::ptr_t > List_t;
-        List_t m_relocs;
-    };
+	    typedef std::vector < boost::shared_ptr < dos_relocation_header > > list_t;
+	    list_t m_relocs;
+	  };
 
-} /* namespace wpef_module */
-} /* namespace libreverse */
+	} // namespace windows_pe
+      } // namespace file_readers
+    } // namespace input
+  } // namespace io
+} // namespace reverse
 
-#endif /* WPEF_DOS_HEADER_H_ */
+
+#endif // ifndef REVERSE_IO_INPUT_FILE_READERS_WINDOWS_PE_DOS_HEADER_HPP_INCLUDED

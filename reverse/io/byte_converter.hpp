@@ -32,15 +32,15 @@ namespace reverse {
      * \date 2003
      * \author Stephen Torri
      */
-    class Byte_Converter
+    class byte_converter
     {
     public:
 
       /*! \brief Big endian type definition */
-      static const bool BIG_ENDIAN_TYPE = true;
+      static const bool big_endian_type = true;
 
       /*! \brief Little endian type definition */
-      static const bool LITTLE_ENDIAN_TYPE = false;
+      static const bool little_endian_type = false;
 
       /*!
        * \brief Convert 16-bit data to correct endian type
@@ -51,8 +51,8 @@ namespace reverse {
 
 
 #ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( trace_area::IO,
-                             trace_level::DETAIL,
+        trace::write_trace ( trace_area::io,
+                             trace_level::detail,
                              "Entering Byte_Converter::convert (uint16)" );
 #endif /* LIBREVERSE_DEBUG */
 
@@ -62,8 +62,8 @@ namespace reverse {
 
 
 #ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( trace_area::IO,
-                             trace_level::DETAIL,
+        trace::write_trace ( trace_area::io,
+                             trace_level::detail,
                              "Exiting Byte_Converter::convert (uint16)" );
 #endif /* LIBREVERSE_DEBUG */
 
@@ -78,8 +78,8 @@ namespace reverse {
 
 
 #ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( trace_area::IO,
-                             trace_level::DETAIL,
+        trace::write_trace ( trace_area::io,
+                             trace_level::detail,
                              "Entering Byte_Converter::convert (uint32)" );
 #endif /* LIBREVERSE_DEBUG */
 
@@ -92,8 +92,8 @@ namespace reverse {
 
 
 #ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( trace_area::IO,
-                             trace_level::DETAIL,
+        trace::write_trace ( trace_area::io,
+                             trace_level::detail,
                              "Exiting Byte_Converter::convert (uint32)" );
 #endif /* LIBREVERSE_DEBUG */
 
@@ -107,8 +107,8 @@ namespace reverse {
       {
 
 #ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( trace_area::IO,
-                             trace_level::DETAIL,
+        trace::write_trace ( trace_area::io,
+                             trace_level::detail,
                              "Entering Byte_Converter::convert (uint64)" );
 #endif /* LIBREVERSE_DEBUG */
 
@@ -126,20 +126,20 @@ namespace reverse {
 
 
 #ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( trace_area::IO,
-                             trace_level::DETAIL,
+        trace::write_trace ( trace_area::io,
+                             trace_level::detail,
                              "Entering Byte_Converter::convert (uint64)" );
 #endif /* LIBREVERSE_DEBUG */
 
 
       }
 
-      template <typename Value_Type>
-      static inline Value_Type check_Convert ( Value_Type val, bool need_convert )
+      template <typename value_type>
+      static inline value_type check_convert ( value_type val, bool need_convert )
       {
 	if ( need_convert )
 	  {
-	    io::Byte_Converter::convert ( val );
+	    io::byte_converter::convert ( val );
 	  }
 
 	return val;

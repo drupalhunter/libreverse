@@ -1,167 +1,175 @@
 /*  PE_Machine_Types.cpp
 
-   Copyright (C) 2008 Stephen Torri
+    Copyright (C) 2008 Stephen Torri
 
-   This file is part of Libreverse.
+    This file is part of Libreverse.
 
-   Libreverse is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published
-   by the Free Software Foundation; either version 3, or (at your
-   option) any later version.
+    Libreverse is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published
+    by the Free Software Foundation; either version 3, or (at your
+    option) any later version.
 
-   Libreverse is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
+    Libreverse is distributed in the hope that it will be useful, but
+    WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with this program.  If not, see
-   <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see
+    <http://www.gnu.org/licenses/>.
 */
 
-#include "PE_Machine_Types.h"
+#include <reverse/io/input/file_readers/windows_pe/pe_machine_types.hpp>
 
-namespace libreverse { namespace wpef_module {
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace windows_pe {
 
-    std::string
-    PE_Machine_Types::get_String_Name ( boost::uint16_t val )
-    {
-        std::string result;
+	  std::string
+	  pe_machine_types::get_string_name ( boost::uint16_t val )
+	  {
+	    std::string result;
 
-        switch ( val )
-            {
-            case IMAGE_FILE_MACHINE_UNKNOWN:
+	    switch ( val )
+	      {
+	      case image_file_machine_unknown:
                 {
-                    result = "PE:Unknown";
-                    break;
+		  result = "pe:unknown";
+		  break;
                 }
-            case IMAGE_FILE_MACHINE_AM33:
+	      case image_file_machine_am33:
                 {
-                    result = "PE:AM33";
-                    break;
+		  result = "pe:am33";
+		  break;
                 }
-            case IMAGE_FILE_MACHINE_AMD64:
+	      case image_file_machine_amd64:
                 {
-                    result = "PE:AMD64";
-                    break;
+		  result = "pe:amd64";
+		  break;
                 }
-            case IMAGE_FILE_MACHINE_EBC:
+	      case image_file_machine_ebc:
                 {
-                    result = "PE:EBC";
-                    break;
+		  result = "pe:ebc";
+		  break;
                 }
-            case IMAGE_FILE_MACHINE_I386:
+	      case image_file_machine_i386:
                 {
-                    result = "PE:i386";
-                    break;
+		  result = "pe:i386";
+		  break;
                 }
-            case IMAGE_FILE_MACHINE_IA64:
+	      case image_file_machine_ia64:
                 {
-                    result = "PE:ia64";
-                    break;
+		  result = "pe:ia64";
+		  break;
                 }
-            case IMAGE_FILE_MACHINE_M32R:
+	      case image_file_machine_m32r:
                 {
-                    result = "PE:M32R";
-                    break;
+		  result = "pe:m32r";
+		  break;
                 }
-            case IMAGE_FILE_MACHINE_MIPS16:
+	      case image_file_machine_mips16:
                 {
-                    result = "PE:MIPS16";
-                    break;
+		  result = "pe:mips16";
+		  break;
                 }
-            case IMAGE_FILE_MACHINE_MIPSFPU:
+	      case image_file_machine_mipsfpu:
                 {
-                    result = "PE:MIPSFPU";
-                    break;
+		  result = "pe:mipsfpu";
+		  break;
                 }
-            case IMAGE_FILE_MACHINE_MIPSFPU16:
+	      case image_file_machine_mipsfpu16:
                 {
-                    result = "PE:MIPSFPU16";
-                    break;
+		  result = "pe:mipsfpu16";
+		  break;
                 }
-            case IMAGE_FILE_MACHINE_POWERPC:
+	      case image_file_machine_powerpc:
                 {
-                    result = "PE:PowerPC";
-                    break;
+		  result = "pe:powerpc";
+		  break;
                 }
-            case IMAGE_FILE_MACHINE_POWERPCFP:
+	      case image_file_machine_powerpcfp:
                 {
-                    result = "PE:PowerPC(FPU)";
-                    break;
+		  result = "pe:powerpc(fpu)";
+		  break;
                 }
-            case IMAGE_FILE_MACHINE_R4000:
+	      case image_file_machine_r4000:
                 {
-                    result = "PE:R4000";
-                    break;
+		  result = "pe:r4000";
+		  break;
                 }
-            case IMAGE_FILE_MACHINE_SH3:
+	      case image_file_machine_sh3:
                 {
-                    result = "PE:SH3";
-                    break;
+		  result = "pe:sh3";
+		  break;
                 }
-            case IMAGE_FILE_MACHINE_SH3DSP:
+	      case image_file_machine_sh3dsp:
                 {
-                    result = "PE:SH3DSP";
-                    break;
+		  result = "pe:sh3dsp";
+		  break;
                 }
-            case IMAGE_FILE_MACHINE_SH4:
+	      case image_file_machine_sh4:
                 {
-                    result = "PE:SH4";
-                    break;
+		  result = "pe:sh4";
+		  break;
                 }
-            case IMAGE_FILE_MACHINE_SH5:
+	      case image_file_machine_sh5:
                 {
-                    result = "PE:SH5";
-                    break;
+		  result = "pe:sh5";
+		  break;
                 }
-            case IMAGE_FILE_MACHINE_THUMB:
+	      case image_file_machine_thumb:
                 {
-                    result = "PE:THUMB";
-                    break;
+		  result = "pe:thumb";
+		  break;
                 }
-            case IMAGE_FILE_MACHINE_WCEMIP:
+	      case image_file_machine_wcemip:
                 {
-                    result = "PE:WCEMIP";
-                    break;
+		  result = "pe:wcemip";
+		  break;
                 }
-            }
+	      }
 
-        return result;
-    }
+	    return result;
+	  }
 
-    bool
-    PE_Machine_Types::is_Valid_Value ( boost::uint16_t val )
-    {
-        bool result = false;
-        switch ( val )
-            {
-            case IMAGE_FILE_MACHINE_UNKNOWN:
-            case IMAGE_FILE_MACHINE_AM33:
-            case IMAGE_FILE_MACHINE_AMD64:
-            case IMAGE_FILE_MACHINE_EBC:
-            case IMAGE_FILE_MACHINE_I386:
-            case IMAGE_FILE_MACHINE_IA64:
-            case IMAGE_FILE_MACHINE_M32R:
-            case IMAGE_FILE_MACHINE_MIPS16:
-            case IMAGE_FILE_MACHINE_MIPSFPU:
-            case IMAGE_FILE_MACHINE_MIPSFPU16:
-            case IMAGE_FILE_MACHINE_POWERPC:
-            case IMAGE_FILE_MACHINE_POWERPCFP:
-            case IMAGE_FILE_MACHINE_R4000:
-            case IMAGE_FILE_MACHINE_SH3:
-            case IMAGE_FILE_MACHINE_SH3DSP:
-            case IMAGE_FILE_MACHINE_SH4:
-            case IMAGE_FILE_MACHINE_SH5:
-            case IMAGE_FILE_MACHINE_THUMB:
-            case IMAGE_FILE_MACHINE_WCEMIP:
+	  bool
+	  pe_machine_types::is_valid_value ( boost::uint16_t val )
+	  {
+	    bool result = false;
+	    switch ( val )
+	      {
+	      case image_file_machine_unknown:
+	      case image_file_machine_am33:
+	      case image_file_machine_amd64:
+	      case image_file_machine_ebc:
+	      case image_file_machine_i386:
+	      case image_file_machine_ia64:
+	      case image_file_machine_m32r:
+	      case image_file_machine_mips16:
+	      case image_file_machine_mipsfpu:
+	      case image_file_machine_mipsfpu16:
+	      case image_file_machine_powerpc:
+	      case image_file_machine_powerpcfp:
+	      case image_file_machine_r4000:
+	      case image_file_machine_sh3:
+	      case image_file_machine_sh3dsp:
+	      case image_file_machine_sh4:
+	      case image_file_machine_sh5:
+	      case image_file_machine_thumb:
+	      case image_file_machine_wcemip:
                 {
-                    result = true;
+		  result = true;
                 }
-            }
+	      }
 
-        return result;
-    }
+	    return result;
+	  }
 
-} /* namespace wpef_module */
-} /* namespace libreverse */
+	} // namespace windows_pe
+      } // namespace file_readers
+    } // namespace input
+  } // namespace io
+} // namespace reverse
+

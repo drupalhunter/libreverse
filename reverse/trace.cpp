@@ -36,7 +36,6 @@
 #endif /* WIN32 */
 
 namespace reverse {
-  namespace trace {
 
     trace_state& trace_state::instance()
     {
@@ -297,6 +296,5 @@ namespace reverse {
     }
 #endif
 
-  } // namespace trace
 } // namespace reverse
 

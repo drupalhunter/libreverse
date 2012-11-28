@@ -65,7 +65,7 @@ namespace reverse {
 
 	    virtual void read_headers ( void );
 
-	    virtual boost::shared_ptr < data_container::memory_map > get_memory_map ( void );
+	    virtual boost::shared_ptr < data_containers::memory_map > get_memory_map ( void );
 
 	    /*!
 	     * \brief Print out the entire file contents

@@ -19,71 +19,69 @@
     <http://www.gnu.org/licenses/>.
 */
 
-#include "GRNN_Data_Entry.h"
-
-#include "Reverse.h"
-#include "io/Preconditions.h"
-
-using namespace libreverse::api;
+#include <reverse/preconditions.hpp>
+#include <reverse/components/input/grnn/grnn_data_entry.hpp>
 
 #ifdef LIBREVERSE_DEBUG
-#include "Trace.h"
+#include <reverse/trace.hpp>
 using namespace libreverse::trace;
 #endif /* LIBREVERSE_DEBUG */
 
-namespace libreverse
-{
-  namespace classifier
-  {
+namespace reverse {
+  namespace components {
+    namespace input {
+      namespace grnn {
 
-    GRNN_Data_Entry::GRNN_Data_Entry ( double sigma, std::string file )
-      : m_sigma ( sigma ),
-	m_file ( file )
-    {
+	grnn_data_entry::grnn_data_entry ( double sigma, std::string file )
+	  : m_sigma ( sigma ),
+	    m_file ( file )
+	{
 
 #ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::GRNN_DATA,
-			   TraceLevel::DETAIL,
-			   "Inside GRNN_Data_Entry constructor" );
+	  Trace::write_Trace ( TraceArea::GRNN_DATA,
+			       TraceLevel::DETAIL,
+			       "Inside GRNN_Data_Entry constructor" );
 #endif /* LIBREVERSE_DEBUG */
 
 
-      io::Preconditions::not_equal ( m_sigma, static_cast<double>(0.0) );
-      io::Preconditions::not_empty ( m_file );
-    }
+	  preconditions::not_equal ( m_sigma, static_cast<double>(0.0) );
+	  preconditions::not_empty ( m_file );
+	}
 
-    double
-    GRNN_Data_Entry::get_Sigma ( void ) const
-    {
+	double
+	grnn_data_entry::get_sigma ( void ) const
+	{
 
 #ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::GRNN_DATA,
-			   TraceLevel::DETAIL,
-			   "Inside GRNN_Data_Entry::get_Sigma" );
+	  Trace::write_Trace ( TraceArea::GRNN_DATA,
+			       TraceLevel::DETAIL,
+			       "Inside GRNN_Data_Entry::get_Sigma" );
 #endif /* LIBREVERSE_DEBUG */
 
 
-      io::Preconditions::not_equal ( m_sigma, static_cast<double>(0.0) );
+	  preconditions::not_equal ( m_sigma, static_cast<double>(0.0) );
 
-      return m_sigma;
-    }
+	  return m_sigma;
+	}
 
-    std::string
-    GRNN_Data_Entry::get_Filename ( void ) const
-    {
+	std::string
+	grnn_data_entry::get_filename ( void ) const
+	{
 
 #ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::GRNN_DATA,
-			   TraceLevel::DETAIL,
-			   "Inside GRNN_Data_Entry::get_Filename" );
+	  Trace::write_Trace ( TraceArea::GRNN_DATA,
+			       TraceLevel::DETAIL,
+			       "Inside GRNN_Data_Entry::get_Filename" );
 #endif /* LIBREVERSE_DEBUG */
 
 
-      io::Preconditions::not_empty ( m_file );
+	  preconditions::not_empty ( m_file );
 
-      return m_file;
-    }
+	  return m_file;
+	}
 
-  } /* namespace classifier */
+      } // namespace grnn
+    } // namespace input
+  } // namespace components
+} // namespace reverse
 
-} /* namespace libreverse */

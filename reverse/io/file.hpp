@@ -22,8 +22,8 @@
 #ifndef REVERSE_IO_FILE_HPP_INCLUDED
 #define REVERSE_IO_FILE_HPP_INCLUDED
 
-#include <reverse/Preconditions.h>
-#include <reverse/data_containers/Memory_Map.h>
+#include <reverse/preconditions.hpp>
+#include <reverse/data_containers/memory_map.hpp>
 
 #include <boost/shared_ptr.hpp>
 #include <boost/format.hpp>
@@ -35,7 +35,7 @@
 namespace reverse {
   namespace io {
 
-    class File_ID;
+    class file_id;
 
     /*!
      * \class File
@@ -43,7 +43,7 @@ namespace reverse {
      * \date 2003
      * \author Stephen Torri
      */
-    class File
+    class file
     {
 
     public:
@@ -56,7 +56,7 @@ namespace reverse {
        * \exception FileNameException The given file name is empty
        * \exception PathNameException The given path name is empty
        */
-      File ( boost::shared_ptr < const File_ID >& filename );
+      file ( boost::shared_ptr < const file_id >& filename );
 
       /*!
        * \brief Basic Constructor
@@ -65,14 +65,14 @@ namespace reverse {
        * \exception FileNameException The given file name is empty
        * \exception PathNameException The given path name is empty
        */
-      File ( boost::shared_ptr < data_container::Memory_Map>& file_img_ptr,
-	     boost::shared_ptr < const File_ID >& filename );
+      file ( boost::shared_ptr < data_containers::memory_map>& file_img_ptr,
+	     boost::shared_ptr < const file_id >& filename );
 
 
       /*!
        * \brief Default destructor
        */
-      ~File ();
+      ~file ();
 
 
       /*!
@@ -80,7 +80,7 @@ namespace reverse {
        *
        * \return Pointer to the File_ID object associated with the target file.
        */
-      boost::shared_ptr < const File_ID> get_ID() const;
+      boost::shared_ptr < const file_id> get_id() const;
 
       /*!
        * \brief Initialize this class and read in file image
@@ -99,19 +99,19 @@ namespace reverse {
       {
 
 #ifdef LIBREVERSE_DEBUG
-	Trace::write_Trace ( TraceArea::IO,
-			     trace_level::DETAIL,
+	trace::write_trace ( trace_area::io,
+			     trace_level::detail,
 			     "Entering File::seek" );
 #endif /* LIBREVERSE_DEBUG */
 
-	reverse::Preconditions::is_set ( m_file_img );
+	reverse::preconditions::is_set ( m_file_img );
 
-	m_file_img->index_Seek ( offset );
+	m_file_img->index_seek ( offset );
 
 
 #ifdef LIBREVERSE_DEBUG
-	Trace::write_Trace ( TraceArea::IO,
-			     trace_level::DETAIL,
+	trace::write_trace ( trace_area::io,
+			     trace_level::detail,
 			     "Exiting File::seek" );
 #endif /* LIBREVERSE_DEBUG */
 
@@ -122,8 +122,8 @@ namespace reverse {
        *
        * \param value Pointer to where data read from the target file will be stored
        */
-      template <typename Value_Type>
-      void read ( Value_Type* value )
+      template <typename value_type>
+      void read ( value_type* value )
       {
 
 #ifdef LIBREVERSE_DEBUG
@@ -138,10 +138,10 @@ namespace reverse {
 					  % sizeof ( Value_Type ) ) );
 #endif /* LIBREVERSE_DEBUG */
 
-	reverse::Preconditions::is_set ( m_file_img );
+	reverse::preconditions::is_set ( m_file_img );
 
 	m_file_img->read ( reinterpret_cast<boost::uint8_t*> ( value ),
-			   sizeof ( Value_Type ) );
+			   sizeof ( value_type ) );
 
 
 #ifdef LIBREVERSE_DEBUG
@@ -158,8 +158,8 @@ namespace reverse {
        * \param offset Unsigned integer value representing the desired offset
        * \param value Pointer to where data read from the target file will be stored
        */
-      template < typename Value_Type, typename Offset_Type >
-      void read ( Value_Type* value, Offset_Type offset )
+      template < typename value_type, typename offset_type >
+      void read ( value_type* value, offset_type offset )
       {
 
 #ifdef LIBREVERSE_DEBUG
@@ -174,8 +174,8 @@ namespace reverse {
 
 
 #ifdef LIBREVERSE_DEBUG
-	Trace::write_Trace ( trace_area::IO,
-			     trace_level::DETAIL,
+	trace::write_trace ( trace_area::io,
+			     trace_level::detail,
 			     "Exiting File::read (Value_Type, Offset_Type)" );
 #endif /* LIBREVERSE_DEBUG */
 
@@ -188,12 +188,12 @@ namespace reverse {
        * \param offset Unsigned integer value representing the desired offset
        * \param len Number of times the Value_Type will be read from the target file
        */
-      template < typename Value_Type,
-		 typename Offset_Type,
-		 typename Length_Type >
-      void read ( Value_Type* value,
-		  Offset_Type offset,
-		  Length_Type len )
+      template < typename value_type,
+		 typename offset_type,
+		 typename length_type >
+      void read ( value_type* value,
+		  offset_type offset,
+		  length_type len )
       {
 
 #ifdef LIBREVERSE_DEBUG
@@ -202,47 +202,47 @@ namespace reverse {
 			     "Entering File::read (Value_Type, Offset_Type, Length_Type)" );
 #endif /* LIBREVERSE_DEBUG */
 
-	reverse::Preconditions::is_set ( m_file_img );
+	reverse::preconditions::is_set ( m_file_img );
 
 	this->seek ( offset );
 
 	m_file_img->read ( static_cast<boost::uint8_t*> ( value ), len );
 
 #ifdef LIBREVERSE_DEBUG
-	Trace::write_Trace ( trace_area::IO,
-			     trace_level::DETAIL,
+	trace::write_trace ( trace_area::io,
+			     trace_level::detail,
 			     "Exiting File::read (Value_Type, Offset_Type, Length_Type)" );
 #endif /* LIBREVERSE_DEBUG */
 
       }
 
-      reverse::data_container::Memory_Map::const_iterator begin ( void ) const;
+      reverse::data_containers::memory_map::const_iterator begin ( void ) const;
 
-      reverse::data_container::Memory_Map::const_iterator end ( void ) const;
+      reverse::data_containers::memory_map::const_iterator end ( void ) const;
 
-      boost::shared_ptr < const reverse::data_container::Memory_Map> get_Map_Ptr ( void ) const;
+      boost::shared_ptr < reverse::data_containers::memory_map> get_map_ptr ( void ) const;
 
       boost::uint32_t size ( void ) const;
 
-      std::string read_UTF8_String ( boost::uint32_t length );
+      std::string read_utf8_string ( boost::uint32_t length );
 
-      std::string read_UTF16_String ( boost::uint32_t length );
+      std::string read_utf16_string ( boost::uint32_t length );
 
-      std::vector<UChar> read_8bit_Java_Unicode_String ( boost::uint32_t length );
+      std::vector<UChar> read_8bit_java_unicode_string ( boost::uint32_t length );
 
-      std::string read_String ( boost::uint32_t length );
+      std::string read_string ( boost::uint32_t length );
 
-      std::string read_Null_Terminated_String ( void );
+      std::string read_null_terminated_string ( void );
 
     protected:
 
       /* ---- VARIABLES ---- */
 
       /*! \brief File identification */
-      boost::shared_ptr < const File_ID> m_file_id;
+      boost::shared_ptr < const file_id > m_file_id;
 
       /*! \brief File image */
-      boost::shared_ptr < reverse::data_container::Memory_Map > m_file_img;
+      boost::shared_ptr < reverse::data_containers::memory_map > m_file_img;
 
     private:
 
@@ -256,7 +256,7 @@ namespace reverse {
       UConverter* m_conv;
     };
 
-    } // namespace io
+  } // namespace io
 } // namespace reverse
 
 #endif // #ifndef REVERSE_IO_FILE_HPP_INCLUDED

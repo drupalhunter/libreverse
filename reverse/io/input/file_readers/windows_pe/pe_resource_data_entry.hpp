@@ -1,26 +1,26 @@
 /*  PE_Resource_Data_Entry.h
 
-   Copyright (C) 2008 Stephen Torri
+    Copyright (C) 2008 Stephen Torri
 
-   This file is part of Libreverse.
+    This file is part of Libreverse.
 
-   Libreverse is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published
-   by the Free Software Foundation; either version 3, or (at your
-   option) any later version.
+    Libreverse is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published
+    by the Free Software Foundation; either version 3, or (at your
+    option) any later version.
 
-   Libreverse is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
+    Libreverse is distributed in the hope that it will be useful, but
+    WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with this program.  If not, see
-   <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see
+    <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PE_RESOURCE_DATA_ENTRY_H_
-#define PE_RESOURCE_DATA_ENTRY_H_
+#ifndef REVERSE_IO_INPUT_FILE_READERS_WINDOWS_PE_PE_RESOURCE_DATA_ENTRY_HPP_INCLUDED
+#define REVERSE_IO_INPUT_FILE_READERS_WINDOWS_PE_PE_RESOURCE_DATA_ENTRY_HPP_INCLUDED
 
 /*
   All comments and hexidecimal values in this header, marked with
@@ -28,58 +28,67 @@
   Common Object File Format - Revision 8, May 16, 2006.
 */
 
+#include <reverse/io/input/file_readers/base_header.hpp>
+
 #include <boost/shared_ptr.hpp>
+
 #include <string>
-#include "io/input/File_Readers/Base_Header.h"
-#include "PE_Types.h"
 
-namespace libreverse { namespace wpef_module {
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace windows_pe {
 
-    class PE_Resource_Data_Entry : public libreverse::header::Base_Header {
-    public:
+	  class pe_resource_data_entry : public io::input::base_header {
+	  public:
 
-        friend class PE_File;
+	    friend class pe_file;
 
-        /*!
-         * \brief Default Constructor
-         */
-        PE_Resource_Data_Entry ( boost::uint8_t level );
+	    /*!
+	     * \brief default constructor
+	     */
+	    pe_resource_data_entry ( boost::uint8_t level );
 
-        /*!
-         * \brief Default Destructor
-         */
-        virtual ~PE_Resource_Data_Entry(){}
+	    /*!
+	     * \brief default destructor
+	     */
+	    virtual ~pe_resource_data_entry(){}
 
-        /*!
-         * \brief Convert the header data into a string representation
-         * \return String representation of header data
-         */
-        virtual std::string to_String (void);
+	    /*!
+	     * \brief convert the header data into a string representation
+	     * \return string representation of header data
+	     */
+	    virtual std::string to_string (void);
 
-        /*!
-         * \brief Convert the bit order of the stored data
-         */
-        virtual void convert ();
+	    /*!
+	     * \brief convert the bit order of the stored data
+	     */
+	    virtual void convert ();
 
-        virtual boost::uint32_t get_size (void) const;
+	    virtual boost::uint32_t get_size (void) const;
 
-        std::string data_To_String (void) const;
+	    std::string data_to_string (void) const;
 
-    private:
+	  private:
 
-        boost::uint32_t m_data_rva;
+	    boost::uint32_t m_data_rva;
 
-        boost::uint32_t m_size;
+	    boost::uint32_t m_size;
 
-        boost::uint32_t m_codepage;
+	    boost::uint32_t m_codepage;
 
-        boost::uint32_t m_reserved;
+	    boost::uint32_t m_reserved;
 
-        boost::uint8_t m_level;
+	    boost::uint8_t m_level;
 
-        std::string m_data_string;
-	};
-} /* namespace wpef_module */
-} /* namespace libreverse */
+	    std::string m_data_string;
+	  };
 
-#endif /* PE_RESOURCE_DATA_ENTRY_H_ */
+	} // namespace windows_pe
+      } // namespace file_readers
+    } // namespace input
+  } // namespace io
+} // namespace reverse
+
+#endif // ifndef REVERSE_IO_INPUT_FILE_READERS_WINDOWS_PE_PE_RESOURCE_DATA_ENTRY_HPP_INCLUDED 

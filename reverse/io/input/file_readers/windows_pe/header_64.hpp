@@ -1,201 +1,224 @@
 /*  Header_64.h
 
-   Copyright (C) 2008 Stephen Torri
+    Copyright (C) 2008 Stephen Torri
 
-   This file is part of Libreverse.
+    This file is part of Libreverse.
 
-   Libreverse is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published
-   by the Free Software Foundation; either version 3, or (at your
-   option) any later version.
+    Libreverse is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published
+    by the Free Software Foundation; either version 3, or (at your
+    option) any later version.
 
-   Libreverse is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
+    Libreverse is distributed in the hope that it will be useful, but
+    WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with this program.  If not, see
-   <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see
+    <http://www.gnu.org/licenses/>.
 */
 
-#ifndef HEADER_64_H_
-#define HEADER_64_H_
+#ifndef REVERSE_IO_INPUT_FILE_READERS_WINDOWS_PE_HEADER_64_HPP_INCLUDED
+#define REVERSE_IO_INPUT_FILE_READERS_WINDOWS_PE_HEADER_64_HPP_INCLUDED
+
+#include <reverse/io/input/file_readers/base_header.hpp>
 
 #include <boost/shared_ptr.hpp>
+
+#include <map>
 #include <string>
-#include "io/input/File_Readers/Base_Header.h"
-#include "io/IO_Types.h"
-#include "PE_Types.h"
+#include <vector>
 
-namespace libreverse { namespace wpef_module {
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace windows_pe {
 
+	  class dos_header;
+	  class pe_debug_directory;
+	  class pe_exception_table_entry;
+	  class pe_export_directory;
+	  class pe_header_64;
+	  class pe_import_directory;
+	  class pe_load_config_directory;
+	  class pe_resource_directory;
+	  class pe_section_header;
    
-    /*!
-     * \class Header
-     * \date 2003
-     * \author Stephen Torri
-     */
-    class Header_64 : public header::Base_Header {
+	  /*!
+	   * \class Header
+	   * \date 2003
+	   * \author Stephen Torri
+	   */
+	  class header_64 : public io::input::base_header {
 
-    public:
+	  public:
+
+	    typedef std::map < std::string, boost::shared_ptr < const pe_section_header > > section_header_map_t;
+	    typedef std::vector < boost::shared_ptr < pe_import_directory > > import_directory_list_t;
+	    typedef std::vector < boost::shared_ptr < const pe_exception_table_entry > > exception_table_list_t;
 
 
-        /*!
-         * \brief Default Constructor
-         */
-        Header_64 ();
+	    /*!
+	     * \brief Default Constructor
+	     */
+	    header_64 ();
 
-        /*!
-         * \brief Default Destructor
-         */
-        virtual ~Header_64 ();
+	    /*!
+	     * \brief Default Destructor
+	     */
+	    virtual ~header_64 ();
 
-        /*!
-         * \brief Change the bit-ordering if required
-         */
-        virtual void convert ();
+	    /*!
+	     * \brief Change the bit-ordering if required
+	     */
+	    virtual void convert ();
 
-        /*!
-         * \brief String representation of WPEF Header
-         * \return String output of header
-         */
-        std::string to_String (void);
+	    /*!
+	     * \brief String representation of WPEF Header
+	     * \return String output of header
+	     */
+	    std::string to_string (void);
 
-        /*!
-         * \brief Get the human readable strings from the header
-         * \return String output of header
-         */
-        void get_Text_String ( io_types::Text_Data::data_type* output );
+	    /*!
+	     * \brief Get the human readable strings from the header
+	     * \return String output of header
+	     */
+	    void get_text_string ( std::vector < std::string >& output );
 
-        /*-----------------------------*/
-        /*        DOS HEADER           */
-        /*-----------------------------*/
-        wpef_types::DOS_Header::ptr_t get_DOS_Header (void) const;
+	    /*-----------------------------*/
+	    /*        DOS HEADER           */
+	    /*-----------------------------*/
+	    boost::shared_ptr < dos_header > get_dos_header (void) const;
 
-        void set_DOS_Header ( wpef_types::DOS_Header::ptr_t hdr );
+	    void set_dos_header ( boost::shared_ptr < dos_header > hdr );
 
-        /*-----------------------------*/
-        /*        PE HEADER            */
-        /*-----------------------------*/
+	    /*-----------------------------*/
+	    /*        PE HEADER            */
+	    /*-----------------------------*/
 
-        wpef_types::PE_Header_64::ptr_t get_PE_Header (void) const;
+	    boost::shared_ptr < pe_header_64 > get_pe_header (void) const;
 
-        void set_PE_Header ( wpef_types::PE_Header_64::ptr_t hdr );
+	    void set_pe_header ( boost::shared_ptr < pe_header_64 > hdr );
 
-        /*-----------------------------*/
-        /*       SECTION HEADER        */
-        /*-----------------------------*/
+	    /*-----------------------------*/
+	    /*       SECTION HEADER        */
+	    /*-----------------------------*/
 
-        /*
-         * Return the iterator pointing to the PE Section Header. If
-         * an incorrect name has been given the iterator will point to
-         * the end of the PE Section Header list.
-         */
-        wpef_types::Header_64::Section_Header_Map_t::const_iterator get_PE_Section_Header ( std::string name ) const;
+	    /*
+	     * Return the iterator pointing to the PE Section Header. If
+	     * an incorrect name has been given the iterator will point to
+	     * the end of the PE Section Header list.
+	     */
+	    header_64::section_header_map_t::const_iterator get_pe_section_header ( std::string name ) const;
 
-        boost::uint32_t get_PE_Section_Header_Count (void) const;
+	    boost::uint32_t get_pe_section_header_count (void) const;
 
-        void set_PE_Section_Header ( wpef_types::PE_Section_Header::ptr_t hdr );
+	    void set_pe_section_header ( boost::shared_ptr < pe_section_header > hdr );
 
-        wpef_types::Header_64::Section_Header_Map_t::const_iterator get_PE_Section_Header_List_Begin () const;
+	    header_64::section_header_map_t::const_iterator get_pe_section_header_list_begin () const;
 
-        wpef_types::Header_64::Section_Header_Map_t::const_iterator get_PE_Section_Header_List_End () const;
+	    header_64::section_header_map_t::const_iterator get_pe_section_header_list_end () const;
 
-        /*-----------------------------*/
-        /*      RESOURCE DIRECTORY     */
-        /*-----------------------------*/
+	    /*-----------------------------*/
+	    /*      RESOURCE DIRECTORY     */
+	    /*-----------------------------*/
 
-	    void set_Resource_Directory ( wpef_types::PE_Resource_Directory::ptr_t r_ptr );
+	    void set_resource_directory ( boost::shared_ptr < pe_resource_directory > r_ptr );
 
-        /*-----------------------------*/
-        /*      EXPORT DIRECTORY       */
-        /*-----------------------------*/
-	    void set_Export_Directory ( wpef_types::PE_Export_Directory::ptr_t exp_ptr );
+	    /*-----------------------------*/
+	    /*      EXPORT DIRECTORY       */
+	    /*-----------------------------*/
+	    void set_export_directory ( boost::shared_ptr < pe_export_directory > exp_ptr );
 
-        wpef_types::PE_Export_Directory::ptr_t get_Export_Directory () const;
+	    boost::shared_ptr < pe_export_directory > get_export_directory () const;
 
-        /*-----------------------------*/
-        /*      IMPORT DIRECTORY       */
-        /*-----------------------------*/
+	    /*-----------------------------*/
+	    /*      IMPORT DIRECTORY       */
+	    /*-----------------------------*/
 
-	    void add_Import_Directory ( wpef_types::PE_Import_Directory::ptr_t exp_ptr );
+	    void add_import_directory ( boost::shared_ptr < pe_import_directory > exp_ptr );
 
-        boost::uint32_t get_PE_Import_Directory_Count (void) const;
+	    boost::uint32_t get_pe_import_directory_count (void) const;
 
-        wpef_types::Header_64::Import_Directory_List_t::iterator get_PE_Import_Directory_List_Begin ();
+	    header_64::import_directory_list_t::iterator get_pe_import_directory_list_begin ();
 
-        wpef_types::Header_64::Import_Directory_List_t::iterator get_PE_Import_Directory_List_End ();
+	    header_64::import_directory_list_t::iterator get_pe_import_directory_list_end ();
 
-        wpef_types::Header_64::Import_Directory_List_t::const_iterator get_PE_Import_Directory_List_Begin () const;
+	    header_64::import_directory_list_t::const_iterator get_pe_import_directory_list_begin () const;
 
-        wpef_types::Header_64::Import_Directory_List_t::const_iterator get_PE_Import_Directory_List_End () const;
+	    header_64::import_directory_list_t::const_iterator get_pe_import_directory_list_end () const;
 
-        /*-----------------------------*/
-        /*       DEBUG DIRECTORY       */
-        /*-----------------------------*/
+	    /*-----------------------------*/
+	    /*       DEBUG DIRECTORY       */
+	    /*-----------------------------*/
 
-	    void set_Debug_Directory ( wpef_types::PE_Debug_Directory::ptr_t r_ptr );
+	    void set_debug_directory ( boost::shared_ptr < pe_debug_directory > r_ptr );
 
-	    wpef_types::PE_Debug_Directory::ptr_t get_Debug_Directory ( void ) const;
+	    boost::shared_ptr < pe_debug_directory > get_debug_directory ( void ) const;
 
-        /*-----------------------------*/
-        /*    LOAD CONFIG DIRECTORY    */
-        /*-----------------------------*/
+	    /*-----------------------------*/
+	    /*    LOAD CONFIG DIRECTORY    */
+	    /*-----------------------------*/
 
-	    void set_Load_Config_Directory ( wpef_types::PE_Load_Config_Directory::ptr_t r_ptr );
+	    void set_load_config_directory ( boost::shared_ptr < pe_load_config_directory > r_ptr );
 
-        wpef_types::PE_Resource_Directory::ptr_t get_PE_Resource_Directory ( void );
+	    boost::shared_ptr < pe_resource_directory > get_pe_resource_directory ( void );
 
-        /*-----------------------------*/
-        /*    EXCEPTION TABLE LIST     */
-        /*-----------------------------*/
-	    void add_Exception_Table_Entry ( wpef_types::PE_Exception_Table_Entry::ptr_t exp_ptr );
+	    /*-----------------------------*/
+	    /*    EXCEPTION TABLE LIST     */
+	    /*-----------------------------*/
+	    void add_exception_table_entry ( boost::shared_ptr < pe_exception_table_entry > exp_ptr );
 
-        boost::uint32_t get_PE_Exception_Table_Entry_Count (void) const;
+	    boost::uint32_t get_pe_exception_table_entry_count (void) const;
 
-        wpef_types::Header_64::Exception_Table_List_t::iterator get_PE_Exception_Table_List_Begin ();
+	    header_64::exception_table_list_t::iterator get_pe_exception_table_list_begin ();
 
-        wpef_types::Header_64::Exception_Table_List_t::iterator get_PE_Exception_Table_List_End ();
+	    header_64::exception_table_list_t::iterator get_pe_exception_table_list_end ();
 
-        wpef_types::Header_64::Exception_Table_List_t::const_iterator get_PE_Exception_Table_List_Begin () const;
+	    header_64::exception_table_list_t::const_iterator get_pe_exception_table_list_begin () const;
 
-        wpef_types::Header_64::Exception_Table_List_t::const_iterator get_PE_Exception_Table_List_End () const;
+	    header_64::exception_table_list_t::const_iterator get_pe_exception_table_list_end () const;
 
-    private:
+	  private:
 
-        /* Variables */
+	    /* Variables */
 
-        /*! \brief WPEF DOS Header */
-        wpef_types::DOS_Header::ptr_t m_dos_hdr;
+	    /*! \brief WPEF DOS Header */
+	    boost::shared_ptr < dos_header > m_dos_hdr;
 
-        /*! \brief WPEF PE Header */
-        wpef_types::PE_Header_64::ptr_t m_pe_hdr;
+	    /*! \brief WPEF PE Header */
+	    boost::shared_ptr < pe_header_64 > m_pe_hdr;
 
-        /*! \brief List of PE Section Headers */
-        wpef_types::Header_64::Section_Header_Map_t m_sec_hdrs;
+	    /*! \brief List of PE Section Headers */
+	    header_64::section_header_map_t m_sec_hdrs;
 
-        /*! \brief PE Resource Directories */
-        wpef_types::PE_Resource_Directory::ptr_t m_res_ptr;
+	    /*! \brief PE Resource Directories */
+	    boost::shared_ptr < pe_resource_directory > m_res_ptr;
 
-        /*! \brief PE Export Directories */
-        wpef_types::PE_Export_Directory::ptr_t m_export_dir_ptr;
+	    /*! \brief PE Export Directories */
+	    boost::shared_ptr < pe_export_directory > m_export_dir_ptr;
 
-        /*! \brief PE Import Directories */
-        wpef_types::Header_64::Import_Directory_List_t m_import_dir_list;
+	    /*! \brief PE Import Directories */
+	    header_64::import_directory_list_t m_import_dir_list;
 
-        /*! \brief PE Debug Directories */
-        wpef_types::PE_Debug_Directory::ptr_t m_debug_ptr;
+	    /*! \brief PE Debug Directories */
+	    boost::shared_ptr < pe_debug_directory > m_debug_ptr;
 
-        /*! \brief PE Load_Config Directories */
-        wpef_types::PE_Load_Config_Directory::ptr_t m_load_config_ptr;
+	    /*! \brief PE Load_Config Directories */
+	    boost::shared_ptr < pe_load_config_directory > m_load_config_ptr;
 
-        /*! \brief PE Exception Table entries */
-        wpef_types::Header_64::Exception_Table_List_t m_exception_list;
+	    /*! \brief PE Exception Table entries */
+	    header_64::exception_table_list_t m_exception_list;
 
-    };
+	  };
 
-} /* namespace wpef_module */
-} /* namespace libreverse */
+	} // namespace windows_pe
+      } // namespace file_readers
+    } // namespace input
+  } // namespace io
+} // namespace reverse
 
-#endif /* HEADER_64_H_ */
+
+#endif // ifndef REVERSE_IO_INPUT_FILE_READERS_WINDOWS_PE_HEADER_64_HPP_INCLUDED

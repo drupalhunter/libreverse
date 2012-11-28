@@ -22,7 +22,8 @@
 #ifndef REVERSE_COMPONENTS_INPUT_GRNN_TRAINING_SET_HPP_INCLUDED
 #define REVERSE_COMPONENTS_INPUT_GRNN_TRAINING_SET_HPP_INCLUDED
 
-#include "Training_Data.h"
+#include <reverse/components/input/grnn/training_data.hpp>
+#include <reverse/errors/internal_exception.hpp>
 
 #include <boost/format.hpp>
 
@@ -31,41 +32,62 @@ namespace reverse {
     namespace input {
       namespace grnn {
 
-	template <typename Data_Type>
-	class Training_Set
+	template <typename data_type>
+	class training_set
 	{
 	public:
 
-	  void append ( boost::shared_ptr<reverse::components::input::grnn::Training_Set<Data_Type> >& data )
+	  typedef std::vector< boost::shared_ptr < reverse::components::input::grnn::training_set<data_type> > > data_list_t;
+
+	  training_set ()
+	  {}
+
+	  training_set ( training_set const& rhs )
+	    : m_data ( rhs.m_data ),
+	      m_test ( rhs.m_test ),
+	      m_verification ( rhs.m_verification ),
+	      m_max_values ( rhs.m_max_values )
+	  {}
+
+	  void swap ( training_set& rhs )
+	  {
+	    m_data.swap ( rhs.m_data );
+	    m_test.swap ( rhs.m_test );
+	    m_verification ( rhs.m_verification );
+	    m_max_values ( rhs.m_max_values );
+	  }
+
+
+	  void append ( boost::shared_ptr<reverse::components::input::grnn::training_set<data_type> >& data )
 	  {
 
 #ifdef LIBREVERSE_DEBUG
-	    Trace::write_Trace ( TraceArea::CLASSIFIER,
-				 TraceLevel::DETAIL,
+	    trace::write_trace ( trace_area::classifier,
+				 trace_level::detail,
 				 "Entering Training_Set<Data_Type>::append" );
 #endif /* LIBREVERSE_DEBUG */
 
 
-	    m_data.insert ( m_data.end(), data->data_Begin(), data->data_End() );
-	    m_test.insert ( m_test.end(), data->test_Begin(), data->test_End() );
-	    m_verification.insert ( m_verification.end(), data->verification_Begin(), data->verification_End() );
+	    m_data.insert ( m_data.end(), data->data_begin(), data->data_end() );
+	    m_test.insert ( m_test.end(), data->test_begin(), data->test_end() );
+	    m_verification.insert ( m_verification.end(), data->verification_begin(), data->verification_end() );
 
 
 #ifdef LIBREVERSE_DEBUG       
-	    Trace::write_Trace ( TraceArea::CLASSIFIER,
-				 TraceLevel::DETAIL,
+	    trace::write_trace ( trace_area::classifier,
+				 trace_level::detail,
 				 "Exiting Training_Set<Data_Type>::append" );
 #endif /* LIBREVERSE_DEBUG */
 
 	  }
 
-	  std::vector < boost::shared_ptr < reverse::components::input::grnn::Training_Set<Data_Type> > > const&
-	    get_Training_Data ( void ) const
+	  std::vector < boost::shared_ptr < reverse::components::input::grnn::training_set<data_type> > > const&
+	    get_training_data ( void ) const
 	  {
 
 #ifdef LIBREVERSE_DEBUG
-	    Trace::write_Trace ( TraceArea::CLASSIFIER,
-				 TraceLevel::DETAIL,
+	    trace::write_trace ( trace_area::classifier,
+				 trace_level::detail,
 				 "Inside Training_Set<Data_Type>::get_Training_Data" );
 #endif /* LIBREVERSE_DEBUG */
 
@@ -74,13 +96,13 @@ namespace reverse {
 	  }
 
 
-	  std::vector < boost::shared_ptr < reverse::components::input::grnn::Training_Set<Data_Type> > > const&
-	    get_Test_Data ( void ) const
+	  std::vector < boost::shared_ptr < reverse::components::input::grnn::training_set<data_type> > > const&
+	    get_test_data ( void ) const
 	  {
 
 #ifdef LIBREVERSE_DEBUG
-	    Trace::write_Trace ( TraceArea::CLASSIFIER,
-				 TraceLevel::DETAIL,
+	    trace::write_trace ( trace_area::classifier,
+				 trace_level::detail,
 				 "Inside Training_Set<Data_Type>::get_Test_Data" );
 #endif /* LIBREVERSE_DEBUG */
 
@@ -88,80 +110,78 @@ namespace reverse {
 	    return m_test;
 	  }
 
-
-	  std::vector< boost::shared_ptr < reverse::components::input::grnn::Training_Set<Data_Type> > > const&
-	    get_Verification_Data ( void ) const
+	  std::vector< boost::shared_ptr < reverse::components::input::grnn::training_set<data_type> > > const&
+	    get_verification_data ( void ) const
 	  {
 
 #ifdef LIBREVERSE_DEBUG
-	    Trace::write_Trace ( TraceArea::CLASSIFIER,
-				 TraceLevel::DETAIL,
+	    trace::write_trace ( trace_area::classifier,
+				 trace_level::detail,
 				 "Inside Training_Set<Data_Type>::get_Verification_Data" );
 #endif /* LIBREVERSE_DEBUG */
 
-       
 	    return m_verification;
 	  }
 
 
-	  typename std::vector< boost::shared_ptr < reverse::components::input::grnn::Training_Set<Data_Type> > >::const_iterator data_Begin() const
+	  typename std::vector< boost::shared_ptr < reverse::components::input::grnn::training_set<data_type> > >::const_iterator data_begin() const
 	  {
 	    return m_data.begin();
 	  }
 
-	  typename std::vector< boost::shared_ptr < reverse::components::input::grnn::Training_Set<Data_Type> > >::const_iterator data_End() const
+	  typename std::vector< boost::shared_ptr < reverse::components::input::grnn::training_set<data_type> > >::const_iterator data_end() const
 	  {
 	    return m_data.end();
 	  }
 
-	  inline void data_Push_Back ( boost::shared_ptr < reverse::components::input::grnn::Training_Data<Data_Type> >& data_ptr )
+	  inline void data_push_back ( boost::shared_ptr < reverse::components::input::grnn::training_data<data_type> > data_ptr )
 	  {
-	    return m_data.push_back ( data_ptr );
+	    m_data.push_back ( data_ptr );
 	  }
 
-	  void data_Insert ( std::vector< boost::shared_ptr < reverse::components::input::grnn::Training_Set<Data_Type> > > const& source_data )
+	  void data_insert ( std::vector< boost::shared_ptr < reverse::components::input::grnn::training_set<data_type> > > const& source_data )
 	  {
 	    return m_data.insert ( m_data.end(), source_data.begin(), source_data.end() );
 	  }
 
-	  typename std::vector< boost::shared_ptr < reverse::components::input::grnn::Training_Set<Data_Type> > >::const_iterator test_Begin() const
+	  typename std::vector< boost::shared_ptr < reverse::components::input::grnn::training_set<data_type> > >::const_iterator test_begin() const
 	  {
 	    return m_test.begin();
 	  }
 
-	  typename std::vector< boost::shared_ptr < reverse::components::input::grnn::Training_Set<Data_Type> > >::const_iterator test_End() const
+	  typename std::vector< boost::shared_ptr < reverse::components::input::grnn::training_set<data_type> > >::const_iterator test_end() const
 	  {
 	    return m_test.end();
 	  }
       
-	  inline void test_Push_Back ( boost::shared_ptr < reverse::components::input::grnn::Training_Data<Data_Type> > const& data_ptr )
+	  inline void test_push_back ( boost::shared_ptr < reverse::components::input::grnn::training_data<data_type> > const& data_ptr )
 	  {
 	    return m_test.push_back ( data_ptr );
 	  }
 
-	  typename std::vector< boost::shared_ptr < reverse::components::input::grnn::Training_Set<Data_Type> > >::const_iterator verification_Begin() const
+	  typename std::vector< boost::shared_ptr < reverse::components::input::grnn::training_set<data_type> > >::const_iterator verification_begin() const
 	  {
 	    return m_verification.begin();
 	  }
 
-	  typename std::vector< boost::shared_ptr < reverse::components::input::grnn::Training_Set<Data_Type> > >::const_iterator verification_End() const
+	  typename std::vector< boost::shared_ptr < reverse::components::input::grnn::training_set<data_type> > >::const_iterator verification_end() const
 	  {
 	    return m_verification.end();
 	  }
 
-	  inline void verification_Push_Back ( boost::shared_ptr < reverse::components::input::grnn::Training_Data<Data_Type> > const& data_ptr )
+	  inline void verification_push_back ( boost::shared_ptr < reverse::components::input::grnn::training_data<data_type> > const& data_ptr )
 	  {
 	    return m_verification.push_back ( data_ptr );
 	  }
 
-	  std::string to_String ( boost::shared_ptr < reverse::components::input::grnn::Configuration<Data_Type> > config =
-				  boost::shared_ptr < reverse::components::input::grnn::Configuration<Data_Type> >
-				  ( new reverse::components::input::grnn::Configuration<Data_Type>() ) ) const
+	  std::string to_string ( boost::shared_ptr < reverse::components::input::grnn::configuration<data_type> > config =
+				  boost::shared_ptr < reverse::components::input::grnn::configuration<data_type> >
+				  ( new reverse::components::input::grnn::configuration<data_type>() ) ) const
 	  {
 
 #ifdef LIBREVERSE_DEBUG
-	    Trace::write_Trace ( TraceArea::CLASSIFIER,
-				 TraceLevel::DETAIL,
+	    trace::write_trace ( trace_area::classifier,
+				 trace_level::detail,
 				 "Entering Training_Set<Data_Type>::to_String" );
 #endif /* LIBREVERSE_DEBUG */
 
@@ -169,15 +189,15 @@ namespace reverse {
 	    std::stringstream output;
 
 	    output << std::endl
-		   << this->print_Maximum_Values () << std::endl
-		   << this->print_Data ( m_data, config, "Data" ) << std::endl
-		   << this->print_Data ( m_test, config, "Test" ) << std::endl
-		   << this->print_Data ( m_verification, config, "Verification" ) << std::endl;
+		   << this->print_maximum_values () << std::endl
+		   << this->print_data ( m_data, config, "data" ) << std::endl
+		   << this->print_data ( m_test, config, "test" ) << std::endl
+		   << this->print_data ( m_verification, config, "verification" ) << std::endl;
 
 
 #ifdef LIBREVERSE_DEBUG
-	    Trace::write_Trace ( TraceArea::CLASSIFIER,
-				 TraceLevel::DETAIL,
+	    trace::write_trace ( trace_area::classifier,
+				 trace_level::detail,
 				 "Exiting Training_Set<Data_Type>::to_String" );
 #endif /* LIBREVERSE_DEBUG */
 
@@ -190,46 +210,43 @@ namespace reverse {
 	  {
 
 #ifdef LIBREVERSE_DEBUG
-	    Trace::write_Trace ( TraceArea::CLASSIFIER,
-				 TraceLevel::DETAIL,
+	    trace::write_trace ( trace_area::classifier,
+				 trace_level::detail,
 				 "Entering Training_Set<Data_Type>::is_Valid" );
 #endif /* LIBREVERSE_DEBUG */
 
-       
-	    bool valid = this->is_Valid_Impl ( m_data, "Training data" );
-	    valid = this->is_Valid_Impl ( m_test, "Test data" );
-	    valid = this->is_Valid_Impl ( m_verification, "Verification data" );
+	    bool valid = this->is_valid_impl ( m_data, "training data" );
+	    valid = this->is_valid_impl ( m_test, "test data" );
+	    valid = this->is_valid_impl ( m_verification, "verification data" );
        
 	    return valid;
 	  }
 
-
-	  void set_Attribute_Maximum ( boost::uint32_t key, double value )
+	  void set_attribute_maximum ( boost::uint32_t key, double value )
 	  {
 	    m_max_values.insert ( std::make_pair ( key, value ) );
 	  }
 
-	  double get_Attribute_Maximum ( boost::uint32_t key ) const
+	  double get_attribute_maximum ( boost::uint32_t key ) const
 	  {
 	    typename std::map < boost::uint32_t, double>::const_iterator pos = m_max_values.find ( key );
 
 	    if ( pos == m_max_values.end() )
 	      {
-		throw errors::Internal_Exception ( errors::Internal_Exception::INVALID_INDEX );	  
+		throw errors::internal_exception ( errors::internal_exception::invalid_index );	  
 	      }
 
 	    return (*pos).second;
 	  }
 
-	  std::string get_Attribute_Maximum_XML ( void ) const
+	  std::string get_attribute_maximum_xml ( void ) const
 	  {
 
 #ifdef LIBREVERSE_DEBUG
-	    Trace::write_Trace ( TraceArea::CLASSIFIER,
-				 TraceLevel::DETAIL,
+	    trace::write_trace ( trace_area::classifier,
+				 trace_level::detail,
 				 "Entering Training_Set<Data_Type>::get_Attribute_Maximum_XML" );
 #endif /* LIBREVERSE_DEBUG */
-
        
 	    std::stringstream output;
 
@@ -249,29 +266,27 @@ namespace reverse {
 
 
 #ifdef LIBREVERSE_DEBUG
-	    Trace::write_Trace ( TraceArea::CLASSIFIER,
-				 TraceLevel::DETAIL,
+	    trace::write_trace ( trace_area::classifier,
+				 trace_level::detail,
 				 "Exiting Training_Set<Data_Type>::get_Attribute_Maximum_XML" );
 #endif /* LIBREVERSE_DEBUG */
 
-        
 	    return output.str();
 	  }
 
-
-	  std::string print_Maximum_Values ( void ) const
+	  std::string print_maximum_values ( void ) const
 	  {
 
 #ifdef LIBREVERSE_DEBUG
-	    Trace::write_Trace ( TraceArea::CLASSIFIER,
-				 TraceLevel::DETAIL,
+	    trace::write_trace ( trace_area::classifier,
+				 trace_level::detail,
 				 "Entering Training_Set<Data_Type>::print_Maximum_Values" );
 #endif /* LIBREVERSE_DEBUG */
 
        
 	    std::stringstream output;
 
-	    output << boost::format("------ Maximum Values (count = %1$d)-----") % m_max_values.size() << std::endl
+	    output << boost::format("------ maximum values (count = %1$d)-----") % m_max_values.size() << std::endl
 		   << "-----------------" << std::endl;
         
 	    for ( typename std::map < boost::uint32_t, double>::const_iterator cpos = m_max_values.begin();
@@ -283,8 +298,8 @@ namespace reverse {
 
 
 #ifdef LIBREVERSE_DEBUG
-	    Trace::write_Trace ( TraceArea::CLASSIFIER,
-				 TraceLevel::DETAIL,
+	    trace::write_trace ( trace_area::classifier,
+				 trace_level::detail,
 				 "Exiting Training_Set<Data_Type>::print_Maximum_Values" );
 #endif /* LIBREVERSE_DEBUG */
 
@@ -293,15 +308,24 @@ namespace reverse {
 	  }
 
 
-	  inline void max_Values_Insert ( std::map < boost::uint32_t, double> const& source_values )
+	  inline void max_values_insert ( std::map < boost::uint32_t, double> const& source_values )
 	  {
 	    return m_max_values.insert ( source_values.begin(), source_values.end() );
 	  }
 
+	  void clear ()
+	  {
+	    m_data.clear();
+	    m_test.clear();
+	    m_verification.clear();
+	    m_max_values.clear();
+	  }
+
+
 	private:
 
-	  std::string print_Data ( std::vector< boost::shared_ptr < reverse::components::input::grnn::Training_Set<Data_Type> > > const& data,
-				   boost::shared_ptr < reverse::components::input::grnn::Configuration<Data_Type> > const& config,
+	  std::string print_data ( std::vector< boost::shared_ptr < reverse::components::input::grnn::training_set<data_type> > > const& data,
+				   boost::shared_ptr < reverse::components::input::grnn::configuration<data_type> > const& config,
 				   std::string prefix ) const
 	  {
 
@@ -317,11 +341,11 @@ namespace reverse {
 	    output << boost::format("------ %1$s (count = %2$d)-----") % prefix % data.size() << std::endl
 		   << "-----------------" << std::endl;
         
-	    for ( typename std::vector< boost::shared_ptr < reverse::components::input::grnn::Training_Set<Data_Type> > >::const_iterator cpos = data.begin();
+	    for ( typename std::vector< boost::shared_ptr < reverse::components::input::grnn::training_set<data_type> > >::const_iterator cpos = data.begin();
 		  cpos != data.end();
 		  ++cpos )
 	      {
-		output << ( *cpos )->to_String ( config ) << std::endl;
+		output << ( *cpos )->to_string ( config ) << std::endl;
 	      }
 
 
@@ -336,7 +360,7 @@ namespace reverse {
 	  }
 
 
-	  bool is_Valid_Impl ( std::vector< boost::shared_ptr < reverse::components::input::grnn::Training_Set<Data_Type> > > const& data,
+	  bool is_valid_impl ( std::vector< boost::shared_ptr < reverse::components::input::grnn::training_set<data_type> > > const& data,
 			       std::string type ) const
 	  {
 
@@ -349,11 +373,11 @@ namespace reverse {
 
 	    bool valid = true;
 
-	    for ( typename std::vector< boost::shared_ptr < reverse::components::input::grnn::Training_Set<Data_Type> > >::const_iterator cpos = data.begin();
+	    for ( typename std::vector< boost::shared_ptr < reverse::components::input::grnn::training_set<data_type> > >::const_iterator cpos = data.begin();
 		  cpos != data.end();
 		  ++cpos )
 	      {
-		if ( ! ( *cpos )->is_Valid () )
+		if ( ! ( *cpos )->is_valid () )
 		  {
 
 #ifdef LIBREVERSE_DEBUG
@@ -402,7 +426,7 @@ namespace reverse {
 #endif /* LIBREVERSE_DEBUG */
 
           
-		throw errors::Internal_Exception ( errors::Internal_Exception::INVALID_DATA_SET );
+		throw errors::internal_exception ( errors::internal_exception::invalid_data_set );
 	      }
 
 
@@ -416,9 +440,10 @@ namespace reverse {
 	    return valid;
 	  }
 
-	  std::vector< boost::shared_ptr < reverse::components::input::grnn::Training_Set<Data_Type> > > m_data;
-	  std::vector< boost::shared_ptr < reverse::components::input::grnn::Training_Set<Data_Type> > > m_test;
-	  std::vector< boost::shared_ptr < reverse::components::input::grnn::Training_Set<Data_Type> > > m_verification;
+	  data_list_t m_data;
+
+	  std::vector< boost::shared_ptr < reverse::components::input::grnn::training_set<data_type> > > m_test;
+	  std::vector< boost::shared_ptr < reverse::components::input::grnn::training_set<data_type> > > m_verification;
 	  std::map < boost::uint32_t, double > m_max_values;
 
 	};

@@ -19,9 +19,10 @@
     <http://www.gnu.org/licenses/>.
 */
 
-#include <reverse/io/Byte_Converter.h>
-#include <reverse/io/input/File_Readers/Windows_PE/AMD_IA_64_Exception_Table_Entry.h>
-#include <reverse/io/input/File_Readers/Windows_PE/PE_File.h>
+#include <reverse/io/byte_converter.hpp>
+#include <reverse/io/input/file_readers/windows_pe/amd_ia_64_exception_table_entry.hpp>
+#include <reverse/io/input/file_readers/windows_pe/pe_file.hpp>
+#include <reverse/trace.hpp>
 
 #include <boost/format.hpp>
 
@@ -33,35 +34,35 @@ namespace reverse {
       namespace file_readers {
 	namespace windows_pe {
 
-	  AMD_IA_64_Exception_Table_Entry::AMD_IA_64_Exception_Table_Entry()
+	  amd_ia_64_exception_table_entry::amd_ia_64_exception_table_entry()
 	    : m_begin_address ( 0 ),
 	      m_end_address ( 0 ),
 	      m_unwind_information ( 0 )
 	  {
-	    Trace::write_Trace ( trace_area::IO,
-				 trace_level::DETAIL,
+	    trace::write_trace ( trace_area::io,
+				 trace_level::detail,
 				 "Inside AMD_IA_64_Exception_Table_Entry () constructor" );
 	  }
 
 	  void
-	  AMD_IA_64_Exception_Table_Entry::read_Entry ( wpef_types::PE_File::ptr_t file_ptr )
+	  amd_ia_64_exception_table_entry::read_entry ( boost::shared_ptr < pe_file > file_ptr )
 	  {
-	    Trace::write_Trace ( trace_area::IO,
-				 trace_level::DETAIL,
+	    trace::write_trace ( trace_area::io,
+				 trace_level::detail,
 				 "Entering AMD_IA_64_Exception_Table_Entry::read_Entry" );
 
-	    file_ptr->read_AMD_IA_64_Exception ( this->shared_from_this() );
+	    file_ptr->read_amd_ia_64_exception ( this->shared_from_this() );
 
-	    Trace::write_Trace ( trace_area::IO,
-				 trace_level::DETAIL,
+	    trace::write_trace ( trace_area::io,
+				 trace_level::detail,
 				 "Exiting AMD_IA_64_Exception_Table_Entry::read_Entry" );
 	  }
 
 	  std::string
-	  AMD_IA_64_Exception_Table_Entry::to_String (void)
+	  amd_ia_64_exception_table_entry::to_string (void)
 	  {
-	    Trace::write_Trace ( trace_area::IO,
-				 trace_level::DETAIL,
+	    trace::write_trace ( trace_area::io,
+				 trace_level::detail,
 				 "Entering AMD_IA_64_Exception_Table_Entry::to_String" );
 
 	    std::stringstream output;
@@ -73,27 +74,27 @@ namespace reverse {
 		   << boost::format("   unwind information: 0x%|1X|") % m_unwind_information
 		   << std::endl;
 
-	    Trace::write_Trace ( trace_area::IO,
-				 trace_level::DETAIL,
+	    trace::write_trace ( trace_area::io,
+				 trace_level::detail,
 				 "Exiting AMD_IA_64_Exception_Table_Entry::to_String" );
 
 	    return output.str();
 	  }
 
 	  void
-	  AMD_IA_64_Exception_Table_Entry::convert ()
+	  amd_ia_64_exception_table_entry::convert ()
 	  {
-	    Trace::write_Trace ( trace_area::IO,
-				 trace_level::DETAIL,
+	    trace::write_trace ( trace_area::io,
+				 trace_level::detail,
 				 "Entering AMD_IA_64_Exception_Table_Entry::convert" );
 
 	    // NOTE: Itanium can be either little-endian or big endian so we have to check
-	    io::Byte_Converter::convert ( m_begin_address );
-	    io::Byte_Converter::convert ( m_end_address );
-	    io::Byte_Converter::convert ( m_unwind_information );
+	    io::byte_converter::convert ( m_begin_address );
+	    io::byte_converter::convert ( m_end_address );
+	    io::byte_converter::convert ( m_unwind_information );
 
-	    Trace::write_Trace ( trace_area::IO,
-				 trace_level::DETAIL,
+	    trace::write_trace ( trace_area::io,
+				 trace_level::detail,
 				 "Exiting AMD_IA_64_Exception_Table_Entry::convert" );
 	  }
 
