@@ -53,25 +53,25 @@ namespace reverse {
 	   * \date 2003
 	   * \author Stephen Torri
 	   */
-	  class class_header : public reverse::io::input::base_header {
+	  class class_header : public io::input::base_header {
 	  public:
 
             typedef std::vector<boost::uint16_t> interfaces_list_t;
 
             typedef std::map < boost::uint16_t,
-	      boost::shared_ptr< reverse::io::input::file_readers::java_class::constant_pool_info >
+	      boost::shared_ptr< io::input::file_readers::java_class::constant_pool_info >
 	      > constant_pool_info_map_t;
 
             typedef std::map < boost::uint16_t,
-	      boost::shared_ptr< reverse::io::input::file_readers::java_class::field_info >
+	      boost::shared_ptr< io::input::file_readers::java_class::field_info >
 	      > field_info_map_t;
 
             typedef std::map < boost::uint16_t,
-	      boost::shared_ptr< reverse::io::input::file_readers::java_class::method_info >
+	      boost::shared_ptr< io::input::file_readers::java_class::method_info >
 	      > method_info_map_t;
 
             typedef std::map < boost::uint16_t,
-	      boost::shared_ptr< reverse::io::input::file_readers::java_class::attribute_info >
+	      boost::shared_ptr< io::input::file_readers::java_class::attribute_info >
 	      > attribute_info_map_t;
 
 	    friend class class_file;

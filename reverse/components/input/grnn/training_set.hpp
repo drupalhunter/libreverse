@@ -37,7 +37,7 @@ namespace reverse {
 	{
 	public:
 
-	  typedef std::vector< boost::shared_ptr < reverse::components::input::grnn::training_set<data_type> > > data_list_t;
+	  typedef std::vector< boost::shared_ptr < training_set<data_type> > > data_list_t;
 
 	  training_set ()
 	  {}
@@ -206,7 +206,7 @@ namespace reverse {
 	  }
 
 
-	  bool is_Valid ( void ) const
+	  bool is_valid ( void ) const
 	  {
 
 #ifdef LIBREVERSE_DEBUG

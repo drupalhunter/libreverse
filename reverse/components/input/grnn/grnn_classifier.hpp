@@ -23,6 +23,7 @@
 #define REVERSE_COMPONENTS_INPUT_GRNN_GRNN_HPP_INCLUDED
 
 #include <reverse/components/input/grnn/training_set.hpp>
+#include <reverse/preconditions.hpp>
 
 #include <math.h>
 
@@ -32,11 +33,11 @@ namespace reverse {
       namespace grnn {
 
 	template <typename data_type>
-	class grnn
+	class grnn_classifier
 	{
 	public:
 	  
-	  grnn ( double sigma,
+	  grnn_classifier ( double sigma,
 		 typename training_set<data_type>::data_list_t const& training,
 		 typename boost::shared_ptr < configuration<data_type> > config )
 	    : m_sigma ( sigma ),
@@ -93,7 +94,7 @@ namespace reverse {
 
 	    // FOR_EACH item, X, in target set
 	    //   call approximation_function(X)
-	    for ( typename classifier_types::training_set<data_type>::data_list_t::const_iterator target_pos = validation_list.begin();
+	    for ( typename training_set<data_type>::data_list_t::const_iterator target_pos = validation_list.begin();
 		  target_pos != validation_list.end();
 		  ++target_pos )
 	      {
@@ -176,7 +177,7 @@ namespace reverse {
 #endif /* LIBREVERSE_DEBUG */
 
 
-	    io::Preconditions::not_empty ( m_training );
+	    preconditions::not_empty ( m_training );
 
 	    double result = 0.0;
 

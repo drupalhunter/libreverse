@@ -19,26 +19,41 @@
     <http://www.gnu.org/licenses/>.
 */
 
+#include <reverse/components/input/grnn/configuration.hpp>
 #include <reverse/components/input/grnn/java_classifier_algorithm.hpp>
-#include <reverse/components/input/grnn/variable_map.hpp>
-#include <reverse/components/input/grnn/grnn.hpp>
-
-#include <reverse/components/input/grnn/io.hpp>
-#include <reverse/components/input/grnn/candidate_solution.hpp>
-#include <reverse/components/input/grnn/grnn_data_map.hpp>
+#include <reverse/components/input/grnn/grnn_classifier.hpp>
 #include <reverse/components/input/grnn/grnn_data_entry.hpp>
+#include <reverse/components/input/grnn/grnn_data_map.hpp>
+#include <reverse/components/input/grnn/training_data_parser.hpp>
 #include <reverse/components/input/grnn/java_training_data.hpp>
 #include <reverse/components/input/grnn/java_training_data_parser.hpp>
+#include <reverse/infrastructure/configurator.hpp>
+#include <reverse/io/file_id.hpp>
+#include <reverse/io/input/file_readers/java_class/class_header.hpp>
+#include <reverse/io/input/file_readers/java_class/reader.hpp>
+#include <reverse/meta/meta_object.hpp>
+
+/*
+#include <reverse/components/input/grnn/variable_map.hpp>
+
+
+
+#include <reverse/components/input/grnn/candidate_solution.hpp>
+
+
+
+
 
 #include <reverse/data_containers/memory_map.hpp>
 #include <reverse/infrastructure/component_types.hpp>
-#include <reverse/infrastructure/configurator.hpp>
-#include <reverse/io/io_types.hpp>
-#include <reverse/io/file_id.hpp>
-#include <reverse/io/input/file_readers/java_class/reader.hpp>
-#include <reverse/io/input/file_readers/java_class/class_header.hpp>
+
+
+*/
 
 #include <boost/format.hpp>
+#include <boost/make_shared.hpp>
+#include <boost/shared_ptr.hpp>
+
 #include <iostream>
 
 #ifdef LIBREVERSE_DEBUG
@@ -52,7 +67,7 @@ namespace reverse {
 
 
 	boost::shared_ptr < meta::meta_object >
-	java_classifier_algorithm::execute ( std::string target_filename )
+	java_classifier_algorithm::execute ( std::string const& target_filename )
 	{
 
 #ifdef LIBREVERSE_DEBUG
@@ -63,10 +78,10 @@ namespace reverse {
 
 
 	  // Grab GRNN Data Map
-	  classifier_types::grnn_data_map::ptr_t grnn_data = (infrastructure::configurator::instance()).get_grnn_data();
+	  boost::shared_ptr < grnn_data_map > grnn_data = (infrastructure::configurator::instance()).get_grnn_data();
 
 	  // Get GRNN Data Entry
-	  classifier_types::grnn_data_entry::const_ptr_t grnn_entry = grnn_data->get_entry ( grnn_data_types::java_class );
+	  boost::shared_ptr < const grnn_data_entry > grnn_entry = grnn_data->get_entry ( grnn_data_types::java_class );
 
 	  // Get sigma value from data map
 	  double stored_sigma = grnn_entry->get_sigma();
@@ -91,8 +106,8 @@ namespace reverse {
 
 
 	  // Parse final training data
-	  classifier_types::training_set<java_training_data>::ptr_t stored_data_set =
-	    io<classifier::java_training_data,classifier::java_training_data_parser>::get_data ( stored_filename );
+	  boost::shared_ptr < training_set<java_training_data> > stored_data_set =
+	    training_data_parser < java_training_data, java_training_data_parser >::get_data ( stored_filename );
 
 
 #ifdef LIBREVERSE_DEBUG
@@ -111,18 +126,19 @@ namespace reverse {
 
 	  // Collect attributes from target file
 
-	  boost::shared_ptr < io::file_id > target_file_obj = boost::make_shared <libreverse::io::file_id> ( target_filename );
+	  boost::shared_ptr < io::file_id > target_file_obj =
+	    boost::make_shared < io::file_id > ( target_filename );
 	    
 	  io::input::file_readers::java_class::reader target_reader ( target_file_obj );
 	    
 	  target_reader.read_class_header();
 
-	  boost::shared_ptr < data_container::memory_map > target_mem_ptr = target_reader.get_memory_map();
+	  boost::shared_ptr < data_containers::memory_map > target_mem_ptr = target_reader.get_memory_map();
 
-	  components::input::grnn::training_set<java_training_data>::data_list_t target_data_map;
+	  components::input::grnn::training_set<java_training_data> target_data_map;
 
 	  boost::shared_ptr < components::input::grnn::training_data<java_training_data> > target_data_ptr =
-	    boost::make_shared < components::input::grnn::training_data<java_training_data>();
+	    boost::make_shared < components::input::grnn::training_data<java_training_data> >();
 
 	  // Save filesize
 	  double normalized_filesize = static_cast<double>( target_mem_ptr->size() ) /
@@ -140,7 +156,7 @@ namespace reverse {
 	
 	  target_data_ptr->set_attribute ( java_training_data::attribute_filesize, normalized_filesize );
       
-	  boost::shared_ptr < java_types::class_header > target_class_header = target_reader.get_header();
+	  boost::shared_ptr < io::input::file_readers::java_class::class_header > target_class_header = target_reader.get_header();
 
 	  // Save
 	  // - This index
@@ -207,18 +223,18 @@ namespace reverse {
 
 	  target_data_ptr->set_attribute ( java_training_data::attribute_constant_pool_count, normalized_constant_pool_count );
 
-	  target_data_map.push_back ( target_data_ptr );
+	  target_data_map.data_push_back ( target_data_ptr );
 
 	  // Create GRNN
-	  classifier_types::configuration<java_training_data>::ptr_t config_ptr =
-	    boost::make_shared < classifier::configuration<java_training_data> > (true);
+	  boost::shared_ptr < configuration<java_training_data> > config_ptr =
+	    boost::make_shared < configuration<java_training_data> > (true);
 
-	  grnn<java_training_data> grnn_obj ( stored_sigma,
-					      stored_data_set->get_training_data (),
-					      config_ptr );
+	  grnn_classifier<java_training_data> grnn_obj ( stored_sigma,
+							 stored_data_set->get_training_data (),
+							 config_ptr );
 
 	  // Execute GRNN
-	  classifier_types::training_set<java_training_data>::data_list_t::const_iterator target_data_pos = target_data_map.begin();
+	  training_set<java_training_data>::data_list_t::const_iterator target_data_pos = target_data_map.data_begin();
 
 	  double results = grnn_obj.classify ( target_data_pos );
 

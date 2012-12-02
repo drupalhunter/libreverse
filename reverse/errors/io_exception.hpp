@@ -1,70 +1,71 @@
 /*  IO_Exception.h
 
-   Copyright (C) 2008 Stephen Torri
+    Copyright (C) 2008 Stephen Torri
 
-   This file is part of Libreverse.
+    This file is part of Libreverse.
 
-   Libreverse is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published
-   by the Free Software Foundation; either version 3, or (at your
-   option) any later version.
+    Libreverse is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published
+    by the Free Software Foundation; either version 3, or (at your
+    option) any later version.
 
-   Libreverse is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
+    Libreverse is distributed in the hope that it will be useful, but
+    WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with this program.  If not, see
-   <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see
+    <http://www.gnu.org/licenses/>.
 */
 
-#ifndef IO_EXCEPTION_H_
-#define IO_EXCEPTION_H_
+#ifndef REVERSE_ERRORS_IO_EXCEPTION_HPP_INCLUDED
+#define REVERSE_ERRORS_IO_EXCEPTION_HPP_INCLUDED
 
-#include "Reverse_Exception.h"
-#include <boost/shared_ptr.hpp>
+#include <reverse/errors/reverse_exception.hpp>
 
-namespace libreverse { namespace errors {
+namespace reverse {
+  namespace errors {
 
-  class IO_Exception : virtual public Reverse_Exception
-  {
-  public:
+    class io_exception : virtual public reverse_exception
+    {
+    public:
 
-    enum {
-      INVALID_FILE_NAME,
-      FATAL_IO_ERROR,
-      INVALID_PATH_NAME,
-      OUT_OF_RANGE,
-      INVALID_INDEX,
-      NULL_POINTER,
-      BAD_INPUT
+      enum {
+	invalid_file_name,
+	fatal_io_error,
+	invalid_path_name,
+	out_of_range,
+	invalid_index,
+	null_pointer,
+	bad_input
+      };
+
+      io_exception ( boost::uint32_t message_id );
+
+      /*!
+       * \brief Destructor
+       */
+      virtual ~io_exception (void) throw(){}
+
+      /*!
+       * \brief Return the extra message accompanying the exception.
+       */
+      const char* what (void) const throw ();
+
+      /*!
+       * \brief Return tne name of the exception
+       */
+      const char* name (void) const throw();
+
+    private:
+
+      static const char* m_exception_name;
+
+      static const char* m_messages[];
     };
 
-    IO_Exception ( boost::uint32_t message_id );
+  } // namespace errors
+} // namespace reverse
 
-    /*!
-     * \brief Destructor
-     */
-    virtual ~IO_Exception (void) throw(){}
-
-    /*!
-     * \brief Return the extra message accompanying the exception.
-     */
-    const char* what (void) const throw ();
-
-    /*!
-     * \brief Return tne name of the exception
-     */
-    const char* name (void) const throw();
-
-  private:
-
-    static const char* m_exception_name;
-
-    static const char* m_messages[];
-  };
-
-} /* namespace errors */
-} /* namespace libreverse */
-#endif /* IO_EXCEPTION_H_ */
+#endif // ifndef REVERSE_ERRORS_IO_EXCEPTION_HPP_INCLUDED

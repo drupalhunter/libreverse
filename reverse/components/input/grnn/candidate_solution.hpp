@@ -22,25 +22,24 @@
 #ifndef REVERSE_COMPONENTS_INPUT_GRNN_CANDIDATE_SOLUTION_HPP_INCLUDED
 #define REVERSE_COMPONENTS_INPUT_GRNN_CANDIDATE_SOLUTION_HPP_INCLUDED
 
-#include <reverse/components/input/grnn/Classifier_Types.h>
-#include <reverse/components/input/grnn/Configuration.h>
-#include <reverse/components/input/grnn/Training_Set.h>
-#include <reverse/Trace.h>
+#include <reverse/components/input/grnn/configuration.hpp>
+#include <reverse/components/input/grnn/training_set.hpp>
+#include <reverse/trace.hpp>
 
-namespace libreverse {
+namespace reverse {
   namespace components {
     namespace input {
       namespace grnn {
 
-	template <template <typename Data_Type> class Classifier_Type, typename Data_Type>
-	class Candidate_Solution
+	template <template <typename data_type> class classifier_type, typename data_type>
+	class candidate_solution
 	{
 	public:
 
-	  Candidate_Solution ( double sigma = 0.002,
+	  candidate_solution ( double sigma = 0.002,
 			       double fitness = 0.0,
-			       boost::shared_ptr < reverse::components::input::grnn::Configuration<Data_Type> > config =
-			       boost::make_shared < reverse::components::input::grnn::Configuration<Data_Type> > () )
+			       boost::shared_ptr < components::input::grnn::configuration<data_type> > config =
+			       boost::make_shared < components::input::grnn::configuration<data_type> > () )
 	    : m_sigma ( sigma ),
 	      m_fitness ( fitness ),
 	      m_mean_distance_squared ( 0.0 ),
@@ -72,16 +71,16 @@ namespace libreverse {
 
 	  }
 
-	  Candidate_Solution ( const Candidate_Solution& rhs )
+	  candidate_solution ( const candidate_solution& rhs )
 	    : m_sigma ( rhs.m_sigma ),
 	      m_fitness ( rhs.m_fitness ),
 	      m_mean_distance_squared ( rhs.m_mean_distance_squared ),
 	      m_iteration_count ( rhs.m_iteration_count ),
-	      m_config ( new reverse::components::input::grnn::Configuration<Data_Type>( *rhs.m_config ) )
+	      m_config ( new components::input::grnn::configuration<data_type>( *rhs.m_config ) )
 	  {}
 
 
-	  void evaluate ( boost::shared_ptr < reverse::components::input::grnn::Training_Set<Data_Type> > const& data )
+	  void evaluate ( boost::shared_ptr < components::input::grnn::training_set<data_type> > data )
 	  {
 
 #ifdef LIBREVERSE_DEBUG
@@ -91,12 +90,12 @@ namespace libreverse {
 #endif /* LIBREVERSE_DEBUG */
 
 
-	    Classifier_Type<Data_Type> classifier_ref ( m_sigma,
-							data->get_Training_Data(),
+	    classifier_type<data_type> classifier_ref ( m_sigma,
+							data->get_training_data(),
 							m_config );
 
-	    m_fitness = classifier_ref.execute ( data->get_Verification_Data() );
-	    m_mean_distance_squared = classifier_ref.get_Mean_Distance_Squared();
+	    m_fitness = classifier_ref.execute ( data->get_verification_data() );
+	    m_mean_distance_squared = classifier_ref.get_mean_distance_squared();
 
 
 #ifdef LIBREVERSE_DEBGU
@@ -116,7 +115,7 @@ namespace libreverse {
 
 	  }
 
-	  void test ( boost::shared_ptr < reverse::components::input::grnn::Training_Set<Data_Type> > const& data )
+	  void test ( boost::shared_ptr < components::input::grnn::training_set<data_type> > data )
 	  {
 
 #ifdef LIBREVERSE_DEBUG
@@ -126,12 +125,12 @@ namespace libreverse {
 #endif /* LIBREVERSE_DEBUG */
 
 
-	    Classifier_Type<Data_Type> classifier_ref ( m_sigma,
-							data->get_Training_Data(),
+	    classifier_type<data_type> classifier_ref ( m_sigma,
+							data->get_training_data(),
 							m_config );
 
-	    m_fitness = classifier_ref.execute ( data->get_Test_Data() );
-	    m_mean_distance_squared = classifier_ref.get_Mean_Distance_Squared();
+	    m_fitness = classifier_ref.execute ( data->get_test_data() );
+	    m_mean_distance_squared = classifier_ref.get_mean_distance_squared();
 	    m_iteration_count = 0;
 
 
@@ -152,7 +151,7 @@ namespace libreverse {
 	  }
 
 
-	  void set_Sigma ( double new_sigma )
+	  void set_sigma ( double new_sigma )
 	  {
 
 #ifdef LIBREVERSE_DEBUG       
@@ -178,7 +177,7 @@ namespace libreverse {
 	  }
 
 
-	  double get_Sigma (void) const
+	  double get_sigma (void) const
 	  {
 
 
@@ -193,7 +192,7 @@ namespace libreverse {
 	  }
 
         
-	  double get_Fitness (void) const
+	  double get_fitness (void) const
 	  {
 
 #ifdef LIBREVERSE_DEBUG
@@ -207,7 +206,7 @@ namespace libreverse {
 	  }
 
 
-	  double get_Mean_Distance_Squared (void) const
+	  double get_mean_distance_squared (void) const
 	  {
 
 
@@ -223,7 +222,7 @@ namespace libreverse {
 	  }
 
 
-	  void set_Iteration_Count (boost::uint32_t count)
+	  void set_iteration_count (boost::uint32_t count)
 	  {
 
 
@@ -249,7 +248,7 @@ namespace libreverse {
 	  }
 
 
-	  boost::uint32_t get_Iteration_Count (void) const
+	  boost::uint32_t get_iteration_count (void) const
 	  {
 
 
@@ -265,7 +264,7 @@ namespace libreverse {
 	  }
 
 
-	  boost::shared_ptr < reverse::components::input::grnn::Configuration<Data_Type> > get_Config (void) const
+	  boost::shared_ptr < components::input::grnn::configuration<data_type> > get_config (void) const
 	  {
 
 
@@ -280,7 +279,7 @@ namespace libreverse {
 	  }
 
         
-	  std::string to_String (void)
+	  std::string to_string (void)
 	  {
 
 
@@ -299,7 +298,7 @@ namespace libreverse {
 		   << boost::format("  Fitness:..%1$1.10f") % m_fitness << std::endl
 		   << boost::format("  Mean Distance Squared:..%1$1.10f") % m_mean_distance_squared << std::endl
 		   << boost::format("  Iteration Count:..%1$1.10f") % m_iteration_count << std::endl
-		   << m_config->to_String() << std::endl;
+		   << m_config->to_string() << std::endl;
 
 
 #ifdef LIBREVERSE_DEBUG       
@@ -323,12 +322,12 @@ namespace libreverse {
 
 	  boost::uint32_t m_iteration_count;
 
-	  boost::shared_ptr < reverse::components::input::grnn::Configuration<Data_Type> > m_config;
+	  boost::shared_ptr < components::input::grnn::configuration<data_type> > m_config;
 	};
     
       } // namespace input
     } // namespace grnn
   } // namespace components
-} // namespace libreverse
+} // namespace reverse
 
 #endif // #ifndef REVERSE_COMPONENTS_INPUT_GRNN_CANDIDATE_SOLUTION_HPP_INCLUDED

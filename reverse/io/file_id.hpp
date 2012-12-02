@@ -22,8 +22,6 @@
 #ifndef REVERSE_IO_FILE_ID_HPP_INCLUDED
 #define REVERSE_IO_FILE_ID_HPP_INCLUDED
 
-#include <boost/shared_ptr.hpp>
-
 #include <string>
 
 namespace reverse {

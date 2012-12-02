@@ -19,77 +19,82 @@
     <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SELECTION_POLICY_H
-#define SELECTION_POLICY_H
+#ifndef REVERSE_COMPONENTS_INPUT_GRNN_SELECTION_POLICY_HPP_INCLUDED
+#define REVERSE_COMPONENTS_INPUT_GRNN_SELECTION_POLICY_HPP_INCLUDED
+
+#include <boost/smart_ptr/make_shared.hpp>
 
 #include <list>
-#include "Classifier_Types.h"
 #include <string>
 
-namespace libreverse
-{
-  namespace classifier
-  {
+namespace reverse {
+  namespace components {
+    namespace input {
+      namespace grnn {
 
-    /*!
-     * \brief Selection Policy implements the division of training data into training, test and validation sets.
-     *
-     * \author Author: Stephen Torri, Winard Britt
-     */
-    template <typename Data_Type>
-      class Selection_Policy
-      {
-      public:
-
-	/*! \brief Execute the selection policy
+	/*!
+	 * \brief Selection Policy implements the division of training data into training, test and validation sets.
 	 *
-	 * Training set (70% of input)
-	 * Test set (20% of input)
-	 * Validation set (20% of input)
-	 *
-	 * \param input_data Input training set with all the training data in the training set.
-	 *
-	 * \return Output training set with the input training data divided into training, test and validation sets
+	 * \author Author: Stephen Torri, Winard Britt
 	 */
-	static typename classifier_types::Training_Set<Data_Type>::ptr_t
-	  execute ( typename classifier_types::Training_Set<Data_Type>::Data_List_t const& input_data )
+	template <typename data_type>
+	class selection_policy
 	{
-	  typename classifier_types::Training_Set<Data_Type>::ptr_t output_set = alloc::Create::shared_pointer< Training_Set<Data_Type> > ();
+	public:
 
-	  // WIN's COMPLETE AND CORRECT POLICY
-	  //
-	  // produce a random number (X)
-	  // FOR ALL
-	  //   IF X < 7 -> Training
-	  //   ELSE IF X >= 7 && X <= 8 -> Verification
-	  //   ELSE -> test
+	  /*! \brief Execute the selection policy
+	   *
+	   * Training set (70% of input)
+	   * Test set (20% of input)
+	   * Validation set (20% of input)
+	   *
+	   * \param input_data Input training set with all the training data in the training set.
+	   *
+	   * \return Output training set with the input training data divided into training, test and validation sets
+	   */
+	  static boost::shared_ptr < training_set<data_type> >
+	  execute ( typename training_set<data_type>::data_list_t const& input_data )
+	  {
+	    typename boost::shared_ptr < training_set<data_type> > output_set = boost::make_shared < training_set<data_type> > ();
 
-	  for ( typename classifier_types::Training_Set<Data_Type>::Data_List_t::const_iterator cpos = input_data.begin();
-		cpos != input_data.end();
-		++cpos )
-	    {
-	      boost::uint32_t random_number = rand() % 10 + 1;
+	    // WIN's COMPLETE AND CORRECT POLICY
+	    //
+	    // produce a random number (X)
+	    // FOR ALL
+	    //   IF X < 7 -> Training
+	    //   ELSE IF X >= 7 && X <= 8 -> Verification
+	    //   ELSE -> test
 
-	      if ( random_number < 7 )
-		{
-		  output_set->data_Push_Back ( *cpos );
-		}
-	      else if ( ( random_number == 7 ) || ( random_number == 8 ) )
-		{
-		  output_set->verification_Push_Back ( *cpos );
-		}
-	      else
-		{
-		  output_set->test_Push_Back ( *cpos );
-		}
-	    }
+	    for ( typename training_set<data_type>::data_list_t::const_iterator cpos = input_data.begin();
+		  cpos != input_data.end();
+		  ++cpos )
+	      {
+		boost::uint32_t random_number = rand() % 10 + 1;
 
-	  // Return results
-	  return output_set;
-	}
+		if ( random_number < 7 )
+		  {
+		    output_set->data_push_back ( *cpos );
+		  }
+		else if ( ( random_number == 7 ) || ( random_number == 8 ) )
+		  {
+		    output_set->verification_push_back ( *cpos );
+		  }
+		else
+		  {
+		    output_set->test_push_back ( *cpos );
+		  }
+	      }
 
-      };
-  } /* namespace classifier */
-} /* namespace libreverse */
+	    // Return results
+	    return output_set;
+	  }
 
-#endif /* SELECTION_POLICY_H */
+	};
+
+      } // namespace grnn
+    } // namespace input
+  } // namespace components
+} // namespace reverse
+
+
+#endif // ifndef REVERSE_COMPONENTS_INPUT_GRNN_SELECTION_POLICY_HPP_INCLUDED

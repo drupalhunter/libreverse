@@ -1,154 +1,158 @@
 /*  Java_Training_Data.h
 
-   Copyright (C) 2008 Stephen Torri
+    Copyright (C) 2008 Stephen Torri
 
-   This file is part of Libreverse.
+    This file is part of Libreverse.
 
-   Libreverse is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published
-   by the Free Software Foundation; either version 3, or (at your
-   option) any later version.
+    Libreverse is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published
+    by the Free Software Foundation; either version 3, or (at your
+    option) any later version.
 
-   Libreverse is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
+    Libreverse is distributed in the hope that it will be useful, but
+    WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with this program.  If not, see
-   <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see
+    <http://www.gnu.org/licenses/>.
 */
 
-#ifndef JAVA_TRAINING_DATA_H
-#define JAVA_TRAINING_DATA_H
+#ifndef REVERSE_COMPONENTS_INPUT_GRNN_JAVA_TRAINING_DATA_HPP_INCLUDED
+#define REVERSE_COMPONENTS_INPUT_GRNN_JAVA_TRAINING_DATA_HPP_INCLUDED
+
+
+#include <reverse/components/input/grnn/variable_map.hpp>
 
 #include <boost/shared_ptr.hpp>
 #include <boost/cstdint.hpp>
+
 #include <string>
 
-#include "Classifier_Types.h"
-#include "Variable_Map.h"
+namespace reverse {
+  namespace components {
+    namespace input {
+      namespace grnn {
 
-namespace libreverse
-{
-  namespace classifier
-  {
-    class Java_Training_Data
-    {
-    public:
+	class java_training_data
+	{
+	public:
 
-      static const boost::uint8_t ATTRIBUTE_COUNT;
-      static const boost::uint8_t CLASSIFIER_TARGET;
+	  static const boost::uint8_t attribute_count;
+	  static const boost::uint8_t classifier_target;
 
-      enum Attributes
-        {
-	  ATTRIBUTE_TARGET_ID = 0,
-	  ATTRIBUTE_FILESIZE = 1,
-	  ATTRIBUTE_THIS_INDEX = 2,
-	  ATTRIBUTE_SUPER_INDEX = 3,
-	  ATTRIBUTE_VERSION = 4,
-	  ATTRIBUTE_CONSTANT_POOL_COUNT = 5,
+	  enum attributes
+	    {
+	      attribute_target_id = 0,
+	      attribute_filesize = 1,
+	      attribute_this_index = 2,
+	      attribute_super_index = 3,
+	      attribute_version = 4,
+	      attribute_constant_pool_count = 5,
 
-	  // Constant Pool Info
-	  // #1 - Constant_UTF
-	  ATTRIBUTE_CONSTANT_UTF8_COUNT = 6,
-	  ATTRIBUTE_CONSTANT_UTF8_RATIO = 7,
+	      // constant pool info
+	      // #1 - constant_utf
+	      attribute_constant_utf8_count = 6,
+	      attribute_constant_utf8_ratio = 7,
 
-	  // #2 - Constant_RESERVED
-	  ATTRIBUTE_CONSTANT_RESERVED_COUNT = 8,
-	  ATTRIBUTE_CONSTANT_RESERVED_RATIO = 9,
+	      // #2 - constant_reserved
+	      attribute_constant_reserved_count = 8,
+	      attribute_constant_reserved_ratio = 9,
 
-	  // #3 - Constant_INTEGER
-	  ATTRIBUTE_CONSTANT_INTEGER_COUNT = 10,
-	  ATTRIBUTE_CONSTANT_INTEGER_RATIO = 11,
+	      // #3 - constant_integer
+	      attribute_constant_integer_count = 10,
+	      attribute_constant_integer_ratio = 11,
 
-	  // #4 - Constant_FLOAT
-	  ATTRIBUTE_CONSTANT_FLOAT_COUNT = 12,
-	  ATTRIBUTE_CONSTANT_FLOAT_RATIO = 13,
+	      // #4 - constant_float
+	      attribute_constant_float_count = 12,
+	      attribute_constant_float_ratio = 13,
 
-	  // #5 - Constant_LONG
-	  ATTRIBUTE_CONSTANT_LONG_COUNT = 14,
-	  ATTRIBUTE_CONSTANT_LONG_RATIO = 15,
+	      // #5 - constant_long
+	      attribute_constant_long_count = 14,
+	      attribute_constant_long_ratio = 15,
 
-	  // #6 - Constant_DOUBLE
-	  ATTRIBUTE_CONSTANT_DOUBLE_COUNT = 16,
-	  ATTRIBUTE_CONSTANT_DOUBLE_RATIO = 17,
+	      // #6 - constant_double
+	      attribute_constant_double_count = 16,
+	      attribute_constant_double_ratio = 17,
 
-	  // #7 - Constant_CLASS
-	  ATTRIBUTE_CONSTANT_CLASS_COUNT = 18,
-	  ATTRIBUTE_CONSTANT_CLASS_RATIO = 19,
+	      // #7 - constant_class
+	      attribute_constant_class_count = 18,
+	      attribute_constant_class_ratio = 19,
 
-	  // #8 - Constant_STRING
-	  ATTRIBUTE_CONSTANT_STRING_COUNT = 20,
-	  ATTRIBUTE_CONSTANT_STRING_RATIO = 21,
+	      // #8 - constant_string
+	      attribute_constant_string_count = 20,
+	      attribute_constant_string_ratio = 21,
 
-	  // #9 - Constant_FIELDREF
-	  ATTRIBUTE_CONSTANT_FIELDREF_COUNT = 22,
-	  ATTRIBUTE_CONSTANT_FIELDREF_RATIO = 23,
+	      // #9 - constant_fieldref
+	      attribute_constant_fieldref_count = 22,
+	      attribute_constant_fieldref_ratio = 23,
 
-	  // #10 - Constant_METHODREF
-	  ATTRIBUTE_CONSTANT_METHODREF_COUNT = 24,
-	  ATTRIBUTE_CONSTANT_METHODREF_RATIO = 25,
+	      // #10 - constant_methodref
+	      attribute_constant_methodref_count = 24,
+	      attribute_constant_methodref_ratio = 25,
 
-	  // #11 - Constant_INTERFACE_METHODREF
-	  ATTRIBUTE_CONSTANT_INTERFACE_METHODREF_COUNT = 26,
-	  ATTRIBUTE_CONSTANT_INTERFACE_METHODREF_RATIO = 27,
+	      // #11 - constant_interface_methodref
+	      attribute_constant_interface_methodref_count = 26,
+	      attribute_constant_interface_methodref_ratio = 27,
 
-	  // #12 - Constant_NAME_AND_TYPE
-	  ATTRIBUTE_CONSTANT_NAME_AND_TYPE_COUNT = 28,
-	  ATTRIBUTE_CONSTANT_NAME_AND_TYPE_RATIO = 29,
+	      // #12 - constant_name_and_type
+	      attribute_constant_name_and_type_count = 28,
+	      attribute_constant_name_and_type_ratio = 29,
 
-	  ATTRIBUTE_FIELD_COUNT = 30,
-	  ATTRIBUTE_METHOD_COUNT = 31
-        };
+	      attribute_field_count = 30,
+	      attribute_method_count = 31
+	    };
 
-      enum Constant_Pool_Tags
-        {
-	  // Map index
-	  UTF8_TAG = 1,
-	  RESERVED_TAG =2,
-	  INTEGER_TAG = 3,
-	  FLOAT_TAG = 4,
-	  LONG_TAG = 5,
-	  DOUBLE_TAG = 6,
-	  CLASS_TAG = 7,
-	  STRING_TAG = 8,
-	  FIELDREF_TAG = 9,
-	  METHODREF_TAG = 10,
-	  INTERFACE_METHODREF_TAG = 11,
-	  NAME_AND_TYPE_TAG = 12
-        };
+	  enum constant_pool_tags
+	    {
+	      // map index
+	      utf8_tag = 1,
+	      reserved_tag =2,
+	      integer_tag = 3,
+	      float_tag = 4,
+	      long_tag = 5,
+	      double_tag = 6,
+	      class_tag = 7,
+	      string_tag = 8,
+	      fieldref_tag = 9,
+	      methodref_tag = 10,
+	      interface_methodref_tag = 11,
+	      name_and_type_tag = 12
+	    };
 
-      friend class Java_Training_Data_Parser;
+	  friend class java_training_data_parser;
 
-      Java_Training_Data ();
+	  java_training_data ();
 
-      ~Java_Training_Data();
+	  ~java_training_data();
 
-      static std::string get_Attribute_String_List ( classifier_types::Configuration<Java_Training_Data>::ptr_t config );
+	  static std::string get_attribute_string_list ( boost::shared_ptr < configuration<java_training_data> > config );
 
-      std::string to_String ( classifier_types::Configuration<Java_Training_Data>::ptr_t config ) const;
+	  std::string to_string ( boost::shared_ptr < configuration<java_training_data> > config ) const;
 
-      std::string to_XML ( classifier_types::Configuration<Java_Training_Data>::ptr_t config ) const;
+	  std::string to_xml ( boost::shared_ptr < configuration<java_training_data> > config ) const;
       
-      classifier_types::Variable_Map::map_type::const_iterator begin ( void ) const;
-      classifier_types::Variable_Map::map_type::iterator begin ( void );
+	  variable_map::map_t::const_iterator begin ( void ) const;
+	  variable_map::map_t::iterator begin ( void );
 
-      classifier_types::Variable_Map::map_type::const_iterator end ( void ) const;
-      classifier_types::Variable_Map::map_type::iterator end ( void );
+	  variable_map::map_t::const_iterator end ( void ) const;
+	  variable_map::map_t::iterator end ( void );
 
-      void set_Attribute ( boost::uint32_t index, double value );
+	  void set_attribute ( boost::uint32_t index, double value );
 
-      double get_Attribute ( boost::uint32_t index );
+	  double get_attribute ( boost::uint32_t index );
 
-      bool empty ( void ) const;
+	  bool empty ( void ) const;
 
-    private:
+	private:
 
-      classifier::Variable_Map m_data;
-    };
+	  variable_map m_data;
+	};
 
-  } /* namespace classifier */
-} /* namespace libreverse */
+      } // namespace grnn
+    } // namespace input 
+  } // namespace components
+} // namespace reverse
 
-#endif /* JAVA_TRAINING_DATA_H */
+#endif // ifndef REVERSE_COMPONENTS_INPUT_GRNN_JAVA_TRAINING_DATA_HPP_INCLUDED

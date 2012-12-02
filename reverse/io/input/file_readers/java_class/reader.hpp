@@ -40,6 +40,8 @@ namespace reverse {
       namespace file_readers {
 	namespace java_class {
 
+	  class class_file;
+	  class class_header;
 	  class header;
 
 	  /*!
