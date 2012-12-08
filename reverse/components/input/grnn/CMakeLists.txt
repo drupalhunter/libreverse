@@ -24,11 +24,9 @@ set ( INPUT_GRNN_COMPONENTS_HEADERS
   elf_input_tag_names.hpp
   elf_training_data.hpp
   elf_training_data_parser.hpp
-  grnn.hpp
   grnn_data_entry.hpp
   grnn_data_map.hpp
   grnn_data_types.hpp
-  io.hpp
   java_classifier_algorithm.hpp
   java_input_tag_names.hpp
   java_training_data.hpp

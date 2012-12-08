@@ -46,29 +46,11 @@ namespace reverse {
 	      m_iteration_count ( 0 ),
 	      m_config ( config )
 	  {
-
-#ifdef LIBREVERSE_DEBUG
-	    Trace::write_Trace ( TraceArea::CANDIDATE_SOLUTION,
-				 TraceLevel::DETAIL,
-				 "Entering Candidate_Solution constructor" );
-
-	    Trace::write_Trace ( TraceArea::CANDIDATE_SOLUTION,
-				 TraceLevel::DATA,
-				 boost::str ( boost::format ( "sigma: %1%" ) % sigma ) );
-
-	    Trace::write_Trace ( TraceArea::CANDIDATE_SOLUTION,
-				 TraceLevel::DATA,
-				 boost::str ( boost::format ( "fitness: %1%" ) % fitness ) );
-
-	    Trace::write_Trace ( TraceArea::CANDIDATE_SOLUTION,
-				 TraceLevel::DATA,
-				 boost::str ( boost::format ( "Configuration: %1%" ) % config->to_String() ) );
-
-	    Trace::write_Trace ( TraceArea::CANDIDATE_SOLUTION,
-				 TraceLevel::DETAIL,
-				 "Exiting Candidate_Solution constructor" );
-#endif /* LIBREVERSE_DEBUG */
-
+	    trace::candidate_solution_detail ( "Entering Candidate_Solution constructor" );
+	    trace::candidate_solution_data ( "sigma: %1%", sigma );
+	    trace::candidate_solution_data ( "fitness: %1%", fitness );
+	    trace::candidate_solution_data ( "Configuration: %1%", config->to_String() );
+	    trace::candidate_solution_detail ( "Exiting Candidate_Solution constructor" );
 	  }
 
 	  candidate_solution ( const candidate_solution& rhs )
@@ -77,18 +59,14 @@ namespace reverse {
 	      m_mean_distance_squared ( rhs.m_mean_distance_squared ),
 	      m_iteration_count ( rhs.m_iteration_count ),
 	      m_config ( new components::input::grnn::configuration<data_type>( *rhs.m_config ) )
-	  {}
+	  {
+	    trace::candidate_solution_detail ( "Inside candidate solution copy constructor" );
+	  }
 
 
 	  void evaluate ( boost::shared_ptr < components::input::grnn::training_set<data_type> > data )
 	  {
-
-#ifdef LIBREVERSE_DEBUG
-	    Trace::write_Trace ( TraceArea::CANDIDATE_SOLUTION,
-				 TraceLevel::DETAIL,
-				 "Entering Candidate_Solution<Classifier_Type, Data_Type>::evaluate" );
-#endif /* LIBREVERSE_DEBUG */
-
+	    trace::candidate_solution_detail ( "Entering Candidate_Solution<Classifier_Type, Data_Type>::evaluate" );
 
 	    classifier_type<data_type> classifier_ref ( m_sigma,
 							data->get_training_data(),
@@ -96,34 +74,15 @@ namespace reverse {
 
 	    m_fitness = classifier_ref.execute ( data->get_verification_data() );
 	    m_mean_distance_squared = classifier_ref.get_mean_distance_squared();
-
-
-#ifdef LIBREVERSE_DEBGU
-	    Trace::write_Trace ( TraceArea::CANDIDATE_SOLUTION,
-				 TraceLevel::DATA,
-				 boost::str ( boost::format ( "Guess Sigma: %1$1.10f" ) % m_sigma ) );
-
-	    Trace::write_Trace ( TraceArea::CANDIDATE_SOLUTION,
-				 TraceLevel::DATA,
-				 boost::str ( boost::format ( "Guess Fitness: %1$1.10f" ) % m_fitness ) );
-
-
-	    Trace::write_Trace ( TraceArea::CANDIDATE_SOLUTION,
-				 TraceLevel::DETAIL,
-				 "Entering Candidate_Solution<Classifier_Type, Data_Type>::evaluate" );
-#endif /* LIBREVERSE_DEBUG */
-
+	    
+	    trace::candidate_solution_data ( "Guess Sigma: %1$1.10f", % m_sigma );
+	    trace::candidate_solution_data ( "Guess Fitness: %1$1.10f", % m_fitness );
+	    trace::candidate_solution_detail ( "Entering Candidate_Solution<Classifier_Type, Data_Type>::evaluate" );
 	  }
 
 	  void test ( boost::shared_ptr < components::input::grnn::training_set<data_type> > data )
 	  {
-
-#ifdef LIBREVERSE_DEBUG
-	    Trace::write_Trace ( TraceArea::CANDIDATE_SOLUTION,
-				 TraceLevel::DETAIL,
-				 "Entering Candidate_Solution<Classifier_Type, Data_Type>::test" );
-#endif /* LIBREVERSE_DEBUG */
-
+	    trace::candidate_solution_detail ( "Entering Candidate_Solution<Classifier_Type, Data_Type>::test" );
 
 	    classifier_type<data_type> classifier_ref ( m_sigma,
 							data->get_training_data(),
@@ -133,60 +92,25 @@ namespace reverse {
 	    m_mean_distance_squared = classifier_ref.get_mean_distance_squared();
 	    m_iteration_count = 0;
 
-
-#ifdef LIBREVERSE_DEBUG
-	    Trace::write_Trace ( TraceArea::CANDIDATE_SOLUTION,
-				 TraceLevel::DATA,
-				 boost::str ( boost::format ( "Final Sigma: %1$1.10f" ) % m_sigma ) );
-
-	    Trace::write_Trace ( TraceArea::CANDIDATE_SOLUTION,
-				 TraceLevel::DATA,
-				 boost::str ( boost::format ( "Final Fitness: %1$1.10d" ) % m_fitness ) );
-
-	    Trace::write_Trace ( TraceArea::CANDIDATE_SOLUTION,
-				 TraceLevel::DETAIL,
-				 "Entering Candidate_Solution<Classifier_Type, Data_Type>::test" );
-#endif /* LIBREVERSE_DEBUG */
-
+	    trace::candidate_solution_data ( "Final Sigma: %1$1.10f", m_sigma );
+	    trace::candidate_solution_data ( "Final Fitness: %1$1.10d", m_fitness );
+	    trace::candidate_solution_detail ( "Entering Candidate_Solution<Classifier_Type, Data_Type>::test" );
 	  }
-
 
 	  void set_sigma ( double new_sigma )
 	  {
-
-#ifdef LIBREVERSE_DEBUG       
-	    Trace::write_Trace ( TraceArea::CANDIDATE_SOLUTION,
-				 TraceLevel::DETAIL,
-				 "Entering Candidate_Solution<Classifier_Type, Data_Type>::set_Sigma" );
-
-	    Trace::write_Trace ( TraceArea::CANDIDATE_SOLUTION,
-				 TraceLevel::DATA,
-				 boost::str ( boost::format ( "New Sigma = %1%" ) % new_sigma ) );
-#endif /* LIBREVERSE_DEBUG */
-
+	    trace::candidate_solution_detail ( "Entering Candidate_Solution<Classifier_Type, Data_Type>::set_Sigma" );
+	    trace::candidate_solution_data ( "New Sigma = %1%", new_sigma );
 
 	    m_sigma = new_sigma;
 
-
-#ifdef LIBREVERSE_DEBUG
-	    Trace::write_Trace ( TraceArea::CANDIDATE_SOLUTION,
-				 TraceLevel::DETAIL,
-				 "Exiting Candidate_Solution<Classifier_Type, Data_Type>::set_Sigma" );
-#endif /* LIBREVERSE_DEBUG */
-
+	    trace::candidate_solution_detail ( "Exiting Candidate_Solution<Classifier_Type, Data_Type>::set_Sigma" );
 	  }
-
 
 	  double get_sigma (void) const
 	  {
 
-
-#ifdef LIBREVERSE_DEBUG
-	    Trace::write_Trace ( TraceArea::CANDIDATE_SOLUTION,
-				 TraceLevel::DETAIL,
-				 "Inside Candidate_Solution<Classifier_Type, Data_Type>::get_Sigma" );
-#endif /* LIBREVERSE_DEBUG */
-
+	    trace::candidate_solution_detail ( "Inside Candidate_Solution<Classifier_Type, Data_Type>::get_Sigma" );
 
 	    return m_sigma;
 	  }
@@ -194,13 +118,7 @@ namespace reverse {
         
 	  double get_fitness (void) const
 	  {
-
-#ifdef LIBREVERSE_DEBUG
-	    Trace::write_Trace ( TraceArea::CANDIDATE_SOLUTION,
-				 TraceLevel::DETAIL,
-				 "Inside Candidate_Solution<Classifier_Type, Data_Type>::get_Fitness" );
-#endif /* LIBREVERSE_DEBUG */
-
+	    trace::candidate_solution_detail ( "Inside Candidate_Solution<Classifier_Type, Data_Type>::get_Fitness" );
 
 	    return m_fitness;
 	  }
@@ -208,72 +126,32 @@ namespace reverse {
 
 	  double get_mean_distance_squared (void) const
 	  {
-
-
-#ifdef LIBREVERSE_DEBUG
-	    Trace::write_Trace ( TraceArea::CANDIDATE_SOLUTION,
-				 TraceLevel::DETAIL,
-				 "Inside Candidate_Solution<Classifier_Type, Data_Type>::get_Mean_Distance_Squared" );
-#endif /* LIBREVERSE_DEBUG */
-
+	    trace::candidate_solution_detail ( "Inside Candidate_Solution<Classifier_Type, Data_Type>::get_Mean_Distance_Squared" );
 
 	    return m_mean_distance_squared;
-
 	  }
-
 
 	  void set_iteration_count (boost::uint32_t count)
 	  {
-
-
-#ifdef LIBREVERSE_DEBUG       
-	    Trace::write_Trace ( TraceArea::CANDIDATE_SOLUTION,
-				 TraceLevel::DETAIL,
-				 "Entering Candidate_Solution<Classifier_Type, Data_Type>::set_Iteration_Count" );
-
-	    Trace::write_Trace ( TraceArea::CANDIDATE_SOLUTION,
-				 TraceLevel::DATA,
-				 boost::str ( boost::format ( "New Iteration Count = %1%" ) % count ) );
-#endif /* LIBREVERSE_DEBUG */
-
+	    trace::candidate_solution_detail ( "Entering Candidate_Solution<Classifier_Type, Data_Type>::set_Iteration_Count" );
+	    trace::candidate_solution_data ( "New Iteration Count = %1%", count );
 
 	    m_iteration_count = count;
 
-
-#ifdef LIBREVERSE_DEBUG
-	    Trace::write_Trace ( TraceArea::CANDIDATE_SOLUTION,
-				 TraceLevel::DETAIL,
-				 "Exiting Candidate_Solution<Classifier_Type, Data_Type>::set_Iteration_Count" );
-#endif /* LIBREVERSE_DEBUG */
+	    trace::candidate_solution_detail ( "Exiting Candidate_Solution<Classifier_Type, Data_Type>::set_Iteration_Count" );
 	  }
-
 
 	  boost::uint32_t get_iteration_count (void) const
 	  {
-
-
-#ifdef LIBREVERSE_DEBUG
-	    Trace::write_Trace ( TraceArea::CANDIDATE_SOLUTION,
-				 TraceLevel::DETAIL,
-				 "Inside Candidate_Solution<Classifier_Type, Data_Type>::get_Mean_Distance_Squared" );
-#endif /* LIBREVERSE_DEBUG */
-
+	    trace::candidate_solution_detail ( "Inside Candidate_Solution<Classifier_Type, Data_Type>::get_Mean_Distance_Squared" );
 
 	    return m_mean_distance_squared;
-
 	  }
 
 
 	  boost::shared_ptr < components::input::grnn::configuration<data_type> > get_config (void) const
 	  {
-
-
-#ifdef LIBREVERSE_DEBUG
-	    Trace::write_Trace ( TraceArea::CANDIDATE_SOLUTION,
-				 TraceLevel::DETAIL,
-				 "Inside Candidate_Solution<Classifier_Type, Data_Type>::get_Config" );
-#endif /* LIBREVERSE_DEBUG */
-
+	    trace::candidate_solution_detail ( "Inside Candidate_Solution<Classifier_Type, Data_Type>::get_Config" );
 
 	    return m_config;
 	  }
@@ -281,13 +159,7 @@ namespace reverse {
         
 	  std::string to_string (void)
 	  {
-
-
-#ifdef LIBREVERSE_DEBUG
-	    Trace::write_Trace ( TraceArea::CANDIDATE_SOLUTION,
-				 TraceLevel::DETAIL,
-				 "Entering Candidate_Solution<Classifier_Type, Data_Type>::to_String" );
-#endif /* LIBREVERSE_DEBUG */
+	    trace::candidate_solution_detail ( "Entering Candidate_Solution<Classifier_Type, Data_Type>::to_String" );
 
 	    std::stringstream output;
        
@@ -301,12 +173,7 @@ namespace reverse {
 		   << m_config->to_string() << std::endl;
 
 
-#ifdef LIBREVERSE_DEBUG       
-	    Trace::write_Trace ( TraceArea::CANDIDATE_SOLUTION,
-				 TraceLevel::DETAIL,
-				 "Exiting Candidate_Solution<Classifier_Type, Data_Type>::to_String" );
-#endif /* LIBREVERSE_DEBUG */
-
+	    trace::candidate_solution_detail ( "Exiting Candidate_Solution<Classifier_Type, Data_Type>::to_String" );
 
 	    return output.str();
 	  }

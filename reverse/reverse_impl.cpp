@@ -38,33 +38,16 @@
 #include <iostream>
 #include <sstream>
 
-#ifdef LIBREVERSE_DEBUG
-using namespace libreverse::api;
-using namespace libreverse::trace;
-#endif /* LIBREVERSE_DEBUG */
-
 namespace reverse {
 
     reverse_impl::reverse_impl ()
     {
-
-#ifdef LIBREVERSE_DEBUG
-      reverse::trace::write_trace ( reverse::trace_area::api,
-                             reverse::trace_level::detail,
-                             "inside reverse_impl constructor" );
-#endif /* LIBREVERSE_DEBUG */
-
+      trace::api_detail ( "inside reverse_impl constructor" );
     }
 
     reverse_impl::~reverse_impl ()
     {
-
-#ifdef LIBREVERSE_DEBUG
-      reverse::trace::write_trace ( reverse::trace_area::api,
-                             reverse::trace_level::detail,
-                             reverse::"inside reverse_impl destructor" );
-#endif /* LIBREVERSE_DEBUG */
-
+      trace::api_detail ( "inside reverse_impl destructor" );
     }
 
     reverse_impl::return_type_t
@@ -72,57 +55,31 @@ namespace reverse {
                                           boost::shared_ptr < infrastructure::data_source::data_source_base > init_data_ptr,
                                           boost::shared_ptr < infrastructure::component > init_comp_ptr )
     {
+      trace::api_detail ( "entering reverse_impl::execute_input_section" );
 
-#ifdef LIBREVERSE_DEBUG
-        reverse::trace::write_trace ( reverse::trace_area::api,
-                             reverse::trace_level::detail,
-                             "entering reverse_impl::execute_input_section" );
-#endif /* LIBREVERSE_DEBUG */
+      if ( ! m_graph )
+	{
+	  trace::api_error ( "exception throw in %s at line %d", __FILE__, __LINE__ );
 
-        if ( ! m_graph )
-            {
+	  throw errors::internal_exception ( errors::internal_exception::null_pointer );
+	  
+	}
 
-#ifdef LIBREVERSE_DEBUG
-                reverse::trace::write_trace ( reverse::trace_area::api,
-                                     reverse::trace_level::error,
-                                     boost::str ( boost::format("exception throw in %s at line %d")
-                                                  % __file__
-                                                  % __line__ ) );
-#endif /* LIBREVERSE_DEBUG */
+      if ( ! init_data_ptr )
+	{
+	  trace::api_error ( "exception throw in %s at line %d", __FILE__, __LINE__ );
 
-                throw errors::internal_exception ( errors::internal_exception::null_pointer );
-
-            }
-
-        if ( ! init_data_ptr )
-            {
-
-#ifdef LIBREVERSE_DEBUG
-	      reverse::trace::write_trace ( reverse::trace_area::api,
-					    reverse::trace_level::error,
-					    boost::str ( boost::format("exception throw in %s at line %d")
-							 % __file__
-							 % __line__ ) );
-#endif /* LIBREVERSE_DEBUG */
-
-                throw errors::internal_exception ( errors::internal_exception::null_pointer );
-
-            }
+	  throw errors::internal_exception ( errors::internal_exception::null_pointer );
+	  
+	}
 
         if ( ! init_comp_ptr )
             {
+	      trace::api_error ( "exception throw in %s at line %d", __FILE__, __LINE__ );
 
-#ifdef LIBREVERSE_DEBUG
-                trace::write_trace ( trace_area::api,
-                                     trace_level::error,
-                                     boost::str ( boost::format("exception throw in %s at line %d")
-                                                  % __file__
-                                                  % __line__ ) );
-#endif /* LIBREVERSE_DEBUG */
-
-                throw errors::internal_exception ( errors::internal_exception::null_pointer );
+	      throw errors::internal_exception ( errors::internal_exception::null_pointer );
             }
-
+	
         reverse_impl::return_type_t results;
 
         std::cout << std::endl
@@ -154,29 +111,14 @@ namespace reverse {
             }
         else
             {
+	      trace::api_error ( "input graph is empty. double check the file." );
+	      trace::api_error ( "exception throw in %s at line %d", __FILE__, __LINE__ );
 
-#ifdef LIBREVERSE_DEBUG
-                trace::write_trace ( trace_area::api,
-                                     trace_level::error,
-                                     "input graph is empty. double check the file." );
-                trace::write_trace ( trace_area::api,
-                                     trace_level::error,
-                                     boost::str ( boost::format("exception throw in %s at line %d")
-                                                  % __file__
-                                                  % __line__ ) );
-#endif /* LIBREVERSE_DEBUG */
-                
-                throw errors::api_exception
-                    ( errors::api_exception::internal_library_error );
+	      throw errors::api_exception ( errors::api_exception::internal_library_error );
 
             }
 
-#ifdef LIBREVERSE_DEBUG
-        trace::write_trace ( trace_area::api,
-                             trace_level::detail,
-                             "exiting reverse_impl::execute_input_section" );
-#endif /* LIBREVERSE_DEBUG */
-
+	trace::api_detail ( "exiting reverse_impl::execute_input_section" );
 
         return results;
     }
@@ -185,28 +127,15 @@ namespace reverse {
     reverse_impl::execute_analysis_section ( boost::shared_ptr < infrastructure::component_graph::map_t > m_graph,
                                              reverse_impl::return_type_t& input_results )
     {
+      trace::api_detail ( "entering reverse_impl::execute_analysis_section" );
 
-#ifdef LIBREVERSE_DEBUG
-        trace::write_trace ( trace_area::api,
-                             trace_level::detail,
-                             "entering reverse_impl::execute_analysis_section" );
-#endif /* LIBREVERSE_DEBUG */
+      if ( ! m_graph )
+	{
+	  trace::api_error ( "exception throw in %s at line %d", __FILE__, __LINE__ );
 
+	  throw errors::internal_exception ( errors::internal_exception::null_pointer );
 
-        if ( ! m_graph )
-            {
-
-#ifdef LIBREVERSE_DEBUG
-                trace::write_trace ( trace_area::api,
-                                     trace_level::error,
-                                     boost::str ( boost::format("exception throw in %s at line %d")
-                                                  % __file__
-                                                  % __line__ ) );
-#endif /* LIBREVERSE_DEBUG */
-
-                throw errors::internal_exception ( errors::internal_exception::null_pointer );
-
-            }
+	}
 
         std::cout << std::endl
                   << "// ----------------------------------------"
@@ -244,29 +173,13 @@ namespace reverse {
             }
         else
             {
+	      trace::api_error ( "analysis graph is empty. double check the file." );
+	      trace::api_error ( "exception throw in %s at line %d", __FILE__, __LINE__ );
 
-#ifdef LIBREVERSE_DEBUG
-                trace::write_trace ( trace_area::api,
-                                     trace_level::error,
-                                     "analysis graph is empty. double check the file." );
-
-                trace::write_trace ( trace_area::api,
-                                     trace_level::error,
-                                     boost::str ( boost::format("exception throw in %s at line %d")
-                                                  % __file__
-                                                  % __line__ ) );
-#endif /* LIBREVERSE_DEBUG */
-
-                throw errors::api_exception
-                    ( errors::api_exception::internal_library_error );
-
+	      throw errors::api_exception ( errors::api_exception::internal_library_error );
             }
-
-#ifdef LIBREVERSE_DEBUG
-        trace::write_trace ( trace_area::api,
-                             trace_level::detail,
-                             "exiting reverse_impl::execute_analysis_section" );
-#endif /* LIBREVERSE_DEBUG */
+       
+	trace::api_detail ( "exiting reverse_impl::execute_analysis_section" );
 
         return results;
     }
@@ -275,27 +188,13 @@ namespace reverse {
     reverse_impl::execute_output_section ( boost::shared_ptr < infrastructure::component_graph::map_t > m_graph,
                                            reverse_impl::return_type_t& analysis_results )
     {
+      trace::api_detail ( "entering reverse_impl::execute_output_section" );
 
-#ifdef LIBREVERSE_DEBUG
-        trace::write_trace ( trace_area::api,
-                             trace_level::detail,
-                             "entering reverse_impl::execute_output_section" );
-#endif /* LIBREVERSE_DEBUG */
-
-        if ( ! m_graph )
-            {
-
-#ifdef LIBREVERSE_DEBUG
-                trace::write_trace ( trace_area::api,
-                                     trace_level::error,
-                                     boost::str ( boost::format("exception throw in %s at line %d")
-                                                  % __file__
-                                                  % __line__ ) );
-#endif /* LIBREVERSE_DEBUG */
-
-                throw errors::internal_exception ( errors::internal_exception::null_pointer );
-
-            }
+      if ( ! m_graph )
+	{
+	  trace::api_error ( "exception throw in %s at line %d", __FILE__, __LINE__ );
+	  throw errors::internal_exception ( errors::internal_exception::null_pointer );
+	}
 
         std::cout << std::endl
                   << "// ----------------------------------------"
@@ -329,58 +228,27 @@ namespace reverse {
             }
         else
             {
+	      trace::api_error ( "output graph is empty. double check the file." );
+	      trace::api_error ( "exception throw in %s at line %d", __FILE__, __LINE__ );
 
-#ifdef LIBREVERSE_DEBUG
-                trace::write_trace ( trace_area::api,
-                                     trace_level::error,
-                                     "output graph is empty. double check the file." );
-
-                trace::write_trace ( trace_area::api,
-                                     trace_level::error,
-                                     boost::str ( boost::format("exception throw in %s at line %d")
-                                                  % __file__
-                                                  % __line__ ) );
-#endif /* LIBREVERSE_DEBUG */
-
-                throw errors::api_exception
-                    ( errors::api_exception::internal_library_error );
+	      throw errors::api_exception ( errors::api_exception::internal_library_error );
 
             }
 
-#ifdef LIBREVERSE_DEBUG
-        trace::write_trace ( trace_area::api,
-                             trace_level::detail,
-                             "exiting reverse_impl::execute_output_section" );
-#endif /* LIBREVERSE_DEBUG */
-
+	trace::api_detail ( "exiting reverse_impl::execute_output_section" );
     }
 
 
     void reverse_impl::print_graph ( infrastructure::component_graph const& graph_ref,
                                      std::string name ) const
     {
+      trace::api_detail ( "entering reverse_impl::print_graph" );
 
-#ifdef LIBREVERSE_DEBUG
-        trace::write_trace ( trace_area::api,
-                             trace_level::detail,
-                             "entering reverse_impl::print_graph" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        if ( name.empty() )
-            {
-
-#ifdef LIBREVERSE_DEBUG
-                trace::write_trace ( trace_area::api,
-                                     trace_level::error,
-                                     boost::str ( boost::format("exception throw in %s at line %d")
-                                                  % __file__
-                                                  % __line__ ) );
-#endif /* LIBREVERSE_DEBUG */
-
-                throw errors::internal_exception ( errors::internal_exception::empty_string );
-
-            }
+      if ( name.empty() )
+	{
+	  trace::api_error ( "exception throw in %s at line %d", __FILE__, __LINE__ );
+	  throw errors::internal_exception ( errors::internal_exception::empty_string );
+	}
 
         std::stringstream output_data;
 
@@ -412,13 +280,7 @@ namespace reverse {
         output_file << output_data.str();
         output_file << "}" << std::endl;
 
-
-#ifdef LIBREVERSE_DEBUG
-        trace::write_trace ( trace_area::api,
-                             trace_level::detail,
-                             "exiting reverse_impl::print_graph" );
-#endif /* LIBREVERSE_DEBUG */
-
+	trace::api_detail ( "exiting reverse_impl::print_graph" );
 
         output_file.close();
     }
@@ -427,45 +289,18 @@ namespace reverse {
   reverse_impl::process_graph ( boost::shared_ptr < const infrastructure::component_graph > graph_ptr,
 				boost::shared_ptr < infrastructure::data_source::data_source_base > val ) const
     {
-
-#ifdef LIBREVERSE_DEBUG
-        trace::write_trace ( trace_area::api,
-                             trace_level::detail,
-                             "entering reverse_impl::process_graph" );
-#endif /* LIBREVERSE_DEBUG */
-
+      trace::api_detail ( "entering reverse_impl::process_graph" );
 
         if ( ! graph_ptr )
             {
-
-
-#ifdef LIBREVERSE_DEBUG
-                trace::write_trace ( trace_area::api,
-                                     trace_level::error,
-                                     boost::str ( boost::format("exception throw in %s at line %d")
-                                                  % __file__
-                                                  % __line__ ) );
-#endif /* LIBREVERSE_DEBUG */
-
-
-                throw errors::internal_exception ( errors::internal_exception::null_pointer );
-
+	      trace::api_error ( "exception throw in %s at line %d", __FILE__, __LINE__ );
+	      throw errors::internal_exception ( errors::internal_exception::null_pointer );
             }
 
         if ( ! val )
             {
-
-
-#ifdef LIBREVERSE_DEBUG
-                trace::write_trace ( trace_area::api,
-                                     trace_level::error,
-                                     boost::str ( boost::format("exception throw in %s at line %d")
-                                                  % __file__
-                                                  % __line__ ) );
-#endif /* LIBREVERSE_DEBUG */
-
-
-                throw errors::internal_exception ( errors::internal_exception::null_pointer );
+	      trace::api_error ( "exception throw in %s at line %d", __FILE__, __LINE__ );
+	      throw errors::internal_exception ( errors::internal_exception::null_pointer );
             }
 
         // prepare data
@@ -488,12 +323,7 @@ namespace reverse {
 
         infrastructure::component_graph::result_data_t result = pos->second;
 
-#ifdef LIBREVERSE_DEBUG
-        trace::write_trace ( trace_area::api,
-                             trace_level::detail,
-                             "exiting reverse_impl::process_graph" );
-#endif /* LIBREVERSE_DEBUG */
-
+	trace::api_detail ( "exiting reverse_impl::process_graph" );
 
         return result.first;
     }

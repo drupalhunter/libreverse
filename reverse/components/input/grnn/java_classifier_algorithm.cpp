@@ -234,7 +234,8 @@ namespace reverse {
 							 config_ptr );
 
 	  // Execute GRNN
-	  training_set<java_training_data>::data_list_t::const_iterator target_data_pos = target_data_map.data_begin();
+	  std::vector< boost::shared_ptr < reverse::components::input::grnn::training_set<java_training_data> > >::const_iterator target_data_pos =
+	    target_data_map.data_begin();
 
 	  double results = grnn_obj.classify ( target_data_pos );
 

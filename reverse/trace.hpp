@@ -22,74 +22,50 @@
 #ifndef REVERSE_TRACE_HPP_INCLUDED
 #define REVERSE_TRACE_HPP_INCLUDED
 
-#include <reverse/reverse.hpp>
-
 #include <boost/cstdint.hpp>
-#include <boost/shared_ptr.hpp>
-
-#include <fstream>
 
 namespace reverse {
-
-    /* Idea taken from http://www.codeproject.com/debug/xytrace.asp
-     * (28 Jan 2002 - Xiangyang Liu)
-     *
-     * I have modified this so that we don't use varargs and use constant types
-     */
-    class trace_state {
-    public:
-
-        typedef boost::shared_ptr<trace_state> ptr_t;
-
-        static trace_state& instance();
-
-        void set_trace_file_name ( std::string name );
-
-        void set_trace_file_prefix ( std::string name );
-
-        void set_trace_level ( boost::uint32_t level );
-
-        void set_trace_area_mask ( boost::uint32_t mask );
-
-        void open_trace_file ( void );
-
-        std::string get_id_string ( void );
-
-        void close_trace_file ( void );
-
-        boost::uint32_t get_trace_level ( void ) const;
-
-        boost::uint32_t get_trace_area_mask ( void ) const;
-
-        bool is_valid_level ( boost::uint32_t lvl );
-
-        bool is_valid_area_mask ( boost::uint32_t mask );
-
-        void write_message ( boost::uint32_t level, std::string msg );
-
-    private:
-
-        trace_state();
-
-        virtual ~trace_state();
-
-        std::string m_file_prefix;
-
-	std::string m_file_name;
-
-        boost::uint32_t m_trace_level;
-
-        boost::uint32_t m_trace_area_mask;
-
-        std::ofstream m_log_stream;
-    };
 
     class trace {
     public:
 
+#ifdef LIBREVERSE_DEBUG
       static bool write_trace ( boost::uint32_t area,
 				boost::uint32_t level,
-				std::string message );
+				const char* message );
+
+      static void api_detail ( const char* message );
+
+      static void api_error ( const char* message );
+
+      static void api_error ( const char* message, const char* filename, unsigned int line );
+
+      static void candidate_solution_detail ( const char* message );
+
+      template <typename T>
+      static void candidate_solution_data ( const char* message, T const& value )
+      {
+	write_trace ( trace_area::candidate_solution,
+		      trace_level::data,
+		      boost::str ( boost::format ( message ) % value ) );
+      }
+
+      static void components_detail ( const char* );
+
+#else
+      static bool write_trace ( boost::uint32_t, boost::uint32_t, const char* ){}
+      static void api_detail ( const char* ) {}
+      static void api_error ( const char* ) {}
+      static void api_error ( const char*, const char*, unsigned int ) {}
+
+      static void candidate_solution_detail ( const char* ) {}
+
+      template <typename T>
+      static void candidate_solution_data ( const char*, T ) {}
+
+      static void components_detail ( const char* ) {}
+#endif
+
     };
 
 } // namespace reverse

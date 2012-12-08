@@ -24,14 +24,10 @@
 #include <reverse/components/input/grnn/java_classifier_algorithm.hpp>
 #include <reverse/errors/internal_exception.hpp>
 #include <reverse/io/input/file_readers/java_class/java_meta_info.hpp>
+#include <reverse/trace.hpp>
 
 #include <boost/format.hpp>
 #include <boost/smart_ptr/make_shared.hpp>
-
-#ifdef LIBREVERSE_DEBUG
-#include <reverse/trace.hpp>
-using namespace libreverse::trace;
-#endif /* LIBREVERSE_DEBUG */
 
 namespace reverse {
   namespace components {
@@ -42,13 +38,7 @@ namespace reverse {
 	boost::shared_ptr < components::input::grnn::classifier_algorithm >
 	compiler_classifier_algorithm_factory::get_classifier ( std::string type )
 	{
-
-#ifdef LIBREVERSE_DEBUG
-	  trace::write_trace ( trace_area::components,
-			       trace_level::detail,
-			       "Inside Compiler_Classifier_Algorithm_Factory::get_classifier" );
-#endif /* LIBREVERSE_DEBUG */
-
+	  trace::components_detail ( "Inside Compiler_Classifier_Algorithm_Factory::get_classifier" );
 
 	  if ( type.compare ( io::input::file_readers::java_class::java_meta_info::file_type ) == 0 )
 	    {

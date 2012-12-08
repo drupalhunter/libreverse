@@ -53,7 +53,7 @@ namespace reverse {
 
 	  virtual void end_element ( const std::string& element_name );
 
-	  std::vector < training_data_ptr_t > get_data ( std::string target_file );
+	  boost::shared_ptr < training_set<elf_training_data> > get_data ( std::string const& target_file );
 
 	  variable_map::map_t& get_max_values ( void );
 
@@ -78,7 +78,7 @@ namespace reverse {
 	  elf_input_tag_names m_tag;
       
 	  // Reset at the end </DATA> tag
-	  std::vector < training_data_ptr_t > m_data;
+	  boost::shared_ptr < training_set<elf_training_data> > m_data;
 	  variable_map::map_t m_max_values;
 	};
 

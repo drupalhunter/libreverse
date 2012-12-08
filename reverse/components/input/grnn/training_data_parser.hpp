@@ -194,7 +194,7 @@ namespace reverse {
 
 	    parser_type parser;
 
-	    typename training_set<data_type>::data_list_t input_data = parser.get_data ( training_data_file );
+	    boost::shared_ptr < training_set<data_type> > input_data = parser.get_data ( training_data_file );
 
 #ifdef LIBREVERSE_DEBUG
 	    Trace::write_Trace ( TraceArea::IO,

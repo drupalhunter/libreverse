@@ -40,10 +40,11 @@ using namespace libreverse::api;
 using namespace libreverse::trace;
 #endif /* LIBREVERSE_DEBUG */
 
-namespace libreverse
-{
-  namespace classifier
-  {
+namespace reverse {
+  namespace components {
+    namespace input {
+      namespace grnn {
+
     Java_Training_Data_Parser::Java_Training_Data_Parser ()
       : m_training_data ( new classifier::Training_Data<Java_Training_Data> () ),
 	m_constant_pool_index ( Java_Training_Data::ATTRIBUTE_CONSTANT_UTF8_COUNT )
@@ -293,8 +294,8 @@ namespace libreverse
 
     }
 
-    classifier_types::Training_Set<Java_Training_Data>::Data_List_t&
-    Java_Training_Data_Parser::get_Data ( std::string target_file )
+    boost::shared_ptr < training_set<java_training_data> >
+    java_training_data_parser::get_data ( std::string const& target_file )
     {
 
 #ifdef LIBREVERSE_DEBUG
@@ -508,10 +509,14 @@ namespace libreverse
       return ( *pos ).second;
     }
 
-    classifier_types::Variable_Map::map_type&
-    Java_Training_Data_Parser::get_Max_Values ( void )
-    {
-      return m_max_values;
-    }
-  } /* namespace classifier */
-} /* namespace libreverse */
+	classifier_types::variable_map::map_type&
+	java_training_data_parser::get_max_values ( void )
+	{
+	  return m_max_values;
+	}
+
+      } // namespace grnn
+    } // namespace input 
+  } // namespace components
+} // namespace reverse
+

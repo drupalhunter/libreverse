@@ -33,14 +33,10 @@
 #include <reverse/infrastructure/data_source/memory_data_transfer.hpp>
 #include <reverse/infrastructure/data_source/memory_data_source_config.hpp>
 #include <reverse/infrastructure/data_source/data_source_t.hpp>
+#include <reverse/trace.hpp>
 
 #include <boost/filesystem/operations.hpp>
 #include <boost/make_shared.hpp>
-
-#ifdef LIBREVERSE_DEBUG
-#include <reverse/Trace.h>
-using namespace libreverse::trace;
-#endif /* LIBREVERSE_DEBUG */
 
 namespace reverse {
 

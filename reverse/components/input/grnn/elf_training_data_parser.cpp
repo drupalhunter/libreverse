@@ -255,7 +255,7 @@ namespace reverse {
 
 
 	      // Save parsed training data
-	      this->m_data.push_back ( m_training_data );
+	      this->m_data->data_push_back ( m_training_data );
 
 	      // Reset for next <FILE> tag
 	      m_training_data = boost::make_shared < training_data<elf_training_data> > ();
@@ -270,8 +270,8 @@ namespace reverse {
 
 	}
 
-	std::vector < elf_training_data_parser::training_data_ptr_t >
-	elf_training_data_parser::get_data ( std::string target_file )
+	boost::shared_ptr < training_set<elf_training_data> >
+	elf_training_data_parser::get_data ( std::string const& target_file )
 	{
 
 #ifdef LIBREVERSE_DEBUG
@@ -292,7 +292,7 @@ namespace reverse {
 	    }
 
 	  // reset the compiler id and training_set
-	  m_data.clear();
+	  m_data->clear();
 
 	  // class and local variable initialization
 	  std::ifstream input ( target_file.c_str() );
@@ -332,8 +332,8 @@ namespace reverse {
 			       TraceLevel::DATA,
 			       "Parsed input:" );
 
-	  for ( classifier_types::Training_Set<Elf_Training_Data>::Data_List_t::const_iterator cpos = m_data.begin();
-		cpos != m_data.end();
+	  for ( std::vector < boost::shared_ptr < reverse::components::input::grnn::training_set<elf_training_data>::const_iterator cpos = m_data->begin();
+		cpos != m_data->end();
 		++cpos )
 	    {
 	      Trace::write_Trace ( TraceArea::GRNN_PARSER,

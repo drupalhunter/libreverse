@@ -66,7 +66,7 @@ namespace reverse {
 	   *  \param target_file Input XML file name to be parsed
 	   *  \return Parsed training set
 	   */
-	  training_set<java_training_data>::data_list_t& get_data ( std::string const& target_file );
+	  boost::shared_ptr < training_set<java_training_data> > get_data ( std::string const& target_file );
 
 	  /*! \brief Get the maximum values for use in normalizing the
 	   *  file attributes from a Java Class file.
@@ -128,7 +128,7 @@ namespace reverse {
 	   *
 	   * Reset at the end </DATA> tag
 	   */
-	  training_set<java_training_data>::data_list_t m_data;
+	  boost::shared_ptr < training_set<java_training_data> > m_data;
 
 	  /*!
 	   * \brief list of maximum values for each column of input

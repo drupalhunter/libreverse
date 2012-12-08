@@ -15,6 +15,7 @@ set ( REVERSE_SOURCES
 reverse.cpp
 reverse_impl.cpp
 trace.cpp
+trace_state.cpp
 sp_debug_hooks.cpp )
 
 set ( REVERSE_HEADERS
@@ -30,6 +31,7 @@ reverse_impl.hpp
 trace.hpp
 trace_area.hpp
 trace_level.hpp
+trace_state.hpp
 transfer_types.hpp )
 
 set ( REVERSE_DEPENDENCIES components data_containers infrastructure io )

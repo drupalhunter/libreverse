@@ -37,7 +37,7 @@ namespace reverse {
 	{
 	public:
 
-	  typedef std::vector< boost::shared_ptr < training_set<data_type> > > data_list_t;
+	  typedef std::vector< boost::shared_ptr < training_data<data_type> > > data_list_t;
 
 	  training_set ()
 	  {}
@@ -134,7 +134,7 @@ namespace reverse {
 	    return m_data.end();
 	  }
 
-	  inline void data_push_back ( boost::shared_ptr < reverse::components::input::grnn::training_data<data_type> > data_ptr )
+	  inline void data_push_back ( boost::shared_ptr < reverse::components::input::grnn::training_data<data_type> >& data_ptr )
 	  {
 	    m_data.push_back ( data_ptr );
 	  }

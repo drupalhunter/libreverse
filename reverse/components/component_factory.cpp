@@ -40,8 +40,6 @@
 
 #include <boost/format.hpp>
 
-using namespace libreverse::alloc;
-
 #ifdef LIBREVERSE_DEBUG
 #include "Trace.h"
 using namespace libreverse::api;

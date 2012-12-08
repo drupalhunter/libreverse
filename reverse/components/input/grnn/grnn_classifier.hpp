@@ -38,8 +38,8 @@ namespace reverse {
 	public:
 	  
 	  grnn_classifier ( double sigma,
-		 typename training_set<data_type>::data_list_t const& training,
-		 typename boost::shared_ptr < configuration<data_type> > config )
+			    std::vector < boost::shared_ptr < components::input::grnn::training_set < data_type > > > const& training,
+			    boost::shared_ptr < configuration<data_type> > config )
 	    : m_sigma ( sigma ),
 	      m_mean_distance_squared ( 0.0 ),
 	      m_training ( training ),
@@ -168,7 +168,7 @@ namespace reverse {
 	  /*! \brief Classify the training set
 	   * \return classification value representing the GRNN's answer
 	   */
-	  double classify ( typename training_set<data_type>::data_list_t::const_iterator& target_row )
+	  double classify ( typename std::vector< boost::shared_ptr < reverse::components::input::grnn::training_set<data_type> > >::const_iterator target_row )
 	  {
 #ifdef LIBREVERSE_DEBUG
 	    Trace::write_Trace ( TraceArea::GRNN,
@@ -474,9 +474,9 @@ namespace reverse {
 
 	  double m_mean_distance_squared;
 
-	  typename training_set<data_type>::data_list_t const& m_training;
+	  std::vector < boost::shared_ptr < components::input::grnn::training_set < data_type > > > const& m_training;
 
-	  typename boost::shared_ptr < configuration<data_type> > m_config;
+	  boost::shared_ptr < configuration<data_type> > m_config;
 
 	};
   
