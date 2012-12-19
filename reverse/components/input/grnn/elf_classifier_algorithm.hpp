@@ -19,40 +19,45 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ELF_CLASSIFIER_ALGORITHM_H
-#define ELF_CLASSIFIER_ALGORITHM_H
+#ifndef REVERSE_COMPONENTS_INPUT_GRNN_ELF_CLASSIFIER_ALGORITHM_HPP_INCLUDED
+#define REVERSE_COMPONENTS_INPUT_GRNN_ELF_CLASSIFIER_ALGORITHM_HPP_INCLUDED
 
 #include "Classifier_Algorithm.h"
 #include <string>
 #include "meta/Meta_Object.h"
 
-namespace libreverse
-{
-  namespace classifier
-  {
-    class Elf_Classifier_Algorithm : public Classifier_Algorithm {
-    public:
+namespace reverse {
+  namespace components {
+    namespace input {
+      namespace grnn {
 
-      virtual ~Elf_Classifier_Algorithm(){}
+	class elf_classifier_algorithm : public classifier_algorithm {
+	public:
 
-      virtual meta::Meta_Object::ptr_t execute ( std::string filename );
+	  virtual ~elf_classifier_algorithm(){}
 
-    private:
+	  virtual boost::shared_ptr < meta::meta_object > execute ( std::string const& filename );
 
-      std::string get_Compiler_Name ( double value );
+	private:
 
-      meta::Meta_Object::ptr_t process_File ( libreverse::elf_module::Elf_Reader_32 const& reader32_obj ) const;
+	  std::string get_compiler_name ( double value );
 
-      meta::Meta_Object::ptr_t process_File ( libreverse::elf_module::Elf_Reader_64 const& reader64_obj ) const;
+	  meta::meta_object::ptr_t process_file ( libreverse::elf_module::elf_reader_32 const& reader32_obj ) const;
 
-      enum Values {
-	GCC_4_1 = 0,
-	PGCC = 1,
-	INTEL = 2
-      };
-    };
+	  meta::meta_object::ptr_t process_file ( libreverse::elf_module::elf_reader_64 const& reader64_obj ) const;
 
-  } /* namespace classifier */
-} /* namespace libreverse */
+	  enum values {
+	    gcc_4_1 = 0,
+	    pgcc = 1,
+	    intel = 2
+	  };
 
-#endif /* ELF_CLASSIFIER_ALGORITHM_H */
+	};
+
+      } // namespace grnn
+    } // namespace input
+  } // namespace components
+} // namespace reverse
+
+
+#endif // ifndef REVERSE_COMPONENTS_INPUT_GRNN_ELF_CLASSIFIER_ALGORITHM_HPP_INCLUDED

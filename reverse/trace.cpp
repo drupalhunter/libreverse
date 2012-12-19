@@ -100,6 +100,17 @@ namespace reverse {
 	write_trace ( trace_area::components, trace_level::detail, message );
       }
 
+      static void classifier_detail ( const char* message )
+      {
+	write_trace ( trace_area::classifier, trace_level::detail, message );
+      }
+
+  static void classifier_data ( const char* message )
+  {
+    write_trace ( trace_area::classifier, trace_level::data, message );
+  }
+
+
 #endif // ifdef LIBREVERSE_DEBUG
 
 } // namespace reverse

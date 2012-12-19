@@ -81,8 +81,7 @@ namespace reverse {
 
 	  }
 
-	  std::vector < boost::shared_ptr < reverse::components::input::grnn::training_set<data_type> > > const&
-	    get_training_data ( void ) const
+	  data_list_t const& get_training_data ( void ) const
 	  {
 
 #ifdef LIBREVERSE_DEBUG
@@ -96,8 +95,7 @@ namespace reverse {
 	  }
 
 
-	  std::vector < boost::shared_ptr < reverse::components::input::grnn::training_set<data_type> > > const&
-	    get_test_data ( void ) const
+	  data_list_t const& get_test_data ( void ) const
 	  {
 
 #ifdef LIBREVERSE_DEBUG
@@ -110,8 +108,7 @@ namespace reverse {
 	    return m_test;
 	  }
 
-	  std::vector< boost::shared_ptr < reverse::components::input::grnn::training_set<data_type> > > const&
-	    get_verification_data ( void ) const
+	  data_list_t const& get_verification_data ( void ) const
 	  {
 
 #ifdef LIBREVERSE_DEBUG
@@ -124,12 +121,12 @@ namespace reverse {
 	  }
 
 
-	  typename std::vector< boost::shared_ptr < reverse::components::input::grnn::training_set<data_type> > >::const_iterator data_begin() const
+	  typename data_list_t::const_iterator data_begin() const
 	  {
 	    return m_data.begin();
 	  }
 
-	  typename std::vector< boost::shared_ptr < reverse::components::input::grnn::training_set<data_type> > >::const_iterator data_end() const
+	  typename data_list_t::const_iterator data_end() const
 	  {
 	    return m_data.end();
 	  }
@@ -139,32 +136,32 @@ namespace reverse {
 	    m_data.push_back ( data_ptr );
 	  }
 
-	  void data_insert ( std::vector< boost::shared_ptr < reverse::components::input::grnn::training_set<data_type> > > const& source_data )
+	  void data_insert ( boost::shared_ptr < reverse::components::input::grnn::training_set<data_type> > source_data )
 	  {
-	    return m_data.insert ( m_data.end(), source_data.begin(), source_data.end() );
+	    return m_data.insert ( m_data.end(), source_data->data_begin(), source_data->data_end() );
 	  }
 
-	  typename std::vector< boost::shared_ptr < reverse::components::input::grnn::training_set<data_type> > >::const_iterator test_begin() const
+	  typename data_list_t::const_iterator test_begin() const
 	  {
 	    return m_test.begin();
 	  }
 
-	  typename std::vector< boost::shared_ptr < reverse::components::input::grnn::training_set<data_type> > >::const_iterator test_end() const
+	  typename data_list_t::const_iterator test_end() const
 	  {
 	    return m_test.end();
 	  }
       
-	  inline void test_push_back ( boost::shared_ptr < reverse::components::input::grnn::training_data<data_type> > const& data_ptr )
+	  inline void test_push_back ( boost::shared_ptr < reverse::components::input::grnn::training_data<data_type> > data_ptr )
 	  {
 	    return m_test.push_back ( data_ptr );
 	  }
 
-	  typename std::vector< boost::shared_ptr < reverse::components::input::grnn::training_set<data_type> > >::const_iterator verification_begin() const
+	  typename data_list_t::const_iterator verification_begin() const
 	  {
 	    return m_verification.begin();
 	  }
 
-	  typename std::vector< boost::shared_ptr < reverse::components::input::grnn::training_set<data_type> > >::const_iterator verification_end() const
+	  typename data_list_t::const_iterator verification_end() const
 	  {
 	    return m_verification.end();
 	  }
@@ -360,7 +357,7 @@ namespace reverse {
 	  }
 
 
-	  bool is_valid_impl ( std::vector< boost::shared_ptr < reverse::components::input::grnn::training_set<data_type> > > const& data,
+	  bool is_valid_impl ( data_list_t const& data,
 			       std::string type ) const
 	  {
 
@@ -373,7 +370,7 @@ namespace reverse {
 
 	    bool valid = true;
 
-	    for ( typename std::vector< boost::shared_ptr < reverse::components::input::grnn::training_set<data_type> > >::const_iterator cpos = data.begin();
+	    for ( typename data_list_t::const_iterator cpos = data.begin();
 		  cpos != data.end();
 		  ++cpos )
 	      {
@@ -441,9 +438,8 @@ namespace reverse {
 	  }
 
 	  data_list_t m_data;
-
-	  std::vector< boost::shared_ptr < reverse::components::input::grnn::training_set<data_type> > > m_test;
-	  std::vector< boost::shared_ptr < reverse::components::input::grnn::training_set<data_type> > > m_verification;
+	  data_list_t m_test;
+	  data_list_t m_verification;
 	  std::map < boost::uint32_t, double > m_max_values;
 
 	};

@@ -52,6 +52,28 @@ namespace reverse {
 
       static void components_detail ( const char* );
 
+      static void classifier_detail ( const char* );
+
+      template <typename T>
+      static void classifier_data ( const char* message, T const& value )
+      {
+	write_trace ( trace_area::classifier,
+		      trace_level::data,
+		      boost::str ( boost::format ( message ) % value ) );
+      }
+
+      template <typename T1, typename T2>
+      static void classifier_data ( const char* message, T1 const& value1, T2 const& value2 )
+      {
+	write_trace ( trace_area::classifier,
+		      trace_level::data,
+		      boost::str ( boost::format ( message )
+				   % value1
+				   % value2 ) );
+      }
+
+      static void classifier_data ( const char* message );
+
 #else
       static bool write_trace ( boost::uint32_t, boost::uint32_t, const char* ){}
       static void api_detail ( const char* ) {}
@@ -64,6 +86,13 @@ namespace reverse {
       static void candidate_solution_data ( const char*, T ) {}
 
       static void components_detail ( const char* ) {}
+
+      static void classifier_detail ( const char* ) {}
+
+      template <typename T>
+      static void classifier_data ( const char* message, T const& value ) {}
+
+      static void classifier_data ( const char* message ){}
 #endif
 
     };

@@ -1,356 +1,362 @@
 /*  Elf_Classifier_Algorithm.cpp
 
-   Copyright (C) 2008 Stephen Torri
+    Copyright (C) 2008 Stephen Torri
 
-   This file is part of Libreverse.
+    This file is part of Libreverse.
 
-   Libreverse is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published
-   by the Free Software Foundation; either version 3, or (at your
-   option) any later version.
+    Libreverse is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published
+    by the Free Software Foundation; either version 3, or (at your
+    option) any later version.
 
-   Libreverse is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
+    Libreverse is distributed in the hope that it will be useful, but
+    WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with this program.  If not, see
-   <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see
+    <http://www.gnu.org/licenses/>.
 */
 
-#include "Elf_Classifier_Algorithm.h"
-#include "Variable_Map.h"
+#include <reverse/components/input/grnn/elf_classifier_algorithm.hpp>
+#include <reverse/components/input/grnn/variable_map.hpp>
 
-#include "components/input/grnn/IO.h"
-#include "components/input/grnn/Candidate_Solution.h"
-#include "components/input/grnn/GRNN_Data_Map.h"
-#include "components/input/grnn/GRNN_Data_Entry.h"
-#include "components/input/grnn/Elf_Training_Data.h"
-#include "components/input/grnn/Elf_Training_Data_Parser.h"
+#include <reverse/components/input/grnn/io.hpp>
+#include <reverse/components/input/grnn/candidate_solution.hpp>
+#include <reverse/components/input/grnn/grnn_data_map.hpp>
+#include <reverse/components/input/grnn/grnn_data_entry.hpp>
+#include <reverse/components/input/grnn/elf_training_data.hpp>
+#include <reverse/components/input/grnn/elf_training_data_parser.hpp>
 
-#include "data_containers/Memory_Map.h"
-#include "infrastructure/Component_Types.h"
-#include "infrastructure/Configurator.h"
-#include "io/IO_Types.h"
-#include "io/File_ID.h"
-#include "io/input/File_Readers/Elf/Elf_Reader.h"
-#include "io/input/File_Readers/Elf/Elf_Header.h"
+#include <reverse/data_containers/memory_map.hpp>
+#include <reverse/infrastructure/component_types.hpp>
+#include <reverse/infrastructure/configurator.hpp>
+#include <reverse/io/io_types.hpp>
+#include <reverse/io/file_id.hpp>
+#include <reverse/io/input/file_readers/elf/elf_reader.hpp>
+#include <reverse/io/input/file_readers/elf/elf_header.hpp>
+#include <reverse/trace.hpp>
 
 #include <boost/format.hpp>
+
 #include <iostream>
 
-#ifdef LIBREVERSE_DEBUG
-#include "Trace.h"
-#endif /* LIBREVERSE_DEBUG */
-
-namespace libreverse
-{
-  namespace classifier
-  {
-
-    meta::Meta_Object::ptr_t
-    Elf_Classifier_Algorithm::execute ( std::string target_filename )
-    {
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::CLASSIFIER,
-			   TraceLevel::DETAIL,
-			   "Entering Elf_Classifier_Algorithm::execute" );
-#endif /* LIBREVERSE_DEBUG */
-
-      //-------------------------------
-      //      Read stored data
-      //-------------------------------
-
-      // Grab GRNN Data Map
-      classifier_types::GRNN_Data_Map::ptr_t grnn_data = (infrastructure::Configurator::Instance()).get_GRNN_Data();
-
-      // Get GRNN Data Entry
-      classifier_types::GRNN_Data_Entry::const_ptr_t grnn_entry = grnn_data->get_Entry ( GRNN_Data_Types::ELF_CLASS );
-
-      // Get sigma value from data map
-      double stored_sigma = grnn_entry->get_Sigma();
+namespace reverse {
+  namespace components {
+    namespace input {
+      namespace grnn {
 
 
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::CLASSIFIER,
-			   TraceLevel::DATA,
-			   boost::str ( boost::format ( "Stored sigma: %1%" ) % stored_sigma ) );
-#endif /* LIBREVERSE_DEBUG */
-
-
-      // Get location of final training data
-      std::string stored_filename = grnn_entry->get_Filename();
-
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::CLASSIFIER,
-			   TraceLevel::DATA,
-			   boost::str ( boost::format ( "Stored filename: %1%" ) % stored_filename ) );
-#endif /* LIBREVERSE_DEBUG */
-
-
-      // Parse final training data
-     classifier_types::Training_Set<Elf_Training_Data>::ptr_t stored_data_set =
-	IO<classifier::Elf_Training_Data,classifier::Elf_Training_Data_Parser>::get_Data ( stored_filename );
-
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::CLASSIFIER,
-			   TraceLevel::DATA,
-			   "Dumping parsed input data" );
-
-      Trace::write_Trace ( TraceArea::CLASSIFIER,
-			   TraceLevel::DATA,
-			   stored_data_set->to_String() );
-#endif /* LIBREVERSE_DEBUG */
-
-      
-      // Verify input data is correct before starting
-      stored_data_set->is_Valid();
-
-      // Collect attributes from target file
-
-      libreverse::io_types::File_ID::ptr_t target_file_obj = Create::shared_pointer<libreverse::io::File_ID> ( target_filename );
-
-      //-------------------------------
-      //       Test reader
-      //-------------------------------	    
-      libreverse::elf_module::Elf_Reader_32 const reader32_obj ( file_obj );
-      meta::Meta_Object::ptr_t results;
-
-      if ( reader32_obj.support_File_Type() )
+	boost::shared_ptr < meta::meta_object >
+	elf_classifier_algorithm::execute ( std::string const& target_filename )
 	{
-	  results = process_File ( reader32_obj );
-	}
-      else
-	{
-	  libreverse::elf_module::Elf_Reader_64 const reader64_obj ( file_obj );
+	  trace::classifier_detail ( "Entering Elf_Classifier_Algorithm::execute" );
+
+	  //-------------------------------
+	  //      Read stored data
+	  //-------------------------------
+
+	  // Grab GRNN Data Map
+	  boost::shared_ptr < grnn_data_map > grnn_data = (infrastructure::configurator::instance()).get_grnn_data();
+
+	  // Get GRNN Data Entry
+	  boost::shared_ptr < const grnn_data_entry > grnn_entry = grnn_data->get_entry ( grnn_data_types::elf_class );
 	  
-	  if ( reader64_obj.support_File_Type() )
-	    {
-	      results = process_File ( reader64_obj );
-	    }
-	}
+	  // Get sigma value from data map
+	  double stored_sigma = grnn_entry->get_sigma();
 
-      return results;
-    }
+	  trace::classifier_data ( "Stored sigma: %1%", stored_sigma );
 
-    std::string
-    Elf_Classifier_Algorithm::get_Compiler_Name ( double value )
-    {
+	  // Get location of final training data
+	  std::string stored_filename = grnn_entry->get_Filename();
 
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::CLASSIFIER,
-			   TraceLevel::DETAIL,
-			   "Entering Elf_Classifier_Algorithm::get_Compiler_Name " );
+	  trace::classifier_data ( "Stored filename: %1%", stored_filename );
 
-      Trace::write_Trace ( TraceArea::CLASSIFIER,
-			   TraceLevel::DATA,
-			   boost::str ( boost::format ( "Input Value: %1%" ) % value ) );
-#endif /* LIBREVERSE_DEBUG */
+	  // Parse final training data
+	  boost::shared_ptr < training_set<elf_training_data> > stored_data_set =
+	    io < elf_training_data, elf_training_data_parser>::get_data ( stored_filename );
 
-
-      boost::int32_t base = static_cast<boost::int32_t>(value);
-
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::CLASSIFIER,
-			   TraceLevel::DATA,
-			   boost::str ( boost::format ( "Base: %1%" ) % base ) );
-#endif /* LIBREVERSE_DEBUG */
-
-
-      double decimal = value - base;
-
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::CLASSIFIER,
-			   TraceLevel::DATA,
-			   boost::str ( boost::format ( "Decimal: %1%" ) % decimal ) );
-#endif /* LIBREVERSE_DEBUG */
-
-
-      if ( decimal >= 0.5 )
-	{
-	  base++;
-	}
-
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::CLASSIFIER,
-			   TraceLevel::DATA,
-			   boost::str ( boost::format ( "Final Base: %1%" ) % base ) );
-#endif /* LIBREVERSE_DEBUG */
-
-
-      std::string compiler_name = "";
-      switch ( base )
-	{
-	case SUN_JDK_6:
-	  compiler_name = "sun_jdk_6";
-	  break;
-	case SUN_JDK_5:
-	  compiler_name = "sun_jdk_5";
-	  break;
-	case ECJ:
-	  compiler_name = "eclipse_ecj";
-	  break;
-	case JIKES:
-	  compiler_name = "ibm_jikes";
-	  break;
-	}
-
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::CLASSIFIER,
-			   TraceLevel::DETAIL,
-			   "Exiting Elf_Classifier_Algorithm::get_Compiler_Name" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-      return compiler_name;
-    }
-
-
-
-      target_reader.read_Class_Header();
-
-      libreverse::data_types::Memory_Map::ptr_t target_mem_ptr = target_reader.get_Memory_Map();
-
-      classifier_types::Training_Set<Elf_Training_Data>::Data_List_t target_data_map;
-      classifier_types::Training_Data<Elf_Training_Data>::ptr_t target_data_ptr ( new classifier::Training_Data<Elf_Training_Data>() );
-
-      // Save filesize
-      double normalized_filesize = static_cast<double>( target_mem_ptr->size() ) /
-	stored_data_set->get_Attribute_Maximum ( Elf_Training_Data::ATTRIBUTE_FILESIZE );
-
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::CLASSIFIER,
-			   TraceLevel::DATA,
-			   boost::str ( boost::format ( "Filesize - original ( %1$d ) == normalized ( %2$1.10f )" )
-					% target_mem_ptr->size()
-					% normalized_filesize ) );
-#endif /* LIBREVERSE_DEBUG */
-
-	
-      target_data_ptr->set_Attribute ( Elf_Training_Data::ATTRIBUTE_FILESIZE, normalized_filesize );
+	  trace::classifier_data ( "Dumping parsed input data" );
+	  trace::classifier_data ( stored_data_set->to_string() );
       
-      elf_types::Class_Header::ptr_t target_class_header = target_reader.get_Header();
+	  // Verify input data is correct before starting
+	  stored_data_set->is_valid();
+
+	  // Collect attributes from target file
+	  boost::shared_ptr < io::file_id > target_file_obj = boost::make_shared<io::file_id> ( target_filename );
+
+	  //-------------------------------
+	  //       Test reader
+	  //-------------------------------	    
+	  io::input::file_readers::linux_elf::elf_reader_32 const reader32_obj ( file_obj );
+	  boost::shared_ptr < meta_object > results;
+	  
+	  if ( reader32_obj.support_file_type() )
+	    {
+	      results = process_file ( reader32_obj );
+	    }
+	  else
+	    {
+	      libreverse::elf_module::elf_reader_64 const reader64_obj ( file_obj );
+	      
+	      if ( reader64_obj.support_file_type() )
+		{
+		  results = process_file ( reader64_obj );
+		}
+	    }
+	  
+	  return results;
+	}
+	
+	std::string
+	elf_classifier_algorithm::get_compiler_name ( double value )
+	{
+	  
+	  trace::classifier_detail ( "entering elf_classifier_algorithm::get_compiler_name " );
+	  trace::classifier_data ( "input value: %1%", value );
+
+	  boost::int32_t base = static_cast<boost::int32_t>(value);
+
+	  trace::classifier_data ( "Base: %1%", base );
+
+	  double decimal = value - base;
+
+	  trace::classifier_data ( "Decimal: %1%", decimal );
+
+	  if ( decimal >= 0.5 )
+	    {
+	      base++;
+	    }
+
+	  trace::classifier_data ( Final Base: %1%, base );
+
+	  std::string compiler_name = "";
+	  switch ( base )
+	    {
+	    case SUN_JDK_6:
+	      compiler_name = "sun_jdk_6";
+	      break;
+	    case SUN_JDK_5:
+	      compiler_name = "sun_jdk_5";
+	      break;
+	    case ECJ:
+	      compiler_name = "eclipse_ecj";
+	      break;
+	    case JIKES:
+	      compiler_name = "ibm_jikes";
+	      break;
+	    }
+
+	  trace::classifier_detail ( "Exiting Elf_Classifier_Algorithm::get_Compiler_Name" );
+
+	  return compiler_name;
+	}
+
+	boost::shared_ptr < meta::meta_object > process_file ( io::input::file_readers::linux_elf::elf_reader_32 const& reader32_obj ) const
+	{
+	  trace::classifier_detail ( "Enering elf_classifier_algorithm ( elf_reader_32 )" );
+
+	  target_reader.read_class_header();
+
+	  boost::shared_ptr < data_containers::memory_map > target_mem_ptr = target_reader.get_memory_map();
+	  
+	  training_set<elf_training_data>::data_list_t target_data_map;
+	  boost::shared_ptr < training_data<elf_training_data> > target_data_ptr =
+	    boost::make_shared < training_data<elf_training_data> > ();
+
+	  // save filesize
+	  double normalized_filesize = static_cast<double>( target_mem_ptr->size() ) /
+	    stored_data_set->get_attribute_maximum ( elf_training_data::attribute_filesize );
+	  
+	  trace::classifier_data ( "Filesize - original ( %1$d ) == normalized ( %2$1.10f )", 
+				   target_mem_ptr->size(),
+				   normalized_filesize );
+	  
+	  target_data_ptr->set_attribute ( elf_training_data::attribute_filesize, normalized_filesize );
+      
+	  boost::shared_ptr < io::input::file_readers::linux_elf::class_header > target_class_header = target_reader.get_header();
+	  
+	  // Save
+	  // - This index
+	  // - super index
+	  // - version
+	  // - constant pool count
+	  double normalized_this_index = static_cast<double>( target_class_header->get_this_class() ) /
+	    stored_data_set->get_attribute_maximum ( elf_training_data::attribute_this_index );
+	  
+	  trace::classifier_data ( "This index - original ( %1$d ) == normalized ( %2$1.10f )",
+				   target_class_header->get_this_class(),
+				   normalized_this_index );
+	  
+	  target_data_ptr->set_attribute ( elf_training_data::attribute_this_index, normalized_this_index );
+	
+	  double normalized_super_index = static_cast<double>( target_class_header->get_super_class() ) /
+	    stored_data_set->get_attribute_maximum ( elf_training_data::attribute_super_index );
+	  
+	  trace::classifier_data ( "super index - original ( %1$d ) == normalized ( %2$1.10f )",
+				   target_class_header->get_super_class(),
+				   normalized_super_index );
+
+	  target_data_ptr->set_attribute ( elf_training_data::attribute_super_index, normalized_super_index );
+	  
+	  double version_value = 0.0;
+	  std::stringstream input_version;
+	  
+	  input_version << boost::format ( "%1%.%2%" )
+	    % target_class_header->get_Major_Version()
+	    % target_class_header->get_Minor_Version();
+	  input_version >> version_value;
+	  
+	  double normalized_version_value = version_value /
+	    stored_data_set->get_Attribute_Maximum ( Elf_Training_Data::ATTRIBUTE_VERSION );
+	  
+	  trace::classifier_data ( "Version - original ( %1$1.10f ) == normalized ( %2$1.10f )",
+				   version_value,
+				   normalized_version_value );
+	  
+	  target_data_ptr->set_attribute ( elf_training_data::attribute_version, normalized_version_value );
+	
+	  double normalized_constant_pool_count = static_cast<double>( target_class_header->get_constant_pool_count() ) /
+	    stored_data_set->get_attribute_maximum ( elf_training_data::attribute_constant_pool_count );
+	
+	  trace::classifier_data ( "constant pool count - original ( %1$d ) == normalized ( %2$1.10f )",
+				   target_class_header->get_constant_pool_count(),
+				   normalized_constant_pool_count );
+
+	  target_data_ptr->set_attribute ( elf_training_data::attribute_constant_pool_count, normalized_constant_pool_count );
+	
+	  target_data_map.push_back ( target_data_ptr );
+	
+	  // Create GRNN
+	  classifier_types::configuration<elf_training_data>::ptr_t config_ptr =
+	    boost::make_shared < classifier::configuration<elf_training_data> > (true);
+
+	  grnn<elf_training_data> grnn_obj ( stored_sigma,
+					     stored_data_set->get_training_data (),
+					     target_data_map,
+					     config_ptr );
+
+	  // Execute GRNN
+	  double results = grnn_obj.classify();
+
+	  trace::classifier_data ( "result of grnn: %1%", results );
+
+	  // Save result
+	  boost::shared_ptr < meta::meta_object > meta_obj = boost::make_shared < meta::meta_object > ();
+
+	  meta_obj->add ( "compiler_name", 
+			  this->get_compiler_name ( results ),
+			  meta::meta_object::string );
+
+	  trace::classifier_detail ( "Exiting Elf_Classifier_Algorithm::execute" );
+
+	  return meta_obj;
+	}
+
+      }
+
+      meta::meta_object::ptr_t process_file ( libreverse::elf_module::elf_reader_64 const& reader64_obj ) const;
+	
+      target_reader.read_class_header();
+
+      boost::shared_ptr < data_containers::memory_map > target_mem_ptr = target_reader.get_memory_map();
+
+      training_set<elf_training_data>::data_list_t target_data_map;
+      boost::shared_ptr < training_data<elf_training_data> > target_data_ptr =
+	boost::make_shared < training_data<elf_training_data> > ();
+
+      // save filesize
+      double normalized_filesize = static_cast<double>( target_mem_ptr->size() ) /
+	stored_data_set->get_attribute_maximum ( elf_training_data::attribute_filesize );
+
+      trace::classifier_data ( "Filesize - original ( %1$d ) == normalized ( %2$1.10f )", 
+			       target_mem_ptr->size(),
+			       normalized_filesize );
+	
+      target_data_ptr->set_attribute ( elf_training_data::attribute_filesize, normalized_filesize );
+      
+      boost::shared_ptr < io::input::file_readers::linux_elf::class_header > target_class_header = target_reader.get_header();
 
       // Save
       // - This index
       // - super index
       // - version
       // - constant pool count
-      double normalized_this_index = static_cast<double>( target_class_header->get_This_Class() ) /
-	stored_data_set->get_Attribute_Maximum ( Elf_Training_Data::ATTRIBUTE_THIS_INDEX );
+      double normalized_this_index = static_cast<double>( target_class_header->get_this_class() ) /
+	stored_data_set->get_attribute_maximum ( elf_training_data::attribute_this_index );
 
+      trace::classifier_data ( "This index - original ( %1$d ) == normalized ( %2$1.10f )",
+			       target_class_header->get_this_class(),
+			       normalized_this_index );
 
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::CLASSIFIER,
-			   TraceLevel::DATA,
-			   boost::str ( boost::format ( "This index - original ( %1$d ) == normalized ( %2$1.10f )" )
-					% target_class_header->get_This_Class()
-					% normalized_this_index ) );
-#endif /* LIBREVERSE_DEBUG */
+      target_data_ptr->set_attribute ( elf_training_data::attribute_this_index, normalized_this_index );
 
+      double normalized_super_index = static_cast<double>( target_class_header->get_super_class() ) /
+	stored_data_set->get_attribute_maximum ( elf_training_data::attribute_super_index );
 
-      target_data_ptr->set_Attribute ( Elf_Training_Data::ATTRIBUTE_THIS_INDEX, normalized_this_index );
+      trace::classifier_data ( "super index - original ( %1$d ) == normalized ( %2$1.10f )",
+			       target_class_header->get_super_class(),
+			       normalized_super_index );
 
-      double normalized_super_index = static_cast<double>( target_class_header->get_Super_Class() ) /
-	stored_data_set->get_Attribute_Maximum ( Elf_Training_Data::ATTRIBUTE_SUPER_INDEX );
-
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::CLASSIFIER,
-			   TraceLevel::DATA,
-			   boost::str ( boost::format ( "Super index - original ( %1$d ) == normalized ( %2$1.10f )" )
-					% target_class_header->get_Super_Class()
-					% normalized_super_index ) );
-#endif /* LIBREVERSE_DEBUG */
-
-
-      target_data_ptr->set_Attribute ( Elf_Training_Data::ATTRIBUTE_SUPER_INDEX, normalized_super_index );
-
+      target_data_ptr->set_attribute ( elf_training_data::attribute_super_index, normalized_super_index );
+	
       double version_value = 0.0;
       std::stringstream input_version;
+	
       input_version << boost::format ( "%1%.%2%" )
-	% target_class_header->get_Major_Version()
-	% target_class_header->get_Minor_Version();
+      % target_class_header->get_Major_Version()
+      % target_class_header->get_Minor_Version();
       input_version >> version_value;
-
+	
       double normalized_version_value = version_value /
 	stored_data_set->get_Attribute_Maximum ( Elf_Training_Data::ATTRIBUTE_VERSION );
+	
+      trace::classifier_data ( "Version - original ( %1$1.10f ) == normalized ( %2$1.10f )",
+			       version_value,
+			       normalized_version_value );
 
+      target_data_ptr->set_attribute ( elf_training_data::attribute_version, normalized_version_value );
 
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::CLASSIFIER,
-			   TraceLevel::DATA,
-			   boost::str ( boost::format ( "Version - original ( %1$1.10f ) == normalized ( %2$1.10f )" )
-					% version_value
-					% normalized_version_value ) );
-#endif /* LIBREVERSE_DEBUG */
+      double normalized_constant_pool_count = static_cast<double>( target_class_header->get_constant_pool_count() ) /
+	stored_data_set->get_attribute_maximum ( elf_training_data::attribute_constant_pool_count );
 
+      trace::classifier_data ( "constant pool count - original ( %1$d ) == normalized ( %2$1.10f )",
+			       target_class_header->get_constant_pool_count(),
+			       normalized_constant_pool_count );
 
-      target_data_ptr->set_Attribute ( Elf_Training_Data::ATTRIBUTE_VERSION, normalized_version_value );
-
-      double normalized_constant_pool_count = static_cast<double>( target_class_header->get_Constant_Pool_Count() ) /
-	stored_data_set->get_Attribute_Maximum ( Elf_Training_Data::ATTRIBUTE_CONSTANT_POOL_COUNT );
-
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::CLASSIFIER,
-			   TraceLevel::DATA,
-			   boost::str ( boost::format ( "Constant pool count - original ( %1$d ) == normalized ( %2$1.10f )" )
-					% target_class_header->get_Constant_Pool_Count()
-					% normalized_constant_pool_count ) );
-#endif /* LIBREVERSE_DEBUG */
-
-
-      target_data_ptr->set_Attribute ( Elf_Training_Data::ATTRIBUTE_CONSTANT_POOL_COUNT, normalized_constant_pool_count );
+      target_data_ptr->set_attribute ( elf_training_data::attribute_constant_pool_count, normalized_constant_pool_count );
 
       target_data_map.push_back ( target_data_ptr );
-
+	
       // Create GRNN
-      classifier_types::Configuration<Elf_Training_Data>::ptr_t config_ptr =
-	Create::shared_pointer < classifier::Configuration<Elf_Training_Data> > (true);
+      classifier_types::configuration<elf_training_data>::ptr_t config_ptr =
+	boost::make_shared < classifier::configuration<elf_training_data> > (true);
 
-      GRNN<Elf_Training_Data> grnn_obj ( stored_sigma,
-					  stored_data_set->get_Training_Data (),
-					  target_data_map,
-					  config_ptr );
+      grnn<elf_training_data> grnn_obj ( stored_sigma,
+					 stored_data_set->get_training_data (),
+					 target_data_map,
+					 config_ptr );
 
       // Execute GRNN
       double results = grnn_obj.classify();
 
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::CLASSIFIER,
-			   TraceLevel::DATA,
-			   boost::str ( boost::format ( "Result of GRNN: %1%" ) % results ) );;
-#endif /* LIBREVERSE_DEBUG */
-
+      trace::classifier_data ( "result of grnn: %1%", results );
 
       // Save result
-      meta::Meta_Object::ptr_t meta_obj = Create::shared_pointer<meta::Meta_Object>();
+      boost::shared_ptr < meta::meta_object > meta_obj = boost::make_shared < meta::meta_object > ();
 
       meta_obj->add ( "compiler_name", 
-		      this->get_Compiler_Name ( results ),
-		      meta::Meta_Object::STRING );
+		      this->get_compiler_name ( results ),
+		      meta::meta_object::string );
 
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::CLASSIFIER,
-			   TraceLevel::DETAIL,
-			   "Exiting Elf_Classifier_Algorithm::execute" );
-#endif /* LIBREVERSE_DEBUG */
-
+      trace::classifier_detail ( "Exiting Elf_Classifier_Algorithm::execute" );
 
       return meta_obj;
-  }
+    }
+      
+  } // namespace grnn
+} // namespace input
+} // namespace components
+} // namespace reverse
 
-  } /* namespace classifier */
-} /* namespace libreverse */
