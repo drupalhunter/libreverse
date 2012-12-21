@@ -44,7 +44,7 @@ namespace reverse
        * \exception Internal_Exception(NULL_POINTER)
        */
       template <typename pointer_type>
-      static inline void is_set ( boost::shared_ptr<pointer_type>& obj_ptr )
+      static inline void is_set ( boost::shared_ptr<pointer_type> obj_ptr )
 	{
 	  if ( ! obj_ptr )
 	    {
@@ -53,7 +53,7 @@ namespace reverse
 	}
 
       template <typename pointer_type>
-      static inline void is_set ( const boost::shared_ptr< const pointer_type>& obj_ptr )
+      static inline void is_set ( const boost::shared_ptr< const pointer_type> obj_ptr )
 	{
 	  if ( ! obj_ptr )
 	    {

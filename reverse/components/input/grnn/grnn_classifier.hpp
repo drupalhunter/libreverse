@@ -405,8 +405,8 @@ namespace reverse {
 
 	    double distance_squared_value = 0.0;
 
-	    typename training_data<data_type>::ptr_t training_map = *training_row;
-	    typename training_data<data_type>::ptr_t target_map = *target_row;
+	    typename boost::shared_ptr < training_data<data_type> > training_map = *training_row;
+	    typename boost::shared_ptr < training_data<data_type> > target_map = *target_row;
 
 	    // For all attributes in row
 	    for ( boost::uint32_t index = 1;

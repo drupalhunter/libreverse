@@ -56,10 +56,11 @@ using namespace libreverse::alloc;
 using namespace libreverse::trace;
 #endif /* LIBREVERSE_DEBUG */
 
-namespace libreverse
-{
-  namespace classifier
-  {
+namespace reverse {
+  namespace components {
+    namespace input {
+      namespace grnn {
+
 
     const boost::uint8_t Java_Training_Data::ATTRIBUTE_COUNT = 32;
     const boost::uint8_t Java_Training_Data::CLASSIFIER_TARGET = Java_Training_Data::ATTRIBUTE_TARGET_ID;
@@ -783,5 +784,8 @@ namespace libreverse
       return m_data.empty();
     }
 
-  } /* namespace classifier */
-} /* namespace libreverse */
+      } // namespace grnn
+    } // namespace input 
+  } // namespace components
+} // namespace reverse
+
