@@ -1,92 +1,101 @@
 
 /*  Windows_Training_Data.h
 
-   Copyright (C) 2008 Stephen Torri
+    Copyright (C) 2008 Stephen Torri
 
-   This file is part of Libreverse.
+    This file is part of Libreverse.
 
-   Libreverse is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published
-   by the Free Software Foundation; either version 3, or (at your
-   option) any later version.
+    Libreverse is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published
+    by the Free Software Foundation; either version 3, or (at your
+    option) any later version.
 
-   Libreverse is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
+    Libreverse is distributed in the hope that it will be useful, but
+    WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with this program.  If not, see
-   <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see
+    <http://www.gnu.org/licenses/>.
 */
 
-#ifndef WINDOWS_TRAINING_DATA_H
-#define WINDOWS_TRAINING_DATA_H
+#ifndef REVERSE_COMPONENTS_INPUT_GRNN_WINDOWS_TRAINING_DATA_HPP_INCLUDED
+#define REVERSE_COMPONENTS_INPUT_GRNN_WINDOWS_TRAINING_DATA_HPP_INCLUDED
+
+#include <reverse/components/input/grnn/variable_map.hpp>
 
 #include <boost/shared_ptr.hpp>
 #include <boost/cstdint.hpp>
+
 #include <string>
 
-#include "Classifier_Types.h"
-#include "Variable_Map.h"
+namespace reverse {
+  namespace components {
+    namespace input {
+      namespace grnn {
 
-namespace libreverse
-{
-  namespace classifier
-  {
-    class Windows_Training_Data
-    {
-    public:
+    
+	template <typename data_type>
+	class configuration;
 
-      static const boost::uint8_t ATTRIBUTE_COUNT;
-      static const boost::uint8_t CLASSIFIER_TARGET;
+	class windows_training_data
+	{
+	public:
 
-      enum Attributes
-        {
-	  ATTRIBUTE_TARGET_ID = 0,
-	  ATTRIBUTE_FILESIZE = 1,
-	  ATTRIBUTE_EXE_HEADER_ADDRESS = 2,
-	  ATTRIBUTE_COFF_SECTION_COUNT = 3,
-	  ATTRIBUTE_PE_OPT_CODE_SIZE = 4,
-	  ATTRIBUTE_PE_OPT_BASE_OF_DATA = 5,
-	  ATTRIBUTE_PE_OPT_ENTRY_POINT = 6,
-	  ATTRIBUTE_PE_OPT_IMAGE_SIZE = 7
-        };
+	  static const boost::uint8_t attribute_count;
+	  static const boost::uint8_t classifier_target;
 
-      friend class Windows_Training_Data_Parser;
+	  enum attributes
+	    {
+	      attribute_target_id = 0,
+	      attribute_filesize = 1,
+	      attribute_exe_header_address = 2,
+	      attribute_coff_section_count = 3,
+	      attribute_pe_opt_code_size = 4,
+	      attribute_pe_opt_base_of_data = 5,
+	      attribute_pe_opt_entry_point = 6,
+	      attribute_pe_opt_image_size = 7
+	    };
 
-      Windows_Training_Data ();
+	  friend class windows_training_data_parser;
 
-      ~Windows_Training_Data();
+	  windows_training_data ();
 
-      classifier_types::Variable_Map::map_type
-      get_Candidate_Data ( classifier_types::Configuration<Windows_Training_Data>::ptr_t config ) const;
+	  ~windows_training_data();
 
-      static std::string get_Attribute_String_List ( classifier_types::Configuration<Windows_Training_Data>::ptr_t config );
+	  variable_map::map_t
+	  get_candidate_data ( boost::shared_ptr < configuration<windows_training_data> > config ) const;
+
+	  static std::string get_attribute_string_list ( boost::shared_ptr < configuration<windows_training_data> > config );
 
 
-      std::string to_String ( classifier_types::Configuration<Windows_Training_Data>::ptr_t config ) const;
+	  std::string to_string ( boost::shared_ptr < configuration<windows_training_data> > config ) const;
 
-      std::string to_XML ( classifier_types::Configuration<Windows_Training_Data>::ptr_t config ) const;
+	  std::string to_xml ( boost::shared_ptr < configuration<windows_training_data> > config ) const;
 
-      classifier_types::Variable_Map::map_type::const_iterator begin ( void ) const;
-      classifier_types::Variable_Map::map_type::iterator begin ( void );
+	  variable_map::map_t::const_iterator begin ( void ) const;
 
-      classifier_types::Variable_Map::map_type::const_iterator end ( void ) const;
-      classifier_types::Variable_Map::map_type::iterator end ( void );
+	  variable_map::map_t::iterator begin ( void );
 
-      void set_Attribute ( boost::uint32_t index, double value );
+	  variable_map::map_t::const_iterator end ( void ) const;
+	  variable_map::map_t::iterator end ( void );
 
-      double get_Attribute ( boost::uint32_t index ) const;
+	  void set_attribute ( boost::uint32_t index, double value );
 
-      bool empty ( void ) const;
+	  double get_attribute ( boost::uint32_t index ) const;
 
-    private:
+	  bool empty ( void ) const;
 
-      classifier::Variable_Map m_data;
-    };
+	private:
 
-  } /* namespace classifier */
-} /* namespace libreverse */
+	  variable_map m_data;
 
-#endif /* WINDOWS_TRAINING_DATA_H */
+	};
+
+      } // namespace input
+    } // namespace grnn
+  } // namespace components
+} // namespace reverse
+
+#endif /* ifdef REVERSE_COMPONENTS_INPUT_GRNN_WINDOWS_TRAINING_DATA_HPP_INCLUDED */

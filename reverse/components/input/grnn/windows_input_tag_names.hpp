@@ -19,31 +19,37 @@
     <http://www.gnu.org/licenses/>.
 */
 
-#ifndef Windows_Input_Tag_Names_H
-#define Windows_Input_Tag_Names_H
+#ifndef REVERSE_COMPONENTS_GRNN_INPUT_WINDOWS_INPUT_TAG_NAMES_HPP_INCLUDED
+#define REVERSE_COMPONENTS_GRNN_INPUT_WINDOWS_INPUT_TAG_NAMES_HPP_INCLUDED
 
 #include <string>
 
-namespace libreverse {
-
-  namespace classifier {
+namespace reverse {
+  namespace components {
+    namespace input {
+      namespace grnn {
    
-    class Windows_Input_Tag_Names {
-    public:
-      static std::string const TAG_DATA;
-      static std::string const TAG_TARGET_ID;
-      static std::string const TAG_FILE;
-      static std::string const TAG_FILE_SIZE;
-      static std::string const TAG_EXE_HEADER_ADDRESS;
-      static std::string const TAG_COFF_SECTION_COUNT;
-      static std::string const TAG_PE_OPT_LINKER_VERSION;
-      static std::string const TAG_PE_OPT_CODE_SIZE;
-      static std::string const TAG_PE_OPT_BASE_OF_DATA;
-      static std::string const TAG_PE_OPT_ENTRY_POINT;
-      static std::string const TAG_PE_OPT_IMAGE_SIZE;
-    };
+	class windows_input_tag_names {
+	public:
 
-  } /* namespace classifier */
-} /* namespace classifier */
+	  static std::string const tag_data;
+	  static std::string const tag_target_id;
+	  static std::string const tag_file;
+	  static std::string const tag_file_size;
+	  static std::string const tag_exe_header_address;
+	  static std::string const tag_coff_section_count;
+	  static std::string const tag_pe_opt_linker_version;
+	  static std::string const tag_pe_opt_code_size;
+	  static std::string const tag_pe_opt_base_of_data;
+	  static std::string const tag_pe_opt_entry_point;
+	  static std::string const tag_pe_opt_image_size;
 
-#endif /* Windows_Input_Tag_Names_H */
+	};
+
+      } // namespace input
+    } // namespace grnn
+  } // namespace components
+} // namespace reverse
+
+
+#endif /* ifdef REVERSE_COMPONENTS_GRNN_INPUT_WINDOWS_INPUT_TAG_NAMES_HPP_INCLUDED */

@@ -30,360 +30,256 @@
 // Copyright: See COPYING file that comes with this distribution
 //
 //
-#include "Windows_Training_Data.h"
-#include "errors/Internal_Exception.h"
-#include "Configuration.h"
-#include <sstream>
-#include <iostream>
+#include <reverse/components/input/grnn/windows_training_data.hpp>
+#include <reverse/components/input/grnn/configuration.hpp>
+#include <reverse/errors/internal_exception.hpp>
+#include <reverse/reverse.hpp>
+#include <reverse/trace.hpp>
+
 #include <boost/format.hpp>
 
-#include "Reverse.h"
+#include <sstream>
+#include <iostream>
 
+namespace reverse {
+  namespace components {
+    namespace input {
+      namespace grnn {
 
-using namespace libreverse::api;
+	const boost::uint8_t windows_training_data::attribute_count = 8;
+	const boost::uint8_t windows_training_data::classifier_target = windows_training_data::attribute_target_id;
 
-#ifdef LIBREVERSE_DEBUG
-#include "Trace.h"
-using namespace libreverse::trace;
-#endif /* LIBREVERSE_DEBUG */
+	windows_training_data::windows_training_data ()
+	{
+	  trace::grnn_detail ( "Inside Windows_Training_Data constructor" );
+	}
 
-namespace libreverse
-{
-  namespace classifier
-  {
+	windows_training_data::~windows_training_data ()
+	{
+	  trace::grnn_detail ( "Inside Windows_Training_Data destructor" );
+	}
 
-    const boost::uint8_t Windows_Training_Data::ATTRIBUTE_COUNT = 8;
-    const boost::uint8_t Windows_Training_Data::CLASSIFIER_TARGET = Windows_Training_Data::ATTRIBUTE_TARGET_ID;
+	variable_map::map_t
+	windows_training_data::get_candidate_data ( boost::shared_ptr < configuration<windows_training_data> > config ) const
+	{
+	  trace::grnn_detail ( "Entering Windows_Training_Data::get_Candidate_Data" );
 
-    Windows_Training_Data::Windows_Training_Data ()
-    {
+	  variable_map::map_t output;
 
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::GRNN_DATA,
-			   TraceLevel::DETAIL,
-			   "Inside Windows_Training_Data constructor" );
-#endif /* LIBREVERSE_DEBUG */
+	  for ( boost::uint32_t index = 0;
+		index < windows_training_data::attribute_count;
+		++index )
+	    {
+	      if ( config->get_attribute ( index ) )
+		{
+		  output[index] = m_data.get_attribute ( index );
+		}
+	    }
 
-    }
+	  trace::grnn_detail ( "Exiting Windows_Training_Data::get_Candidate_Data" );
 
-    Windows_Training_Data::~Windows_Training_Data ()
-    {
+	  return output;
+	}
 
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::GRNN_DATA,
-			   TraceLevel::DETAIL,
-			   "Inside Windows_Training_Data destructor" );
-#endif /* LIBREVERSE_DEBUG */
-
-    }
-
-//     classifier_types::Variable_Map::map_type
-//     Windows_Training_Data::get_Candidate_Data ( classifier_types::Configuration<Windows_Training_Data>::ptr_t config ) const
-//     {
-
-// #ifdef LIBREVERSE_DEBUG
-//       Trace::write_Trace ( TraceArea::GRNN_DATA,
-// 			   TraceLevel::DETAIL,
-// 			   "Entering Windows_Training_Data::get_Candidate_Data" );
-// #endif /* LIBREVERSE_DEBUG */
-
-
-//       classifier_types::Variable_Map::map_type output;
-
-//       for ( boost::uint32_t index = 0;
-// 	    index < Windows_Training_Data::ATTRIBUTE_COUNT;
-// 	    ++index )
-//         {
-// 	  if ( config->get_Attribute ( index ) )
-//             {
-// 	      classifier_types::Variable_Map::map_type::const_iterator pos = m_data.find ( index );
-// 	      output[index] = ( *pos ).second;
-//             }
-//         }
-
-
-// #ifdef LIBREVERSE_DEBUG
-//       Trace::write_Trace ( TraceArea::GRNN_DATA,
-// 			   TraceLevel::DETAIL,
-// 			   "Exiting Windows_Training_Data::get_Candidate_Data" );
-// #endif /* LIBREVERSE_DEBUG */
-
-
-//       return output;
-//     }
-
-    std::string
-    Windows_Training_Data::get_Attribute_String_List ( classifier_types::Configuration<Windows_Training_Data>::ptr_t config )
-    {
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::GRNN_DATA,
-			   TraceLevel::DETAIL,
-			   "Entering Windows_Training_Data::get_Attribute_String_List" );
-#endif /* LIBREVERSE_DEBUG */
-
+	std::string
+	windows_training_data::get_attribute_string_list ( boost::shared_ptr < configuration<windows_training_data> > config )
+	{
+	  trace::grnn_detail ( "Entering Windows_Training_Data::get_Attribute_String_List" );
       
-      std::stringstream output;
+	  std::stringstream output;
 
-      output << "Windows_Training_Data #%1%" << std::endl;
+	  output << "Windows_Training_Data #%1%" << std::endl;
 	
-      if ( config->get_Attribute ( Windows_Training_Data::ATTRIBUTE_TARGET_ID ) )
-        {
-	  output << "Target_ID" << std::endl;
-        }
+	  if ( config->get_attribute ( windows_training_data::attribute_target_id ) )
+	    {
+	      output << "Target_ID" << std::endl;
+	    }
+	  
+	  if ( config->get_attribute ( windows_training_data::attribute_filesize ) )
+	    {
+	      output << "filesize" << std::endl;
+	    }
 
-      if ( config->get_Attribute ( Windows_Training_Data::ATTRIBUTE_FILESIZE ) )
-        {
-	  output << "Filesize" << std::endl;
-        }
+	  if ( config->get_attribute ( windows_training_data::attribute_exe_header_address ) )
+	    {
+	      output << "dos exe header address" << std::endl;
+	    }
 
-      if ( config->get_Attribute ( Windows_Training_Data::ATTRIBUTE_EXE_HEADER_ADDRESS ) )
-	{
-	  output << "DOS Exe header address" << std::endl;
+	  if ( config->get_attribute ( windows_training_data::attribute_coff_section_count ) )
+	    {
+	      output << "coff number of section headers" << std::endl;
+	    }
+
+	  if ( config->get_attribute ( windows_training_data::attribute_pe_opt_code_size ) )
+	    {
+	      output << "optional header code size" << std::endl;
+	    }
+
+	  if ( config->get_attribute ( windows_training_data::attribute_pe_opt_base_of_data ) )
+	    {
+	      output << "optional header base of data" << std::endl;
+	    }
+
+	  if ( config->get_attribute ( windows_training_data::attribute_pe_opt_entry_point ) )
+	    {
+	      output << "optional header entry point" << std::endl;
+	    }
+
+	  if ( config->get_attribute ( windows_training_data::attribute_pe_opt_image_size ) )
+	    {
+	      output << "optional header image size" << std::endl;
+	    }
+
+	  trace::grnn_detail ( "Exiting Windows_Training_Data::get_Attribute_String_List" );
+
+	  return output.str();
 	}
 
-      if ( config->get_Attribute ( Windows_Training_Data::ATTRIBUTE_COFF_SECTION_COUNT ) )
+	std::string
+	windows_training_data::to_string ( boost::shared_ptr < configuration<windows_training_data> > config ) const
 	{
-	  output << "COFF number of section headers" << std::endl;
-	}
+	  trace::grnn_detail ( "Entering Windows_Training_Data::to_String" );
 
-      if ( config->get_Attribute ( Windows_Training_Data::ATTRIBUTE_PE_OPT_CODE_SIZE ) )
-	{
-	  output << "Optional Header code size" << std::endl;
-	}
+	  std::stringstream output;
 
-      if ( config->get_Attribute ( Windows_Training_Data::ATTRIBUTE_PE_OPT_BASE_OF_DATA ) )
-	{
-	  output << "Optional Header base of data" << std::endl;
-	}
-
-      if ( config->get_Attribute ( Windows_Training_Data::ATTRIBUTE_PE_OPT_ENTRY_POINT ) )
-	{
-	  output << "Optional Header entry point" << std::endl;
-	}
-
-      if ( config->get_Attribute ( Windows_Training_Data::ATTRIBUTE_PE_OPT_IMAGE_SIZE ) )
-	{
-	  output << "Optional Header image size" << std::endl;
-	}
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::GRNN_DATA,
-			   TraceLevel::DETAIL,
-			   "Exiting Windows_Training_Data::get_Attribute_String_List" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-      return output.str();
-    }
-
-    std::string
-    Windows_Training_Data::to_String ( classifier_types::Configuration<Windows_Training_Data>::ptr_t config ) const
-    {
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::GRNN_DATA,
-			   TraceLevel::DETAIL,
-			   "Entering Windows_Training_Data::to_String" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-      std::stringstream output;
-
-      output << "Windows_Training_Data" << std::endl;
+	  output << "windows_training_data" << std::endl;
 	
-      if ( config->get_Attribute ( Windows_Training_Data::ATTRIBUTE_TARGET_ID ) )
-        {
-	  output << boost::format ( "  target id...........: %1%" )
-	    % m_data.get_Attribute ( ATTRIBUTE_TARGET_ID ) << std::endl;
-        }
+	  if ( config->get_attribute ( windows_training_data::attribute_target_id ) )
+	    {
+	      output << boost::format ( "  target id...........: %1%" )
+		% m_data.get_attribute ( attribute_target_id ) << std::endl;
+	    }
 
-      if ( config->get_Attribute ( Windows_Training_Data::ATTRIBUTE_FILESIZE ) )
-        {
-	  output << boost::format ( "  file size.............: %1% bytes" )
-	    % m_data.get_Attribute ( ATTRIBUTE_FILESIZE )  << std::endl;
-        }
+	  if ( config->get_attribute ( windows_training_data::attribute_filesize ) )
+	    {
+	      output << boost::format ( "  file size.............: %1% bytes" )
+		% m_data.get_attribute ( attribute_filesize )  << std::endl;
+	    }
 
-      if ( config->get_Attribute ( Windows_Training_Data::ATTRIBUTE_EXE_HEADER_ADDRESS ) )
-	{
-	  output << boost::format ( "  Exe header address.............: %1%" )
-	    % m_data.get_Attribute ( ATTRIBUTE_EXE_HEADER_ADDRESS )  << std::endl;
+	  if ( config->get_attribute ( windows_training_data::attribute_exe_header_address ) )
+	    {
+	      output << boost::format ( "  exe header address.............: %1%" )
+		% m_data.get_attribute ( attribute_exe_header_address )  << std::endl;
+	    }
+
+	  if ( config->get_attribute ( windows_training_data::attribute_coff_section_count ) )
+	    {
+	      output << boost::format ( "  coff section header count......: %1%" )
+		% m_data.get_attribute ( attribute_coff_section_count )  << std::endl;
+	    }
+
+	  if ( config->get_attribute ( windows_training_data::attribute_pe_opt_code_size ) )
+	    {
+	      output << boost::format ( "  pe code size...................: %1%" )
+		% m_data.get_attribute ( attribute_pe_opt_code_size )  << std::endl;
+	    }
+
+	  if ( config->get_attribute ( windows_training_data::attribute_pe_opt_base_of_data ) )
+	    {
+	      output << boost::format ( "  pe base of data................: %1%" )
+		% m_data.get_attribute ( attribute_pe_opt_base_of_data )  << std::endl;
+	    }
+
+	  if ( config->get_attribute ( windows_training_data::attribute_pe_opt_entry_point ) )
+	    {
+	      output << boost::format ( "  pe entry point................: %1%" )
+		% m_data.get_attribute ( attribute_pe_opt_entry_point )  << std::endl;
+	    }
+
+	  if ( config->get_attribute ( windows_training_data::attribute_pe_opt_image_size ) )
+	    {
+	      output << boost::format ( "  pe image size.................: %1%" )
+		% m_data.get_attribute ( attribute_pe_opt_image_size )  << std::endl;
+	    }
+
+	  trace::grnn_detail ( "Exiting Windows_Training_Data::to_String" );
+
+	  return output.str();
 	}
 
-      if ( config->get_Attribute ( Windows_Training_Data::ATTRIBUTE_COFF_SECTION_COUNT ) )
+	std::string
+	windows_training_data::to_xml ( boost::shared_ptr < configuration<windows_training_data> > config ) const
 	{
-	  output << boost::format ( "  COFF section header count......: %1%" )
-	    % m_data.get_Attribute ( ATTRIBUTE_COFF_SECTION_COUNT )  << std::endl;
+	  trace::grnn_detail ( "Entering Windows_Training_Data::to_XML" );
+
+	  std::stringstream output;
+
+	  output << "windows_training_data:" << std::endl
+		 << boost::format ( "  compiler id.................: %1%" ) % this->get_attribute ( attribute_target_id )  << std::endl
+		 << boost::format ( "  file size...................: %1% bytes" ) % this->get_attribute ( attribute_filesize )  << std::endl
+		 << boost::format ( "  dos exe header address......: 0x%1$x" ) % this->get_attribute ( attribute_exe_header_address ) << std::endl
+		 << boost::format ( "  optional header code size...: 0x%1%" ) % this->get_attribute ( attribute_pe_opt_code_size ) << std::endl
+		 << boost::format ( "  optional base of data.......: 0x%1$x" ) % this->get_attribute ( attribute_pe_opt_base_of_data ) << std::endl
+		 << boost::format ( "  optional entry point........: 0x%1$x" ) % this->get_attribute ( attribute_pe_opt_entry_point ) << std::endl
+	    	 << boost::format ( "  optional image size.........: 0x%1$x" ) % this->get_attribute ( attribute_pe_opt_image_size ) << std::endl;
+
+	  trace::grnn_detail ( "Exiting Windows_Training_Data::to_XML" );
+
+	  return output.str();
 	}
 
-      if ( config->get_Attribute ( Windows_Training_Data::ATTRIBUTE_PE_OPT_CODE_SIZE ) )
+	variable_map::map_t::const_iterator
+	windows_training_data::begin ( void ) const
 	{
-	  output << boost::format ( "  PE code size...................: %1%" )
-	    % m_data.get_Attribute ( ATTRIBUTE_PE_OPT_CODE_SIZE )  << std::endl;
+	  trace::grnn_detail ( "Inside Windows_Training_Data::begin (const)" );
+
+	  return m_data.begin();
 	}
 
-      if ( config->get_Attribute ( Windows_Training_Data::ATTRIBUTE_PE_OPT_BASE_OF_DATA ) )
+	variable_map::map_t::iterator
+	windows_training_data::begin ( void )
 	{
-	  output << boost::format ( "  PE base of data................: %1%" )
-	    % m_data.get_Attribute ( ATTRIBUTE_PE_OPT_BASE_OF_DATA )  << std::endl;
+	  trace::grnn_detail ( "Inside Windows_Training_Data::begin" );
+
+	  return m_data.begin();
 	}
 
-      if ( config->get_Attribute ( Windows_Training_Data::ATTRIBUTE_PE_OPT_ENTRY_POINT ) )
+	variable_map::map_t::const_iterator
+	windows_training_data::end ( void ) const
 	{
-	  output << boost::format ( "  PE entry point................: %1%" )
-	    % m_data.get_Attribute ( ATTRIBUTE_PE_OPT_ENTRY_POINT )  << std::endl;
+	  trace::grnn_detail ( "Inside Windows_Training_Data::end (const)" );
+
+	  return m_data.end();
 	}
 
-      if ( config->get_Attribute ( Windows_Training_Data::ATTRIBUTE_PE_OPT_IMAGE_SIZE ) )
+	variable_map::map_t::iterator
+	windows_training_data::end ( void )
 	{
-	  output << boost::format ( "  PE image size.................: %1%" )
-	    % m_data.get_Attribute ( ATTRIBUTE_PE_OPT_IMAGE_SIZE )  << std::endl;
+	  trace::grnn_detail ( "Inside Windows_Training_Data::end" );
+
+	  return m_data.end();
 	}
 
-#ifdef LIBREVERSE_DEBUG	
-      Trace::write_Trace ( TraceArea::GRNN_DATA,
-			   TraceLevel::DETAIL,
-			   "Exiting Windows_Training_Data::to_String" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-      return output.str();
-    }
-
-    std::string
-    Windows_Training_Data::to_XML ( classifier_types::Configuration<Windows_Training_Data>::ptr_t ) const
-    {
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::GRNN_DATA,
-			   TraceLevel::DETAIL,
-			   "Entering Windows_Training_Data::to_XML" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-      std::stringstream output;
-
-      /*
-
-
-      output << boost::format ( "Windows_Training_Data #%1%" ) % index << std::endl
-	     << boost::format ( "  compiler id................: %1%" ) % this->get_Attribute ( ATTRIBUTE_TARGET_ID )  << std::endl
-	     << boost::format ( "  file size..................: %1% bytes" ) % this->get_Attribute ( ATTRIBUTE_FILESIZE )  << std::endl
-	     << boost::format ( "  DOS magic number...........: 0x%1$X" ) % this->get_Attribute ( ATTRIBUTE_DOS_MAGIC_NUMBER ) << std::endl
-	     << boost::format ( "  DOS EXE header address.....: 0x%1$X" ) % this->get_Attribute ( ATTRIBUTE_EXE_HEADER_ADDRESS ) << std::endl
-	     << boost::format ( "  PE magic number............: 0x%1$X" ) % this->get_Attribute ( ATTRIBUTE_PE_MAGIC_NUMBER ) << std::endl
-	     << boost::format ( "  COFF machine...............: 0x%1$X" ) % this->get_Attribute ( ATTRIBUTE_COFF_MACHINE ) << std::endl
-	     << boost::format ( "  COFF timestamp.............: 0x%1$X" ) % this->get_Attribute ( ATTRIBUTE_COFF_TIMESTAMP ) << std::endl
-	     << boost::format ( "  COFF number of symbols.....: %1%" ) % this->get_Attribute ( ATTRIBUTE_COFF_NUMBER_OF_SYMBOLS ) << std::endl
-	     << boost::format ( "  Optional Header magic value: 0x%1$X" ) % this->get_Attribute ( ATTRIBUTE_PE_OPT_MAGIC_VALUE ) << std::endl
-	     << boost::format ( "  Optional Header linker version: 0x%1%" ) % this->get_Attribute ( ATTRIBUTE_PE_OPT_LINKER_VERSION ) << std::endl
-	     << boost::format ( "  Optional Header code size: 0x%1%" ) % this->get_Attribute ( ATTRIBUTE_PE_OPT_CODE_SIZE ) << std::endl
-	     << boost::format ( "  Optional Header initialized data size: 0x%1%" ) % this->get_Attribute ( ATTRIBUTE_PE_OPT_INIT_DATA_SIZE ) << std::endl
-
-	     << boost::format ( "  Optional Header uninitialized data size: 0x%1%" )
-	% this->get_Attribute ( ATTRIBUTE_PE_OPT_UNINIT_DATA_SIZE ) << std::endl
-
-	     << boost::format ( "  Optional Header entry point: 0x%1$X" ) % this->get_Attribute ( ATTRIBUTE_PE_OPT_ENTRY_POINT ) << std::endl
-	     << boost::format ( "  Optional Header code address: 0x%1$X" ) % this->get_Attribute ( ATTRIBUTE_PE_OPT_CODE_ADDRESS ) << std::endl
-
-	     << boost::format ( "  Optional Header operating system version: 0x%1%" )
-	% this->get_Attribute ( ATTRIBUTE_PE_OPT_OPERATING_SYSTEM_VERSION ) << std::endl;
-      */
-
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::GRNN_DATA,
-			   TraceLevel::DETAIL,
-			   "Exiting Windows_Training_Data::to_XML" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-      return output.str();
-    }
-
-    classifier_types::Variable_Map::map_type::const_iterator
-    Windows_Training_Data::begin ( void ) const
-    {
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::GRNN_DATA,
-			   TraceLevel::DETAIL,
-			   "Inside Windows_Training_Data::begin (const)" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-      return m_data.begin();
-    }
-
-    classifier_types::Variable_Map::map_type::iterator
-    Windows_Training_Data::begin ( void )
-    {
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::GRNN_DATA,
-			   TraceLevel::DETAIL,
-			   "Inside Windows_Training_Data::begin" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-      return m_data.begin();
-    }
-
-    classifier_types::Variable_Map::map_type::const_iterator
-    Windows_Training_Data::end ( void ) const
-    {
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::GRNN_DATA,
-			   TraceLevel::DETAIL,
-			   "Inside Windows_Training_Data::end (const)" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-      return m_data.end();
-    }
-
-    classifier_types::Variable_Map::map_type::iterator
-    Windows_Training_Data::end ( void )
-    {
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::GRNN_DATA,
-			   TraceLevel::DETAIL,
-			   "Inside Windows_Training_Data::end" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-      return m_data.end();
-    }
-
-    void
-    Windows_Training_Data::set_Attribute ( boost::uint32_t index, double value )
-    {
-      if ( index < Windows_Training_Data::ATTRIBUTE_COUNT )
+	void
+	windows_training_data::set_attribute ( boost::uint32_t index, double value )
 	{
-          m_data.set_Attribute ( index, value );
+	  if ( index < windows_training_data::attribute_count )
+	    {
+	      m_data.set_attribute ( index, value );
+	    }
 	}
-    }
 
-    double
-    Windows_Training_Data::get_Attribute ( boost::uint32_t index ) const
-    {
-      if ( index < Windows_Training_Data::ATTRIBUTE_COUNT )
+	double
+	windows_training_data::get_attribute ( boost::uint32_t index ) const
 	{
-	  return m_data.get_Attribute ( index );
+	  if ( index < windows_training_data::attribute_count )
+	    {
+	      return m_data.get_attribute ( index );
+	    }
+	  else
+	    {
+	      throw errors::internal_exception ( errors::internal_exception::invalid_index );
+	    }
 	}
-      else
+
+	bool
+	windows_training_data::empty ( void ) const
 	{
-	  throw errors::Internal_Exception ( errors::Internal_Exception::INVALID_INDEX );
+	  return m_data.empty();
 	}
-    }
 
-    bool
-    Windows_Training_Data::empty ( void ) const
-    {
-      return m_data.empty();
-    }
+      } // namespace input
+    } // namespace grnn
+  } // namespace components
+} // namespace reverse
 
-  } /* namespace classifier */
-} /* namespace libreverse */

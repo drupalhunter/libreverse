@@ -22,20 +22,27 @@
 #ifndef REVERSE_COMPONENTS_INPUT_GRNN_JAVA_TRAINING_DATA_PARSER_HPP_INCLUDED
 #define REVERSE_COMPONENTS_INPUT_GRNN_JAVA_TRAINING_DATA_PARSER_HPP_INCLUDED
 
-#include <reverse/components/input/grnn/java_training_data.hpp>
 #include <reverse/components/input/grnn/java_input_tag_names.hpp>
+#include <reverse/components/input/grnn/variable_map.hpp>
 
 #include <reverse/infrastructure/xmlexpatparser.hpp>
 
 #include <boost/shared_ptr.hpp>
 
-#include <list>
 #include <stack>
 
 namespace reverse {
   namespace components {
     namespace input {
       namespace grnn {
+
+	class java_training_data;
+
+	template <typename data_type>
+	class training_data;
+
+	template <typename data_type>
+	class training_set;
 
 	/*! \brief XML parser for Java training data */   
 	class java_training_data_parser : public infrastructure::xml_expat_parser {

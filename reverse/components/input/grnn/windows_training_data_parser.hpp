@@ -19,85 +19,77 @@
     <http://www.gnu.org/licenses/>.
 */
 
-#ifndef Windows_Training_Data_Parser_H
-#define Windows_Training_Data_Parser_H
+#ifndef REVERSE_COMPONENTS_INPUT_GRNN_WINDOWS_TRAINING_DATA_PARSER_HPP_INCLUDED
+#define REVERSE_COMPONENTS_INPUT_GRNN_WINDOWS_TRAINING_DATA_PARSER_HPP_INCLUDED
 
-#include "XMLExpatParser.h"
-#include "Windows_Input_Tag_Names.h"
-#include "Windows_Training_Data.h"
-#include "Classifier_Types.h"
-#include "Training_Data.h"
+#include <reverse/components/input/grnn/windows_input_tag_names.hpp>
+#include <reverse/components/input/grnn/xmlexpatparser.hpp>
 
-#include <list>
-#include <string>
-#include <stack>
-#include <boost/format.hpp>
+#include <boost/cstdint.hpp>
 #include <boost/shared_ptr.hpp>
 
-#ifdef LIBREVERSE_DEBUG
-#include "Reverse.h"
-#include "Trace.h"
+#include <stack>
 
-using namespace libreverse::api;
-using namespace libreverse::trace;
-#endif /* LIBREVERSE_DEBUG */
+namespace reverse {
+  namespace components {
+    namespace input {
+      namespace grnn {
 
-namespace libreverse {
+	class windows_training_data;
 
-  namespace classifier {
+	template <typename data_type>
+	class training_data;
 
-    class Windows_Training_Data_Parser : public XMLExpatParser {
-    public:
+	template <typename data_type>
+	class training_set;
 
-      Windows_Training_Data_Parser();
+	class windows_training_data_parser : public xml_expat_parser {
+	public:
 
-      virtual ~Windows_Training_Data_Parser();
+	  windows_training_data_parser();
 
-      virtual void startElement ( const std::string& element_name,
-	                          const Attribute_Map_t& attributes );
+	  virtual ~windows_training_data_parser();
+
+	  virtual void start_element ( const std::string& element_name,
+				       const attribute_map_t& attributes );
   
-      virtual void charData ( const std::string& element_value );
+	  virtual void char_data ( const std::string& element_value );
 
-      virtual void endElement ( const std::string& element_name );
+	  virtual void end_element ( const std::string& element_name );
 
-      classifier_types::Training_Set<Windows_Training_Data>::Data_List_t get_Data ( std::string target_file );
+	  boost::shared_ptr < training_set<windows_training_data> > get_data ( std::string const& target_file );
 
-    private:
+	private:
 
-      boost::uint32_t convert_String_To_UInt ( std::string );
+	  boost::uint32_t convert_string_to_uint ( std::string const& );
 
-      float convert_String_To_Float ( std::string );
+	  float convert_string_to_float ( std::string const& );
 
-      std::string get_Attribute ( std::string name,
-                                  const Attribute_Map_t& attributes );
+	  std::string get_attribute ( std::string const& name,
+				      const attribute_map_t& attributes );
 
-      template < typename Tag_Value_Type, typename Attribute_Type, typename Element_Type >
-      void process_Value ( Tag_Value_Type tag_value, Attribute_Type attrib_value, Element_Type element_value )
-      {
-	  Trace::write_Trace ( TraceArea::GRNN_PARSER,
-			       TraceLevel::DATA,
-			       boost::str ( boost::format ( "Processing %s% tag" ) % tag_value ) );
+	  void process_value ( std::string const& tag_value,
+			       boost::uint32_t attrib_value,
+			       std::string const& element_value );
 
-	  m_training_data->set_Attribute ( attrib_value,
-					   convert_String_To_Float ( element_value ) );
-      }
-
-      // A Windows_Training object is created for each <FILE> tag
-      // Reset at the end </FILE> tag
-      classifier_types::Training_Data<Windows_Training_Data>::ptr_t m_training_data;
+	  // A Windows_Training object is created for each <FILE> tag
+	  // Reset at the end </FILE> tag
+	  boost::shared_ptr < training_data<windows_training_data> > m_training_data;
       
-      // There is no need to reset this variable since it will
-      // always be reset during normal operations.
-      std::stack<std::string> m_element_list;
+	  // There is no need to reset this variable since it will
+	  // always be reset during normal operations.
+	  std::stack<std::string> m_element_list;
       
-      // Constant variable
-      Windows_Input_Tag_Names m_tag;
+	  // Constant variable
+	  windows_input_tag_names m_tag;
       
-      // Reset at the end </DATA> tag
-      classifier_types::Training_Set<Windows_Training_Data>::Data_List_t m_data;
-    };
+	  // Reset at the end </DATA> tag
+	  boost::shared_ptr < training_set<windows_training_data> > m_data;
+	};
 
-  } /* namespace classifier */
-} /* namespace classifier */
+      } // namespace grnn
+    } // namespace input 
+  } // namespace components
+} // namespace reverse
 
-#endif /* Windows_Training_Data_Parser_H */
+#endif // ifndef REVERSE_COMPONENTS_INPUT_GRNN_WINDOWS_TRAINING_DATA_PARSER_HPP_INCLUDED

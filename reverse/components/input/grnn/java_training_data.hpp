@@ -35,6 +35,9 @@ namespace reverse {
     namespace input {
       namespace grnn {
 
+	template <typename data_type>
+	class configuration;
+
 	class java_training_data
 	{
 	public:
@@ -102,23 +105,6 @@ namespace reverse {
 
 	      attribute_field_count = 30,
 	      attribute_method_count = 31
-	    };
-
-	  enum constant_pool_tags
-	    {
-	      // map index
-	      utf8_tag = 1,
-	      reserved_tag =2,
-	      integer_tag = 3,
-	      float_tag = 4,
-	      long_tag = 5,
-	      double_tag = 6,
-	      class_tag = 7,
-	      string_tag = 8,
-	      fieldref_tag = 9,
-	      methodref_tag = 10,
-	      interface_methodref_tag = 11,
-	      name_and_type_tag = 12
 	    };
 
 	  friend class java_training_data_parser;

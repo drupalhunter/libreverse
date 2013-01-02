@@ -24,8 +24,11 @@
 
 #include <reverse/components/input/grnn/training_data.hpp>
 #include <reverse/errors/internal_exception.hpp>
+#include <reverse/trace.hpp>
 
 #include <boost/format.hpp>
+
+#include <vector>
 
 namespace reverse {
   namespace components {
@@ -60,66 +63,36 @@ namespace reverse {
 
 	  void append ( boost::shared_ptr<reverse::components::input::grnn::training_set<data_type> >& data )
 	  {
-
-#ifdef LIBREVERSE_DEBUG
-	    trace::write_trace ( trace_area::classifier,
-				 trace_level::detail,
-				 "Entering Training_Set<Data_Type>::append" );
-#endif /* LIBREVERSE_DEBUG */
-
+	    trace::classifier_detail ( "Entering Training_Set<Data_Type>::append" );
 
 	    m_data.insert ( m_data.end(), data->data_begin(), data->data_end() );
 	    m_test.insert ( m_test.end(), data->test_begin(), data->test_end() );
 	    m_verification.insert ( m_verification.end(), data->verification_begin(), data->verification_end() );
 
-
-#ifdef LIBREVERSE_DEBUG       
-	    trace::write_trace ( trace_area::classifier,
-				 trace_level::detail,
-				 "Exiting Training_Set<Data_Type>::append" );
-#endif /* LIBREVERSE_DEBUG */
-
+	    trace::classifier_detail ( "Exiting Training_Set<Data_Type>::append" );
 	  }
 
 	  data_list_t const& get_training_data ( void ) const
 	  {
+	    trace::classifier_detail ( "Inside Training_Set<Data_Type>::get_Training_Data" );
 
-#ifdef LIBREVERSE_DEBUG
-	    trace::write_trace ( trace_area::classifier,
-				 trace_level::detail,
-				 "Inside Training_Set<Data_Type>::get_Training_Data" );
-#endif /* LIBREVERSE_DEBUG */
-
-       
 	    return m_data;
 	  }
 
 
 	  data_list_t const& get_test_data ( void ) const
 	  {
-
-#ifdef LIBREVERSE_DEBUG
-	    trace::write_trace ( trace_area::classifier,
-				 trace_level::detail,
-				 "Inside Training_Set<Data_Type>::get_Test_Data" );
-#endif /* LIBREVERSE_DEBUG */
-
+	    trace::classifier_detail ( "Inside Training_Set<Data_Type>::get_Test_Data" );
 
 	    return m_test;
 	  }
 
 	  data_list_t const& get_verification_data ( void ) const
 	  {
-
-#ifdef LIBREVERSE_DEBUG
-	    trace::write_trace ( trace_area::classifier,
-				 trace_level::detail,
-				 "Inside Training_Set<Data_Type>::get_Verification_Data" );
-#endif /* LIBREVERSE_DEBUG */
+	    trace::classifier_detail ( "Inside Training_Set<Data_Type>::get_Verification_Data" );
 
 	    return m_verification;
 	  }
-
 
 	  typename data_list_t::const_iterator data_begin() const
 	  {
@@ -175,13 +148,7 @@ namespace reverse {
 				  boost::shared_ptr < reverse::components::input::grnn::configuration<data_type> >
 				  ( new reverse::components::input::grnn::configuration<data_type>() ) ) const
 	  {
-
-#ifdef LIBREVERSE_DEBUG
-	    trace::write_trace ( trace_area::classifier,
-				 trace_level::detail,
-				 "Entering Training_Set<Data_Type>::to_String" );
-#endif /* LIBREVERSE_DEBUG */
-
+	    trace::classifier_detail ( "Entering Training_Set<Data_Type>::to_String" );
 
 	    std::stringstream output;
 
@@ -191,13 +158,7 @@ namespace reverse {
 		   << this->print_data ( m_test, config, "test" ) << std::endl
 		   << this->print_data ( m_verification, config, "verification" ) << std::endl;
 
-
-#ifdef LIBREVERSE_DEBUG
-	    trace::write_trace ( trace_area::classifier,
-				 trace_level::detail,
-				 "Exiting Training_Set<Data_Type>::to_String" );
-#endif /* LIBREVERSE_DEBUG */
-
+	    trace::classifier_detail ( "Exiting Training_Set<Data_Type>::to_String" );
         
 	    return output.str();
 	  }
@@ -205,12 +166,7 @@ namespace reverse {
 
 	  bool is_valid ( void ) const
 	  {
-
-#ifdef LIBREVERSE_DEBUG
-	    trace::write_trace ( trace_area::classifier,
-				 trace_level::detail,
-				 "Entering Training_Set<Data_Type>::is_Valid" );
-#endif /* LIBREVERSE_DEBUG */
+	    trace::classifier_detail ( "Entering Training_Set<Data_Type>::is_Valid" );
 
 	    bool valid = this->is_valid_impl ( m_data, "training data" );
 	    valid = this->is_valid_impl ( m_test, "test data" );
@@ -238,12 +194,7 @@ namespace reverse {
 
 	  std::string get_attribute_maximum_xml ( void ) const
 	  {
-
-#ifdef LIBREVERSE_DEBUG
-	    trace::write_trace ( trace_area::classifier,
-				 trace_level::detail,
-				 "Entering Training_Set<Data_Type>::get_Attribute_Maximum_XML" );
-#endif /* LIBREVERSE_DEBUG */
+	    trace::classifier_detail ( "Entering Training_Set<Data_Type>::get_Attribute_Maximum_XML" );
        
 	    std::stringstream output;
 
@@ -261,25 +212,14 @@ namespace reverse {
 		output << "  </maximum>" << std::endl;
 	      }
 
-
-#ifdef LIBREVERSE_DEBUG
-	    trace::write_trace ( trace_area::classifier,
-				 trace_level::detail,
-				 "Exiting Training_Set<Data_Type>::get_Attribute_Maximum_XML" );
-#endif /* LIBREVERSE_DEBUG */
+	    trace::classifier_detail ( "Exiting Training_Set<Data_Type>::get_Attribute_Maximum_XML" );
 
 	    return output.str();
 	  }
 
 	  std::string print_maximum_values ( void ) const
 	  {
-
-#ifdef LIBREVERSE_DEBUG
-	    trace::write_trace ( trace_area::classifier,
-				 trace_level::detail,
-				 "Entering Training_Set<Data_Type>::print_Maximum_Values" );
-#endif /* LIBREVERSE_DEBUG */
-
+	    trace::classifier_detail ( "Entering Training_Set<Data_Type>::print_Maximum_Values" );
        
 	    std::stringstream output;
 
@@ -292,14 +232,8 @@ namespace reverse {
 	      {
 		output << boost::format ( " %1$d: %2$1.10f" ) % ( *cpos ).first % ( *cpos ).second << std::endl;
 	      }
-
-
-#ifdef LIBREVERSE_DEBUG
-	    trace::write_trace ( trace_area::classifier,
-				 trace_level::detail,
-				 "Exiting Training_Set<Data_Type>::print_Maximum_Values" );
-#endif /* LIBREVERSE_DEBUG */
-
+	    
+	    trace::classifier_detail ( "Exiting Training_Set<Data_Type>::print_Maximum_Values" );
         
 	    return output.str();
 	  }
@@ -325,13 +259,7 @@ namespace reverse {
 				   boost::shared_ptr < reverse::components::input::grnn::configuration<data_type> > const& config,
 				   std::string prefix ) const
 	  {
-
-#ifdef LIBREVERSE_DEBUG
-	    Trace::write_Trace ( TraceArea::CLASSIFIER,
-				 TraceLevel::DETAIL,
-				 "Entering Training_Set<Data_Type>::print_Data" );
-#endif /* LIBREVERSE_DEBUG */
-
+	    trace::classifier_detail ( "Entering Training_Set<Data_Type>::print_Data" );
        
 	    std::stringstream output;
 
@@ -345,13 +273,7 @@ namespace reverse {
 		output << ( *cpos )->to_string ( config ) << std::endl;
 	      }
 
-
-#ifdef LIBREVERSE_DEBUG
-	    Trace::write_Trace ( TraceArea::CLASSIFIER,
-				 TraceLevel::DETAIL,
-				 "Exiting Training_Set<Data_Type>::print_Data" );
-#endif /* LIBREVERSE_DEBUG */
-
+	    trace::classifier_detail ( "Exiting Training_Set<Data_Type>::print_Data" );
         
 	    return output.str();
 	  }
@@ -360,13 +282,7 @@ namespace reverse {
 	  bool is_valid_impl ( data_list_t const& data,
 			       std::string type ) const
 	  {
-
-#ifdef LIBREVERSE_DEBUG
-	    Trace::write_Trace ( TraceArea::CLASSIFIER,
-				 TraceLevel::DETAIL,
-				 "Entering Training_Set<Data_Type>::is_Valid_Impl" );
-#endif /* LIBREVERSE_DEBUG */
-
+	    trace::classifier_detail ( "Entering Training_Set<Data_Type>::is_Valid_Impl" );
 
 	    bool valid = true;
 
@@ -377,24 +293,13 @@ namespace reverse {
 		if ( ! ( *cpos )->is_valid () )
 		  {
 
-#ifdef LIBREVERSE_DEBUG
-		    Trace::write_Trace ( TraceArea::CLASSIFIER,
-					 TraceLevel::ERROR,
-					 boost::str ( boost::format ( "(%1$s) Training Data #%2$d is not valid" )
-						      % type
-						      % ( cpos - data.begin() ) ) );
-#endif /* LIBREVERSE_DEBUG */
-
+		    trace::classifier_error ( "(%1$s) Training Data #%2$d is not valid",
+					      type,
+					      ( cpos - data.begin() ) );
 
 		    valid = false;
 
-
-#ifdef LIBREVERSE_DEBUG
-		    Trace::write_Trace ( TraceArea::CLASSIFIER,
-					 TraceLevel::ERROR,
-					 (*cpos)->to_String () );
-#endif /* LIBREVERSE_DEBUG */
-
+		    trace::classifier_detail ( (*cpos)->to_String () );
 
 		    break;
 		  }
@@ -403,37 +308,17 @@ namespace reverse {
 
 	    if ( valid )
 	      {
-
-
-#ifdef LIBREVERSE_DEBUG       
-		Trace::write_Trace ( TraceArea::CLASSIFIER,
-				     TraceLevel::DETAIL,
-				     "Training Data is valid" );
-
-#endif /* LIBREVERSE_DEBUG */
-
+		trace::classifier_detail ( "Training Data is valid" );
 	      }
 	    else
 	      {
-
-#ifdef LIBREVERSE_DEBUG       
-		Trace::write_Trace ( TraceArea::CLASSIFIER,
-				     TraceLevel::ERROR,
-				     "Training Data is NOT valid" );
-#endif /* LIBREVERSE_DEBUG */
-
+		trace::classifier_detail ( "Training Data is NOT valid" );
           
 		throw errors::internal_exception ( errors::internal_exception::invalid_data_set );
 	      }
 
+	    trace::classifier_detail ( "Exiting Training_Set<Data_Type>::is_Valid_Impl" );
 
-#ifdef LIBREVERSE_DEBUG       
-	    Trace::write_Trace ( TraceArea::CLASSIFIER,
-				 TraceLevel::DETAIL,
-				 "Exiting Training_Set<Data_Type>::is_Valid_Impl" );
-#endif /* LIBREVERSE_DEBUG */
-
-       
 	    return valid;
 	  }
 

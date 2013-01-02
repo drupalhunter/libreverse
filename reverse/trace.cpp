@@ -110,6 +110,20 @@ namespace reverse {
     write_trace ( trace_area::classifier, trace_level::data, message );
   }
 
+  static void grnn_detail ( const char* message )
+  {
+    write_trace ( trace_area::grnn_data, trace_level::detail, message );
+  }
+
+  static void grnn_data ( boost::shared_ptr < training_set<java_training_data> > data )
+  {
+    for ( classifier_types::training_set<java_training_data>::data_list_t::const_iterator cpos = m_data.begin();
+	  cpos != m_data.end();
+	  ++cpos )
+      {
+	grnn_detail ( ( *cpos )->to_String () );
+      }
+  }
 
 #endif // ifdef LIBREVERSE_DEBUG
 

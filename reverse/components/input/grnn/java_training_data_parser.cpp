@@ -19,497 +19,295 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#include "Java_Training_Data_Parser.h"
-#include "Java_Training_Data.h"
-#include "Training_Data.h"
+#include <reverse/components/input/grnn/java_training_data_parser.hpp>
+#include <reverse/components/input/grnn/java_training_data.hpp>
+#include <reverse/components/input/grnn/training_data.hpp>
+#include <reverse/components/input/grnn/training_set.hpp>
+#include <reverse/reverse.hpp>
+#include <reverse/trace.hpp>
+
+#include <boost/cstdint.hpp>
+#include <boost/format.hpp>
+#include <boost/make_shared.hpp>
+
 #include <sstream>
 #include <iostream>
 #include <exception>
 #include <fstream>
-#include <boost/cstdint.hpp>
 #include <vector>
-#include <boost/format.hpp>
-
-#include "Reverse.h"
-#include "Create.h"
-
-using namespace libreverse::api;
-
-#ifdef LIBREVERSE_DEBUG
-#include "Trace.h"
-using namespace libreverse::trace;
-#endif /* LIBREVERSE_DEBUG */
 
 namespace reverse {
   namespace components {
     namespace input {
       namespace grnn {
 
-    Java_Training_Data_Parser::Java_Training_Data_Parser ()
-      : m_training_data ( new classifier::Training_Data<Java_Training_Data> () ),
-	m_constant_pool_index ( Java_Training_Data::ATTRIBUTE_CONSTANT_UTF8_COUNT )
-    {
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::GRNN_PARSER,
-			   TraceLevel::DETAIL,
-			   "Inside Java_Training_Data_Parser constructor" );
-#endif /* LIBREVERSE_DEBUG */
-
-    }
-
-    Java_Training_Data_Parser::~Java_Training_Data_Parser()
-    {}
-
-    void
-    Java_Training_Data_Parser::startElement ( const std::string& element_name,
-					      const Attribute_Map_t& attributes )
-    {
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::GRNN_PARSER,
-			   TraceLevel::DETAIL,
-			   "Entering Java_Training_Data_Parser::startElement" );
-
-      Trace::write_Trace ( TraceArea::GRNN_PARSER,
-			   TraceLevel::DATA,
-			   boost::str ( boost::format ( "element_name = %1%" ) % element_name ) );
-
-      for ( Attribute_Map_t::const_iterator pos = attributes.begin();
-	    pos != attributes.end();
-	    ++pos )
-        {
-	  Trace::write_Trace ( TraceArea::GRNN_PARSER,
-			       TraceLevel::DATA,
-			       boost::str ( boost::format ( "Key (%1%) -> Data (%2%)" ) % ( *pos ).first % ( *pos ).second ) );
-        }
-#endif /* LIBREVERSE_DEBUG */
-
-      m_element_list.push ( element_name );
-
-      if ( element_name.compare ( m_tag.TAG_CONSTANT_POOL_INFO ) == 0 )
-        {
-	  double count = convert_String_To_Double ( get_Attribute ( m_tag.TAG_CONSTANT_INFO_TAG_COUNT, attributes ) );
-	  double ratio = convert_String_To_Double ( get_Attribute ( m_tag.TAG_CONSTANT_INFO_TAG_RATIO, attributes ) );
-
-	  m_training_data->set_Attribute ( m_constant_pool_index, count );
-	  m_training_data->set_Attribute ( m_constant_pool_index + 1, ratio );
-	  m_constant_pool_index += 2;
-        }
-      else if ( element_name.compare ( m_tag.TAG_VALUE ) == 0 )
-        {
-	  boost::uint32_t key_value = convert_String_To_UInt ( get_Attribute ( m_tag.TAG_MAX_VALUE_KEY, attributes ) );
-	  double max_value = convert_String_To_Double ( get_Attribute ( m_tag.TAG_MAX_VALUE_FLOAT, attributes ) );
-
-	  m_max_values.insert ( std::make_pair ( key_value, max_value ) );
-        }
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::GRNN_PARSER,
-			   TraceLevel::DETAIL,
-			   "Exiting Java_Training_Data_Parser::startElement" );
-#endif /* LIBREVERSE_DEBUG */
-
-    }
-
-    void
-    Java_Training_Data_Parser::charData ( const std::string& element_value )
-    {
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::GRNN_PARSER,
-			   TraceLevel::DETAIL,
-			   "Entering Java_Training_Data_Parser::charData" );
-
-      Trace::write_Trace ( TraceArea::GRNN_PARSER,
-			   TraceLevel::DATA,
-			   boost::str ( boost::format ( "element_value = %s" ) % element_value ) );
-#endif /* LIBREVERSE_DEBUG */
-
-
-      std::string present_element = m_element_list.top();
-
-      if ( present_element.compare ( m_tag.TAG_TARGET_ID ) == 0 )
-        {
-	  float target_id = convert_String_To_Double ( element_value );
-
-
-#ifdef LIBREVERSE_DEBUG
-	  Trace::write_Trace ( TraceArea::GRNN_PARSER,
-			       TraceLevel::DATA,
-			       boost::str ( boost::format ( "target id = %1%" ) % target_id ) );
-#endif /* LIBREVERSE_DEBUG */
-
-
-	  m_training_data->set_Attribute ( Java_Training_Data::ATTRIBUTE_TARGET_ID,
-					   target_id );
-        }
-      else if ( present_element.compare ( m_tag.TAG_FILESIZE ) == 0 )
-        {
-	  m_training_data->set_Attribute ( Java_Training_Data::ATTRIBUTE_FILESIZE,
-					   convert_String_To_Double ( element_value ) );
-
-
-#ifdef LIBREVERSE_DEBUG
-	  Trace::write_Trace ( TraceArea::GRNN_PARSER,
-			       TraceLevel::DATA,
-			       boost::str ( boost::format ( "filesize = %1%" ) % convert_String_To_Double ( element_value ) ) );
-#endif /* LIBREVERSE_DEBUG */
-
-        }
-      else if ( present_element.compare ( m_tag.TAG_VERSION ) == 0 )
-        {
-
-
-#ifdef LIBREVERSE_DEBUG
-	  Trace::write_Trace ( TraceArea::GRNN_PARSER,
-			       TraceLevel::DATA,
-			       "Processing VERSION tag" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-	  m_training_data->set_Attribute ( Java_Training_Data::ATTRIBUTE_VERSION,
-					   convert_String_To_Double ( element_value ) );
-        }
-      else if ( present_element.compare ( m_tag.TAG_THIS_INDEX ) == 0 )
-        {
-
-
-#ifdef LIBREVERSE_DEBUG
-	  Trace::write_Trace ( TraceArea::GRNN_PARSER,
-			       TraceLevel::DATA,
-			       "Processing THIS_INDEX tag" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-	  m_training_data->set_Attribute ( Java_Training_Data::ATTRIBUTE_THIS_INDEX,
-					   convert_String_To_Double ( element_value ) );
-        }
-      else if ( present_element.compare ( m_tag.TAG_SUPER_INDEX ) == 0 )
-        {
-
-
-#ifdef LIBREVERSE_DEBUG
-	  Trace::write_Trace ( TraceArea::GRNN_PARSER,
-			       TraceLevel::DATA,
-			       "Processing SUPER_INDEX tag" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-	  m_training_data->set_Attribute ( Java_Training_Data::ATTRIBUTE_SUPER_INDEX,
-					   convert_String_To_Double ( element_value ) );
-        }
-      else if ( present_element.compare ( m_tag.TAG_CONSTANT_POOL_COUNT ) == 0 )
-        {
-
-
-#ifdef LIBREVERSE_DEBUG
-	  Trace::write_Trace ( TraceArea::GRNN_PARSER,
-			       TraceLevel::DATA,
-			       "Processing CONSTANT_POOL_COUNT tag" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-	  m_training_data->set_Attribute ( Java_Training_Data::ATTRIBUTE_CONSTANT_POOL_COUNT,
-					   convert_String_To_Double ( element_value ) );
-        }
-      else if ( present_element.compare ( m_tag.TAG_FIELD_COUNT ) == 0 )
-        {
-
-
-#ifdef LIBREVERSE_DEBUG
-	  Trace::write_Trace ( TraceArea::GRNN_PARSER,
-			       TraceLevel::DATA,
-			       "Processing TAG FIELD COUNT tag" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-	  m_training_data->set_Attribute ( Java_Training_Data::ATTRIBUTE_FIELD_COUNT,
-					   convert_String_To_Double ( element_value ) );
-        }
-      else if ( present_element.compare ( m_tag.TAG_METHOD_COUNT ) == 0 )
-        {
-
-
-#ifdef LIBREVERSE_DEBUG
-	  Trace::write_Trace ( TraceArea::GRNN_PARSER,
-			       TraceLevel::DATA,
-			       "Processing METHOD_COUNT tag" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-	  m_training_data->set_Attribute ( Java_Training_Data::ATTRIBUTE_METHOD_COUNT,
-					   convert_String_To_Double ( element_value ) );
-        }
-
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::GRNN_PARSER,
-			   TraceLevel::DETAIL,
-			   "Exiting Java_Training_Data_Parser::charData" );
-#endif /* LIBREVERSE_DEBUG */
-
-    }
-
-    void
-    Java_Training_Data_Parser::endElement ( const std::string& element_name )
-    {
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::GRNN_PARSER,
-			   TraceLevel::DETAIL,
-			   "Entering Java_Training_Data_Parser::endElement" );
-
-      Trace::write_Trace ( TraceArea::GRNN_PARSER,
-			   TraceLevel::DATA,
-			   boost::str ( boost::format ( "element_name = %s" ) % element_name ) );
-#endif /* LIBREVERSE_DEBUG */
-
-
-      if ( element_name.compare ( m_tag.TAG_FILE ) == 0 )
-        {
-
-
-#ifdef LIBREVERSE_DEBUG
-	  Trace::write_Trace ( TraceArea::GRNN_PARSER,
-			       TraceLevel::DATA,
-			       "Closing FILE tag" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-	  // Save parsed training data
-	  this->m_data.push_back ( m_training_data );
-
-	  // Reset for next <FILE> tag
-	  m_constant_pool_index = Java_Training_Data::ATTRIBUTE_CONSTANT_UTF8_COUNT;
-	  m_training_data = alloc::Create::shared_pointer < Training_Data<Java_Training_Data> > ();
-        }
-
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::GRNN_PARSER,
-			   TraceLevel::DETAIL,
-			   "Exiting Java_Training_Data_Parser::endElement" );
-#endif /* LIBREVERSE_DEBUG */
-
-    }
-
-    boost::shared_ptr < training_set<java_training_data> >
-    java_training_data_parser::get_data ( std::string const& target_file )
-    {
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::GRNN_PARSER,
-			   TraceLevel::DETAIL,
-			   "Entering Java_Training_Data_Parser::get_Data" );
-
-      Trace::write_Trace ( TraceArea::GRNN_PARSER,
-			   TraceLevel::DETAIL,
-			   boost::str ( boost::format ( "Reading data from %s" ) % target_file ) );
-#endif /* LIBREVERSE_DEBUG */
-
-
-      if ( ! this->createParser() )
-        {
-	  std::cerr << "Unknown Parser Error - error creating parser" << std::endl;
-	  abort();
-        }
-
-      // Reset the compiler id and Training_Set
-      m_data.clear();
-
-      // Class and local variable initialization
-      std::ifstream input ( target_file.c_str() );
-
-      std::vector<char> input_data;
-        
-      while ( ! input.eof() )
-        {
-	  char input_char;
-	  input.get ( input_char );
-
-
-#ifdef LIBREVERSE_DEBUG
-	  Trace::write_Trace ( TraceArea::GRNN_PARSER,
-			       TraceLevel::DATA,
-			       boost::str ( boost::format ( "Char: %1$X (%2$s)" )
-					    % static_cast<boost::uint16_t>( input_char )
-					    % input_char ) );
-#endif /* LIBREVERSE_DEBUG */
-
-
-	  input_data.push_back ( input_char );
-        }
-
-      if ( ! this->parse ( & ( *input_data.begin() ), input_data.size() ) )
-        {
-	  std::cerr << boost::format ( "Invalid file format (%s) - check the input file for possible error" ) % target_file << std::endl;
-	  XML_Error err_ref = this->getErrorCode();
-	  std::cerr << boost::format ( "Error at line %d, column %d: %s" ) % this->getCurrentLineNumber()
-	    % this->getCurrentColumnNumber()
-	    % this->getErrorString ( err_ref ) << std::endl;
-	  abort();
-        }
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::GRNN_PARSER,
-			   TraceLevel::DATA,
-			   "Parsed input:" );
-
-      for ( classifier_types::Training_Set<Java_Training_Data>::Data_List_t::const_iterator cpos = m_data.begin();
-	    cpos != m_data.end();
-	    ++cpos )
-        {
-	  Trace::write_Trace ( TraceArea::GRNN_PARSER,
-			       TraceLevel::DETAIL,
-			       ( *cpos )->to_String () );
-        }
-#endif /* LIBREVERSE_DEBUG */
-
-
-      this->destroyParser();
-
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::GRNN_PARSER,
-			   TraceLevel::DETAIL,
-			   "Exiting Java_Training_Data_Parser::get_Data" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-      return m_data;
-    }
-
-    boost::uint32_t
-    Java_Training_Data_Parser::convert_String_To_UInt ( std::string element_value )
-    {
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::GRNN_PARSER,
-			   TraceLevel::DETAIL,
-			   "Entering Java_Training_Data_Parser::convert_String_To_UInt" );
-
-      Trace::write_Trace ( TraceArea::GRNN_PARSER,
-			   TraceLevel::DATA,
-			   boost::str ( boost::format ( "element_value (string) = %1%" ) % element_value ) );
-#endif /* LIBREVERSE_DEBUG */
-
-
-      boost::uint32_t value = 0;
-
-      std::stringstream input;
-
-      input << element_value;
-      input >> value;
-
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::GRNN_PARSER,
-			   TraceLevel::DATA,
-			   boost::str ( boost::format ( "element_value (uint) = %1$d" ) % value ) );
-
-      Trace::write_Trace ( TraceArea::GRNN_PARSER,
-			   TraceLevel::DETAIL,
-			   "Exiting Java_Training_Data_Parser::convert_String_To_UInt" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-      return value;
-    }
-
-    double
-    Java_Training_Data_Parser::convert_String_To_Double ( std::string element_value )
-    {
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::GRNN_PARSER,
-			   TraceLevel::DETAIL,
-			   "Entering Java_Training_Data_Parser::convert_String_To_Double" );
-
-      Trace::write_Trace ( TraceArea::GRNN_PARSER,
-			   TraceLevel::DATA,
-			   boost::str ( boost::format ( "element_value = %1%" ) % element_value ) );
-#endif /* LIBREVERSE_DEBUG */
-
-
-      double value = 0.0;
-      std::stringstream input;
-
-      input << element_value;
-      input >> value;
-
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::GRNN_PARSER,
-			   TraceLevel::DATA,
-			   boost::str ( boost::format ( "float value = %1$f" ) % value ) );
-
-      Trace::write_Trace ( TraceArea::GRNN_PARSER,
-			   TraceLevel::DETAIL,
-			   "Exiting Java_Training_Data_Parser::convert_String_To_Double" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-      return value;
-    }
-
-    std::string
-    Java_Training_Data_Parser::get_Attribute ( std::string name, const Attribute_Map_t& attributes )
-    {
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::GRNN_PARSER,
-			   TraceLevel::DETAIL,
-			   "Entering Java_Training_Data_Parser::get_Attribute" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-      if ( name.size() == 0 )
-        {
-	  std::cerr << "Name to search in the list of attributes is empty."
-		    << boost::format ( "Attribute count: %1%" ) % attributes.size() << std::endl
-		    << "Terminating program. Investigate the input XML file creator or this program to find out why" << std::endl
-		    << "we are looking looking for an empty attribute name or have a empty list of attributes." << std::endl;
-
-	  exit ( 1 );
-        }
-      else if ( attributes.size() == 0 )
-        {
-	  std::cerr << "Attribute list is empty." << std::endl
-		    << boost::format ( "Name: %1$s (%2$d characters)" ) % name % name.size() << std::endl
-
-		    << std::endl
-		    << "Terminating program. Investigate the input XML file creator or this program to find out why" << std::endl
-		    << "we are looking looking for an empty attribute name or have a empty list of attributes." << std::endl;
-
-	  exit ( 1 );
-        }
-
-      Attribute_Map_t::const_iterator pos = attributes.find ( name );
-
-      if ( pos == attributes.end() )
-        {
-	  std::cerr << "FATAL ERROR: The attribute names of the input XML file must match those used in this program." << std::endl
-		    << std::endl
-		    << "Input target was...: " << name << std::endl
-		    << std::endl
-		    << "Terminating program. Investigate the input XML file creator or this program to find out why" << std::endl
-		    << "we are looking for this input name." << std::endl;
-	  exit ( 1 );
-        }
-
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::GRNN_PARSER,
-			   TraceLevel::DETAIL,
-			   "Exiting Java_Training_Data_Parser::get_Attribute" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-      return ( *pos ).second;
-    }
-
-	classifier_types::variable_map::map_type&
+	java_training_data_parser::java_training_data_parser ()
+	  : m_training_data ( new training_data<java_training_data> () ),
+	    m_constant_pool_index ( java_training_data::attribute_constant_utf8_count )
+	{
+	  trace::grnn_detail ( "Inside Java_Training_Data_Parser constructor" );
+	}
+	
+	java_training_data_parser::~java_training_data_parser()
+	{}
+	
+	void
+	java_training_data_parser::start_element ( const std::string& element_name,
+						   const attribute_map_t& attributes )
+	{
+	  trace::grnn_detail ( "Entering Java_Training_Data_Parser::startElement" );
+	  trace::grnn_data ( "element_name = %1%", element_name );
+	  trace::grnn_data_map ( attributes );
+
+	  m_element_list.push ( element_name );
+
+	  if ( element_name.compare ( m_tag.tag_constant_pool_info ) == 0 )
+	    {
+	      double count = convert_string_to_double ( get_attribute ( m_tag.tag_constant_info_tag_count, attributes ) );
+	      double ratio = convert_string_to_double ( get_attribute ( m_tag.tag_constant_info_tag_ratio, attributes ) );
+	      
+	      m_training_data->set_attribute ( m_constant_pool_index, count );
+	      m_training_data->set_attribute ( m_constant_pool_index + 1, ratio );
+	      m_constant_pool_index += 2;
+	    }
+	  else if ( element_name.compare ( m_tag.tag_value ) == 0 )
+	    {
+	      boost::uint32_t key_value = convert_string_to_uint ( get_attribute ( m_tag.tag_max_value_key, attributes ) );
+	      double max_value = convert_string_to_double ( get_attribute ( m_tag.tag_max_value_float, attributes ) );
+	      
+	      m_max_values.insert ( std::make_pair ( key_value, max_value ) );
+	    }
+	  
+	  trace::grnn_detail ( "Exiting Java_Training_Data_Parser::startElement" );
+	}
+	
+	void
+	java_training_data_parser::char_data ( const std::string& element_value )
+	{
+	  trace::grnn_detail ( "Entering Java_Training_Data_Parser::charData" );
+	  trace::grnn_data ( "element_value = %s", element_value );
+
+	  std::string present_element = m_element_list.top();
+
+	  if ( present_element.compare ( m_tag.tag_target_id ) == 0 )
+	    {
+	      float target_id = convert_string_to_double ( element_value );
+
+	      trace::grnn_data ( "target id = %1%", target_id );
+
+	      m_training_data->set_attribute ( java_training_data::attribute_target_id,
+					       target_id );
+	    }
+	  else if ( present_element.compare ( m_tag.tag_filesize ) == 0 )
+	    {
+	      m_training_data->set_attribute ( java_training_data::attribute_filesize,
+					       convert_string_to_double ( element_value ) );
+
+	      trace::grnn_data ( "filesize = %1%", convert_string_to_double ( element_value ) );
+	      
+	    }
+	  else if ( present_element.compare ( m_tag.tag_version ) == 0 )
+	    {
+	      trace::grnn_detail ( "Processing VERSION tag" );
+
+	      m_training_data->set_attribute ( java_training_data::attribute_version,
+					       convert_string_to_double ( element_value ) );
+	    }
+	  else if ( present_element.compare ( m_tag.tag_this_index ) == 0 )
+	    {
+
+	      trace::grnn_detail ( "Processing THIS_INDEX tag" );
+
+	      m_training_data->set_attribute ( java_training_data::attribute_this_index,
+					       convert_string_to_double ( element_value ) );
+	    }
+	  else if ( present_element.compare ( m_tag.tag_super_index ) == 0 )
+	    {
+	      trace::grnn_detail ( "Processing SUPER_INDEX tag" );
+
+	      m_training_data->set_attribute ( java_training_data::attribute_super_index,
+					       convert_string_to_double ( element_value ) );
+	    }
+	  else if ( present_element.compare ( m_tag.tag_constant_pool_count ) == 0 )
+	    {
+
+	      trace::grnn_detail ( "Processing CONSTANT_POOL_COUNT tag" );
+
+	      m_training_data->set_attribute ( java_training_data::attribute_constant_pool_count,
+					       convert_string_to_double ( element_value ) );
+	    }
+	  else if ( present_element.compare ( m_tag.tag_field_count ) == 0 )
+	    {
+	      trace::grnn_detail ( "Processing TAG FIELD COUNT tag" );
+
+	      m_training_data->set_attribute ( java_training_data::attribute_field_count,
+					       convert_string_to_double ( element_value ) );
+	    }
+	  else if ( present_element.compare ( m_tag.tag_method_count ) == 0 )
+	    {
+	      trace::grnn_detail ( "Processing METHOD_COUNT tag" );
+
+	       m_training_data->set_attribute ( java_training_data::attribute_method_count,
+						convert_string_to_double ( element_value ) );
+	     }
+
+	   trace::grnn_detail ( "Exiting Java_Training_Data_Parser::charData" );
+	}
+
+	void
+	java_training_data_parser::end_element ( const std::string& element_name )
+	{
+	  trace::grnn_detail ( "Entering Java_Training_Data_Parser::end_element" );
+	  trace::grnn_data ( "element_name = %s", element_name );
+
+	  if ( element_name.compare ( m_tag.tag_file ) == 0 )
+	    {
+	      trace::grnn_detail ( "Closing FILE tag" );
+
+	      // Save parsed training data
+	      this->m_data->data_push_back ( m_training_data );
+	      
+	      // Reset for next <FILE> tag
+	      m_constant_pool_index = java_training_data::attribute_constant_utf8_count;
+	      m_training_data = boost::make_shared < training_data<java_training_data> > ();
+	    }
+
+	  trace::grnn_detail ( "Exiting Java_Training_Data_Parser::end_element" );
+	}
+
+	boost::shared_ptr < training_set<java_training_data> >
+	java_training_data_parser::get_data ( std::string const& target_file )
+	{
+	  trace::grnn_detail ( "Entering Java_Training_Data_Parser::get_Data" );
+	  trace::grnn_data ( "Reading data from %s", target_file );
+
+	  if ( ! this->create_parser() )
+	    {
+	      std::cerr << "Unknown Parser Error - error creating parser" << std::endl;
+	      abort();
+	    }
+	  
+	  // Reset the compiler id and Training_Set
+	  m_data->clear();
+	  
+	  // Class and local variable initialization
+	  std::ifstream input ( target_file.c_str() );
+	  
+	  std::vector<char> input_data;
+	  
+	  while ( ! input.eof() )
+	    {
+	      char input_char;
+	      input.get ( input_char );
+	      
+	      trace::grnn_data ( "Char: %1$X (%2$s)",
+				 static_cast<boost::uint16_t>( input_char ),
+				 input_char );
+
+	      input_data.push_back ( input_char );
+	    }
+	  
+	  if ( ! this->parse ( & ( *input_data.begin() ), input_data.size() ) )
+	    {
+	      std::cerr << boost::format ( "Invalid file format (%s) - check the input file for possible error" ) % target_file << std::endl;
+
+	      XML_Error err_ref = this->get_error_code();
+
+	      std::cerr << boost::format ( "error at line %d, column %d: %s" ) % this->get_current_line_number()
+		% this->get_current_column_number()
+		% this->get_error_string ( err_ref ) << std::endl;
+	      abort();
+	    }
+
+	  this->destroy_parser();
+
+	  trace::grnn_detail ( "Exiting Java_Training_Data_Parser::get_Data" );
+
+	  return m_data;
+	}
+
+	boost::uint32_t
+	java_training_data_parser::convert_string_to_uint ( std::string const& element_value )
+	{
+	  trace::grnn_detail ( "Entering Java_Training_Data_Parser::convert_String_To_UInt" );
+	  trace::grnn_data ( "element_value (string) = %1%", element_value );
+
+	  boost::uint32_t value = 0;
+
+	  std::stringstream input;
+
+	  input << element_value;
+	  input >> value;
+
+	  trace::grnn_data ( "element_value (uint) = %1$d", value );
+	  trace::grnn_detail ( "Exiting Java_Training_Data_Parser::convert_String_To_UInt" );
+
+	  return value;
+	}
+
+	double
+	java_training_data_parser::convert_string_to_double ( std::string const& element_value )
+	{
+	  trace::grnn_detail ( "Entering Java_Training_Data_Parser::convert_String_To_Double" );
+	  trace::grnn_data ( "element_value = %1%", element_value );
+
+	  double value = 0.0;
+	  std::stringstream input;
+
+	  input << element_value;
+	  input >> value;
+	  
+	  trace::grnn_data ( "float value = %1$f", value );
+	  trace::grnn_detail ( "Exiting Java_Training_Data_Parser::convert_String_To_Double" );
+
+	  return value;
+	}
+
+	std::string
+	java_training_data_parser::get_attribute ( std::string const& name, const attribute_map_t& attributes )
+	{
+	  trace::grnn_detail ( "Entering Java_Training_Data_Parser::get_Attribute" );
+
+	  if ( name.size() == 0 )
+	    {
+	      std::cerr << "Name to search in the list of attributes is empty."
+			<< boost::format ( "Attribute count: %1%" ) % attributes.size() << std::endl
+			<< "Terminating program. Investigate the input XML file creator or this program to find out why" << std::endl
+			<< "we are looking looking for an empty attribute name or have a empty list of attributes." << std::endl;
+
+	      exit ( 1 );
+	    }
+	  else if ( attributes.size() == 0 )
+	    {
+	      std::cerr << "Attribute list is empty." << std::endl
+			<< boost::format ( "Name: %1$s (%2$d characters)" ) % name % name.size() << std::endl
+			<< std::endl
+			<< "Terminating program. Investigate the input XML file creator or this program to find out why" << std::endl
+			<< "we are looking looking for an empty attribute name or have a empty list of attributes." << std::endl;
+
+	      exit ( 1 );
+	    }
+
+	  attribute_map_t::const_iterator pos = attributes.find ( name );
+
+	  if ( pos == attributes.end() )
+	    {
+	      std::cerr << "FATAL ERROR: The attribute names of the input XML file must match those used in this program." << std::endl
+			<< std::endl
+			<< "Input target was...: " << name << std::endl
+			<< std::endl
+			<< "Terminating program. Investigate the input XML file creator or this program to find out why" << std::endl
+			<< "we are looking for this input name." << std::endl;
+	      exit ( 1 );
+	    }
+	  
+
+	  trace::grnn_detail ( "Exiting Java_Training_Data_Parser::get_Attribute" );
+
+	  return ( *pos ).second;
+	}
+
+	variable_map::map_t&
 	java_training_data_parser::get_max_values ( void )
 	{
 	  return m_max_values;
