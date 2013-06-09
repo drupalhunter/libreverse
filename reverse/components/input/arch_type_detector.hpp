@@ -1,92 +1,104 @@
 /*  Arch_Type_Detector.h
 
-   Copyright (C) 2008 Stephen Torri
+    Copyright (C) 2008 Stephen Torri
 
-   This file is part of Libreverse.
+    This file is part of Libreverse.
 
-   Libreverse is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published
-   by the Free Software Foundation; either version 3, or (at your
-   option) any later version.
+    Libreverse is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published
+    by the Free Software Foundation; either version 3, or (at your
+    option) any later version.
 
-   Libreverse is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
+    Libreverse is distributed in the hope that it will be useful, but
+    WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with this program.  If not, see
-   <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see
+    <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ARCH_TYPE_DECTECTOR_H
-#define ARCH_TYPE_DECTECTOR_H
+#ifndef REVERSE_COMPONENT_INPUT_ARCH_TYPE_DECTECTOR_HPP_INCLUDED
+#define REVERSE_COMPONENT_INPUT_ARCH_TYPE_DECTECTOR_HPP_INCLUDED
 
-#include "infrastructure/Component.h"
-#include "infrastructure/Component_Actor.h"
+#include <reverse/infrastructure/component.hpp>
+#include <reverse/infrastructure/component_actor.hpp>
 
 #include <boost/enable_shared_from_this.hpp>
 
-namespace libreverse {
+namespace reverse {
 
-    namespace component {
+  namespace infrastructure {
+    class component_state;
 
-        class Arch_Type_Detector : public infrastructure::Component,
-                                   public infrastructure::Component_Actor,
-                                   public boost::enable_shared_from_this<Arch_Type_Detector>
-        {
-        public:
+    namespace data_source {
+      class data_source_base;
+    }
 
-            explicit Arch_Type_Detector ();
+  } // namespace infrastructure
 
-            explicit Arch_Type_Detector ( infrastructure_types::Component_State::ptr_t input_ptr );
+  namespace component {
+    namespace input {
 
-            Arch_Type_Detector ( Arch_Type_Detector const& rhs );
+      class arch_type_detector : public infrastructure::component,
+				 public infrastructure::component_actor,
+				 public boost::enable_shared_from_this<arch_type_detector>
+      {
+      public:
+	
+	explicit arch_type_detector ();
+	
+	explicit arch_type_detector ( boost::shared_ptr < infrastructure::component_state > input_ptr );
 
-            virtual ~Arch_Type_Detector();
+	arch_type_detector ( arch_type_detector const& rhs );
 
-            Arch_Type_Detector& operator= ( Arch_Type_Detector const& rhs );
+	virtual ~arch_type_detector();
 
-            void swap ( Arch_Type_Detector& rhs );
+	arch_type_detector& operator= ( arch_type_detector const& rhs );
 
-            //------------------------------
-            // Component required functions
-            //------------------------------
-            virtual void received_Input_Source_Data ( boost::uint32_t id );
+	void swap ( arch_type_detector& rhs );
+
+	//------------------------------
+	// component required functions
+	//------------------------------
+	virtual void received_input_source_data ( boost::uint32_t id );
             
-            virtual void add_Input_Source ( boost::uint32_t id );
+	virtual void add_input_source ( boost::uint32_t id );
 
-            virtual std::string get_Name (void) const;
+	virtual std::string get_name (void) const;
 
-            virtual void run ( infrastructure_types::Component_Graph::Data_Map_t* m_input_data );
+	virtual void run ( infrastructure::component_graph::data_map_t* m_input_data );
 
-            virtual infrastructure_types::Data_Source_Base::ptr_t results (void);
+	virtual boost::shared_ptr < infrastructure::data_source::data_source_base > results (void);
 
-            virtual void set_State ( boost::uint32_t mode );
+	virtual void set_state ( boost::uint32_t mode );
 
-            virtual boost::uint32_t get_ID (void) const;
+	virtual boost::uint32_t get_id (void) const;
 
-            virtual infrastructure_types::Component_Data::Input_Token_t::const_iterator get_Source_List_Begin (void) const;
+	virtual infrastructure::component_data::input_token_t::const_iterator get_source_list_begin (void) const;
 
-            virtual infrastructure_types::Component_Data::Input_Token_t::const_iterator get_Source_List_End (void) const;
+	virtual infrastructure::component_data::input_token_t::const_iterator get_source_list_end (void) const;
 
-            //------------------------------
-            // Component Actor required functions
-            //------------------------------
-            virtual void process (void);
+	//------------------------------
+	// component actor required functions
+	//------------------------------
+	virtual void process (void);
 
-            //------------------------------
-            // Component Creator required functions
-            //------------------------------
-	    virtual infrastructure_types::Component::ptr_t operator() ( infrastructure_types::Component_State::ptr_t data_ptr );
+	//------------------------------
+	// component creator required functions
+	//------------------------------
+	virtual boost::shared_ptr < infrastructure::component > operator() ( boost::shared_ptr < infrastructure::component_state > data_ptr );
 
-            static const std::string NAME;
+	static const std::string name;
 
-        private:
+      private:
 
-            infrastructure_types::Component_State::ptr_t m_state_ptr;
-        };
-    } /* namespace component */
-} /* namespace libreverse */
+	boost::shared_ptr < infrastructure::component_state > m_state_ptr;
+      };
 
-#endif /* ARCH_TYPE_DECTECTOR_H */
+    } // namespace input
+  } // namespace component
+} // namespace libreverse
+
+#endif // ifndef REVERSE_COMPONENT_INPUT_ARCH_TYPE_DECTECTOR_HPP_INCLUDED

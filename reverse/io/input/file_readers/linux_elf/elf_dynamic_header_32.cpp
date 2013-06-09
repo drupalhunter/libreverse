@@ -19,9 +19,10 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#include "Elf_Dynamic_Header_32.h"
-#include "io/Byte_Converter.h"
-#include "Elf_Dynamic_Tag_32.h"
+#include <reverse/io/byte_converter.hpp>
+
+#include <reverse/io/input/linux_elf/elf_dynamic_header_32.hpp>
+#include <reverse/io/input/linux_elf/elf_dynamic_tag_32.hpp
 
 #include <sstream>
 

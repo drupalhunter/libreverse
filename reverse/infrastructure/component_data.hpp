@@ -137,7 +137,7 @@ namespace reverse {
 
       void set_output_data ( boost::shared_ptr<const data_container::memory_map> map_ptr );
 
-      void set_output_meta_data ( boost::shared_ptr < const meta::meta_object>& meta_ptr );
+      void set_output_meta_data ( boost::shared_ptr < meta::meta_object>& meta_ptr );
 
       component_data::input_token_t::const_iterator get_source_list_begin (void) const;
       

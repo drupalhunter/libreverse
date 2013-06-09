@@ -1,57 +1,60 @@
 /*  Arch_Type_Detector_Algorithm_Factory.h
 
-   Copyright (C) 2008 Stephen Torri
+    Copyright (C) 2008 Stephen Torri
 
-   This file is part of Libreverse.
+    This file is part of Libreverse.
 
-   Libreverse is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published
-   by the Free Software Foundation; either version 3, or (at your
-   option) any later version.
+    Libreverse is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published
+    by the Free Software Foundation; either version 3, or (at your
+    option) any later version.
 
-   Libreverse is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
+    Libreverse is distributed in the hope that it will be useful, but
+    WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with this program.  If not, see
-   <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see
+    <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ARCH_TYPE_DETECTOR_ALGORITHM_FACTORY_H
-#define ARCH_TYPE_DETECTOR_ALGORITHM_FACTORY_H
+#ifndef REVERSE_COMPONENTS_INPUT_ARCH_TYPE_DETECTOR_ALGORITHM_FACTORY_HPP_INCLUDED
+#define REVERSE_COMPONENTS_INPUT_ARCH_TYPE_DETECTOR_ALGORITHM_FACTORY_HPP_INCLUDED
 
-#include "Arch_Type_Detector_Algorithm.h"
+#include <boost/shared_ptr.hpp>
 
-namespace libreverse { namespace component {
+namespace reverse {
+  namespace component {
+    namespace input {
 
-    class Arch_Type_Detector_Algorithm_Factory {
-    public:
+      class arch_type_detector_algorithm_factory {
+      public:
 
         // pointer type
-        typedef boost::shared_ptr<Arch_Type_Detector_Algorithm_Factory> ptr_t;
+        typedef boost::shared_ptr<arch_type_detector_algorithm_factory> ptr_t;
 
-        static Arch_Type_Detector_Algorithm_Factory& Instance()
+        static arch_type_detector_algorithm_factory& instance()
         {
-            static Arch_Type_Detector_Algorithm_Factory fact_ref;
-            return fact_ref;
+	  static arch_type_detector_algorithm_factory fact_ref;
+	  return fact_ref;
         }
 
-        Arch_Type_Detector_Algorithm::ptr_t get_Algorithm ( std::string file_type );
+	boost::shared_ptr < arch_type_detector_algorithm > get_algorithm ( std::string file_type );
 
-    private:
+      private:
 
-      Arch_Type_Detector_Algorithm_Factory (){}
+	arch_type_detector_algorithm_factory (){}
 
-      Arch_Type_Detector_Algorithm_Factory ( const Arch_Type_Detector_Algorithm_Factory& );
+	arch_type_detector_algorithm_factory ( const arch_type_detector_algorithm_factory& );
       
-      Arch_Type_Detector_Algorithm_Factory& operator = ( const Arch_Type_Detector_Algorithm_Factory& );
+	arch_type_detector_algorithm_factory& operator = ( const arch_type_detector_algorithm_factory& );
       
-      ~Arch_Type_Detector_Algorithm_Factory (){}
-    };
+	~arch_type_detector_algorithm_factory (){}
+      };
 
-} /* namespace component */
-} /* namespace libreverse */
+    } /* namespace input */
+  } /* namespace component */
+} /* namespace reverse */
 
-#endif /* ARCH_TYPE_DETECTOR_ALGORITHM_FACTORY_H */
+#endif // ifndef REVERSE_COMPONENTS_INPUT_ARCH_TYPE_DETECTOR_ALGORITHM_FACTORY_HPP_INCLUDED

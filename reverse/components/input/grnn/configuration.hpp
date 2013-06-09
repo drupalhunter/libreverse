@@ -24,6 +24,7 @@
 
 #include <reverse/errors/internal_exception.hpp>
 #include <reverse/components/input/grnn/training_data.hpp>
+#include <reverse/trace.hpp>
 
 #include <boost/cstdint.hpp>
 #include <boost/enable_shared_from_this.hpp>
@@ -43,12 +44,8 @@ namespace reverse {
 	  
 	  configuration ( bool default_value = true )
 	  {
-	  
-#ifdef LIBREVERSE_DEBUG
-	    trace::write_trace ( trace_area::grnn_data,
-				 trace_level::detail,
-				 "Entering Configuration constructor" );
-#endif /* LIBREVERSE_DEBUG */
+
+	    trace::grnn_detail ( "Entering Configuration constructor" );
 	  
 	    for ( boost::uint32_t i = 0;
 		  i < data_type::attribute_count;
@@ -56,35 +53,20 @@ namespace reverse {
 	      {
 		m_attributes[i] = default_value;
 	      }
-	  
-#ifdef LIBREVERSE_DEBUG
-	    trace::write_trace ( trace_area::grnn_data,
-				 trace_level::detail,
-				 "Exiting Configuration constructor" );
-#endif /* LIBREVERSE_DEBUG */
-	  
+
+	    trace::grnn_detail ( "Exiting Configuration constructor" );
 	  }
 
 	  configuration ( const configuration& rhs )
 	    : boost::enable_shared_from_this< configuration<data_type> > ( rhs ),
 	      m_attributes ( rhs.m_attributes )
 	  {
-#ifdef LIBREVERSE_DEBUG
-	    trace::write_trace ( trace_area::grnn_data,
-				 trace_level::detail,
-				 "Inside Configuration copy constructor" );
-#endif /* LIBREVERSE_DEBUG */
+	    trace::grnn_detail ( "Inside Configuration copy constructor" );
 	  }
 
-        
 	  void set_attribute ( boost::uint32_t index, bool value )
 	  {
-
-#ifdef LIBREVERSE_DEBUG
-	    trace::write_trace ( trace_area::grnn_data,
-				 trace_level::detail,
-				 "Entering Configuration::set_Attribute" );
-#endif /* LIBREVERSE_DEBUG */
+	    trace::grnn_detail ( "Entering Configuration::set_Attribute" );
 
 	    if ( index > m_attributes.size() )
 	      {
@@ -93,39 +75,25 @@ namespace reverse {
 
 	    m_attributes[index] = value;
 
-#ifdef LIBREVERSE_DEBUG
-	    trace::write_trace ( trace_area::grnn_data,
-				 trace_level::detail,
-				 "Exiting Configuration::set_Attribute" );
-#endif /* LIBREVERSE_DEBUG */
-
+	    trace::grnn_detail ( "Exiting Configuration::set_Attribute" );
 	  }
 
-	  bool get_attribute ( boost::uint32_t index )
+	  bool get_attribute ( boost::uint32_t index ) const
 	  {
-
-#ifdef LIBREVERSE_DEBUG
-	    trace::write_trace ( trace_area::grnn_data,
-				 trace_level::detail,
-				 "Entering Configuration::get_Attribute" );
-#endif /* LIBREVERSE_DEBUG */
+	    trace::grnn_detail ( "Entering Configuration::get_Attribute" );
 
 	    if ( index > m_attributes.size() )
 	      {
 		throw errors::internal_exception ( errors::internal_exception::invalid_index );
 	      }
 
-#ifdef LIBREVERSE_DEBUG
-	    trace::write_trace ( trace_area::grnn_data,
-				 trace_level::detail,
-				 "Exiting Configuration::set_Attribute" );
-#endif /* LIBREVERSE_DEBUG */
+	    trace::grnn_detail ( "Exiting Configuration::set_Attribute" );
 
-	    return m_attributes[index];
+	    return m_attributes.at(index);
 	  }
 
 
-	  std::string to_string (void)
+	  std::string to_string (void) const
 	  {
 
 #ifdef LIBREVERSE_DEBUG
@@ -150,7 +118,7 @@ namespace reverse {
         
 	private:
 
-	  std::string bool_string ( bool value )
+	  std::string bool_string ( bool value ) const
 	  {
 
 #ifdef LIBREVERSE_DEBUG

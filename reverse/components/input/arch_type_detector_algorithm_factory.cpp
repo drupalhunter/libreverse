@@ -1,69 +1,77 @@
 /*  Arch_Type_Detector_Algorithm_Factory.cpp
 
-   Copyright (C) 2008 Stephen Torri
+    Copyright (C) 2008 Stephen Torri
 
-   This file is part of Libreverse.
+    This file is part of Libreverse.
 
-   Libreverse is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published
-   by the Free Software Foundation; either version 3, or (at your
-   option) any later version.
+    Libreverse is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published
+    by the Free Software Foundation; either version 3, or (at your
+    option) any later version.
 
-   Libreverse is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
+    Libreverse is distributed in the hope that it will be useful, but
+    WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with this program.  If not, see
-   <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see
+    <http://www.gnu.org/licenses/>.
 */
 
-#include "Arch_Type_Detector_Algorithm_Factory.h"
-#include "Arch_Type_Detector_Elf32_Algorithm.h"
-#include "Arch_Type_Detector_Elf64_Algorithm.h"
-#include "Arch_Type_Detector_Java_Algorithm.h"
-#include "Arch_Type_Detector_WPEF32_Algorithm.h"
-#include "Arch_Type_Detector_WPEF64_Algorithm.h"
+#include <reverse/components/input/arch_type_detector_algorithm_factory.hpp>
+#include <reverse/components/input/arch_type_detector_elf32_algorithm.hpp>
+#include <reverse/components/input/arch_type_detector_elf64_algorithm.hpp>
+#include <reverse/components/input/arch_type_detector_java_algorithm.hpp>
+#include <reverse/components/input/arch_type_detector_wpef32_algorithm.hpp>
+#include <reverse/components/input/arch_type_detector_wpef64_algorithm.hpp>
+#include <reverse/errors/cpu_exception.hpp>
+#include <reverse/io/input/file_readers/elf/elf_meta_info.hpp>
+#include <reverse/io/input/file_readers/java_class/java_meta_info.hpp>
+#include <reverse/io/input/file_readers/windows_pe/pe_meta_info.hpp>
 
-#include "io/input/File_Readers/Elf/Elf_Meta_Info.h"
-#include "io/input/File_Readers/Java_Class/Java_Meta_Info.h"
-#include "io/input/File_Readers/Windows_PE/PE_Meta_Info.h"
-#include "errors/CPU_Exception.h"
+#include <reverse/trace.hpp>
 
 #include <string>
 
-namespace libreverse { namespace component {
+namespace reverse {
+  namespace component {
+    namespace input {
 
-    Arch_Type_Detector_Algorithm::ptr_t
-    Arch_Type_Detector_Algorithm_Factory::get_Algorithm ( std::string file_type )
-    {
-      if ( file_type.compare ( elf_module::Elf_Meta_Info::FILE_TYPE_32BIT ) == 0 )
-	{
-	  return Arch_Type_Detector_Algorithm::ptr_t ( new Arch_Type_Detector_Elf32_Algorithm() );
-	}
-      else if ( file_type.compare ( elf_module::Elf_Meta_Info::FILE_TYPE_64BIT ) == 0 )
-	{
-	  return Arch_Type_Detector_Algorithm::ptr_t ( new Arch_Type_Detector_Elf64_Algorithm() );
-	}
-      else if ( file_type.compare ( java_module::Java_Meta_Info::FILE_TYPE ) == 0 )
-	{
-	  return Arch_Type_Detector_Algorithm::ptr_t ( new Arch_Type_Detector_Java_Algorithm() );
-	}
-      else if ( file_type.compare ( wpef_module::PE_Meta_Info::PE_FILE_TYPE_32BIT ) == 0 )
-	{
-	  return Arch_Type_Detector_Algorithm::ptr_t ( new Arch_Type_Detector_WPEF32_Algorithm() );
-	}
-      else if ( file_type.compare ( wpef_module::PE_Meta_Info::PE_FILE_TYPE_64BIT ) == 0 )
-	{
-	  return Arch_Type_Detector_Algorithm::ptr_t ( new Arch_Type_Detector_WPEF64_Algorithm() );
-	}
-      else
-	{
-	  throw errors::CPU_Exception ( errors::CPU_Exception::UNSUPPORTED_ARCHITECTURE );
-	}
-    }
+      arch_type_detector_algorithm::ptr_t
+      arch_type_detector_algorithm_factory::get_algorithm ( std::string file_type )
+      {
+	trace::components_detail ("Entering arch_type_detector_algorithm_factory::get_algorithm" );
 
-} /* namespace component */
-} /* namespace libreverse */
+	if ( file_type.compare ( elf_module::elf_meta_info::file_type_32bit ) == 0 )
+	  {
+	    return arch_type_detector_algorithm::ptr_t ( new arch_type_detector_elf32_algorithm() );
+	  }
+	else if ( file_type.compare ( elf_module::elf_meta_info::file_type_64bit ) == 0 )
+	  {
+	    return arch_type_detector_algorithm::ptr_t ( new arch_type_detector_elf64_algorithm() );
+	  }
+	else if ( file_type.compare ( java_module::java_meta_info::file_type ) == 0 )
+	  {
+	    return arch_type_detector_algorithm::ptr_t ( new arch_type_detector_java_algorithm() );
+	  }
+	else if ( file_type.compare ( wpef_module::pe_meta_info::pe_file_type_32bit ) == 0 )
+	  {
+	    return arch_type_detector_algorithm::ptr_t ( new arch_type_detector_wpef32_algorithm() );
+	  }
+	else if ( file_type.compare ( wpef_module::pe_meta_info::pe_file_type_64bit ) == 0 )
+	  {
+	    return arch_type_detector_algorithm::ptr_t ( new arch_type_detector_wpef64_algorithm() );
+	  }
+	else
+	  {
+	    throw errors::cpu_exception ( errors::cpu_exception::unsupported_architecture );
+	  }
+
+	trace::components_detail ("Exiting arch_type_detector_algorithm_factory::get_algorithm" );
+      }
+
+    }  // namespace input
+  }  // namespace component
+} // namespace reverse
 

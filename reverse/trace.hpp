@@ -52,6 +52,18 @@ namespace reverse {
 
     static void components_detail ( const char* );
 
+    template <typename T>
+    static void components_data ( const char* message, T const& value )
+    {
+      write_trace ( trace_area::components,
+		    trace_level::data,
+		    boost::str ( boost::format ( message ) % value ) );
+    }
+
+    static void components_error ( const char* message );
+
+    static void components_error ( const char* message, const char* filename, unsigned int line );
+
     static void classifier_detail ( const char* );
 
     template <typename T>
@@ -127,6 +139,13 @@ namespace reverse {
     static void candidate_solution_data ( const char*, T ) {}
 
     static void components_detail ( const char* ) {}
+
+    static void components_error ( const char* message ) {}
+
+    static void components_error ( const char* message, const char* filename, unsigned int line ) {}
+
+    template <typename T>
+    static void components_data ( const char* message, T const& value ) {}
 
     static void classifier_detail ( const char* ) {}
 

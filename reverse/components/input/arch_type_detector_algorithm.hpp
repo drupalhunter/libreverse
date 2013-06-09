@@ -19,26 +19,33 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ARCH_TYPE_DETECTOR_ALGORITHM_H
-#define ARCH_TYPE_DETECTOR_ALGORITHM_H
+#ifndef REVERSE_COMPONENTS_INPUT_ARCH_TYPE_DETECTOR_ALGORITHM_HPP_INCLUDED
+#define REVERSE_COMPONENTS_INPUT_ARCH_TYPE_DETECTOR_ALGORITHM_HPP_INCLUDED
 
-#include "io/IO_Types.h"
+#include <boost/shared_ptr.hpp>
 
-namespace libreverse {
+#include <string>
 
-    namespace component {
+namespace reverse {
 
-        class Arch_Type_Detector_Algorithm {
-        public:
+  namespace io {
+    class file_id;
+  }
+  
+  namespace component {
+    namespace input {
+      
+      class arch_type_detector_algorithm {
+      public:
+	
+	virtual ~arch_type_detector_algorithm(){}
 
-            typedef boost::shared_ptr<Arch_Type_Detector_Algorithm> ptr_t;
+	virtual std::string run ( boost::shared_ptr < const io::file_id> file_ptr ) = 0;
 
-            virtual ~Arch_Type_Detector_Algorithm(){}
-
-            virtual std::string run ( io_types::File_ID::const_ptr_t file_ptr ) = 0;
-        };
-
-    } /* namespace component */
-} /* namespace libreverse */
+      };
+      
+    } /* namespace io */
+  } /* namespace component */
+} /* namespace reverse */
 
 #endif /* UNPACKAGE_ALGORITHM_H */

@@ -75,7 +75,7 @@ namespace reverse {
 
 	  void set_attribute ( boost::uint32_t index, double value );
 
-	  double get_attribute ( boost::uint32_t index );
+	  double get_attribute ( boost::uint32_t index ) const;
 
 	  bool empty ( void ) const;
 

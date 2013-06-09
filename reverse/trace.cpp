@@ -100,6 +100,20 @@ namespace reverse {
 	write_trace ( trace_area::components, trace_level::detail, message );
       }
 
+      static void components_error ( const char* message )
+      {
+	write_trace ( trace_area::components, trace_level::error, message );
+      }
+
+      static void components_error ( const char* message, const char* filename, unsigned int line )
+      {
+	trace::write_trace ( trace_area::components,
+			     trace_level::error,
+			     boost::str ( boost::format( message )
+					  % filename
+					  % line ) );
+      }
+
       static void classifier_detail ( const char* message )
       {
 	write_trace ( trace_area::classifier, trace_level::detail, message );
