@@ -26,11 +26,13 @@
 #include <reverse/components/input/arch_type_detector_wpef32_algorithm.hpp>
 #include <reverse/components/input/arch_type_detector_wpef64_algorithm.hpp>
 #include <reverse/errors/cpu_exception.hpp>
-#include <reverse/io/input/file_readers/elf/elf_meta_info.hpp>
+#include <reverse/io/input/file_readers/linux_elf/elf_meta_info.hpp>
 #include <reverse/io/input/file_readers/java_class/java_meta_info.hpp>
 #include <reverse/io/input/file_readers/windows_pe/pe_meta_info.hpp>
 
 #include <reverse/trace.hpp>
+
+#include <boost/make_shared.hpp>
 
 #include <string>
 
@@ -38,30 +40,30 @@ namespace reverse {
   namespace component {
     namespace input {
 
-      arch_type_detector_algorithm::ptr_t
+      boost::shared_ptr < arch_type_detector_algorithm >
       arch_type_detector_algorithm_factory::get_algorithm ( std::string file_type )
       {
 	trace::components_detail ("Entering arch_type_detector_algorithm_factory::get_algorithm" );
 
-	if ( file_type.compare ( elf_module::elf_meta_info::file_type_32bit ) == 0 )
+	if ( file_type.compare ( io::input::file_readers::linux_elf::elf_meta_info::FILE_TYPE_32BIT ) == 0 )
 	  {
-	    return arch_type_detector_algorithm::ptr_t ( new arch_type_detector_elf32_algorithm() );
+	    return boost::make_shared < arch_type_detector_elf32_algorithm > ();
 	  }
-	else if ( file_type.compare ( elf_module::elf_meta_info::file_type_64bit ) == 0 )
+	else if ( file_type.compare ( io::input::file_readers::linux_elf::elf_meta_info::FILE_TYPE_64BIT ) == 0 )
 	  {
-	    return arch_type_detector_algorithm::ptr_t ( new arch_type_detector_elf64_algorithm() );
+	    return boost::make_shared < arch_type_detector_elf64_algorithm > ();
 	  }
 	else if ( file_type.compare ( java_module::java_meta_info::file_type ) == 0 )
 	  {
-	    return arch_type_detector_algorithm::ptr_t ( new arch_type_detector_java_algorithm() );
+	    return boost::make_shared < arch_type_detector_java_algorithm > ();
 	  }
 	else if ( file_type.compare ( wpef_module::pe_meta_info::pe_file_type_32bit ) == 0 )
 	  {
-	    return arch_type_detector_algorithm::ptr_t ( new arch_type_detector_wpef32_algorithm() );
+	    return boost::make_shared < arch_type_detector_wpef32_algorithm > ();
 	  }
 	else if ( file_type.compare ( wpef_module::pe_meta_info::pe_file_type_64bit ) == 0 )
 	  {
-	    return arch_type_detector_algorithm::ptr_t ( new arch_type_detector_wpef64_algorithm() );
+	    return boost::make_shared < arch_type_detector_wpef64_algorithm> ();
 	  }
 	else
 	  {

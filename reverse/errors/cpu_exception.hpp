@@ -19,22 +19,25 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CPU_EXCEPTION_H_
-#define CPU_EXCEPTION_H_
+#ifndef REVERSE_ERRORS_CPU_EXCEPTION_HPP_INCLUDED
+#define REVERSE_ERRORS_CPU_EXCEPTION_HPP_INCLUDED
 
-#include "Reverse_Exception.h"
+#include <reverse/errors/reverse_exception.hpp>
 
-namespace libreverse { namespace errors {
+#include <boost/cstdint.hpp>
 
-    class CPU_Exception : public virtual Reverse_Exception {
+namespace reverse {
+  namespace errors {
+
+    class cpu_exception : public virtual reverse_exception {
     public:
 
-        CPU_Exception ( boost::uint32_t message_id );
+        cpu_exception ( boost::uint32_t message_id );
 
         /*!
          * \brief Destructor
          */
-        virtual ~CPU_Exception (void) throw(){}
+        virtual ~cpu_exception (void) throw(){}
 
         const char* what (void) const throw();
 
@@ -54,7 +57,7 @@ namespace libreverse { namespace errors {
         static const char* m_messages[];
     };
 
-} /* namespace errors */
-} /* namespace libreverse */
+  } /* namespace errors */
+} /* namespace reverse */
 
-#endif /* CPU_EXCEPTION_H_ */
+#endif // ifndef REVERSE_ERRORS_CPU_EXCEPTION_HPP_INCLUDED

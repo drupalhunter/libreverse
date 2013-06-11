@@ -22,6 +22,8 @@
 #ifndef REVERSE_COMPONENTS_INPUT_ARCH_TYPE_DETECTOR_ALGORITHM_FACTORY_HPP_INCLUDED
 #define REVERSE_COMPONENTS_INPUT_ARCH_TYPE_DETECTOR_ALGORITHM_FACTORY_HPP_INCLUDED
 
+#include <reverse/components/input/arch_type_detector_algorithm.hpp>
+
 #include <boost/shared_ptr.hpp>
 
 namespace reverse {

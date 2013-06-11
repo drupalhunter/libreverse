@@ -19,155 +19,174 @@
     <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ELF_READER_32_H
-#define ELF_READER_32_H
+#ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_READER_32_HPP_INCLUDED
+#define REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_READER_32_HPP_INCLUDED
 
-#include "Elf_Types.h"
-#include "io/IO_Types.h"
-#include "io/input/File_Readers/File_Reader.h"
+#include <reverse/io/input/file_readers/file_reader.hpp>
+
+#include <boost/shared_ptr.hpp>
+
 #include <string>
 
-namespace libreverse
-{
-  namespace elf_module
-  {
+namespace reverse {
 
-    /*!
-     * \class Elf_Reader_32
-     * \date 2003
-     * \author Stephen Torri
-     */
-    class Elf_Reader_32 : public io::File_Reader
-      {
-      public:
+  namespace data_containers {
+    class memory_map;
+  }
 
-	/*!
-	 * \brief Default Constructor
-	 * \param target_file The file to be used for decompiling
-	 */
-	Elf_Reader_32 ( io_types::File_ID::const_ptr_t target_file );
+  namespace io {
+    
+    class file_id;
 
-	/*!
-	 * \brief Default Destructor
-	 */
-	virtual ~Elf_Reader_32();
+    namespace input {
+      namespace file_readers {
+	namespace linux_elf {
 
-	/*! \brief Elf_Header reference for this reader */
-	elf_types::Elf_Header_32::ptr_t get_Header ( void );
+	  class elf_file;
+	  class elf_header_32;
+	  class elf_section_header_32;
+	  class elf_symbol_32;
 
-	virtual bool support_File_Type ( void );
+	  /*!
+	   * \class Elf_Reader_32
+	   * \date 2003
+	   * \author Stephen Torri
+	   */
+	  class elf_reader_32 : public io::file_reader
+	  {
+	  public:
 
-	virtual void read_Headers ( void );
+	    /*!
+	     * \brief Default Constructor
+	     * \param target_file The file to be used for decompiling
+	     */
+	    elf_reader_32 ( boost::shared_ptr < const io::file_id > target_file );
 
-	virtual data_types::Memory_Map::ptr_t get_Memory_Map ( void );
+	    /*!
+	     * \brief Default Destructor
+	     */
+	    virtual ~elf_reader_32();
 
-	virtual std::string to_String ( void );
+	    /*! \brief Elf_Header reference for this reader */
+	    boost::shared_ptr < elf_header_32 > get_header ( void );
 
-	virtual io_types::Text_Data::data_type get_Text_Strings ( void );
+	    virtual bool support_File_Type ( void );
 
-	virtual io_types::Text_Data::data_type get_UTF16_Strings ( void );
+	    virtual void read_Headers ( void );
 
-	/*---------------
-	 *   Functions
-	 *---------------*/
+	    virtual boost::shared_ptr < data_containers::memory_map > get_memory_map ( void );
 
-	/*!
-	 * \brief Get the Elf File Header from the file
-	 */
-	void read_File_Header ( void );
+	    virtual std::string to_string ( void );
 
-	/*!
-	 * \brief Get the Elf Program Headers from the file
-	 */
-	void read_Program_Headers ( void );
+	    virtual std::string get_text_strings ( void );
 
-	/*!
-	 * \brief Return the File Type of the target file
-	 */
-	virtual std::string get_File_Type ( void );
+	    virtual std::string get_utf16_strings ( void );
 
-	/* !\brief Return the Architecture Type of the target file */
-	std::string get_Arch_Type ( void );
+	    /*---------------
+	     *   Functions
+	     *---------------*/
 
-	/* !\brief Return the offset for a section header */
-	std::string get_Section_Offset ( std::string name );
+	    /*!
+	     * \brief Get the Elf File Header from the file
+	     */
+	    void read_file_header ( void );
 
-	/* !\brief Return the offset for a section length */
-	std::string get_Section_Length ( std::string name );
+	    /*!
+	     * \brief Get the Elf Program Headers from the file
+	     */
+	    void read_program_headers ( void );
 
-	/*!
-	 * \brief Return the Entry Point of the target file
-	 */
-	std::string get_Entry_Point ( void );
+	    /*!
+	     * \brief Return the File Type of the target file
+	     */
+	    virtual std::string get_file_type ( void );
 
-	/*!
-	 * \brief Return the Base Address of the target file
-	 */
-	std::string get_Base_Address ( void );
+	    /* !\brief Return the Architecture Type of the target file */
+	    std::string get_arch_type ( void );
 
-	/*!
-	 * \brief Get the Section Headers from the file
-	 */
-	void read_Section_Headers ( void );
+	    /* !\brief Return the offset for a section header */
+	    std::string get_section_offset ( std::string name );
 
-	/*!
-	 * \brief Get the Dynamic Headers from the file
-	 */
-	void read_Dynamic_Headers ( void );
+	    /* !\brief Return the offset for a section length */
+	    std::string get_section_length ( std::string name );
 
-	/*!
-	 * \brief Get the Symbols from the Symbols Token of the file
-	 */
-	void read_Symbol_Token ( void );
+	    /*!
+	     * \brief Return the Entry Point of the target file
+	     */
+	    std::string get_entry_point ( void );
 
-	/*!
-	 * \brief Get the Relocation Headers from the file
-	 */
-	void read_Relocations ( void );
+	    /*!
+	     * \brief Return the Base Address of the target file
+	     */
+	    std::string get_base_address ( void );
 
-	/*!
-	 * \brief Get the Relocation headers (SHT_REL)
-	 */
-	void read_Relocation_Headers ( elf_types::Elf_Section_Header_32::const_ptr_t sec_hdr,
-				       elf_types::Elf_File_Header_32::const_ptr_t file_hdr );
+	    /*!
+	     * \brief Get the Section Headers from the file
+	     */
+	    void read_section_headers ( void );
 
-	/*!
-	 * \brief Get the Relocation Addend headers (SHT_RELA)
-	 */
-	void read_Relocation_Addend_Headers ( elf_types::Elf_Section_Header_32::const_ptr_t sec_hdr,
-					      elf_types::Elf_File_Header_32::const_ptr_t file_hdr );
+	    /*!
+	     * \brief Get the Dynamic Headers from the file
+	     */
+	    void read_dynamic_headers ( void );
 
-	/*!
-	 * \brief Get the Relocation symbols
-	 */
-	void read_Relocation_Symbols ( elf_types::Elf_Section_Header_32::const_ptr_t sec_hdr,
-				       elf_types::Elf_File_Header_32::const_ptr_t file_hdr );
+	    /*!
+	     * \brief Get the Symbols from the Symbols Token of the file
+	     */
+	    void read_symbol_token ( void );
 
-	virtual std::string get_Section_String ( std::string name ) const;
+	    /*!
+	     * \brief Get the Relocation Headers from the file
+	     */
+	    void read_relocations ( void );
 
-	virtual std::string get_String_Name ( boost::uint32_t index ) const;
+	    /*!
+	     * \brief Get the Relocation headers (SHT_REL)
+	     */
+	    void read_relocation_headers ( boost::shared_ptr < const elf_section_header_32 > sec_hdr,
+					   boost::shared_ptr < const elf_file_header_32> file_hdr );
 
-	void set_Symbol_Name ( elf_types::Elf_Symbol_32::ptr_t symbol_ptr );
+	    /*!
+	     * \brief Get the Relocation Addend headers (SHT_RELA)
+	     */
+	    void read_relocation_addend_headers ( boost::shared_ptr < const elf_section_header_32 > sec_hdr,
+						  boost::shared_ptr < const elf_file_header_32> file_hdr );
 
-	elf_types::Elf_File::const_ptr_t get_File (void) const;
+	    /*!
+	     * \brief Get the Relocation symbols
+	     */
+	    void read_relocation_symbols ( boost::shared_ptr < const elf_section_header_32 > sec_hdr,
+					   boost::shared_ptr < const elf_file_header_32> file_hdr );
 
-      private:
+	    virtual std::string get_section_string ( std::string name ) const;
 
-	/*---------------
-	 *   Variables
-	 *---------------*/
-	/*! \brief Elf File handle */
-	elf_types::Elf_File::ptr_t m_elf_file;
+	    virtual std::string get_string_name ( boost::uint32_t index ) const;
 
-	/*! \brief Conversion of data read is required */
-	bool m_convert;
+	    void set_symbol_name ( boost::shared_ptr < elf_symbol_32 > symbol_ptr );
 
-	elf_types::Elf_Header_32::ptr_t m_elf_data;
+	    boost::shared_ptr < const elf_file > get_file (void) const;
 
-	data_types::Memory_Map::ptr_t m_string_table_ptr;
-      };
+	  private:
 
-  } /* namespace elf_module */
-} /* namespace libreverse */
+	    /*---------------
+	     *   Variables
+	     *---------------*/
 
-#endif /* ELF_READER_32_H */
+	    /*! \brief elf file handle */
+	    boost::shared_ptr < elf_types::elf_file > m_elf_file;
+
+	    /*! \brief Conversion of data read is required */
+	    bool m_convert;
+
+	    boost::shared_ptr < elf_header_32 > m_elf_data;
+
+	    boost::shared_ptr < data_containers::memory_map > m_string_table_ptr;
+	  };
+
+	} // namespace linux_elf
+      } // namespace file_readers
+    } // namespace input
+  } // namespace io
+} // namespace reverse
+
+#endif // ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_READER_32_HPP_INCLUDED

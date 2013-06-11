@@ -19,28 +19,32 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ARCH_TYPE_DETECTOR_Elf64_ALGORITHM_H
-#define ARCH_TYPE_DETECTOR_Elf64_ALGORITHM_H
+#ifndef REVERSE_COMPONENT_INPUT_ARCH_TYPE_DETECTOR_Elf64_ALGORITHM_HPP_INCLUDED
+#define REVERSE_COMPONENT_INPUT_ARCH_TYPE_DETECTOR_Elf64_ALGORITHM_HPP_INCLUDED
 
-#include "Arch_Type_Detector_Algorithm.h"
+#include <reverse/components/input/arch_type_detector_algorithm.hpp>
 
-#include "io/IO_Types.h"
+#include <boost/shared_ptr.hpp>
 
-namespace libreverse {
+namespace reverse {
 
-    namespace component {
+  namespace io {
+    class file_id;
+  }
 
-      class Arch_Type_Detector_Elf64_Algorithm : public Arch_Type_Detector_Algorithm {
+  namespace component {
+    namespace input {
+
+      class arch_type_detector_elf64_algorithm : public arch_type_detector_algorithm {
       public:
 
-	typedef boost::shared_ptr<Arch_Type_Detector_Elf64_Algorithm> ptr_t;
+	virtual ~arch_type_detector_elf64_algorithm(){}
 
-	virtual ~Arch_Type_Detector_Elf64_Algorithm(){}
-
-	virtual std::string run ( io_types::File_ID::const_ptr_t file_ptr );
+	virtual std::string run ( boost::shared_ptr < const io::file_id > file_ptr );
       };
 
-    } /* namespace component */
-} /* namespace libreverse */
+    } // namespace input
+  } /* namespace component */
+} /* namespace reverse */
 
 #endif /* ARCH_TYPE_DETECTOR_Elf64_ALGORITHM_H */

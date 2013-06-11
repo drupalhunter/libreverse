@@ -1,44 +1,50 @@
 /*  Arch_Type_Detector_Java_Algorithm.h
 
-   Copyright (C) 2008 Stephen Torri
+    Copyright (C) 2008 Stephen Torri
 
-   This file is part of Libreverse.
+    This file is part of Libreverse.
 
-   Libreverse is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published
-   by the Free Software Foundation; either version 3, or (at your
-   option) any later version.
+    Libreverse is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published
+    by the Free Software Foundation; either version 3, or (at your
+    option) any later version.
 
-   Libreverse is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
+    Libreverse is distributed in the hope that it will be useful, but
+    WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with this program.  If not, see
-   <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see
+    <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ARCH_TYPE_DETECTOR_JAVA_ALGORITHM_H
-#define ARCH_TYPE_DETECTOR_JAVA_ALGORITHM_H
+#ifndef REVERSE_COMPONENT_INPUT_ARCH_TYPE_DETECTOR_JAVA_ALGORITHM_HPP_INCLUDED
+#define REVERSE_COMPONENT_INPUT_ARCH_TYPE_DETECTOR_JAVA_ALGORITHM_HPP_INCLUDED
 
-#include "Arch_Type_Detector_Algorithm.h"
+#include <reverse/components/input/arch_type_detector_algorithm.hpp>
 
-namespace libreverse {
+#include <boost/shared_ptr.hpp>
 
-    namespace component {
+namespace reverse {
+
+  namespace io {
+    class file_id;
+  }
+
+  namespace component {
+    namespace input {
       
-      class Arch_Type_Detector_Java_Algorithm : public Arch_Type_Detector_Algorithm {
+      class arch_type_detector_java_algorithm : public arch_type_detector_algorithm {
       public:
 
-	typedef boost::shared_ptr<Arch_Type_Detector_Java_Algorithm> ptr_t;
+	virtual ~arch_type_detector_java_algorithm(){}
 
-	virtual ~Arch_Type_Detector_Java_Algorithm(){}
-
-	virtual std::string run ( io_types::File_ID::const_ptr_t file_ptr );
+        virtual std::string run ( boost::shared_ptr < const io::file_id > file_ptr );
       };
 
-    } /* namespace component */
-} /* namespace libreverse */
+    } // namespace input
+  } /* namespace component */
+} /* namespace reverse */
 
-#endif /* ARCH_TYPE_DETECTOR_JAVA_ALGORITHM_H */
+#endif // ifndef  REVERSE_COMPONENT_INPUT_ARCH_TYPE_DETECTOR_JAVA_ALGORITHM_HPP_INCLUDED
