@@ -299,7 +299,7 @@ namespace reverse {
 
 		    valid = false;
 
-		    trace::classifier_detail ( (*cpos)->to_String () );
+		    trace::classifier_detail ( (*cpos)->to_string ().c_str() );
 
 		    break;
 		  }

@@ -127,6 +127,36 @@ namespace reverse {
         }
     }
 
+    static void io_detail ( const char* message );
+
+    static void io_error ( const char* message );
+
+    static void io_data ( const char* message );
+
+    template <typename T>
+    static void io_data ( const char* message, T const& value )
+    {
+      write_trace ( trace_area::io_data,
+		    trace_level::data,
+		    boost::str ( boost::format ( message ) % value ) );
+    }
+
+    static void infrastructure_detail ( const char* message );
+
+    static void infrastructure_error ( const char* message );
+
+    static void infrastructure_data ( const char* message );
+
+    template <typename T>
+    static void infrastructure_data ( const char* message, T const& value )
+    {
+      write_trace ( trace_area::infrastructure_data,
+		    trace_level::data,
+		    boost::str ( boost::format ( message ) % value ) );
+    }
+
+    static void infrastructure_error ( const char* message, const char* filename, unsigned int line );
+    
 #else
     static bool write_trace ( boost::uint32_t, boost::uint32_t, const char* ){}
     static void api_detail ( const char* ) {}
@@ -153,22 +183,41 @@ namespace reverse {
     static void classifier_error ( const char*, T1 const& v1, T2 const& v2 ) {}
 
     template <typename T>
-    static void classifier_data ( const char* message, T const& value ) {}
+    static void classifier_data ( const char*, T const& ) {}
 
-    static void classifier_data ( const char* message ){}
+    static void classifier_data ( const char* ){}
 
-    static void grnn_detail ( const char* message ){}
+    static void grnn_detail ( const char* ){}
 
     template <typename T>
-    static void grnn_data ( const char* message, T const& value ) {}
+    static void grnn_data ( const char*, T const& ) {}
 
     template <typename T1, typename T2>
-    static void grnn_data  ( const char* message, T1 const& value1, T2 const& value2 ) {}
+    static void grnn_data  ( const char*, T1 const&, T2 const& ) {}
 
     template <typename T1>
-    static void grnn_data_map ( T1 const& map_data )
+    static void grnn_data_map ( T1 const& )
     {}
 
+    static void io_detail ( const char* ) {}
+
+    static void io_error ( const char* ) {}
+
+    template <typename T>
+    static void io_data ( const char*, T const& ) {}
+
+    static void infrastructure_detail ( const char* ){}
+
+    static void infrastructure_error ( const char* ){}
+
+    static void infrastructure_data ( const char* ){}
+
+    template <typename T>
+    static void infrastructure_data ( const char*, T const& )
+    {}
+
+    static void infrastructure_error ( const char*, const char*, unsigned int ) {}
+    
 #endif
 
   };

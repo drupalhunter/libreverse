@@ -53,15 +53,15 @@ namespace reverse {
 	  {
 	    return boost::make_shared < arch_type_detector_elf64_algorithm > ();
 	  }
-	else if ( file_type.compare ( java_module::java_meta_info::file_type ) == 0 )
+	else if ( file_type.compare ( io::input::file_readers::java_class::java_meta_info::file_type ) == 0 )
 	  {
 	    return boost::make_shared < arch_type_detector_java_algorithm > ();
 	  }
-	else if ( file_type.compare ( wpef_module::pe_meta_info::pe_file_type_32bit ) == 0 )
+	else if ( file_type.compare ( io::input::file_readers::windows_pe::pe_meta_info::pe_file_type_32bit ) == 0 )
 	  {
 	    return boost::make_shared < arch_type_detector_wpef32_algorithm > ();
 	  }
-	else if ( file_type.compare ( wpef_module::pe_meta_info::pe_file_type_64bit ) == 0 )
+	else if ( file_type.compare ( io::input::file_readers::windows_pe::pe_meta_info::pe_file_type_64bit ) == 0 )
 	  {
 	    return boost::make_shared < arch_type_detector_wpef64_algorithm> ();
 	  }

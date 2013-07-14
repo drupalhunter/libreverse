@@ -56,17 +56,9 @@ namespace reverse {
 	    }
 	  else
 	    {
-	      trace::write_trace ( trace_area::infrastructure,
-				   trace_level::error,
-				   boost::str ( boost::format ( "GRNN_Data_Types::get_Types - unknown type. %1%" ) % type_string ) );
-
-	      trace::write_trace ( trace_area::infrastructure,
-				   trace_level::error,
-				   boost::str ( boost::format("Exception throw in %s at line %d")
-						% __FILE__
-						% __LINE__ ) );
-
-	      throw errors::internal_exception ( errors::internal_exception::invalid_value );
+		trace::infrastructure_data ( "GRNN_Data_Types::get_Types - unknown type. %1%", type_string );
+		trace::infrastructure_error ( "Exception throw in %s at line %d", __FILE__, __LINE__ );
+		throw errors::internal_exception ( errors::internal_exception::invalid_value );
 	    }
 
 	  return result;

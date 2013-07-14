@@ -42,19 +42,13 @@ namespace reverse {
     meta_writer::meta_writer ()
       : m_state_ptr ( new infrastructure::component_state (0) )
     {
-      trace::trace::write_trace ( trace_area::components,
-				  trace_level::detail,
-				  boost::str ( boost::format ( "inside meta_writer constructor (id=%d)")
-					       % m_state_ptr->get_id() ) );
+      trace::components_data( "inside meta_writer constructor (id=%d)", m_state_ptr->get_id() );
     }
 
     meta_writer::meta_writer ( boost::shared_ptr < infrastructure::component_state > state_ptr )
         : m_state_ptr ( state_ptr )
     {
-      trace::trace::write_trace ( trace_area::components,
-				  trace_level::detail,
-				  boost::str ( boost::format ( "inside meta_writer constructor (id=%d)")
-					       % m_state_ptr->get_id() ) );
+      trace::components_data( "inside meta_writer constructor (id=%d)", m_state_ptr->get_id() );
     }
 
     meta_writer::meta_writer ( meta_writer const& rhs )
@@ -63,28 +57,19 @@ namespace reverse {
 	boost::enable_shared_from_this<meta_writer> ( rhs ),
 	m_state_ptr ( new infrastructure::component_state ( *rhs.m_state_ptr ) )
     {
-      trace::trace::write_trace ( trace_area::components,
-				  trace_level::detail,
-				  boost::str ( boost::format ( "inside meta_writer copy constructor (id=%d)")
-					       % m_state_ptr->get_id() ) );
+      trace::components_data ( "inside meta_writer copy constructor (id=%d)", m_state_ptr->get_id() );
     }
 
     meta_writer::~meta_writer ()
     {
-      trace::trace::write_trace ( trace_area::components,
-				  trace_level::detail,
-				  boost::str ( boost::format ( "inside meta_writer destructor (id=%d)")
-					       % m_state_ptr->get_id() ) );
+      trace::components_data ( "inside meta_writer destructor (id=%d)", m_state_ptr->get_id() );
     }
 
     void
     meta_writer::received_input_source_data ( boost::uint32_t id )
     {
-      trace::trace::write_trace ( trace_area::components,
-				  trace_level::detail,
-				  boost::str ( boost::format ( "entering meta_writer::received_input_source_data (id=%d)")
-					       % m_state_ptr->get_id() ) );
-
+      trace::components_data ( "entering meta_writer::received_input_source_data (id=%d)", m_state_ptr->get_id() );
+    
       std::cout << boost::format("meta_writer(%d)::init")
 	% m_state_ptr->get_id()
 		<< std::endl;
@@ -92,51 +77,34 @@ namespace reverse {
 
       m_state_ptr->received_input_source_data ( id );
 
-      trace::trace::write_trace ( trace_area::components,
-				  trace_level::detail,
-				  boost::str ( boost::format ( "exiting meta_writer::received_input_source_data (id=%d)")
-					       % m_state_ptr->get_id() ) );
+      trace::components_data("exiting meta_writer::received_input_source_data (id=%d)", m_state_ptr->get_id() );
       
     }
 
     void
     meta_writer::add_input_source ( boost::uint32_t id )
     {
-      trace::trace::write_trace ( trace_area::components,
-                             trace_level::detail,
-                             boost::str ( boost::format ( "entering meta_writer::add_input_source (id=%d)")
-                                          % m_state_ptr->get_id() ) );
+      trace::components_data("entering meta_writer::add_input_source (id=%d)", m_state_ptr->get_id() );
 
         m_state_ptr->add_input_source ( id );
 
-        trace::trace::write_trace ( trace_area::components,
-                             trace_level::detail,
-                             boost::str ( boost::format ( "exiting meta_writer::add_input_source (id=%d)")
-                                          % m_state_ptr->get_id() ) );
-
+      trace::components_data("exiting meta_writer::add_input_source (id=%d)", m_state_ptr->get_id() );
     }
 
     std::string
     meta_writer::get_name (void) const
     {
-        trace::trace::write_trace ( trace_area::components,
-                             trace_level::detail,
-                             boost::str ( boost::format ( "inside meta_writer::get_name (id=%d)")
-                                          % m_state_ptr->get_id() ) );
+      trace::components_data("inside meta_writer::get_name (id=%d)", m_state_ptr->get_id() );
 
         return m_name;
     }
 
     void meta_writer::process ()
     {
-        trace::trace::write_trace ( trace_area::components,
-                             trace_level::detail,
-                             boost::str ( boost::format ( "entering meta_writer::process (id=%d)")
-                                          % m_state_ptr->get_id() ) );
+      trace::components_data ( "entering meta_writer::process (id=%d)", m_state_ptr->get_id() );
 
 	boost::shared_ptr < infrastructure::component_data > data_ptr = m_state_ptr->get_data();
-
-        meta::meta_object::const_ptr_t meta_ptr = data_ptr->get_input_meta_data();
+	boost::shared_ptr < const meta::meta_object > meta_ptr = data_ptr->get_input_meta_data();
 
         std::cout << meta_ptr->to_string() << std::endl;
 
@@ -156,20 +124,14 @@ namespace reverse {
                 data_ptr->set_output_data ( data_ptr->get_input_memory_map() );
             }
 
-        trace::trace::write_trace ( trace_area::components,
-                             trace_level::detail,
-                             boost::str ( boost::format ( "exiting meta_writer::process (id=%d)")
-                                          % m_state_ptr->get_id() ) );
+        trace::components_data ( "exiting meta_writer::process (id=%d)", m_state_ptr->get_id() );
 
     }
 
     void
     meta_writer::run ( infrastructure::component_graph::data_map_t* m_input_data )
     {
-        trace::trace::write_trace ( trace_area::components,
-                             trace_level::detail,
-                             boost::str ( boost::format ( "entering meta_writer::run (id=%d)")
-                                          % m_state_ptr->get_id() ) );
+      trace::components_data ( "entering meta_writer::run (id=%d)",  m_state_ptr->get_id() );
 
         std::cout << std::endl
                   << "--------------------------------" << std::endl
@@ -188,19 +150,13 @@ namespace reverse {
                   << "--------------------------------" << std::endl
                   << std::endl;
 
-        trace::trace::write_trace ( trace_area::components,
-                             trace_level::detail,
-                             boost::str ( boost::format ( "exiting meta_writer::run (id=%d)")
-                                          % m_state_ptr->get_id() ) );
+	trace::components_data( "exiting meta_writer::run (id=%d)", m_state_ptr->get_id() );
     }
 
     boost::shared_ptr < infrastructure::data_source::data_source_base >
     meta_writer::results (void)
     {
-        trace::trace::write_trace ( trace_area::components,
-                             trace_level::detail,
-                             boost::str ( boost::format ( "inside meta_writer::results (id=%d)")
-                                          % m_state_ptr->get_id() ) );
+	trace::components_data ( "inside meta_writer::results (id=%d)", m_state_ptr->get_id() );
 
         return m_state_ptr->results();
     }
@@ -208,10 +164,7 @@ namespace reverse {
     void
     meta_writer::set_state ( boost::uint32_t mode )
     {
-        trace::trace::write_trace ( trace_area::components,
-                             trace_level::detail,
-                             boost::str ( boost::format ( "inside meta_writer::set_state (id=%d)")
-                                          % m_state_ptr->get_id() ) );
+	trace::components_data ( "inside meta_writer::set_state (id=%d)", m_state_ptr->get_id() );
 
         m_state_ptr->switch_state ( mode );
     }
@@ -219,10 +172,7 @@ namespace reverse {
     boost::uint32_t
     meta_writer::get_id (void) const
     {
-        trace::trace::write_trace ( trace_area::components,
-                             trace_level::detail,
-                             boost::str ( boost::format ( "inside meta_writer::get_id (id=%d)")
-                                          % m_state_ptr->get_id() ) );
+	trace::components_data ( "inside meta_writer::get_id (id=%d)", m_state_ptr->get_id() );
 
         return m_state_ptr->get_id();
     }
@@ -230,10 +180,7 @@ namespace reverse {
     infrastructure::component_data::input_token_t::const_iterator
     meta_writer::get_source_list_begin (void) const
     {
-        trace::trace::write_trace ( trace_area::components,
-                             trace_level::detail,
-                             boost::str ( boost::format ( "inside meta_writer::get_source_list_begin (id=%d)")
-                                          % m_state_ptr->get_id() ) );
+	trace::components_data ( "inside meta_writer::get_source_list_begin (id=%d)", m_state_ptr->get_id() );
 
         return m_state_ptr->get_source_list_begin ();
     }
@@ -241,10 +188,7 @@ namespace reverse {
     infrastructure::component_data::input_token_t::const_iterator
     meta_writer::get_source_list_end (void) const
     {
-        trace::trace::write_trace ( trace_area::components,
-                             trace_level::detail,
-                             boost::str ( boost::format ( "inside meta_writer::get_source_list_end (id=%d)")
-                                          % m_state_ptr->get_id() ) );
+	trace::components_data ( "inside meta_writer::get_source_list_end (id=%d)", m_state_ptr->get_id() );
 
         return m_state_ptr->get_source_list_end ();
     }
@@ -252,18 +196,12 @@ namespace reverse {
     meta_writer&
     meta_writer::operator= ( meta_writer const& rhs )
     {
-        trace::trace::write_trace ( trace_area::components,
-                             trace_level::detail,
-                             boost::str ( boost::format ( "entering meta_writer::operator= (assignment) (id=%d)")
-                                          % m_state_ptr->get_id() ) );
+	trace::components_data ( "entering meta_writer::operator= (assignment) (id=%d)", m_state_ptr->get_id() );
 
         meta_writer temp ( rhs );
         swap ( temp );
 
-        trace::trace::write_trace ( trace_area::components,
-                             trace_level::detail,
-                             boost::str ( boost::format ( "exiting meta_writer::operator= (assignment)  (id=%d)")
-                                          % m_state_ptr->get_id() ) );
+        trace::components_data ( "exiting meta_writer::operator= (assignment)  (id=%d)", m_state_ptr->get_id() );
 
         return *this;
     }
@@ -271,17 +209,11 @@ namespace reverse {
     void
     meta_writer::swap ( meta_writer& rhs )
     {
-        trace::trace::write_trace ( trace_area::components,
-                             trace_level::detail,
-                             boost::str ( boost::format ( "entering meta_writer::swap (id=%d)")
-                                          % m_state_ptr->get_id() ) );
+	trace::components_data ( "entering meta_writer::swap (id=%d)", m_state_ptr->get_id() );
 
         m_state_ptr.swap ( rhs.m_state_ptr );
 
-        trace::trace::write_trace ( trace_area::components,
-                             trace_level::detail,
-                             boost::str ( boost::format ( "exiting meta_writer::swap (id=%d)")
-                                          % m_state_ptr->get_id() ) );
+	trace::components_data ( "exiting meta_writer::swap (id=%d)", m_state_ptr->get_id() );
 
     }
   } // namespace component

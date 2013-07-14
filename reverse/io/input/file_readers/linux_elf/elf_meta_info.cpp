@@ -22,10 +22,10 @@
 #include "Elf_Meta_Info.h"
 
 namespace libreverse {
-  namespace elf_module {
+namespace elf_module {
 
-    const std::string Elf_Meta_Info::FILE_TYPE_32BIT = "elf32";
-    const std::string Elf_Meta_Info::FILE_TYPE_64BIT = "elf64";
+const std::string Elf_Meta_Info::FILE_TYPE_32BIT = "elf32";
+const std::string Elf_Meta_Info::FILE_TYPE_64BIT = "elf64";
 
 } /* namespace elf_module */
 } /* namespace libreverse */

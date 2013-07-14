@@ -25,22 +25,22 @@
 #include <string>
 
 namespace reverse {
-  namespace io {
-    namespace input {
-      namespace file_readers {
-	namespace linux_elf {
+namespace io {
+namespace input {
+namespace file_readers {
+namespace linux_elf {
 
-	  class elf_meta_info {
-	  public:
+class elf_meta_info {
+public:
 
-	    static const std::string FILE_TYPE_32BIT;
-	    static const std::string FILE_TYPE_64BIT;
-	  };
+     static const std::string FILE_TYPE_32BIT;
+     static const std::string FILE_TYPE_64BIT;
+};
 
-	} // namespace linux_elf
-      } // namespace file_readers
-    } // namespace input
-  } // namespace io
+} // namespace linux_elf
+} // namespace file_readers
+} // namespace input
+} // namespace io
 } // namespace reverse
 
 #endif // REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_META_INFO_HPP_INCLUDED

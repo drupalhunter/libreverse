@@ -39,105 +39,140 @@ namespace reverse {
 
 #ifdef LIBREVERSE_DEBUG
 
-    bool
-    trace::write_trace ( boost::uint32_t area, 
-                         boost::uint32_t level,
-                         const char* message )
-    {
-        if ( ! trace_state::instance().is_valid_level ( level ) )
-            {
-                throw errors::internal_exception ( errors::internal_exception::invalid_value );
-            }
+bool
+trace::write_trace ( boost::uint32_t area,
+                     boost::uint32_t level,
+                     const char* message )
+{
+     if ( ! trace_state::instance().is_valid_level ( level ) ) {
+          throw errors::internal_exception ( errors::internal_exception::invalid_value );
+     }
 
-        if ( message.empty() )
-            {
-                throw errors::internal_exception ( errors::internal_exception::empty_string );
-            }
+     if ( message.empty() ) {
+          throw errors::internal_exception ( errors::internal_exception::empty_string );
+     }
 
-        if ( ! trace_state::instance().is_valid_area_mask ( area ) )
-            {
-                throw errors::internal_exception ( errors::internal_exception::invalid_value );
-            }
+     if ( ! trace_state::instance().is_valid_area_mask ( area ) ) {
+          throw errors::internal_exception ( errors::internal_exception::invalid_value );
+     }
 
-        // If the level is equal to or greater than the present
-        // level we record out message.
-        if ( ( trace_state::instance().get_trace_level() != trace_level::none ) && 
-             ( level <= trace_state::instance().get_trace_level() ) &&
-             ( ( trace_state::instance().get_trace_area_mask() & area ) != 0 ) )
-            {
-                trace_state::instance().write_message ( level, message );
-            }
+     // If the level is equal to or greater than the present
+     // level we record out message.
+     if ( ( trace_state::instance().get_trace_level() != trace_level::none ) &&
+               ( level <= trace_state::instance().get_trace_level() ) &&
+               ( ( trace_state::instance().get_trace_area_mask() & area ) != 0 ) ) {
+          trace_state::instance().write_message ( level, message );
+     }
 
-        return true;
-    }
+     return true;
+}
 
-      static void api_detail ( const char* message )
-      {
-	write_trace ( trace_area::api, trace_level::detail, message );
-      }
+static void api_detail ( const char* message )
+{
+     write_trace ( trace_area::api, trace_level::detail, message );
+}
 
-      static void api_error ( const char* message )
-      {
-	write_trace ( trace_area::api, trace_level::error, message );
-      }
+static void api_error ( const char* message )
+{
+     write_trace ( trace_area::api, trace_level::error, message );
+}
 
-      static void api_error ( const char* message, const char* filename, unsigned int line )
-      {
-	trace::write_trace ( trace_area::api,
-			     trace_level::error,
-			     boost::str ( boost::format( message )
-					  % filename
-					  % line ) );
-      }
+static void api_error ( const char* message, const char* filename, unsigned int line )
+{
+     trace::write_trace ( trace_area::api,
+                          trace_level::error,
+                          boost::str ( boost::format ( message )
+                                       % filename
+                                       % line ) );
+}
 
-      static void candidate_solution_detail ( const char* message )
-      {
-	write_trace ( trace_area::candidate_solution, trace_level::detail, message );
-      }
+static void candidate_solution_detail ( const char* message )
+{
+     write_trace ( trace_area::candidate_solution, trace_level::detail, message );
+}
 
-      static void components_detail ( const char* message )
-      {
-	write_trace ( trace_area::components, trace_level::detail, message );
-      }
+static void components_detail ( const char* message )
+{
+     write_trace ( trace_area::components, trace_level::detail, message );
+}
 
-      static void components_error ( const char* message )
-      {
-	write_trace ( trace_area::components, trace_level::error, message );
-      }
+static void components_error ( const char* message )
+{
+     write_trace ( trace_area::components, trace_level::error, message );
+}
 
-      static void components_error ( const char* message, const char* filename, unsigned int line )
-      {
-	trace::write_trace ( trace_area::components,
-			     trace_level::error,
-			     boost::str ( boost::format( message )
-					  % filename
-					  % line ) );
-      }
+static void components_error ( const char* message, const char* filename, unsigned int line )
+{
+     trace::write_trace ( trace_area::components,
+                          trace_level::error,
+                          boost::str ( boost::format ( message )
+                                       % filename
+                                       % line ) );
+}
 
-      static void classifier_detail ( const char* message )
-      {
-	write_trace ( trace_area::classifier, trace_level::detail, message );
-      }
+static void classifier_detail ( const char* message )
+{
+     write_trace ( trace_area::classifier, trace_level::detail, message );
+}
 
-  static void classifier_data ( const char* message )
-  {
-    write_trace ( trace_area::classifier, trace_level::data, message );
-  }
+static void classifier_data ( const char* message )
+{
+     write_trace ( trace_area::classifier, trace_level::data, message );
+}
 
-  static void grnn_detail ( const char* message )
-  {
-    write_trace ( trace_area::grnn_data, trace_level::detail, message );
-  }
+static void grnn_detail ( const char* message )
+{
+     write_trace ( trace_area::grnn_data, trace_level::detail, message );
+}
 
-  static void grnn_data ( boost::shared_ptr < training_set<java_training_data> > data )
-  {
-    for ( classifier_types::training_set<java_training_data>::data_list_t::const_iterator cpos = m_data.begin();
-	  cpos != m_data.end();
-	  ++cpos )
-      {
-	grnn_detail ( ( *cpos )->to_String () );
-      }
-  }
+static void grnn_data ( boost::shared_ptr < training_set<java_training_data> > data )
+{
+     for ( classifier_types::training_set<java_training_data>::data_list_t::const_iterator cpos = m_data.begin();
+               cpos != m_data.end();
+               ++cpos ) {
+          grnn_detail ( ( *cpos )->to_String () );
+     }
+}
+
+static void io_detail ( const char* message )
+{
+     write_trace ( trace_area::io, trace_level::detail, message );
+}
+
+static void io_error ( const char* message )
+{
+     write_trace ( trace_area::io, trace_level::error, message );
+}
+
+static void io_data ( const char* message )
+{
+     write_trace ( trace_area::io, trace_level::data, message );
+}
+
+static void infrastructure_detail ( const char* message )
+{
+     write_trace ( trace_area::infrastructure, trace_level::detail, message );
+}
+
+static void infrastructure_error ( const char* message )
+{
+     write_trace ( trace_area::infrastructure, trace_level::error, message );
+}
+
+static void infrastructure_data ( const char* message )
+{
+     write_trace ( trace_area::infrastructure, trace_level::data, message );
+}
+
+static void infrastructure_error ( const char* message, const char* filename, unsigned int line )
+{
+     trace::write_trace ( trace_area::infrastructure,
+                          trace_level::error,
+                          boost::str ( boost::format ( message )
+                                       % filename
+                                       % line ) );
+}
+
 
 #endif // ifdef LIBREVERSE_DEBUG
 
