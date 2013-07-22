@@ -42,6 +42,8 @@ namespace reverse {
 	return fact_ref;
       }
 
+      virtual ~component_factory();
+
       /**
        * \brief create a new file type detector component
        *
@@ -200,14 +202,12 @@ namespace reverse {
 
     private:
 
-      component_factory (){}
+      component_factory ();
 
-      component_factory ( const component_factory& ){}
+      component_factory ( const component_factory& );
       
-      component_factory& operator= ( const component_factory& ){}
+      component_factory& operator= ( const component_factory& );
       
-      ~component_factory (){}
-
     };
 
   } // namespace infrastructure

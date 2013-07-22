@@ -19,29 +19,20 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#include "Arch_Type_Detector_WPEF32_Algorithm.h"
+#include <reverse/components/input/arch_type_detector_wpef32_algorithm.hpp>
+#include <reverse/io/input/file_readers/windows_pe/reader_32.hpp>
+#include <reverse/trace.hpp>
 
-#include "io/input/File_Readers/Windows_PE/Reader_32.h"
-
-#ifdef LIBREVERSE_DEBUG
-#include "Trace.h"
-using namespace libreverse::api;
-using namespace libreverse::trace;
-#endif /* LIBREVERSE_DEBUG */
-
-namespace libreverse { namespace component {
-
+namespace reverse {
+namespace component {
+namespace input {
+    
     std::string
-    Arch_Type_Detector_WPEF32_Algorithm::run ( io_types::File_ID::const_ptr_t file_ptr )
+    arch_type_detector_wpef32_algorithm::run ( boost::shared_ptr < const io::file_id > file_ptr )
     {
+	trace::components_detail ( "Entering Arch_Type_Detector_WPEF32_Algorithm::run" );
 
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::COMPONENTS,
-			   TraceLevel::DETAIL,
-			   "Entering Arch_Type_Detector_WPEF32_Algorithm::run" );
-#endif /* LIBREVERSE_DEBUG */
-
-
+	boost::shared_ptr < windows_pe::re
       wpef_types::Reader_32::ptr_t file_reader_ptr ( new wpef_module::Reader_32 ( file_ptr ) );
 
       std::string result = file_reader_ptr->get_Arch_Type ();
@@ -57,6 +48,7 @@ namespace libreverse { namespace component {
       return result;
     }
 
+} // namespace input
 } /* namespace component */
-} /* namespace libreverse */
+} /* namespace reverse */
 

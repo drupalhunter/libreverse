@@ -21,7 +21,9 @@
 #include <reverse/io/input/file_readers/linux_elf/elf_file_32.hpp>
 #include <reverse/io/input/file_readers/linux_elf/elf_parser.hpp>
 #include <reverse/io/input/file_readers/linux_elf/parsing/elf_eident_grammar.hpp>
+#include <reverse/io/input/file_readers/linux_elf/parsing/elf_header_32_grammar.hpp>
 #include <reverse/io/input/file_readers/linux_elf/parsing/elf_program_header_32_grammar.hpp>
+#include <reverse/io/input/file_readers/linux_elf/parsing/elf_section_header_32_grammar.hpp>
 #include <reverse/io/file_id.hpp>
 #include <reverse/trace.hpp>
 
@@ -38,11 +40,25 @@ bool elf_parser::read ( char const* iter,
                         const char* end,
                         elf_file_32& output )
 {
+  // Read Eident header
      bool result = read_elf_header_eident ( iter, end, output.base );
-     result = read_elf_program_header ( iter, end, output.program_header );
+     
+     // Read Elf header
+     result = read_elf_header ( iter, end, output.elf_header );
+     
+// 	 // Read Program Header
+// 	 result = read_elf_program_header ( iter, end, output.program_header );
+	 
+	 // Read Section header table
+
+	 
+	 // For each section header entry
+	 //   Read Section header
+	 
+	 
+	 
      return result;
 }
-
 bool elf_parser::read_elf_header_eident ( char const* iter,
           char const* end,
           elf_eident_header& elf_eident_header_obj )
@@ -55,6 +71,20 @@ bool elf_parser::read_elf_header_eident ( char const* iter,
                    elf_eident_header_obj );
 
      return result;
+}
+
+bool elf_parser::read_elf_header ( const char* iter,
+					   const char* end, 
+					   elf_header_32& elf_header_obj )
+{
+    linux_elf::parsing::elf_header_32_grammar<char const*> elf_header_parser;
+    
+    bool result = boost::spirit::qi::parse ( iter,
+	end,
+	elf_header_parser,
+	elf_header_obj );
+    
+    return result;
 }
 
 bool elf_parser::read_elf_program_header ( const char* iter,
@@ -71,96 +101,20 @@ bool elf_parser::read_elf_program_header ( const char* iter,
     return result;
 }
 
-//
-//     void
-//     Elf_File::seek ( boost::uint32_t offset )
-//     {
-//
-// #ifdef LIBREVERSE_DEBUG
-//         Trace::write_Trace ( TraceArea::IO,
-//                              TraceLevel::DETAIL,
-//                              "Entering Elf_File::seek" );
-// #endif /* LIBREVERSE_DEBUG */
-//
-//
-//         m_file.seek ( offset );
-//
-//
-// #ifdef LIBREVERSE_DEBUG
-//         Trace::write_Trace ( TraceArea::IO,
-//                              TraceLevel::DETAIL,
-//                              "Exiting Elf_File::seek" );
-// #endif /* LIBREVERSE_DEBUG */
-//
-//     }
-//
-//     data_types::Memory_Map::ptr_t
-//     Elf_File::subset ( boost::uint32_t length )
-//     {
-//
-// #ifdef LIBREVERSE_DEBUG
-//         Trace::write_Trace ( TraceArea::IO,
-//                              TraceLevel::DETAIL,
-//                              "Entering Elf_File::subset" );
-// #endif /* LIBREVERSE_DEBUG */
-//
-//
-//         data_types::Memory_Map::ptr_t file_map_ptr = m_file.get_Map_Ptr();
-//
-//         std::pair<data_types::Memory_Map::ptr_t,boost::int8_t> subset_ptr = file_map_ptr->subset ( length );
-//
-//         if ( subset_ptr.second != data_types::Memory_Map::SUCCESS )
-//             {
-//                 throw errors::IO_Exception ( errors::IO_Exception::INVALID_INDEX );
-//             }
-//
-//
-// #ifdef LIBREVERSE_DEBUG
-//         Trace::write_Trace ( TraceArea::IO,
-//                              TraceLevel::DETAIL,
-//                              "Exiting Elf_File::subset" );
-// #endif /* LIBREVERSE_DEBUG */
-//
-//
-//         return subset_ptr.first;
-//     }
-//
-//     void
-//     Elf_File::read_Elf_Program_Header ( elf_types::Elf_Program_Header_32::ptr_t& obj)
-//     {
-//
-// #ifdef LIBREVERSE_DEBUG
-//         Trace::write_Trace ( TraceArea::IO,
-//                              TraceLevel::DETAIL,
-//                              "Entering Elf_File::read_Elf_Program_Header (32-bit)" );
-// #endif /* LIBREVERSE_DEBUG */
-//
-//
-//         m_file.init();
-//
-//         m_file.read(&(obj->p_type));
-//         m_file.read(&(obj->p_offset));
-//         m_file.read(&(obj->p_vaddr));
-//         m_file.read(&(obj->p_paddr));
-//         m_file.read(&(obj->p_filesz));
-//         m_file.read(&(obj->p_memsz));
-//         m_file.read(&(obj->p_flags));
-//         m_file.read(&(obj->p_align));
-//
-//
-// #ifdef LIBREVERSE_DEBUG
-//         Trace::write_Trace ( TraceArea::IO,
-// 			     TraceLevel::DATA,
-// 			     boost::str ( boost::format ( "Elf_File::read_Elf_Program_Header (32-bit)\n%s" )
-// 					  % obj->to_String() ) );
-//
-//         Trace::write_Trace ( TraceArea::IO,
-//                              TraceLevel::DETAIL,
-//                              "Exiting Elf_File::read_Elf_Program_Header (32-bit)" );
-// #endif /* LIBREVERSE_DEBUG */
-//
-//
-//     }
+bool elf_parser::read_elf_section_header ( const char* iter,
+					   const char* end, 
+					   elf_section_header_32& section_header_obj )
+{
+    linux_elf::parsing::elf_section_header_32_grammar<const char*> section_header_parser;
+    
+    bool result = boost::spirit::qi::parse ( iter,
+	end,
+	section_header_parser,
+	section_header_obj );
+    
+    return result;
+}
+
 //
 //     void
 //     Elf_File::read_Elf_Program_Header ( elf_types::Elf_Program_Header_64::ptr_t& obj)

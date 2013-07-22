@@ -66,6 +66,8 @@ namespace reverse {
 	return fact_ref;
       }
 
+      virtual ~configurator();
+
       /**
        * all data source factories will call this when they
        * are first initialized. the information given to them
@@ -87,13 +89,10 @@ namespace reverse {
 
       configurator ( std::string file );
 
-      configurator ( const configurator& ){}
+      configurator ( const configurator& );
       
-      configurator& operator= ( const configurator& ){}
+      configurator& operator= ( const configurator& );
       
-      ~configurator (){}
-
-
       // system wide configuration
       static boost::shared_ptr < infrastructure::configuration_data > m_config;
 

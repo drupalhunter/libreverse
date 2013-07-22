@@ -19,13 +19,19 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#include "Elf_Meta_Info.h"
+#include <reverse/io/input/file_readers/linux_elf/elf_meta_info.hpp>
 
-namespace libreverse {
-namespace elf_module {
+namespace reverse {
+namespace io {
+namespace input {
+namespace file_readers {
+namespace linux_elf {
 
-const std::string Elf_Meta_Info::FILE_TYPE_32BIT = "elf32";
-const std::string Elf_Meta_Info::FILE_TYPE_64BIT = "elf64";
+const std::string elf_meta_info::FILE_TYPE_32BIT = "elf32";
+const std::string elf_meta_info::FILE_TYPE_64BIT = "elf64";
 
-} /* namespace elf_module */
-} /* namespace libreverse */
+} // namespace linux_elf
+} // namespace file_readers
+} // namespace input
+} // namespace io
+} // namespace reverse

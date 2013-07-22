@@ -26,43 +26,43 @@
 #include <boost/fusion/adapted/struct/adapt_struct.hpp>
 
 namespace reverse {
-namespace io {
-namespace input {
-namespace file_readers {
-namespace linux_elf {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace linux_elf {
+	  
+	  struct elf_eident_header {
 
-struct elf_eident_header {
-
-     //! \brief ELF class type
-     boost::uint8_t class_type;
-
-     //! \brief ELF data encoding
-     boost::uint8_t data_encoding;
-
-     //! \brief ELF file version
-     boost::uint8_t file_version;
-
-     //! \brief Operating system/ABI indication
-     boost::uint8_t os_abi_identification;
-
-     //! \brief ABI version
-     boost::uint8_t abi_version;
-
-};
-
-} // namespace linux_elf
-} // namespace file_readers
-} // namespace input
-} // namespace io
+	    //! \brief ELF class type
+	    boost::uint8_t class_type;
+	    
+	    //! \brief ELF data encoding
+	    boost::uint8_t data_encoding;
+	    
+	    //! \brief ELF file version
+	    boost::uint8_t file_version;
+	    
+	    //! \brief Operating system/ABI indication
+	    boost::uint8_t os_abi_identification;
+	    
+	    //! \brief ABI version
+	    boost::uint8_t abi_version;
+	    
+	  };
+	  
+	} // namespace linux_elf
+      } // namespace file_readers
+    } // namespace input
+  } // namespace io
 } // namespace reverse
 
 BOOST_FUSION_ADAPT_STRUCT (
-     reverse::io::input::file_readers::linux_elf::elf_eident_header,
-     ( boost::uint8_t, class_type )
-     ( boost::uint8_t, data_encoding )
-//   (boost::uint8_t, file_version)
-//   (boost::uint8_t, os_abi_identification)
-//   (boost::uint8_t, abi_version)
+    reverse::io::input::file_readers::linux_elf::elf_eident_header,
+    (boost::uint8_t, class_type)
+    (boost::uint8_t, data_encoding)
+    (boost::uint8_t, file_version)
+    (boost::uint8_t, os_abi_identification)
+    (boost::uint8_t, abi_version)
 )
 
 #endif /* ELF_HEADER_EIDENT_ */

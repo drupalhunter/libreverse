@@ -52,10 +52,24 @@ public:
                                    char const* end,
                                    elf_eident_header& elf_eident_header_obj );
 
+     /*! \brief Read ELF header
+      * \param iter Current position in input file.
+      * \param end Last position in input file.
+      * \param elf_header_obj ELF header found in input file.
+      */
+     bool read_elf_header ( const char* iter,
+			   const char* end, 
+			   elf_header_32& elf_header_obj );
+     
      /* Read program header (32-bit) */
      bool read_elf_program_header ( char const* iter,
                                    char const* end,
-				   elf_program_header_32& program_header_obj );
+								   elf_program_header_32& program_header_obj );
+	 
+	 /* Read section header (32-bit) */
+     bool read_elf_section_header ( char const* iter,
+                                   char const* end,
+								   elf_section_header_32& section_header_obj );
 
 // 	    /* Read program header */
 // 	    void read_Elf_Program_Header ( elf_types::Elf_Program_Header_64::ptr_t& obj );

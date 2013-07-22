@@ -28,25 +28,24 @@
 #include <boost/shared_ptr.hpp>
 
 namespace reverse {
-  namespace component {
-    namespace input {
+namespace component {
+namespace input {
 
-    std::string
-    arch_type_detector_elf64_algorithm::run ( boost::shared_ptr < const io::file_id > file_ptr )
-    {
-      trace::components_detail ( "Entering Arch_Type_Detector_Elf64_Algorithm::run" );
+std::string
+arch_type_detector_elf64_algorithm::run ( boost::shared_ptr < const io::file_id > file_ptr )
+{
+     trace::components_detail ( "Entering Arch_Type_Detector_Elf64_Algorithm::run" );
 
-      boost::shared_ptr < io::input::file_readers::linux_elf::elf_reader_64 > file_reader_ptr =
-	boost::make_shared < io::input::file_readers::linux_elf::elf_reader_64 > ( file_ptr );
+     boost::shared_ptr < io::input::file_readers::linux_elf::elf_reader_64 > file_reader_ptr =
+          boost::make_shared < io::input::file_readers::linux_elf::elf_reader_64 > ( file_ptr );
 
-      std::string result = file_reader_ptr->get_arch_type ();
+     std::string result = file_reader_ptr->get_arch_type ();
 
-      trace::components_detail ( "Exiting Arch_Type_Detector_Elf64_Algorithm::run" );
-      
-      return result;
-    }
+     trace::components_detail ( "Exiting Arch_Type_Detector_Elf64_Algorithm::run" );
 
-    } // namespace input
-  } /* namespace component */
+     return result;
+}
+
+} // namespace input
+} /* namespace component */
 } /* namespace reverse */
-

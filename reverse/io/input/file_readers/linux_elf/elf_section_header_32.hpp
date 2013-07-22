@@ -19,122 +19,70 @@
     <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ELF_SECTION_HEADER_32_H
-#define ELF_SECTION_HEADER_32_H
-
-#include "io/Type_Mapper.h"
-#include "io/input/File_Readers/Base_Header.h"
-#include "io/IO_Types.h"
+#ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_SECTION_HEADER_32_HPP
+#define REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_SECTION_HEADER_32_HPP
 
 #include <boost/cstdint.hpp>
-#include <boost/shared_ptr.hpp>
+#include <boost/fusion/adapted/struct/adapt_struct.hpp>
 
-namespace libreverse { namespace elf_module {
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace linux_elf {
 
-    /*!
-     * \class Elf_Section_Header
-     * \date 2003
-     * \author Stephen Torri
-     */
-    class Elf_Section_Header_32 : public header::Base_Header {
+	  struct elf_section_header_32 {
+	    
+	    /*! \brief Section name, index in string tbl */
+	    boost::uint32_t sh_name;
+	    
+	    /*! \brief Type of section */
+	    boost::uint32_t sh_type;
+	    
+	    /*! \brief Miscellaneous section attributes */
+	    boost::uint32_t sh_flags;
+	    
+	    /*! \brief Section virtual addr at execution */
+	    boost::uint32_t sh_addr;
+	    
+	    /*! \brief Section file offset */
+	    boost::uint32_t sh_offset;
+	    
+	    /*! \brief Size of section in bytes */
+	    boost::uint32_t sh_size;
+	    
+	    /*! \brief Index of another section */
+	    boost::uint32_t sh_link;
+	    
+	    /*! \brief Additional section information */
+	    boost::uint32_t sh_info;
+	    
+	    /*! \brief Section alignment */
+	    boost::uint32_t sh_addralign;
+	    
+	    /*! \brief Entry size if section holds table */
+	    boost::uint32_t sh_entsize;
+	    
+	  };
+	  
+	} // namespace linux_elf
+      } // namespace file_readers
+    } // namespace input
+  } //  namespace io
+} // namespace reverse
 
-      friend class Elf_File;
+BOOST_FUSION_ADAPT_STRUCT (
+     struct reverse::io::input::file_readers::linux_elf::elf_section_header_32,
+     ( boost::uint32_t, sh_name )
+     ( boost::uint32_t, sh_type )
+     ( boost::uint32_t, sh_flags )
+     ( boost::uint32_t, sh_addr )
+     ( boost::uint32_t, sh_offset )
+     ( boost::uint32_t, sh_size )
+     ( boost::uint32_t, sh_link )
+     ( boost::uint32_t, sh_info )
+     ( boost::uint32_t, sh_addralign )
+     ( boost::uint32_t, sh_entsize )
+)
 
-    public:
-
-      /*!
-       * \brief Default Constructor
-       */
-      Elf_Section_Header_32 (void);
-
-      /*!
-       * \brief Constructor
-       * \param e_machine Target architecture
-       */
-      Elf_Section_Header_32 (boost::uint16_t e_machine);
-
-      /*!
-       * \brief Convert the bit ordering from the target file bit ordering
-       * to the host system.
-       */
-      virtual void convert ();
-
-      /*!
-       * \brief Convert the header data into a string representation
-       * \return String representation of header data
-       */
-      virtual std::string to_String (void) const;
-
-      /*!
-       * \brief Get the human readable strings from the header
-       * \return String output of header
-       */
-      void get_Text_String ( io_types::Text_Data::data_type* output ) const;
-
-      boost::uint32_t get_Section_Name_Index(void) const;
-
-      boost::uint32_t get_Section_Size(void) const;
-
-      boost::uint32_t get_Section_Offset(void) const;
-
-      void set_Section_String_Name ( std::string name );
-
-      std::string get_Section_String_Name (void) const;
-
-      boost::uint32_t get_Section_Type (void) const;
-
-      boost::uint32_t get_Next_Section_Index (void) const;
-
-      boost::uint32_t get_Section_Token_Size (void) const;
-
-    private:
-
-      //----------------------------------------
-      //            ELF HEADER variables
-      //----------------------------------------
-
-      /*! \brief Section name, index in string tbl */
-      boost::uint32_t sh_name;
-
-      /*! \brief Type of section */
-      boost::uint32_t sh_type;
-
-      /*! \brief Miscellaneous section attributes */
-      boost::uint32_t sh_flags;
-
-      /*! \brief Section virtual addr at execution */
-      boost::uint32_t sh_addr;
-
-      /*! \brief Section file offset */
-      boost::uint32_t sh_offset;
-
-      /*! \brief Size of section in bytes */
-      boost::uint32_t sh_size;
-
-      /*! \brief Index of another section */
-      boost::uint32_t sh_link;
-
-      /*! \brief Additional section information */
-      boost::uint32_t sh_info;
-
-      /*! \brief Section alignment */
-      boost::uint32_t sh_addralign;
-
-      /*! \brief Entry size if section holds table */
-      boost::uint32_t sh_entsize;
-
-      //----------------------------------------
-      //      ELF HEADER helper variables
-      //----------------------------------------
-      /*! \brief String name of header */
-      std::string m_str_name;
-
-      /*! \brief Machine architecture */
-      boost::uint16_t m_e_machine;
-
-    };
-
-  } /* namespace elf_module */
-} /* namespace libreverse */
-
-#endif /* ELF_SECTION_HEADER_32_H */
+#endif // ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_SECTION_HEADER_32_HPP

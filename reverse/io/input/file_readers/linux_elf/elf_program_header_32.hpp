@@ -18,7 +18,8 @@ namespace linux_elf {
      * (Elf) = Executable and Linkable Format specification
      */
     struct elf_program_header_32
-
+    {
+	
       /*!
        * \brief This member tells what kind of segment this array element
        * described or how to interpret the array element's

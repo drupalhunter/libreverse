@@ -5,6 +5,8 @@ include(CheckIncludeFiles)
 
 add_subdirectory(reverse)
 
+SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeScripts)
+
 SET(Boost_USE_MULTITHREAD ON)
 FIND_PACKAGE(Boost)
 IF(Boost_FOUND)
@@ -12,6 +14,13 @@ IF(Boost_FOUND)
   list ( APPEND ADDITIONAL_LIBS ${Boost_LIBRARY_DIRS} )
   set ( HAVE_BOOST 1 )
 ENDIF(Boost_FOUND)
+
+FIND_PACKAGE(ICU)
+IF(ICU_FOUND)
+  include_directories(${ICU_INCLUDE_DIR})
+  list ( APPEND ADDITIONAL_LIBS ${ICU_LIBRARIES} )
+  set ( HAVE_ICU 1 )
+ENDIF(ICU_FOUND)
 
 FIND_PACKAGE(EXPAT)
 IF(EXPAT_FOUND)

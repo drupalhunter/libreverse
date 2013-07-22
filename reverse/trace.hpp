@@ -158,7 +158,7 @@ namespace reverse {
     static void infrastructure_error ( const char* message, const char* filename, unsigned int line );
     
 #else
-    static bool write_trace ( boost::uint32_t, boost::uint32_t, const char* ){}
+    static bool write_trace ( boost::uint32_t, boost::uint32_t, const char* ) { return true; }
     static void api_detail ( const char* ) {}
     static void api_error ( const char* ) {}
     static void api_error ( const char*, const char*, unsigned int ) {}

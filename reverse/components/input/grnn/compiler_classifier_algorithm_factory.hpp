@@ -38,6 +38,8 @@ namespace reverse {
 	    return fact_ref;
 	  }
 
+	virtual ~compiler_classifier_algorithm_factory();
+
 	  /**
 	   * \brief Create a new Classifier Algorithm
 	   *
@@ -52,14 +54,12 @@ namespace reverse {
 
 	private:
 
-	  compiler_classifier_algorithm_factory (){}
+	  compiler_classifier_algorithm_factory ();
 
-	  compiler_classifier_algorithm_factory ( const compiler_classifier_algorithm_factory& ){}
+	  compiler_classifier_algorithm_factory ( const compiler_classifier_algorithm_factory& );
       
-	  compiler_classifier_algorithm_factory& operator= ( const compiler_classifier_algorithm_factory& ){}
+	  compiler_classifier_algorithm_factory& operator= ( const compiler_classifier_algorithm_factory& );
       
-	  ~compiler_classifier_algorithm_factory (){}
-
 	};
 
       } // namespace grnn
