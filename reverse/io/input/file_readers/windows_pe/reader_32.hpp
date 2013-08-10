@@ -19,143 +19,171 @@
     <http://www.gnu.org/licenses/>.
 */
 
-#ifndef WPEF_READER_32_H
-#define WPEF_READER_32_H
+#ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_WINDOWS_PE_WPEF_READER_32_HPP_INCLUDED
+#define REVERSE_IO_INPUT_FILE_READERS_LINUX_WINDOWS_PE_WPEF_READER_32_HPP_INCLUDED
 
-#include <boost/shared_ptr.hpp>
+#include <reverse/io/input/file_readers/file_reader.hpp>
+#include <reverse/io/input/file_readers/windows_pe/pe_file.hpp>
+
 #include <boost/cstdint.hpp>
-#include "io/input/File_Readers/File_Reader.h"
-#include "io/IO_Types.h"
-#include "Reverse.h"
-#include "PE_Types.h"
+#include <boost/shared_ptr.hpp>
 
-namespace libreverse { namespace wpef_module {
+namespace reverse
+{
 
-    /*!
-     * \class Reader_32
-     * \date 2003
-     * \author Stephen Torri
-     */
-    class Reader_32 : public io::File_Reader {
-    public:
+    namespace data_containers
+    {
+        class memory_map;
+    }
 
-      /*!
-       * \brief Default Constructor
-       * \param target_file The file to be used for decompiling
-       */
-      Reader_32 ( io_types::File_ID::const_ptr_t target_file );
+    namespace io
+    {
 
-      /*!
-       * \brief Default Destructor
-       */
-      virtual ~Reader_32();
+        class file_id;
 
-      /*! \brief Header reference for this reader
-       */
-      wpef_types::Header_32::ptr_t get_Header (void);
+        namespace input
+        {
+            namespace file_readers
+            {
+                namespace windows_pe
+                {
 
-      wpef_types::PE_File::ptr_t get_File (void) const;
+                    class header_32;
+                    class pe_exception_table_entry;
+                    class pe_file;
+                    class pe_import_directory;
 
-      bool support_File_Type ( void );
+                    /*!
+                     * \class Reader_32
+                     * \date 2003
+                     * \author Stephen Torri
+                     */
+                    class reader_32 : public io::file_reader
+                    {
+                        public:
 
-      virtual void read_Headers ( void );
+                            /*!
+                             * \brief Default Constructor
+                             * \param target_file The file to be used for decompiling
+                             */
+                            reader_32 ( boost::shared_ptr < const io::file_id > target_file );
 
-      void preload_Image ( void );
+                            /*!
+                             * \brief Default Destructor
+                             */
+                            virtual ~reader_32();
 
-      virtual data_types::Memory_Map::ptr_t get_Memory_Map ( void );
+                            /*! \brief Header reference for this reader
+                             */
+                            boost::shared_ptr < header_32 > get_Header ( void );
 
-      /*!
-       * \brief Print out the entire file contents
-       */
-      virtual std::string to_String (void);
+                            boost::shared_ptr < pe_file > get_file ( void ) const;
 
-      virtual io_types::Text_Data::data_type get_Text_Strings (void);
+                            bool support_file_type ( void );
 
-      virtual io_types::Text_Data::data_type get_UTF16_Strings (void);
+                            virtual void read_headers ( void );
 
-      /*!
-       * \brief Return the File Type of the target file
-       */
-      virtual std::string get_File_Type (void);
+                            void preload_image ( void );
 
-      /* !\brief Return the Architecture Type of the target file */
-      std::string get_Arch_Type (void);
+                            virtual boost::shared_ptr < data_containers::memory_map > get_memory_map ( void );
 
-      /* !\brief Return the offset for a section header */
-      std::string get_Section_Offset ( std::string name );
+                            /*!
+                             * \brief Print out the entire file contents
+                             */
+                            virtual std::string to_string ( void );
 
-      /* !\brief Return the offset for a section length */
-      std::string get_Section_Length ( std::string name );
+                            virtual std::vector < std::string > get_text_strings ( void );
 
-    private:
+                            virtual std::vector < std::string > get_utf16_strings ( void );
 
-      std::string get_Entry_Point ( void );
+                            /*!
+                             * \brief Return the File Type of the target file
+                             */
+                            virtual std::string get_file_type ( void );
 
-      std::string get_Base_Address ( void );
+                            /* !\brief Return the Architecture Type of the target file */
+                            std::string get_arch_type ( void );
 
-      wpef_types::PE_Exception_Table_Entry::ptr_t create_Exception_Table_Entry ( boost::uint16_t type );
+                            /* !\brief Return the offset for a section header */
+                            std::string get_section_offset ( std::string name );
 
-      /*---------------
-       *   Variables
-       *---------------*/
-      /*! \brief WPEF File handle */
-      wpef_types::PE_File::ptr_t m_file;
+                            /* !\brief Return the offset for a section length */
+                            std::string get_section_length ( std::string name );
 
-      /*! \brief Need to convert header data byte order */
-      bool m_convert;
+                        private:
 
-      wpef_types::Header_32::ptr_t m_data;
+                            std::string get_entry_point ( void );
 
-      wpef_types::PE_File::ptr_t m_loaded_file;
+                            std::string get_base_address ( void );
 
-    public:
+                            boost::shared_ptr<pe_exception_table_entry> create_exception_table_entry ( boost::uint16_t type );
 
-      /*---------------
-       *   Functions
-       *---------------*/
+                            /*---------------
+                             *   Variables
+                             *---------------*/
 
-      /*!
-       * \brief Get the WPEF DOS Header from the file
-       */
-      void read_DOS_Header (void);
+                            /*! \brief WPEF File handle */
+                            boost::shared_ptr<pe_file> m_file;
 
-      /*!
-       * \brief Get the WPEF PE Header from the file
-       */
-      void read_PE_Header (void);
+                            /*! \brief Need to convert header data byte order */
+                            bool m_convert;
 
-      /*!
-       * \brief Get the WPEF PE Section Header from the file
-       */
-      void read_Section_Headers (void);
+                            boost::shared_ptr<header_32> m_data;
 
-      virtual std::string get_Section_String ( std::string name ) const;
+                            boost::shared_ptr<pe_file> m_loaded_file;
 
-      api::Results::Values read_Export_Table ();
+                        public:
 
-      void read_Import_Table ();
+                            /*---------------
+                             *   Functions
+                             *---------------*/
 
-      void read_Import_Lookup_Table ( wpef_types::PE_Import_Directory::ptr_t& import_dir_ptr );
+                            /*!
+                             * \brief Get the WPEF DOS Header from the file
+                             */
+                            void read_dos_header ( void );
 
-      /*!
-       * \brief Get the WPEF PE Resource Tables from the image
-       */
-      void read_Resource_Table ();
+                            /*!
+                             * \brief Get the WPEF PE Header from the file
+                             */
+                            void read_pe_header ( void );
 
-      void
-      handle_Resource_Directory_Entries ( wpef_types::PE_Resource_Directory::ptr_t& parent_ptr,
-					  wpef_types::PE_Resource_Directory_Entry::ptr_t& parent_entry_ptr,
-					  boost::uint32_t base_address );
+                            /*!
+                             * \brief Get the WPEF PE Section Header from the file
+                             */
+                            void read_section_headers ( void );
 
-      void read_Debug_Table ();
+                            virtual std::string get_section_string ( std::string name ) const;
 
-      void read_Load_Config_Table ();
+                            void read_export_table ();
 
-      void read_Exception_Table ();
+                            void read_import_table ();
 
-    };
+                            void read_import_lookup_table ( boost::shared_ptr<pe_import_directory> import_dir_ptr );
 
-  } /* namespace wpef_module */
-} /* namespace libreverse */
+                            /*!
+                             * \brief Get the WPEF PE Resource Tables from the image
+                             */
+                            void read_resource_table ();
 
-#endif /* WPEF_READER_H_ */
+                            void
+                            handle_resource_directory_entries ( boost::shared_ptr<pe_resource_directory> parent_ptr,
+                                                                boost::shared_ptr<pe_resource_directory_entry> parent_entry_ptr,
+                                                                boost::uint32_t base_address );
+
+                            void read_debug_table ();
+
+                            void read_load_config_table ();
+
+                            void read_exception_table ();
+
+                    };
+
+                } /* namespace windows_pe */
+            } // namespace file_readers
+        } // namespace input
+    } // namespace io
+} // namespace reverse
+
+
+#endif // ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_WINDOWS_PE_WPEF_READER_32_HPP_INCLUDED

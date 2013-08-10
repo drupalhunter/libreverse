@@ -635,7 +635,7 @@ namespace libreverse { namespace wpef_module {
       return output;
     }
 
-    api::Results::Values
+    void
     Reader_32::read_Export_Table ()
     {
       wpef_types::PE_Header_32::const_ptr_t pe_hdr_ptr = m_data->get_PE_Header();
@@ -654,14 +654,7 @@ namespace libreverse { namespace wpef_module {
 	  std::vector<boost::uint32_t> name_pointer_list;
 	  std::vector<boost::uint16_t> ordinal_list;
 
-	  try
-	    {
-	      m_loaded_file->address_Seek ( export_address );
-	    }
-	  catch ( errors::IO_Exception& )
-	    {
-	      return api::Results::FAILURE;
-	    }
+	  m_loaded_file->address_Seek ( export_address );
 
 	  //-----------------------------
 	  // Read export directory table
@@ -776,8 +769,6 @@ namespace libreverse { namespace wpef_module {
 						 symbol_name );
 	    }
 	}
-
-      return api::Results::SUCCESS;
     }
 
     void

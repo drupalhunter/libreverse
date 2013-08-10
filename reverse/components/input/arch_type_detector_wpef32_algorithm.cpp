@@ -23,32 +23,37 @@
 #include <reverse/io/input/file_readers/windows_pe/reader_32.hpp>
 #include <reverse/trace.hpp>
 
-namespace reverse {
-namespace component {
-namespace input {
-    
-    std::string
-    arch_type_detector_wpef32_algorithm::run ( boost::shared_ptr < const io::file_id > file_ptr )
+#include <boost/make_shared.hpp>
+
+namespace reverse
+{
+    namespace component
     {
-	trace::components_detail ( "Entering Arch_Type_Detector_WPEF32_Algorithm::run" );
+        namespace input
+        {
 
-	boost::shared_ptr < windows_pe::re
-      wpef_types::Reader_32::ptr_t file_reader_ptr ( new wpef_module::Reader_32 ( file_ptr ) );
+            std::string
+            arch_type_detector_wpef32_algorithm::run ( boost::shared_ptr < const io::file_id > file_ptr )
+            {
+                trace::components_detail ( "Entering Arch_Type_Detector_WPEF32_Algorithm::run" );
 
-      std::string result = file_reader_ptr->get_Arch_Type ();
+                boost::shared_ptr < io::input::file_readers::windows_pe::reader_32 > file_reader_ptr =
+                    boost::make_shared < io::input::file_readers::windows_pe::reader_32 > ( file_ptr );
+
+                std::string result = file_reader_ptr->get_arch_type ();
 
 
 #ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::COMPONENTS,
-			   TraceLevel::DETAIL,
-			   "Exiting Arch_Type_Detector_WPEF32_Algorithm::run" );
+                Trace::write_Trace ( TraceArea::COMPONENTS,
+                                     TraceLevel::DETAIL,
+                                     "Exiting Arch_Type_Detector_WPEF32_Algorithm::run" );
 #endif /* LIBREVERSE_DEBUG */
 
 
-      return result;
-    }
+                return result;
+            }
 
-} // namespace input
-} /* namespace component */
+        } // namespace input
+    } /* namespace component */
 } /* namespace reverse */
 

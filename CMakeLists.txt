@@ -4,6 +4,7 @@ project(libreverse)
 include(CheckIncludeFiles)
 
 add_subdirectory(reverse)
+add_subdirectory(testing)
 
 SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeScripts)
 
