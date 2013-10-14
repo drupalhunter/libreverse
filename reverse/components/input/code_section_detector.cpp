@@ -19,20 +19,20 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#include "Code_Section_Detector.h"
-#include "Code_Section_Detector_Algorithm.h"
-#include "Code_Section_Detector_Algorithm_Factory.h"
+#include <reverse/components/input/code_section_detector.hpp>
+#include <reverse/components/input/code_section_detector_algorithm.hpp>
+#include <reverse/components/input/code_section_detector_algorithm_factory.hpp>
 
-#include "meta/Meta_Object.h"
-#include "infrastructure/data_source/Data_Source_Factory.h"
-#include "io/File_ID.h"
-#include "io/input/File_Readers/Reader_Factory.h"
-#include "io/input/File_Readers/File_Reader.h"
-#include "data_containers/Filename.h"
-#include "infrastructure/data_source/Data_Object.h"
-#include "infrastructure/Component_Data.h"
-#include "infrastructure/Component_State.h"
-#include "errors/API_Exception.h"
+#include "meta/meta_object.h"
+#include "infrastructure/data_source/data_source_factory.h"
+#include "io/file_id.h"
+#include "io/input/file_readers/reader_factory.h"
+#include "io/input/file_readers/file_reader.h"
+#include "data_containers/filename.h"
+#include "infrastructure/data_source/data_object.h"
+#include "infrastructure/component_data.h"
+#include "infrastructure/component_state.h"
+#include "errors/api_exception.h"
 
 #include <boost/format.hpp>
 

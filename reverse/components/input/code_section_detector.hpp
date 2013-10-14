@@ -19,72 +19,93 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CODE_SECTION_DECTECTOR_H
-#define CODE_SECTION_DECTECTOR_H
+#ifndef REVERSE_COMPONENT_INPUT_CODE_SECTION_DECTECTOR_HPP_INCLUDED
+#define REVERSE_COMPONENT_INPUT_CODE_SECTION_DECTECTOR_HPP_INCLUDED
 
 #include "infrastructure/Component.h"
 #include "infrastructure/Component_Actor.h"
 #include <boost/enable_shared_from_this.hpp>
 
-namespace libreverse { namespace component {
+namespace reverse
+{
 
-    class Code_Section_Detector : public infrastructure::Component,
-                                  public infrastructure::Component_Actor,
-                                  public boost::enable_shared_from_this<Code_Section_Detector>
+    namespace infrastructure
     {
-    public:
+        class component_state;
 
-      static const std::string CODE_SECTION_ADDRESS_META_FORMAT;
-      static const std::string CODE_SECTION_SIZE_META_FORMAT;
+        namespace data_source
+        {
+            class data_source_base;
+        }
 
-        explicit Code_Section_Detector ();
-	  
-        explicit Code_Section_Detector ( infrastructure_types::Component_State::ptr_t state_ptr );
+    } // namespace infrastructure
 
-        Code_Section_Detector ( Code_Section_Detector const& rhs );
+    namespace component
+    {
+        namespace input
+        {
 
-        virtual ~Code_Section_Detector();
+            class code_section_detector : public infrastructure::component,
+                public infrastructure::component_actor,
+                public boost::enable_shared_from_this<code_section_detector>
+            {
+                public:
 
-        Code_Section_Detector& operator= ( Code_Section_Detector const& rhs );
+                    static const std::string CODE_SECTION_ADDRESS_META_FORMAT;
+                    static const std::string CODE_SECTION_SIZE_META_FORMAT;
 
-        void swap ( Code_Section_Detector& rhs );
+                    explicit code_section_detector ();
 
-        //------------------------------
-        // Component required functions
-        //------------------------------
-        virtual void received_Input_Source_Data ( boost::uint32_t id );
+                    explicit code_section_detector ( boost::shared_ptr < infrastructure::component_state > state_ptr );
 
-        virtual void add_Input_Source ( boost::uint32_t id );
+                    code_section_detector ( code_section_detector const& rhs );
 
-        virtual std::string get_Name (void) const;
+                    virtual ~code_section_detector();
 
-        virtual void run ( infrastructure_types::Component_Graph::Data_Map_t* m_input_data );
+                    code_section_detector& operator= ( code_section_detector const& rhs );
 
-        virtual infrastructure_types::Data_Source_Base::ptr_t results (void);
+                    void swap ( code_section_detector& rhs );
 
-        virtual void set_State ( boost::uint32_t mode );
+                    //------------------------------
+                    // Component required functions
+                    //------------------------------
+                    virtual void received_input_source_data ( boost::uint32_t id );
+
+                    virtual void add_input_source ( boost::uint32_t id );
+
+                    virtual std::string get_name ( void ) const;
+
+                    virtual void run ( infrastructure_types::component_graph::data_map_t* m_input_data );
+
+                    virtual boost::shared_ptr< infrastructure::data_source_base > results ( void );
+
+                    virtual void set_state ( boost::uint32_t mode );
 
 
-        virtual boost::uint32_t get_ID (void) const;
+                    virtual boost::uint32_t get_id ( void ) const;
 
-        virtual infrastructure_types::Component_Data::Input_Token_t::const_iterator get_Source_List_Begin (void) const;
+                    virtual infrastructure_types::component_data::input_token_t::const_iterator get_source_list_begin ( void ) const;
 
-        virtual infrastructure_types::Component_Data::Input_Token_t::const_iterator get_Source_List_End (void) const;
+                    virtual infrastructure_types::component_data::input_token_t::const_iterator get_source_list_end ( void ) const;
 
-        //------------------------------
-        // Component Actor required functions
-        //------------------------------
-        virtual void process (void);
+                    //------------------------------
+                    // Component Actor required functions
+                    //------------------------------
+                    virtual void process ( void );
 
-    protected:
+                protected:
 
-        static const std::string m_name;
+                    static const std::string m_name;
 
-    private:
+                private:
 
-        infrastructure_types::Component_State::ptr_t m_state_ptr;
-    };
-} /* namespace component */
-} /* namespace libreverse */
+                    boost::shared_ptr < infrastructure::component_state > m_state_ptr;
+            };
 
-#endif /* CODE_SECTION_DECTECTOR_H */
+
+        } // namespace input
+    } // namespace component
+} // namespace libreverse
+
+
+#endif /* REVERSE_COMPONENT_INPUT_CODE_SECTION_DECTECTOR_HPP_INCLUDED */
