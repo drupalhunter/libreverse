@@ -19,39 +19,42 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CODE_SECTION_DETECTOR_ALGORITHM_FACTORY_H
-#define CODE_SECTION_DETECTOR_ALGORITHM_FACTORY_H
+#ifndef REVERSE_COMPONENT_CODE_SECTION_DETECTOR_ALGORITHM_FACTORY_HPP_INCLUDED
+#define REVERSE_COMPONENT_CODE_SECTION_DETECTOR_ALGORITHM_FACTORY_HPP_INCLUDED
 
-#include "Code_Section_Detector_Algorithm.h"
+#include <boost/shared_ptr.hpp>
 
-namespace libreverse { namespace component {
+namespace reverse {
+  namespace component {
 
-    class Code_Section_Detector_Algorithm_Factory {
+    class code_section_detector_algorithm;
+
+    class code_section_detector_algorithm_factory {
     public:
 
-        // pointer type
-        typedef boost::shared_ptr<Code_Section_Detector_Algorithm_Factory> ptr_t;
+      // pointer type
+      typedef boost::shared_ptr<code_section_detector_algorithm_factory> ptr_t;
 
-        static Code_Section_Detector_Algorithm_Factory& Instance()
-        {
-            static Code_Section_Detector_Algorithm_Factory fact_ref;
-            return fact_ref;
-        }
+      static code_section_detector_algorithm_factory& instance()
+      {
+	static code_section_detector_algorithm_factory fact_ref;
+	return fact_ref;
+      }
 
-        Code_Section_Detector_Algorithm::ptr_t get_Algorithm ( std::string file_type );
+      boost::shared_ptr < code_section_detector_algorithm > get_algorithm ( std::string file_type );
 
     private:
 
-      Code_Section_Detector_Algorithm_Factory (){}
+      code_section_detector_algorithm_factory (){}
 
-      Code_Section_Detector_Algorithm_Factory ( const Code_Section_Detector_Algorithm_Factory& );
+      code_section_detector_algorithm_factory ( const code_section_detector_algorithm_factory& );
       
-      Code_Section_Detector_Algorithm_Factory& operator = ( const Code_Section_Detector_Algorithm_Factory& );
+      code_section_detector_algorithm_factory& operator = ( const code_section_detector_algorithm_factory& );
       
-      ~Code_Section_Detector_Algorithm_Factory (){}
+      ~code_section_detector_algorithm_factory (){}
     };
 
-} /* namespace component */
+  } /* namespace component */
 } /* namespace libreverse */
 
-#endif /* CODE_SECTION_DETECTOR_ALGORITHM_FACTORY_H */
+#endif // ifndef REVERSE_COMPONENT_CODE_SECTION_DETECTOR_ALGORITHM_FACTORY_HPP_INCLUDED

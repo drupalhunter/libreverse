@@ -1,75 +1,79 @@
 /*  Data_Source_Factory.h
 
-   Copyright (C) 2008 Stephen Torri
+    Copyright (C) 2008 Stephen Torri
 
-   This file is part of Libreverse.
+    This file is part of Libreverse.
 
-   Libreverse is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published
-   by the Free Software Foundation; either version 3, or (at your
-   option) any later version.
+    Libreverse is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published
+    by the Free Software Foundation; either version 3, or (at your
+    option) any later version.
 
-   Libreverse is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
+    Libreverse is distributed in the hope that it will be useful, but
+    WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with this program.  If not, see
-   <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see
+    <http://www.gnu.org/licenses/>.
 */
 
-#ifndef DATA_SOURCE_FACTORY_H
-#define DATA_SOURCE_FACTORY_H
+#ifndef REVERSE_INFRASTRUCTURE_DATA_SOURCE_DATA_SOURCE_FACTORY_HPP_INCLUDED
+#define REVERSE_INFRASTRUCTURE_DATA_SOURCE_DATA_SOURCE_FACTORY_HPP_INCLUDED
+
+#include <reverse/infrastructure/data_source/data_source_factory_base.hpp>
 
 #include <boost/shared_ptr.hpp>
 #include <boost/cstdint.hpp>
-#include "Data_Source_Factory_Base.h"
-#include "infrastructure/Component_Types.h"
 
-namespace libreverse { namespace infrastructure {
+namespace reverse {
+  namespace infrastructure {
+    namespace data_source {
 
-    class Data_Source_Factory : public Data_Source_Factory_Base {
+      class data_source_base;
 
-    public:
+      class data_source_factory : public data_source_factory_base {
 
-        virtual ~Data_Source_Factory(){}
+      public:
 
-        /**
-         *
-         */
-        infrastructure_types::Data_Source_Base::ptr_t get_Data_Source ( boost::uint32_t id );
+	virtual ~data_source_factory(){}
+
+	/**
+	 *
+	 */
+	boost::shared_ptr < infrastructure::data_source::data_source_base > get_data_source ( boost::uint32_t id );
         
-        /**
-         *
-         */
-        static infrastructure_types::Data_Source_Factory::ptr_t Instance ();
+	/**
+	 *
+	 */
+	static boost::shared_ptr < infrastructure::data_source::data_source_factory > instance ();
+	
+	/**
+	 *
+	 * @param transfer_type
+	 * @param source_config
+	 */
+	void init ( boost::shared_ptr < infrastructure::data_source::data_source_config_base > source_config );
 
-        /**
-         *
-         * @param transfer_type
-         * @param source_config
-         */
-        void init ( infrastructure_types::Data_Source_Config_Base::ptr_t source_config );
+      private:
+	
+	data_source_factory();
 
+	/**
+	 * Fields
+	 */
+	static boost::shared_ptr < infrastructure::data_source::data_source_factory > m_factory;
 
-    private:
+	/**
+	 *
+	 */
+	boost::shared_ptr < infrastructure::data_source::data_source_config_base > m_src_config;
 
-        Data_Source_Factory();
-
-        /**
-         * Fields
-         */
-        static infrastructure_types::Data_Source_Factory::ptr_t m_factory;
-
-        /**
-         *
-         */
-        infrastructure_types::Data_Source_Config_Base::ptr_t m_src_config;
-
-    };
-} /* namespace infrastructure */
+      };
+    } // namespace data_source
+  } /* namespace infrastructure */
 } /* namespace libreverse */
 
-#endif /* DATA_SOURCE_FACTORY_H */
+#endif // ifndef REVERSE_INFRASTRUCTURE_DATA_SOURCE_DATA_SOURCE_FACTORY_HPP_INCLUDED
 

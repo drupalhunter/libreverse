@@ -19,27 +19,30 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CODE_SECTION_DETECTOR_ALGORITHM_H
-#define CODE_SECTION_DETECTOR_ALGORITHM_H
+#ifndef REVERSE_COMPONENT_CODE_SECTION_DETECTOR_ALGORITHM_HPP_INCLUDED
+#define REVERSE_COMPONENT_CODE_SECTION_DETECTOR_ALGORITHM_HPP_INCLUDED
 
-#include "io/IO_Types.h"
-#include "meta/Meta_Object.h"
+#include <reverse/meta/meta_object.hpp>
 
-namespace libreverse {
+namespace reverse {
 
-    namespace component {
+  namespace io {
+    class file_id;
+  } // namespace io
 
-        class Code_Section_Detector_Algorithm {
-        public:
+  namespace component {
 
-            typedef boost::shared_ptr<Code_Section_Detector_Algorithm> ptr_t;
+    class code_section_detector_algorithm {
+    public:
+      
+      typedef boost::shared_ptr<code_section_detector_algorithm> ptr_t;
+      
+      virtual ~code_section_detector_algorithm(){}
+      
+      virtual boost::shared_ptr < meta::meta_object > run ( boost::shared_ptr < const io::file_id > file_ptr ) = 0;
+    };
+    
+  } /* namespace component */
+} /* namespace reverse */
 
-            virtual ~Code_Section_Detector_Algorithm(){}
-
-            virtual meta::Meta_Object::ptr_t run ( io_types::File_ID::const_ptr_t file_ptr ) = 0;
-        };
-
-    } /* namespace component */
-} /* namespace libreverse */
-
-#endif /* CODE_SECTION_DETECTOR_ALGORITHM_H */
+#endif // ifndef REVERSE_COMPONENT_CODE_SECTION_DETECTOR_ALGORITHM_HPP_INCLUDED

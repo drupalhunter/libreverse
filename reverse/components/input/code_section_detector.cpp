@@ -1,398 +1,226 @@
 /*  Code_Section_Detector.cpp
 
-   Copyright (C) 2008 Stephen Torri
+    Copyright (C) 2008 Stephen Torri
 
-   This file is part of Libreverse.
+    This file is part of Libreverse.
 
-   Libreverse is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published
-   by the Free Software Foundation; either version 3, or (at your
-   option) any later version.
+    Libreverse is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published
+    by the Free Software Foundation; either version 3, or (at your
+    option) any later version.
 
-   Libreverse is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
+    Libreverse is distributed in the hope that it will be useful, but
+    WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with this program.  If not, see
-   <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see
+    <http://www.gnu.org/licenses/>.
 */
 
 #include <reverse/components/input/code_section_detector.hpp>
 #include <reverse/components/input/code_section_detector_algorithm.hpp>
 #include <reverse/components/input/code_section_detector_algorithm_factory.hpp>
-
-#include "meta/meta_object.h"
-#include "infrastructure/data_source/data_source_factory.h"
-#include "io/file_id.h"
-#include "io/input/file_readers/reader_factory.h"
-#include "io/input/file_readers/file_reader.h"
-#include "data_containers/filename.h"
-#include "infrastructure/data_source/data_object.h"
-#include "infrastructure/component_data.h"
-#include "infrastructure/component_state.h"
-#include "errors/api_exception.h"
+#include <reverse/data_containers/filename.hpp>
+#include <reverse/errors/api_exception.hpp>
+#include <reverse/infrastructure/data_source/data_source_factory.hpp>
+#include <reverse/io/file_id.hpp>
+#include <reverse/io/input/file_readers/reader_factory.hpp>
+#include <reverse/io/input/file_readers/file_reader.hpp>
+#include <reverse/infrastructure/data_source/data_object.hpp>
+#include <reverse/infrastructure/component_data.hpp>
+#include <reverse/infrastructure/component_state.hpp>
+#include <reverse/meta/meta_object.hpp>
+#include <reverse/trace.hpp>
 
 #include <boost/format.hpp>
+#include <boost/make_shared.hpp>
 
+namespace reverse {
+  namespace component {
+    namespace input {
 
-#ifdef LIBREVERSE_DEBUG
-#include "Trace.h"
-using namespace libreverse::api;
-using namespace libreverse::trace;
-#endif /* LIBREVERSE_DEBUG */
+      const std::string code_section_detector::code_section_address_meta_format = "code_section_address:%1%";
+      const std::string code_section_detector::code_section_size_meta_format = "code_section_size:%1%";
+      const std::string code_section_detector::m_name = "code_section_detector";
 
+      code_section_detector::code_section_detector ()
+	: m_state_ptr ( new infrastructure::component_state (0) )
+      {
+	trace::components_detail ( "Inside code_section_detector constructor" );
+      }
 
-namespace libreverse { namespace component {
+      code_section_detector::code_section_detector( boost::shared_ptr < infrastructure::component_state > state_ptr )
+	: m_state_ptr ( state_ptr )
+      {
+	trace::components_detail ( "Inside code_section_detector constructor (state_ptr) ");
+      }
 
-    const std::string Code_Section_Detector::CODE_SECTION_ADDRESS_META_FORMAT = "code_section_address:%1%";
-    const std::string Code_Section_Detector::CODE_SECTION_SIZE_META_FORMAT = "code_section_size:%1%";
-    const std::string Code_Section_Detector::m_name = "Code_Section_Detector";
+      code_section_detector::code_section_detector ( code_section_detector const& rhs )
+	: infrastructure::component ( rhs ),
+	  infrastructure::component_actor ( rhs ),
+	  boost::enable_shared_from_this<code_section_detector> ( rhs ),
+	  m_state_ptr ( new infrastructure::component_state ( *rhs.m_state_ptr ) )
+      {
+	trace::components_detail ( "Inside code_section_detector copy_constructor" );
+      }
 
-    Code_Section_Detector::Code_Section_Detector ()
-        : m_state_ptr ( new infrastructure::Component_State (0) )
-    {
+      code_section_detector::~code_section_detector ()
+      {
+	trace::components_detail ( "Inside code_section_detector destructor" );
+      }
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::COMPONENTS,
-			     TraceLevel::DETAIL,
-			     boost::str ( boost::format ( "Inside Code_Section_Detector constructor (id=%d)")
-					  % m_state_ptr->get_ID() ) );
-#endif /* LIBREVERSE_DEBUG */
+      void
+      code_section_detector::received_input_source_data ( boost::uint32_t id )
+      {
+	trace::components_detail ( "Entering code_section_detector::received_input_source_data" );
 
-    }
+	m_state_ptr->received_input_source_data ( id );
 
-    Code_Section_Detector::Code_Section_Detector( infrastructure_types::Component_State::ptr_t state_ptr )
-        : m_state_ptr ( state_ptr )
-    {
+	trace::components_detail ( "Exiting code_section_detector::received_input_source_data" );
+      }
 
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::COMPONENTS,
-			   TraceLevel::DETAIL,
-			   boost::str ( boost::format ( "Inside Code_Section_Detector constructor (id=%d)")
-					% m_state_ptr->get_ID() ) );
-#endif /* LIBREVERSE_DEBUG */
+      void
+      code_section_detector::add_input_source ( boost::uint32_t id )
+      {
+	trace::components_detail ( "Inside code_section_detector::add_input_source" );
 
-    }
+	m_state_ptr->add_input_source ( id );
+      }
 
-    Code_Section_Detector::Code_Section_Detector ( Code_Section_Detector const& rhs )
-        : infrastructure::Component ( rhs ),
-          infrastructure::Component_Actor ( rhs ),
-          boost::enable_shared_from_this<Code_Section_Detector> ( rhs ),
-          m_state_ptr ( new infrastructure::Component_State ( *rhs.m_state_ptr ) )
-    {
+      std::string
+      code_section_detector::get_name (void) const
+      {
+	trace::components_detail ( "Inside code_section_detector::get_name" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::COMPONENTS,
-			     TraceLevel::DETAIL,
-			     boost::str ( boost::format ( "Inside Code_Section_Detector copy_constructor (id=%d)")
-					  % m_state_ptr->get_ID() ) );
-#endif /* LIBREVERSE_DEBUG */
+	return m_name;
+      }
 
-    }
+      void code_section_detector::process ()
+      {
+	trace::components_detail ( "Entering Code_Section_Detector::process" );
 
-    Code_Section_Detector::~Code_Section_Detector ()
-    {
+	boost::shared_ptr < infrastructure::component_data > data_ptr = m_state_ptr->get_data();
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::COMPONENTS,
-			     TraceLevel::DETAIL,
-			     boost::str ( boost::format ( "Inside Code_Section_Detector destructor (id=%d)")
-					  % m_state_ptr->get_ID() ) );
-#endif /* LIBREVERSE_DEBUG */
+	if ( ! data_ptr->is_filename_set() )
+	  {
+	    trace::components_error ( "Unable to find the input file name." );
+	    trace::components_error ( "Cannot find the arch type without it." );
+	    trace::components_error ( "Exception throw in %s at line %d", __FILE__,  __LINE__ );
 
-    }
-
-    void
-    Code_Section_Detector::received_Input_Source_Data ( boost::uint32_t id )
-    {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::COMPONENTS,
-			     TraceLevel::DETAIL,
-			     boost::str ( boost::format ( "Entering Code_Section_Detector::received_Input_Source_Data (id=%d)")
-					  % m_state_ptr->get_ID() ) );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        m_state_ptr->received_Input_Source_Data ( id );
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::COMPONENTS,
-			     TraceLevel::DETAIL,
-			     boost::str ( boost::format ( "Exiting Code_Section_Detector::received_Input_Source_Data (id=%d)")
-					  % m_state_ptr->get_ID() ) );
-#endif /* LIBREVERSE_DEBUG */
-
-
-    }
-
-    void
-    Code_Section_Detector::add_Input_Source ( boost::uint32_t id )
-    {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::COMPONENTS,
-			     TraceLevel::DETAIL,
-			     boost::str ( boost::format ( "Inside Code_Section_Detector::add_Input_Source (id=%d)")
-					  % m_state_ptr->get_ID() ) );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        m_state_ptr->add_Input_Source ( id );
-    }
-
-    std::string
-    Code_Section_Detector::get_Name (void) const
-    {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::COMPONENTS,
-			     TraceLevel::DETAIL,
-			     boost::str ( boost::format ( "Inside Code_Section_Detector::get_Name (id=%d)")
-					  % m_state_ptr->get_ID() ) );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        return m_name;
-    }
-
-    void Code_Section_Detector::process ()
-    {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::COMPONENTS,
-			     TraceLevel::DETAIL,
-			     boost::str ( boost::format ( "Entering Code_Section_Detector::process (id=%d)")
-					  % m_state_ptr->get_ID() ) );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        infrastructure_types::Component_Data::ptr_t data_ptr = m_state_ptr->get_Data();
-
-        if ( ! data_ptr->is_Filename_Set() )
-            {
-
-
-#ifdef LIBREVERSE_DEBUG
-                Trace::write_Trace ( TraceArea::COMPONENTS,
-				     TraceLevel::ERROR,
-				     "Unable to find the input file name." );
-
-                Trace::write_Trace ( TraceArea::COMPONENTS,
-				     TraceLevel::ERROR,
-				     "Cannot find the arch type without it." );
-
-                Trace::write_Trace ( TraceArea::COMPONENTS,
-				     TraceLevel::ERROR,
-				     boost::str ( boost::format("Exception throw in %s at line %d")
-						  % __FILE__
-						  % __LINE__ ) );
-#endif /* LIBREVERSE_DEBUG */
-
-
-                // At this point we have not found the filename somehow
-                // the Precondition visitor did not work. So we will
-                // will throw an exception
-                throw ( errors::API_Exception ( errors::API_Exception::INTERNAL_LIBRARY_ERROR ) );
-            }
+	    // At this point we have not found the filename somehow
+	    // the Precondition visitor did not work. So we will
+	    // will throw an exception
+	    throw ( errors::api_exception ( errors::api_exception::internal_library_error ) );
+	  }
 
 	/*---------------------------------*/
 	/*          Get File Type          */
 	/*---------------------------------*/
-        meta::Meta_Object::const_ptr_t input_meta_ptr = data_ptr->get_Input_Meta_Data();
+	boost::shared_ptr < const meta::meta_object > input_meta_ptr = data_ptr->get_input_meta_data();
+	meta::meta_object::data_pair_t file_type_meta_value = input_meta_ptr->get_value ( "file_type" );
 
-	meta::Meta_Object::Data_Pair_t file_type_meta_value = input_meta_ptr->get_Value ( "file_type" );
+	assert ( file_type_meta_value.second == meta::meta_object::string );
 
-        assert ( file_type_meta_value.second == meta::Meta_Object::STRING );
-
-        std::string file_type = file_type_meta_value.first;
+	std::string file_type = file_type_meta_value.first;
 
 	/*---------------------------------*/
 	/*          Get Algorithm          */
 	/*---------------------------------*/
-	Code_Section_Detector_Algorithm::ptr_t algorithm_ptr =
-	  Code_Section_Detector_Algorithm_Factory::Instance().get_Algorithm ( file_type );
+	boost::shared_ptr < code_section_detector_algorithm > algorithm_ptr =
+	  code_section_detector_algorithm_factory::instance().get_algorithm ( file_type );
 
 	/*--------------------------------*/
 	/*       Execute Algorithm        */
 	/*--------------------------------*/
-        data_types::Filename::const_ptr_t file_ptr = data_ptr->get_Input_Filename();
+	boost::shared_ptr < const data_container::filename > file_ptr = data_ptr->get_input_filename();
+	boost::shared_ptr < const io::file_id > file_id_ptr = boost::make_shared < io::file_id > ( file_ptr->to_string() );
+	boost::shared_ptr < meta::meta_object > code_section_meta_ptr = algorithm_ptr->run ( file_id_ptr );
 
-	io_types::File_ID::const_ptr_t file_id_ptr ( new io::File_ID ( file_ptr->to_String() ) );
+	/**
+	 * add input filename to output information
+	 */
+	data_ptr->set_output_data ( file_ptr );
+	data_ptr->set_output_meta_data ( code_section_meta_ptr );
 
-	meta::Meta_Object::ptr_t code_section_meta_ptr = algorithm_ptr->run ( file_id_ptr );
+	trace::components_detail ( "Exiting Code_Section_Detector::process" );
+      }
 
-        /**
-         * add input filename to output information
-         */
-        data_ptr->set_Output_Data ( file_ptr );
+      void
+      code_section_detector::run ( infrastructure::component_graph::data_map_t* m_input_data )
+      {
+	trace::components_detail ( "Entering Code_Section_Detector::run" );
 
-        data_ptr->set_Output_Meta_Data ( code_section_meta_ptr );
+	m_state_ptr->run ( this->shared_from_this(),
+			   m_input_data );        
+      
+	trace::components_detail ( "Exiting Code_Section_Detector::run" );
+      }
 
+      boost::shared_ptr < infrastructure::data_source::data_source_base >
+      code_section_detector::results (void)
+      {
+	trace::components_detail ( "Inside Code_Section_Detector::results" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::COMPONENTS,
-			     TraceLevel::DETAIL,
-			     boost::str ( boost::format ( "Exiting Code_Section_Detector::process (id=%d)")
-					  % m_state_ptr->get_ID() ) );
-#endif /* LIBREVERSE_DEBUG */
+	return m_state_ptr->results();
+      }
 
+      void
+      code_section_detector::set_state ( boost::uint32_t mode )
+      {
+	trace::components_detail ( "Inside Code_Section_Detector::set_State" );
 
-    }
+	m_state_ptr->switch_state ( mode );
+      }
 
-    void
-    Code_Section_Detector::run ( infrastructure_types::Component_Graph::Data_Map_t* m_input_data )
-    {
+      boost::uint32_t
+      code_section_detector::get_id (void) const
+      {
+	trace::components_detail ( "Inside Code_Section_Detector::get_ID (id=%d)" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::COMPONENTS,
-			     TraceLevel::DETAIL,
-			     boost::str ( boost::format ( "Entering Code_Section_Detector::run (id=%d)")
-					  % m_state_ptr->get_ID() ) );
-#endif /* LIBREVERSE_DEBUG */
+	return m_state_ptr->get_id();
+      }
+       
+      infrastructure::component_data::input_token_t::const_iterator
+      code_section_detector::get_source_list_begin (void) const
+      {
+	trace::components_detail ( "Inside Code_Section_Detector::get_Source_List_Begin" );
+      	
+	return m_state_ptr->get_source_list_begin ();
+      }
 
+      infrastructure::component_data::input_token_t::const_iterator
+      code_section_detector::get_source_list_end (void) const
+      {
+	trace::components_detail ( "Inside Code_Section_Detector::get_Source_List_End" );
 
-        m_state_ptr->run ( this->shared_from_this(),
-                           m_input_data );        
+	return m_state_ptr->get_source_list_end ();
+      }
 
+      code_section_detector&
+      code_section_detector::operator= ( code_section_detector const& rhs )
+      {
+	trace::components_detail ( "Entering Code_Section_Detector::operator= (assignment)" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::COMPONENTS,
-			     TraceLevel::DETAIL,
-			     boost::str ( boost::format ( "Exiting Code_Section_Detector::run (id=%d)")
-					  % m_state_ptr->get_ID() ) );
-#endif /* LIBREVERSE_DEBUG */
+	code_section_detector temp ( rhs );
+	swap ( temp );
 
-    }
+	trace::components_detail ( "Exiting Code_Section_Detector::operator= (assignment)" );
 
-    infrastructure_types::Data_Source_Base::ptr_t
-    Code_Section_Detector::results (void)
-    {
+	return *this;
+      }
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::COMPONENTS,
-			     TraceLevel::DETAIL,
-			     boost::str ( boost::format ( "Inside Code_Section_Detector::results (id=%d)")
-					  % m_state_ptr->get_ID() ) );
-#endif /* LIBREVERSE_DEBUG */
+      void
+      code_section_detector::swap ( code_section_detector& rhs )
+      {
+	trace::components_detail ( "Entering Code_Section_Detector::swap" );
 
+	m_state_ptr.swap ( rhs.m_state_ptr );
 
-        return m_state_ptr->results();
-    }
+	trace::components_detail ( "Exiting Code_Section_Detector::swap" );
+      }
 
-    void
-    Code_Section_Detector::set_State ( boost::uint32_t mode )
-    {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::COMPONENTS,
-			     TraceLevel::DETAIL,
-			     boost::str ( boost::format ( "Inside Code_Section_Detector::set_State (id=%d)")
-					  % m_state_ptr->get_ID() ) );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        m_state_ptr->switch_State ( mode );
-    }
-
-    boost::uint32_t
-    Code_Section_Detector::get_ID (void) const
-    {
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::COMPONENTS,
-			   TraceLevel::DETAIL,
-			   boost::str ( boost::format ( "Inside Code_Section_Detector::get_ID (id=%d)")
-					% m_state_ptr->get_ID() ) );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        return m_state_ptr->get_ID();
-    }
-    
-    infrastructure_types::Component_Data::Input_Token_t::const_iterator
-    Code_Section_Detector::get_Source_List_Begin (void) const
-    {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::COMPONENTS,
-			     TraceLevel::DETAIL,
-			     boost::str ( boost::format ( "Inside Code_Section_Detector::get_Source_List_Begin (id=%d)")
-					  % m_state_ptr->get_ID() ) );
-#endif /* LIBREVERSE_DEBUG */
-
-	
-        return m_state_ptr->get_Source_List_Begin ();
-    }
-
-    infrastructure_types::Component_Data::Input_Token_t::const_iterator
-    Code_Section_Detector::get_Source_List_End (void) const
-    {
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::COMPONENTS,
-			   TraceLevel::DETAIL,
-			   boost::str ( boost::format ( "Inside Code_Section_Detector::get_Source_List_End (id=%d)")
-					% m_state_ptr->get_ID() ) );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        return m_state_ptr->get_Source_List_End ();
-    }
-
-    Code_Section_Detector&
-    Code_Section_Detector::operator= ( Code_Section_Detector const& rhs )
-    {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::COMPONENTS,
-			     TraceLevel::DETAIL,
-			     boost::str ( boost::format ( "Entering Code_Section_Detector::operator= (assignment) (id=%d)")
-					  % m_state_ptr->get_ID() ) );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        Code_Section_Detector temp ( rhs );
-        swap ( temp );
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::COMPONENTS,
-			     TraceLevel::DETAIL,
-			     boost::str ( boost::format ( "Exiting Code_Section_Detector::operator= (assignment) (id=%d)")
-					  % m_state_ptr->get_ID() ) );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        return *this;
-    }
-
-    void
-    Code_Section_Detector::swap ( Code_Section_Detector& rhs )
-    {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::COMPONENTS,
-			     TraceLevel::DETAIL,
-			     boost::str ( boost::format ( "Entering Code_Section_Detector::swap (id=%d)")
-					  % m_state_ptr->get_ID() ) );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        m_state_ptr.swap ( rhs.m_state_ptr );
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::COMPONENTS,
-			     TraceLevel::DETAIL,
-			     boost::str ( boost::format ( "Exiting Code_Section_Detector::swap (id=%d)")
-					  % m_state_ptr->get_ID() ) );
-#endif /* LIBREVERSE_DEBUG */
-
-    }
-
-} /* namespace component */
+    } // namespace input
+  } /* namespace component */
 } /* namespace libreverse */
