@@ -19,51 +19,56 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#include "Code_Section_Detector_Algorithm_Factory.h"
-#include "Code_Section_Detector_Elf32_Algorithm.h"
-#include "Code_Section_Detector_Elf64_Algorithm.h"
-#include "Code_Section_Detector_Java_Algorithm.h"
-#include "Code_Section_Detector_WPEF32_Algorithm.h"
-#include "Code_Section_Detector_WPEF64_Algorithm.h"
+#include <reverse/components/input/code_section_detector_algorithm_factory.hpp>
+#include <reverse/components/input/code_section_detector_elf32_algorithm.hpp>
+#include <reverse/components/input/code_section_detector_elf64_algorithm.hpp>
+#include <reverse/components/input/code_section_detector_java_algorithm.hpp>
+#include <reverse/components/input/code_section_detector_wpef32_algorithm.hpp>
+#include <reverse/components/input/code_section_detector_wpef64_algorithm.hpp>
 
-#include "io/input/File_Readers/Elf/Elf_Meta_Info.h"
-#include "io/input/File_Readers/Java_Class/Java_Meta_Info.h"
-#include "io/input/File_Readers/Windows_PE/PE_Meta_Info.h"
-#include "errors/CPU_Exception.h"
+#include <reverse/io/input/file_readers/linux_elf/elf_meta_info.hpp>
+#include <reverse/io/input/file_readers/java_class/java_meta_info.hpp>
+#include <reverse/io/input/file_readers/windows_pe/pe_meta_info.hpp>
+#include <reverse/errors/cpu_exception.hpp>
+
+#include <boost/make_shared.hpp>
 
 #include <string>
 
-namespace libreverse { namespace component {
+namespace reverse {
+  namespace components {
+    namespace input {
 
-    Code_Section_Detector_Algorithm::ptr_t
-    Code_Section_Detector_Algorithm_Factory::get_Algorithm ( std::string file_type )
-    {
-      if ( file_type.compare ( elf_module::Elf_Meta_Info::FILE_TYPE_32BIT ) == 0 )
-	{
-	  return Code_Section_Detector_Algorithm::ptr_t ( new Code_Section_Detector_Elf32_Algorithm() );
-	}
-      else if ( file_type.compare ( elf_module::Elf_Meta_Info::FILE_TYPE_64BIT ) == 0 )
-	{
-	  return Code_Section_Detector_Algorithm::ptr_t ( new Code_Section_Detector_Elf64_Algorithm() );
-	}
-      else if ( file_type.compare ( java_module::Java_Meta_Info::FILE_TYPE ) == 0 )
-	{
-	  return Code_Section_Detector_Algorithm::ptr_t ( new Code_Section_Detector_Java_Algorithm() );
-	}
-      else if ( file_type.compare ( wpef_module::PE_Meta_Info::PE_FILE_TYPE_32BIT ) == 0 )
-	{
-	  return Code_Section_Detector_Algorithm::ptr_t ( new Code_Section_Detector_WPEF32_Algorithm() );
-	}
-      else if ( file_type.compare ( wpef_module::PE_Meta_Info::PE_FILE_TYPE_64BIT ) == 0 )
-	{
-	  return Code_Section_Detector_Algorithm::ptr_t ( new Code_Section_Detector_WPEF64_Algorithm() );
-	}
-      else
-	{
-	  throw errors::CPU_Exception ( errors::CPU_Exception::UNSUPPORTED_ARCHITECTURE );
-	}
-    }
+      boost::shared_ptr < code_section_detector_algorithm >
+      code_section_detector_algorithm_factory::get_algorithm ( std::string file_type )
+      {
+	if ( file_type.compare ( io::input::file_readers::linux_elf::elf_meta_info::file_type_32bit ) == 0 )
+	  {
+	    return boost::make_shared < code_section_detector_elf32_algorithm > ();
+	  }
+	else if ( file_type.compare ( io::input::file_readers::linux_elf::elf_meta_info::file_type_64bit ) == 0 )
+	  {
+	    return boost::make_shared < code_section_detector_elf64_algorithm > ();
+	  }
+	else if ( file_type.compare ( io::input::file_readers::java_class::java_meta_info::file_type ) == 0 )
+	  {
+	    return boost::make_shared < code_section_detector_java_algorithm > ();
+	  }
+	else if ( file_type.compare ( io::input::file_readers::windows_pe::pe_meta_info::pe_file_type_32bit ) == 0 )
+	  {
+	    return boost::make_shared < code_section_detector_wpef32_algorithm > ();
+	  }
+	else if ( file_type.compare ( io::input::file_readers::windows_pe::pe_file_type_64bit ) == 0 )
+	  {
+	    return boost::make_shared < code_section_detector_wpef64_algorithm > ();
+	  }
+	else
+	  {
+	    throw errors::cpu_exception ( errors::cpu_exception::unsupported_architecture );
+	  }
+      }
 
-} /* namespace component */
+    } // namespace input
+  } /* namespace components */
 } /* namespace libreverse */
 

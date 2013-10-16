@@ -19,28 +19,36 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CODE_SECTION_DETECTOR_Java_ALGORITHM_H
-#define CODE_SECTION_DETECTOR_Java_ALGORITHM_H
+#ifndef REVERSE_COMPONENTS_INPUT_CODE_SECTION_DETECTOR_JAVA_ALGORITHM_HPP_INCLUDED
+#define REVERSE_COMPONENTS_INPUT_CODE_SECTION_DETECTOR_JAVA_ALGORITHM_HPP_INCLUDED
 
-#include "Code_Section_Detector_Algorithm.h"
+#include <reverse/components/input/code_section_detector_algorithm.hpp>
 
-#include "io/IO_Types.h"
+#include <boost/shared_ptr.hpp>
 
-namespace libreverse {
+namespace reverse {
 
-    namespace component {
+  namespace io {
+    class file_id;
+  }
 
-      class Code_Section_Detector_Java_Algorithm : public Code_Section_Detector_Algorithm {
+  namespace meta {
+    class meta_object;
+  }
+
+  namespace components {
+    namespace input {
+
+      class code_section_detector_java_algorithm : public code_section_detector_algorithm {
       public:
 	
-	typedef boost::shared_ptr<Code_Section_Detector_Java_Algorithm> ptr_t;
+	virtual ~code_section_detector_java_algorithm(){}
 
-	virtual ~Code_Section_Detector_Java_Algorithm(){}
-
-	virtual meta::Meta_Object::ptr_t run ( io_types::File_ID::const_ptr_t file_ptr );
+	virtual boost::shared_ptr < meta::meta_object > run ( boost::shared_ptr < io::file_id > file_ptr );
       };
 
-    } /* namespace component */
+    } // namespace input
+  } /* namespace components */
 } /* namespace libreverse */
 
-#endif /* CODE_SECTION_DETECTOR_Java_ALGORITHM_H */
+#endif // ifndef REVERSE_COMPONENTS_INPUT_CODE_SECTION_DETECTOR_JAVA_ALGORITHM_HPP_INCLUDED

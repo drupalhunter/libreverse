@@ -38,7 +38,7 @@
 #include <boost/make_shared.hpp>
 
 namespace reverse {
-  namespace component {
+  namespace components {
     namespace input {
 
       const std::string code_section_detector::code_section_address_meta_format = "code_section_address:%1%";
@@ -222,5 +222,5 @@ namespace reverse {
       }
 
     } // namespace input
-  } /* namespace component */
+  } /* namespace components */
 } /* namespace libreverse */

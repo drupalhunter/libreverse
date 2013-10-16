@@ -19,8 +19,8 @@
     <http://www.gnu.org/licenses/>.
 */
 
-#ifndef REVERSE_COMPONENT_INPUT_CODE_SECTION_DECTECTOR_HPP_INCLUDED
-#define REVERSE_COMPONENT_INPUT_CODE_SECTION_DECTECTOR_HPP_INCLUDED
+#ifndef REVERSE_COMPONENTS_INPUT_CODE_SECTION_DECTECTOR_HPP_INCLUDED
+#define REVERSE_COMPONENTS_INPUT_CODE_SECTION_DECTECTOR_HPP_INCLUDED
 
 #include <reverse/infrastructure/component.hpp>
 #include <reverse/infrastructure/component_actor.hpp>
@@ -39,7 +39,7 @@ namespace reverse
 
   } // namespace infrastructure
 
-  namespace component
+  namespace components
   {
     namespace input
     {
@@ -103,8 +103,8 @@ namespace reverse
 
 
     } // namespace input
-  } // namespace component
+  } // namespace components
 } // namespace libreverse
 
 
-#endif /* REVERSE_COMPONENT_INPUT_CODE_SECTION_DECTECTOR_HPP_INCLUDED */
+#endif /* REVERSE_COMPONENTS_INPUT_CODE_SECTION_DECTECTOR_HPP_INCLUDED */
