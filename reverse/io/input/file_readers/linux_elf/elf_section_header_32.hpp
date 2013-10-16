@@ -23,6 +23,7 @@
 #define REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_SECTION_HEADER_32_HPP
 
 #include <boost/cstdint.hpp>
+
 #include <boost/fusion/adapted/struct/adapt_struct.hpp>
 
 namespace reverse {

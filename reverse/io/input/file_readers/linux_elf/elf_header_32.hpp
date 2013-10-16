@@ -26,69 +26,67 @@
 #include <boost/fusion/adapted/struct/adapt_struct.hpp>
 
 namespace reverse {
-namespace io {
-namespace input {
-namespace file_readers {
-namespace linux_elf {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace linux_elf {
+	  
+	  struct elf_header_32
+	  {
+	    /*! \brief  Object file type */
+	    boost::uint16_t e_type;
 
-  struct elf_header_32
-  {
+	    /*! \brief Required architecture for the file */
+	    boost::uint16_t e_machine;
+	    
+	    /*! \brief ELF version for the file */
+	    boost::uint32_t e_version;
+	    
+	    /*!
+	     * \brief This memeber gives the virtual address to which the system
+	     * first transfer control. If the file has no associated entry
+	     * point, this member holds zero. [Elf Format]
+	     */
+	    boost::uint32_t e_entry;
+	    
+	    /*! \brief  Program header table's file offset in bytes */
+	    boost::uint32_t e_phoff;
+	    
+	    /*! \brief  Section header table's file offset in bytes */
+	    boost::uint32_t e_shoff;
+	    
+	    /*! \brief  Processor-specific flags associated with the file */
+	    boost::uint32_t e_flags;
+	    
+	    /*! \brief  ELF header size in bytes */
+	    boost::uint16_t e_ehsize;
+	    
+	    /*! \brief  Program header table entry size */
+	    boost::uint16_t e_phentsize;
 
-        /*! \brief  Object file type */
-        boost::uint16_t e_type;
+	    /*!
+	     * \brief This members holds the number of entries in the program
+	     * header table (bytes).
+	     */
+	    boost::uint16_t e_phnum;
+	    
+	    /*! \brief  Section header table entry size (bytes) */
+	    boost::uint16_t e_shentsize;
+	    
+	    /*! \brief  Section header table entry count */
+	    boost::uint16_t e_shnum;
+	    
+	    /*!
+	     * \brief Section header string table index of the entry associated
+	     * with the section name string table.
+	     */
+	    boost::uint16_t e_shstrndx;
+	  };
 
-        /*! \brief Required architecture for the file */
-        boost::uint16_t e_machine;
-
-        /*! \brief ELF version for the file */
-        boost::uint32_t e_version;
-
-        /*!
-         * \brief This memeber gives the virtual address to which the system
-         * first transfer control. If the file has no associated entry
-         * point, this member holds zero. [Elf Format]
-         */
-        boost::uint32_t e_entry;
-
-        /*! \brief  Program header table's file offset in bytes */
-        boost::uint32_t e_phoff;
-
-        /*! \brief  Section header table's file offset in bytes */
-        boost::uint32_t e_shoff;
-
-        /*! \brief  Processor-specific flags associated with the file */
-        boost::uint32_t e_flags;
-
-        /*! \brief  ELF header size in bytes */
-        boost::uint16_t e_ehsize;
-
-        /*! \brief  Program header table entry size */
-        boost::uint16_t e_phentsize;
-
-        /*!
-         * \brief This members holds the number of entries in the program
-         * header table (bytes).
-         */
-        boost::uint16_t e_phnum;
-
-        /*! \brief  Section header table entry size (bytes) */
-        boost::uint16_t e_shentsize;
-
-        /*! \brief  Section header table entry count */
-        boost::uint16_t e_shnum;
-
-        /*!
-         * \brief Section header string table index of the entry associated
-         * with the section name string table.
-         */
-        boost::uint16_t e_shstrndx;
-
-    };
-
-} // namespace linux_elf
-} // namespace file_readers
-} // namespace input
-} //  namespace io
+	} // namespace linux_elf
+      } // namespace file_readers
+    } // namespace input
+  } //  namespace io
 } // namespace reverse
 
 BOOST_FUSION_ADAPT_STRUCT (
