@@ -19,8 +19,8 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#ifndef REVERSE_COMPONENT_INPUT_ARCH_TYPE_DETECTOR_Elf64_ALGORITHM_HPP_INCLUDED
-#define REVERSE_COMPONENT_INPUT_ARCH_TYPE_DETECTOR_Elf64_ALGORITHM_HPP_INCLUDED
+#ifndef REVERSE_COMPONENTS_INPUT_ARCH_TYPE_DETECTOR_Elf64_ALGORITHM_HPP_INCLUDED
+#define REVERSE_COMPONENTS_INPUT_ARCH_TYPE_DETECTOR_Elf64_ALGORITHM_HPP_INCLUDED
 
 #include <reverse/components/input/arch_type_detector_algorithm.hpp>
 
@@ -32,7 +32,7 @@ namespace reverse {
     class file_id;
   }
 
-  namespace component {
+  namespace components {
     namespace input {
 
       class arch_type_detector_elf64_algorithm : public arch_type_detector_algorithm {
@@ -44,7 +44,7 @@ namespace reverse {
       };
 
     } // namespace input
-  } /* namespace component */
+  } /* namespace components */
 } /* namespace reverse */
 
-#endif /* ARCH_TYPE_DETECTOR_Elf64_ALGORITHM_H */
+#endif // ifndef REVERSE_COMPONENTS_INPUT_ARCH_TYPE_DETECTOR_Elf64_ALGORITHM_HPP_INCLUDED

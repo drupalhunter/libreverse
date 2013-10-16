@@ -22,9 +22,13 @@
 #ifndef REVERSE_COMPONENTS_INPUT_CODE_SECTION_DETECTOR_ALGORITHM_HPP_INCLUDED
 #define REVERSE_COMPONENTS_INPUT_CODE_SECTION_DETECTOR_ALGORITHM_HPP_INCLUDED
 
-#include <reverse/meta/meta_object.hpp>
+#include <boost/shared_ptr.hpp>
 
 namespace reverse {
+
+  namespace meta {
+    class meta_object;
+  }
 
   namespace io {
     class file_id;

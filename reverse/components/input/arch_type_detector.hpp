@@ -38,7 +38,7 @@ namespace reverse {
 
   } // namespace infrastructure
 
-  namespace component {
+  namespace components {
     namespace input {
 
       class arch_type_detector : public infrastructure::component,
@@ -98,7 +98,7 @@ namespace reverse {
       };
 
     } // namespace input
-  } // namespace component
+  } // namespace components
 } // namespace libreverse
 
 #endif // ifndef REVERSE_COMPONENT_INPUT_ARCH_TYPE_DECTECTOR_HPP_INCLUDED

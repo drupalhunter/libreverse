@@ -32,7 +32,7 @@ namespace reverse {
     class file_id;
   }
   
-  namespace component {
+  namespace components {
     namespace input {
       
       class arch_type_detector_algorithm {
@@ -45,7 +45,7 @@ namespace reverse {
       };
       
     } /* namespace io */
-  } /* namespace component */
+  } /* namespace components */
 } /* namespace reverse */
 
 #endif /* UNPACKAGE_ALGORITHM_H */

@@ -28,25 +28,25 @@
 #include <boost/make_shared.hpp>
 
 namespace reverse {
-namespace component {
-namespace input {
+  namespace components {
+    namespace input {
+      
+      std::string
+      arch_type_detector_elf32_algorithm::run ( boost::shared_ptr < const io::file_id > file_ptr )
+      {
+	trace::components_detail ( "Entering Arch_Type_Detector_Elf32_Algorithm::run" );
 
-std::string
-arch_type_detector_elf32_algorithm::run ( boost::shared_ptr < const io::file_id > file_ptr )
-{
-     trace::components_detail ( "Entering Arch_Type_Detector_Elf32_Algorithm::run" );
-
-     boost::shared_ptr < io::input::file_readers::linux_elf::elf_reader_32 > file_reader_ptr =
+	boost::shared_ptr < io::input::file_readers::linux_elf::elf_reader_32 > file_reader_ptr =
           boost::make_shared < io::input::file_readers::linux_elf::elf_reader_32 > ( file_ptr );
 
-     std::string result = file_reader_ptr->get_arch_type ();
+	std::string result = file_reader_ptr->get_arch_type ();
 
-     trace::components_detail ( "Exiting Arch_Type_Detector_Elf32_Algorithm::run" );
+	trace::components_detail ( "Exiting Arch_Type_Detector_Elf32_Algorithm::run" );
 
-     return result;
-}
+	return result;
+      }
 
-} // namespace input
-} // namespace component
+    } // namespace input
+  } // namespace components
 } // namespace libreverse
 

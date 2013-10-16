@@ -19,67 +19,58 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#include "Code_Section_Detector_Elf32_Algorithm.h"
-#include "Code_Section_Detector.h"
+#include <reverse/components/input/code_section_detector_elf32_algorithm.hpp>
+#include <reverse/components/input/code_section_detector.hpp>
 
-#include "io/File_ID.h"
-#include "io/input/File_Readers/Elf/Elf_Reader_32.h"
-#include "io/input/File_Readers/Elf/Elf_Header_32.h"
+#include <reverse/io/file_id.hpp>
+#include <reverse/io/input/file_readers/linux_elf/elf_reader_32.hpp>
+#include <reverse/io/input/file_readers/linux_elf/elf_header_32.hpp>
+#include <reverse/trace.hpp>
 
 #include <boost/format.hpp>
+#include <boost/make_shared.hpp>
 
-#ifdef LIBREVERSE_DEBUG
-#include "Trace.h"
-using namespace libreverse::api;
-using namespace libreverse::trace;
-#endif /* LIBREVERSE_DEBUG */
+namespace reverse {
+  namespace components {
+    namespace input {
 
-namespace libreverse { namespace component {
+      boost::shared_ptr < meta::meta_object >
+      code_section_detector_elf32_algorithm::run ( boost::shared_ptr < const io::file_id > file_ptr )
+      {
+	trace::components_detail ( "Entering Code_Section_Detector_Elf32_Algorithm::run" );
 
-    meta::Meta_Object::ptr_t
-    Code_Section_Detector_Elf32_Algorithm::run ( io_types::File_ID::const_ptr_t file_ptr )
-    {
+	boost::shared_ptr < io::input::file_readers::linux_elf::elf_reader_32 > file_reader_ptr =
+	  boost::make_shared < io::input::file_readers::linux_elf::elf_reader_32 > ( file_ptr );
 
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::COMPONENTS,
-			   TraceLevel::DETAIL,
-			   "Entering Code_Section_Detector_Elf32_Algorithm::run" );
-#endif /* LIBREVERSE_DEBUG */
+	file_reader_ptr->read_headers();
 
+	boost::shared_ptr < io::input::file_readers::linux_elf::elf_header_32 > elf_hdr_ptr = file_reader_ptr->get_header();
 
-      elf_types::Elf_Reader_32::ptr_t file_reader_ptr ( new elf_module::Elf_Reader_32 ( file_ptr ) );
-      file_reader_ptr->read_Headers();
+	boost::shared_ptr < meta::meta_object > meta_ptr = boost::make_shared < meta::meta_object> ();
 
-      elf_types::Elf_Header_32::ptr_t elf_hdr_ptr = file_reader_ptr->get_Header();
+	// Exception is thrown if a '.text' section is not found. We
+	// will not catch it because we are expecting a section header
+	// to contain the executable code. Therefore we will stop
+	// processing the target file.
+	boost::shared_ptr < const io::input::file_readers::linux_elf::elf_section_header_32 > elf_sec_hdr_ptr =
+	  elf_hdr_ptr->get_section_header ( ".text" );
 
-      meta::Meta_Object::ptr_t meta_ptr ( new meta::Meta_Object() );
+	std::string code_section_address = boost::str ( boost::format ("%1%" ) % elf_sec_hdr_ptr->get_section_offset() );
+	std::string code_section_size = boost::str ( boost::format ( "%1%" ) % elf_sec_hdr_ptr->get_section_size() );
 
-      // Exception is thrown if a '.text' section is not found. We
-      // will not catch it because we are expecting a section header
-      // to contain the executable code. Therefore we will stop
-      // processing the target file.
-      elf_types::Elf_Section_Header_32::const_ptr_t elf_sec_hdr_ptr = elf_hdr_ptr->get_Section_Header ( ".text" );
+	meta_ptr->add ( "code_section_address",
+			code_section_address,
+			meta::Meta_Object::HEX );
+	meta_ptr->add ( "code_section_size",
+			code_section_size,
+			meta::Meta_Object::HEX );
 
-      std::string code_section_address = boost::str ( boost::format ("%1%" ) % elf_sec_hdr_ptr->get_Section_Offset() );
-      std::string code_section_size = boost::str ( boost::format ( "%1%" ) % elf_sec_hdr_ptr->get_Section_Size() );
+	trace::components_detail ( "Exiting Code_Section_Detector_Elf32_Algorithm::run" );
 
-      meta_ptr->add ( "code_section_address",
-		      code_section_address,
-		      meta::Meta_Object::HEX );
-      meta_ptr->add ( "code_section_size",
-		      code_section_size,
-		      meta::Meta_Object::HEX );
+	return meta_ptr;
+      }
 
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::COMPONENTS,
-			   TraceLevel::DETAIL,
-			   "Exiting Code_Section_Detector_Elf32_Algorithm::run" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-      return meta_ptr;
-    }
-
-} /* namespace component */
+    } // namespace input
+  } /* namespace components */
 } /* namespace libreverse */
 

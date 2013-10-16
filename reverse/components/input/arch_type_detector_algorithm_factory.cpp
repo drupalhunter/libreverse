@@ -37,7 +37,7 @@
 #include <string>
 
 namespace reverse {
-  namespace component {
+  namespace components {
     namespace input {
 
       boost::shared_ptr < arch_type_detector_algorithm >
@@ -45,11 +45,11 @@ namespace reverse {
       {
 	trace::components_detail ("Entering arch_type_detector_algorithm_factory::get_algorithm" );
 
-	if ( file_type.compare ( io::input::file_readers::linux_elf::elf_meta_info::FILE_TYPE_32BIT ) == 0 )
+	if ( file_type.compare ( io::input::file_readers::linux_elf::elf_meta_info::file_type_32bit ) == 0 )
 	  {
 	    return boost::make_shared < arch_type_detector_elf32_algorithm > ();
 	  }
-	else if ( file_type.compare ( io::input::file_readers::linux_elf::elf_meta_info::FILE_TYPE_64BIT ) == 0 )
+	else if ( file_type.compare ( io::input::file_readers::linux_elf::elf_meta_info::file_type_64bit ) == 0 )
 	  {
 	    return boost::make_shared < arch_type_detector_elf64_algorithm > ();
 	  }

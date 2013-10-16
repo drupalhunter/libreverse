@@ -42,7 +42,7 @@ namespace reverse {
 
 	virtual ~code_section_detector_elf64_algorithm(){}
 
-	virtual boost::shared_ptr < meta::meta_object > run ( boost::shared_ptr < io::file_id > file_ptr );
+	virtual boost::shared_ptr < meta::meta_object > run ( boost::shared_ptr < const io::file_id > file_ptr );
       };
 
     } // namespace input

@@ -40,7 +40,7 @@
 #include <iostream>
 
 namespace reverse {
-  namespace component {
+  namespace components {
     namespace input {
 
       const std::string arch_type_detector::name = "Arch_Type_Detector";
@@ -248,5 +248,5 @@ namespace reverse {
       }
 
     } /* namespace input */
-  } /* namespace component */
+  } /* namespace components */
 } /* namespace reverse */

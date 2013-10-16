@@ -58,7 +58,7 @@ namespace reverse {
 	  {
 	    return boost::make_shared < code_section_detector_wpef32_algorithm > ();
 	  }
-	else if ( file_type.compare ( io::input::file_readers::windows_pe::pe_file_type_64bit ) == 0 )
+	else if ( file_type.compare ( io::input::file_readers::windows_pe::pe_meta_info::pe_file_type_64bit ) == 0 )
 	  {
 	    return boost::make_shared < code_section_detector_wpef64_algorithm > ();
 	  }

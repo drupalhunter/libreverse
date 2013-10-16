@@ -27,7 +27,7 @@
 #include <boost/shared_ptr.hpp>
 
 namespace reverse {
-  namespace component {
+  namespace components {
     namespace input {
 
       class arch_type_detector_algorithm_factory {
@@ -56,7 +56,7 @@ namespace reverse {
       };
 
     } /* namespace input */
-  } /* namespace component */
+  } /* namespace components */
 } /* namespace reverse */
 
 #endif // ifndef REVERSE_COMPONENTS_INPUT_ARCH_TYPE_DETECTOR_ALGORITHM_FACTORY_HPP_INCLUDED
