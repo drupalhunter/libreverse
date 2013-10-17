@@ -38,7 +38,7 @@ namespace reverse {
 	   * \date 2003
 	   * \author Stephen Torri
 	   */
-	  class Elf_Section_Header_Utils {
+	  class elf_section_header_utils {
 
 	  public:
 

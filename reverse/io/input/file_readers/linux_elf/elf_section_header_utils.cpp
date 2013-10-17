@@ -19,406 +19,337 @@
     <http://www.gnu.org/licenses/>.
 */
 
-#include "Elf_Section_Header_Utils.h"
-#include "Elf_Common.h"
-#include "Elf_mips.h"
-#include "Elf_hppa.h"
-#include "Elf_ia64.h"
-
-#include "io/Byte_Converter.h"
+#include <reverse/io/byte_converter.hpp>
+#include <reverse/io/input/file_readers/linux_elf/elf_section_header_utils.hpp>
+#include <reverse/io/input/file_readers/linux_elf/elf_common.hpp>
+#include <reverse/io/input/file_readers/linux_elf/elf_mips.hpp>
+#include <reverse/io/input/file_readers/linux_elf/elf_hppa.hpp>
+#include <reverse/io/input/file_readers/linux_elf/elf_ia64.hpp>
+#include <reverse/trace.hpp>
 
 #include <boost/format.hpp>
 #include <sstream>
 #include <iomanip>
 
-#ifdef LIBREVERSE_DEBUG
-#include "Trace.h"
-using namespace libreverse::api;
-using namespace libreverse::trace;
-#endif /* LIBREVERSE_DEBUG */
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace linux_elf {
 
-namespace libreverse
-{ 
-  namespace elf_module
-  {
+	  std::string
+	  elf_section_header_utils::get_flags ( boost::uint64_t sh_flags )
+	  {
 
-    std::string
-    Elf_Section_Header_Utils::get_Flags ( boost::uint64_t sh_flags )
-    {
+	    trace::io_detail ( "Entering Elf_Section_Header_Utils::get_flags" );
 
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::IO,
-			   TraceLevel::DETAIL,
-			   "Entering Elf_Section_Header_Utils::get_flags" );
-#endif /* LIBREVERSE_DEBUG */
+	    std::stringstream result;
 
+	    while ( sh_flags )
+	      {
+		boost::uint64_t flag;
 
-      std::stringstream result;
+		flag = sh_flags & - sh_flags;
+		sh_flags &= ~ flag;
 
-      while ( sh_flags )
-	{
-	  boost::uint64_t flag;
+		switch ( flag )
+		  {
+		  case elf_common::SHF_WRITE:
+		    result << "W"; break;
+		  case elf_common::SHF_ALLOC:
+		    result << "A"; break;
+		  case elf_common::SHF_EXECINSTR:
+		    result << "X"; break;
+		  case elf_common::SHF_MERGE:
+		    result << "M"; break;
+		  case elf_common::SHF_STRINGS:
+		    result << "S"; break;
+		  case elf_common::SHF_INFO_LINK:
+		    result << "I"; break;
+		  case elf_common::SHF_LINK_ORDER:
+		    result << "L"; break;
+		  case elf_common::SHF_OS_NONCONFORMING:
+		    result << "O"; break;
+		  case elf_common::SHF_GROUP:
+		    result << "G"; break;
+		  case elf_common::SHF_TLS:
+		    result << "T"; break;
+		  default:
+		    if ( flag & elf_common::SHF_MASKOS )
+		      {
+			result << "o";
+			sh_flags &= ~ elf_common::SHF_MASKOS;
+		      }
+		    else if ( flag & elf_common::SHF_MASKPROC )
+		      {
+			result << "p";
+			sh_flags &= ~ elf_common::SHF_MASKPROC;
+		      }
+		    else
+		      result << "x";
+		    break;
+		  }
+	      }
 
-	  flag = sh_flags & - sh_flags;
-	  sh_flags &= ~ flag;
+	    trace::io_detail ( "Exiting Elf_Section_Header_Utils::get_flags" );
 
-	  switch ( flag )
-	    {
-	    case Elf_Common::SHF_WRITE:
-	      result << "W"; break;
-	    case Elf_Common::SHF_ALLOC:
-	      result << "A"; break;
-	    case Elf_Common::SHF_EXECINSTR:
-	      result << "X"; break;
-	    case Elf_Common::SHF_MERGE:
-	      result << "M"; break;
-	    case Elf_Common::SHF_STRINGS:
-	      result << "S"; break;
-	    case Elf_Common::SHF_INFO_LINK:
-	      result << "I"; break;
-	    case Elf_Common::SHF_LINK_ORDER:
-	      result << "L"; break;
-	    case Elf_Common::SHF_OS_NONCONFORMING:
-	      result << "O"; break;
-	    case Elf_Common::SHF_GROUP:
-	      result << "G"; break;
-	    case Elf_Common::SHF_TLS:
-	      result << "T"; break;
-	    default:
-	      if ( flag & Elf_Common::SHF_MASKOS )
+	    return result.str();
+	  }
+
+	  std::string
+	  elf_section_header_utils::get_section_type_name ( boost::uint32_t sh_type,
+							    boost::uint16_t e_machine )
+	  {
+
+	    trace::io_detail ( "Entering Elf_Section_Header_Utils::get_Section_Type_Name" );
+
+	    std::stringstream result;
+
+	    switch ( sh_type )
+	      {
+	      case elf_common::SHT_NULL:      result << "NULL"; break;
+	      case elf_common::SHT_PROGBITS:          result << "PROGBITS"; break;
+	      case elf_common::SHT_SYMTAB:        result << "SYMTAB"; break;
+	      case elf_common::SHT_STRTAB:        result << "STRTAB"; break;
+	      case elf_common::SHT_RELA:      result << "RELA"; break;
+	      case elf_common::SHT_HASH:      result << "HASH"; break;
+	      case elf_common::SHT_DYNAMIC:       result << "DYNAMIC"; break;
+	      case elf_common::SHT_NOTE:      result << "NOTE"; break;
+	      case elf_common::SHT_NOBITS:        result << "NOBITS"; break;
+	      case elf_common::SHT_REL:               result << "REL"; break;
+	      case elf_common::SHT_SHLIB:     result << "SHLIB"; break;
+	      case elf_common::SHT_DYNSYM:        result << "DYNSYM"; break;
+	      case elf_common::SHT_INIT_ARRAY:            result << "INIT_ARRAY"; break;
+	      case elf_common::SHT_FINI_ARRAY:            result << "FINI_ARRAY"; break;
+	      case elf_common::SHT_PREINIT_ARRAY: result << "PREINIT_ARRAY"; break;
+	      case elf_common::SHT_GROUP:     result << "GROUP"; break;
+	      case elf_common::SHT_SYMTAB_SHNDX:  result << "SYMTAB SECTION INDICIES"; break;
+	      case elf_common::SHT_GNU_verdef:            result << "VERDEF"; break;
+	      case elf_common::SHT_GNU_verneed:           result << "VERNEED"; break;
+	      case elf_common::SHT_GNU_versym:            result << "VERSYM"; break;
+	      case 0x6ffffff0:                        result << "VERSYM"; break;
+	      case 0x6ffffffc:                        result << "VERDEF"; break;
+	      case 0x7ffffffd:                        result << "AUXILIARY"; break;
+	      case 0x7fffffff:                        result << "FILTER"; break;
+	      case elf_common::SHT_GNU_LIBLIST:           result << "GNU_LIBLIST"; break;
+
+	      default:
+		if ( ( sh_type >= elf_common::SHT_LOPROC ) && ( sh_type <= elf_common::SHT_HIPROC ) )
+		  {
+		    switch ( e_machine )
+		      {
+		      case elf_common::EM_MIPS:
+		      case elf_common::EM_MIPS_RS3_LE:
+			result << elf_section_header_utils::get_mips_section_type_name ( sh_type );
+			break;
+		      case elf_common::EM_PARISC:
+			result << elf_section_header_utils::get_parisc_section_type_name ( sh_type );
+			break;
+		      case elf_common::EM_IA_64:
+			result << elf_section_header_utils::get_ia64_section_type_name ( sh_type );
+			break;
+		      default:
+			result << boost::format ( "LOPROC+%x" ) % ( sh_type - elf_common::SHT_LOPROC );
+			break;
+		      }
+		  }
+		else if ( ( sh_type >= elf_common::SHT_LOOS ) && ( sh_type <= elf_common::SHT_HIOS ) )
+		  {
+		    result << boost::format ( "LOOS+%x" ) % ( sh_type - elf_common::SHT_LOOS );
+		  }
+		else if ( ( sh_type >= elf_common::SHT_LOUSER ) && ( sh_type <= elf_common::SHT_HIUSER ) )
+		  {
+		    result << boost::format ( "LOUSER+%x" ) % ( sh_type - elf_common::SHT_LOUSER );
+		  }
+		else
+		  {
+		    result << boost::format ( "<unknown>: %x" ) % sh_type;
+		  }
+	      }
+
+	    trace::io_detail ( "Exiting Elf_Section_Header_Utils::get_Section_Type_Name" );
+
+	    return result.str();
+	  }
+
+	  std::string
+	  elf_section_header_utils::get_mips_section_type_name ( boost::uint32_t sh_type )
+	  {
+
+	    trace::io_detail ( "Entering Elf_Section_Header_Utils::get_Mips_Section_Type_Name" );
+
+	    std::stringstream result;
+
+	    switch ( sh_type )
+	      {
+	      case elf_mips::SHT_MIPS_LIBLIST:       result << "MIPS_LIBLIST"; break;
+	      case elf_mips::SHT_MIPS_MSYM:            result << "MIPS_MSYM"; break;
+	      case elf_mips::SHT_MIPS_CONFLICT:      result << "MIPS_CONFLICT"; break;
+	      case elf_mips::SHT_MIPS_GPTAB:       result << "MIPS_GPTAB"; break;
+	      case elf_mips::SHT_MIPS_UCODE:       result << "MIPS_UCODE"; break;
+	      case elf_mips::SHT_MIPS_DEBUG:       result << "MIPS_DEBUG"; break;
+	      case elf_mips::SHT_MIPS_REGINFO:       result << "MIPS_REGINFO"; break;
+	      case elf_mips::SHT_MIPS_PACKAGE:       result << "MIPS_PACKAGE"; break;
+	      case elf_mips::SHT_MIPS_PACKSYM:       result << "MIPS_PACKSYM"; break;
+	      case elf_mips::SHT_MIPS_RELD:            result << "MIPS_RELD"; break;
+	      case elf_mips::SHT_MIPS_IFACE:       result << "MIPS_IFACE"; break;
+	      case elf_mips::SHT_MIPS_CONTENT:       result << "MIPS_CONTENT"; break;
+	      case elf_mips::SHT_MIPS_OPTIONS:       result << "MIPS_OPTIONS"; break;
+	      case elf_mips::SHT_MIPS_SHDR:            result << "MIPS_SHDR"; break;
+	      case elf_mips::SHT_MIPS_FDESC:       result << "MIPS_FDESC"; break;
+	      case elf_mips::SHT_MIPS_EXTSYM:      result << "MIPS_EXTSYM"; break;
+	      case elf_mips::SHT_MIPS_DENSE:       result << "MIPS_DENSE"; break;
+	      case elf_mips::SHT_MIPS_PDESC:       result << "MIPS_PDESC"; break;
+	      case elf_mips::SHT_MIPS_LOCSYM:      result << "MIPS_LOCSYM"; break;
+	      case elf_mips::SHT_MIPS_AUXSYM:      result << "MIPS_AUXSYM"; break;
+	      case elf_mips::SHT_MIPS_OPTSYM:      result << "MIPS_OPTSYM"; break;
+	      case elf_mips::SHT_MIPS_LOCSTR:      result << "MIPS_LOCSTR"; break;
+	      case elf_mips::SHT_MIPS_LINE:            result << "MIPS_LINE"; break;
+	      case elf_mips::SHT_MIPS_RFDESC:      result << "MIPS_RFDESC"; break;
+	      case elf_mips::SHT_MIPS_DELTASYM:      result << "MIPS_DELTASYM"; break;
+	      case elf_mips::SHT_MIPS_DELTAINST:     result << "MIPS_DELTAINST"; break;
+	      case elf_mips::SHT_MIPS_DELTACLASS:    result << "MIPS_DELTACLASS"; break;
+	      case elf_mips::SHT_MIPS_DWARF:       result << "MIPS_DWARF"; break;
+	      case elf_mips::SHT_MIPS_DELTADECL:     result << "MIPS_DELTADECL"; break;
+	      case elf_mips::SHT_MIPS_SYMBOL_LIB:    result << "MIPS_SYMBOL_LIB"; break;
+	      case elf_mips::SHT_MIPS_EVENTS:      result << "MIPS_EVENTS"; break;
+	      case elf_mips::SHT_MIPS_TRANSLATE:     result << "MIPS_TRANSLATE"; break;
+	      case elf_mips::SHT_MIPS_PIXIE:       result << "MIPS_PIXIE"; break;
+	      case elf_mips::SHT_MIPS_XLATE:       result << "MIPS_XLATE"; break;
+	      case elf_mips::SHT_MIPS_XLATE_DEBUG:   result << "MIPS_XLATE_DEBUG"; break;
+	      case elf_mips::SHT_MIPS_WHIRL:       result << "MIPS_WHIRL"; break;
+	      case elf_mips::SHT_MIPS_EH_REGION:     result << "MIPS_EH_REGION"; break;
+	      case elf_mips::SHT_MIPS_XLATE_OLD:     result << "MIPS_XLATE_OLD"; break;
+	      case elf_mips::SHT_MIPS_PDR_EXCEPTION: result << "MIPS_PDR_EXCEPTION"; break;
+	      default:
+		result << "<unknown> ";
+		break;
+	      }
+	    
+	    trace::io_detail ( "Exiting Elf_Section_Header_Utils::get_Mips_Section_Type_Name" );
+
+	    return result.str();
+	  }
+
+	  std::string
+	  elf_section_header_utils::get_parisc_section_type_name ( boost::uint32_t sh_type )
+	  {
+
+	    trace::io_detail ( "Entering Elf_Section_Header_Utils::get_Parisc_Section_Type_Name" );
+
+	    std::stringstream result;
+
+	    switch ( sh_type )
+	      {
+	      case elf_hppa::SHT_PARISC_EXT:
 		{
-		  result << "o";
-		  sh_flags &= ~ Elf_Common::SHF_MASKOS;
+		  result << "PARISC_EXT";
+		  break;
 		}
-	      else if ( flag & Elf_Common::SHF_MASKPROC )
+	      case elf_hppa::SHT_PARISC_UNWIND:
 		{
-		  result << "p";
-		  sh_flags &= ~ Elf_Common::SHF_MASKPROC;
+		  result << "PARISC_UNWIND";
+		  break;
 		}
-	      else
-		result << "x";
-	      break;
-	    }
-	}
-
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::IO,
-			   TraceLevel::DETAIL,
-			   "Exiting Elf_Section_Header_Utils::get_flags" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-      return result.str();
-    }
-
-    std::string
-    Elf_Section_Header_Utils::get_Section_Type_Name ( boost::uint32_t sh_type,
-						      boost::uint16_t e_machine )
-    {
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::IO,
-			   TraceLevel::DETAIL,
-			   "Entering Elf_Section_Header_Utils::get_Section_Type_Name" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-      std::stringstream result;
-
-      switch ( sh_type )
-	{
-	case Elf_Common::SHT_NULL:      result << "NULL"; break;
-	case Elf_Common::SHT_PROGBITS:          result << "PROGBITS"; break;
-	case Elf_Common::SHT_SYMTAB:        result << "SYMTAB"; break;
-	case Elf_Common::SHT_STRTAB:        result << "STRTAB"; break;
-	case Elf_Common::SHT_RELA:      result << "RELA"; break;
-	case Elf_Common::SHT_HASH:      result << "HASH"; break;
-	case Elf_Common::SHT_DYNAMIC:       result << "DYNAMIC"; break;
-	case Elf_Common::SHT_NOTE:      result << "NOTE"; break;
-	case Elf_Common::SHT_NOBITS:        result << "NOBITS"; break;
-	case Elf_Common::SHT_REL:               result << "REL"; break;
-	case Elf_Common::SHT_SHLIB:     result << "SHLIB"; break;
-	case Elf_Common::SHT_DYNSYM:        result << "DYNSYM"; break;
-	case Elf_Common::SHT_INIT_ARRAY:            result << "INIT_ARRAY"; break;
-	case Elf_Common::SHT_FINI_ARRAY:            result << "FINI_ARRAY"; break;
-	case Elf_Common::SHT_PREINIT_ARRAY: result << "PREINIT_ARRAY"; break;
-	case Elf_Common::SHT_GROUP:     result << "GROUP"; break;
-	case Elf_Common::SHT_SYMTAB_SHNDX:  result << "SYMTAB SECTION INDICIES"; break;
-	case Elf_Common::SHT_GNU_verdef:            result << "VERDEF"; break;
-	case Elf_Common::SHT_GNU_verneed:           result << "VERNEED"; break;
-	case Elf_Common::SHT_GNU_versym:            result << "VERSYM"; break;
-	case 0x6ffffff0:                        result << "VERSYM"; break;
-	case 0x6ffffffc:                        result << "VERDEF"; break;
-	case 0x7ffffffd:                        result << "AUXILIARY"; break;
-	case 0x7fffffff:                        result << "FILTER"; break;
-	case Elf_Common::SHT_GNU_LIBLIST:           result << "GNU_LIBLIST"; break;
-
-	default:
-	  if ( ( sh_type >= Elf_Common::SHT_LOPROC ) && ( sh_type <= Elf_Common::SHT_HIPROC ) )
-	    {
-	      switch ( e_machine )
+	      case elf_hppa::SHT_PARISC_DOC:
 		{
-		case Elf_Common::EM_MIPS:
-		case Elf_Common::EM_MIPS_RS3_LE:
-		  result << Elf_Section_Header_Utils::get_Mips_Section_Type_Name ( sh_type );
-		  break;
-		case Elf_Common::EM_PARISC:
-		  result << Elf_Section_Header_Utils::get_Parisc_Section_Type_Name ( sh_type );
-		  break;
-		case Elf_Common::EM_IA_64:
-		  result << Elf_Section_Header_Utils::get_Ia64_Section_Type_Name ( sh_type );
-		  break;
-		default:
-		  result << boost::format ( "LOPROC+%x" ) % ( sh_type - Elf_Common::SHT_LOPROC );
+		  result << "PARISC_DOC";
 		  break;
 		}
-	    }
-	  else if ( ( sh_type >= Elf_Common::SHT_LOOS ) && ( sh_type <= Elf_Common::SHT_HIOS ) )
-	    {
-	      result << boost::format ( "LOOS+%x" ) % ( sh_type - Elf_Common::SHT_LOOS );
-	    }
-	  else if ( ( sh_type >= Elf_Common::SHT_LOUSER ) && ( sh_type <= Elf_Common::SHT_HIUSER ) )
-	    {
-	      result << boost::format ( "LOUSER+%x" ) % ( sh_type - Elf_Common::SHT_LOUSER );
-	    }
-	  else
-	    {
-	      result << boost::format ( "<unknown>: %x" ) % sh_type;
-	    }
-	}
-
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::IO,
-			   TraceLevel::DETAIL,
-			   "Exiting Elf_Section_Header_Utils::get_Section_Type_Name" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-      return result.str();
-    }
-
-    std::string
-    Elf_Section_Header_Utils::get_Mips_Section_Type_Name ( boost::uint32_t sh_type )
-    {
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::IO,
-			   TraceLevel::DETAIL,
-			   "Entering Elf_Section_Header_Utils::get_Mips_Section_Type_Name" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-      std::stringstream result;
-
-      switch ( sh_type )
-	{
-	case Elf_mips::SHT_MIPS_LIBLIST:       result << "MIPS_LIBLIST"; break;
-	case Elf_mips::SHT_MIPS_MSYM:            result << "MIPS_MSYM"; break;
-	case Elf_mips::SHT_MIPS_CONFLICT:      result << "MIPS_CONFLICT"; break;
-	case Elf_mips::SHT_MIPS_GPTAB:       result << "MIPS_GPTAB"; break;
-	case Elf_mips::SHT_MIPS_UCODE:       result << "MIPS_UCODE"; break;
-	case Elf_mips::SHT_MIPS_DEBUG:       result << "MIPS_DEBUG"; break;
-	case Elf_mips::SHT_MIPS_REGINFO:       result << "MIPS_REGINFO"; break;
-	case Elf_mips::SHT_MIPS_PACKAGE:       result << "MIPS_PACKAGE"; break;
-	case Elf_mips::SHT_MIPS_PACKSYM:       result << "MIPS_PACKSYM"; break;
-	case Elf_mips::SHT_MIPS_RELD:            result << "MIPS_RELD"; break;
-	case Elf_mips::SHT_MIPS_IFACE:       result << "MIPS_IFACE"; break;
-	case Elf_mips::SHT_MIPS_CONTENT:       result << "MIPS_CONTENT"; break;
-	case Elf_mips::SHT_MIPS_OPTIONS:       result << "MIPS_OPTIONS"; break;
-	case Elf_mips::SHT_MIPS_SHDR:            result << "MIPS_SHDR"; break;
-	case Elf_mips::SHT_MIPS_FDESC:       result << "MIPS_FDESC"; break;
-	case Elf_mips::SHT_MIPS_EXTSYM:      result << "MIPS_EXTSYM"; break;
-	case Elf_mips::SHT_MIPS_DENSE:       result << "MIPS_DENSE"; break;
-	case Elf_mips::SHT_MIPS_PDESC:       result << "MIPS_PDESC"; break;
-	case Elf_mips::SHT_MIPS_LOCSYM:      result << "MIPS_LOCSYM"; break;
-	case Elf_mips::SHT_MIPS_AUXSYM:      result << "MIPS_AUXSYM"; break;
-	case Elf_mips::SHT_MIPS_OPTSYM:      result << "MIPS_OPTSYM"; break;
-	case Elf_mips::SHT_MIPS_LOCSTR:      result << "MIPS_LOCSTR"; break;
-	case Elf_mips::SHT_MIPS_LINE:            result << "MIPS_LINE"; break;
-	case Elf_mips::SHT_MIPS_RFDESC:      result << "MIPS_RFDESC"; break;
-	case Elf_mips::SHT_MIPS_DELTASYM:      result << "MIPS_DELTASYM"; break;
-	case Elf_mips::SHT_MIPS_DELTAINST:     result << "MIPS_DELTAINST"; break;
-	case Elf_mips::SHT_MIPS_DELTACLASS:    result << "MIPS_DELTACLASS"; break;
-	case Elf_mips::SHT_MIPS_DWARF:       result << "MIPS_DWARF"; break;
-	case Elf_mips::SHT_MIPS_DELTADECL:     result << "MIPS_DELTADECL"; break;
-	case Elf_mips::SHT_MIPS_SYMBOL_LIB:    result << "MIPS_SYMBOL_LIB"; break;
-	case Elf_mips::SHT_MIPS_EVENTS:      result << "MIPS_EVENTS"; break;
-	case Elf_mips::SHT_MIPS_TRANSLATE:     result << "MIPS_TRANSLATE"; break;
-	case Elf_mips::SHT_MIPS_PIXIE:       result << "MIPS_PIXIE"; break;
-	case Elf_mips::SHT_MIPS_XLATE:       result << "MIPS_XLATE"; break;
-	case Elf_mips::SHT_MIPS_XLATE_DEBUG:   result << "MIPS_XLATE_DEBUG"; break;
-	case Elf_mips::SHT_MIPS_WHIRL:       result << "MIPS_WHIRL"; break;
-	case Elf_mips::SHT_MIPS_EH_REGION:     result << "MIPS_EH_REGION"; break;
-	case Elf_mips::SHT_MIPS_XLATE_OLD:     result << "MIPS_XLATE_OLD"; break;
-	case Elf_mips::SHT_MIPS_PDR_EXCEPTION: result << "MIPS_PDR_EXCEPTION"; break;
-	default:
-	  result << "<unknown> ";
-	  break;
-	}
-
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::IO,
-			   TraceLevel::DETAIL,
-			   "Exiting Elf_Section_Header_Utils::get_Mips_Section_Type_Name" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-      return result.str();
-    }
-
-    std::string
-    Elf_Section_Header_Utils::get_Parisc_Section_Type_Name ( boost::uint32_t sh_type )
-    {
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::IO,
-			   TraceLevel::DETAIL,
-			   "Entering Elf_Section_Header_Utils::get_Parisc_Section_Type_Name" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-      std::stringstream result;
-
-      switch ( sh_type )
-	{
-	case Elf_hppa::SHT_PARISC_EXT:
-	  {
-	    result << "PARISC_EXT";
-	    break;
-	  }
-	case Elf_hppa::SHT_PARISC_UNWIND:
-	  {
-	    result << "PARISC_UNWIND";
-	    break;
-	  }
-	case Elf_hppa::SHT_PARISC_DOC:
-	  {
-	    result << "PARISC_DOC";
-	    break;
-	  }
-	default:
-	  {
-	    result << "<unknown>";
-	    break;
-	  }
-	}
-
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::IO,
-			   TraceLevel::DETAIL,
-			   "Exiting Elf_Section_Header_Utils::get_Mips_Section_Type_Name" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-      return result.str();
-    }
-
-    std::string
-    Elf_Section_Header_Utils::get_Ia64_Section_Type_Name ( boost::uint32_t sh_type )
-    {
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::IO,
-			   TraceLevel::DETAIL,
-			   "Entering Elf_Section_Header_Utils::get_Ia64_Section_Type_Name" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-      std::stringstream result;
-
-      /* If the top 8 bits are 0x78 the next 8 are the os/abi ID. */
-      if ( ( sh_type & 0xFF000000 ) == Elf_ia64::SHT_IA_64_LOPSREG )
-	{
-	  result << Elf_Section_Header_Utils::get_Osabi_Name ( ( sh_type & 0x00FF0000 ) >> 16 );
-	}
-      else
-	{
-	  switch ( sh_type )
-	    {
-	    case Elf_ia64::SHT_IA_64_EXT:
-	      {
-		result << "IA_64_EXT";
-		break;
+	      default:
+		{
+		  result << "<unknown>";
+		  break;
+		}
 	      }
-	    case Elf_ia64::SHT_IA_64_UNWIND:
+
+	    trace::io_detail ( "Exiting Elf_Section_Header_Utils::get_Mips_Section_Type_Name" );
+
+	    return result.str();
+	  }
+
+	  std::string
+	  elf_section_header_utils::get_ia64_section_type_name ( boost::uint32_t sh_type )
+	  {
+	    trace::io_detail ( "Entering Elf_Section_Header_Utils::get_Ia64_Section_Type_Name" );
+
+	    std::stringstream result;
+
+	    /* If the top 8 bits are 0x78 the next 8 are the os/abi ID. */
+	    if ( ( sh_type & 0xFF000000 ) == elf_ia64::SHT_IA_64_LOPSREG )
 	      {
-		result << "IA_64_UNWIND";
-		break;
+		result << elf_section_header_utils::get_osabi_name ( ( sh_type & 0x00FF0000 ) >> 16 );
 	      }
-	    case Elf_ia64::SHT_IA_64_PRIORITY_INIT:
+	    else
 	      {
-		result << "IA_64_PRIORITY_INIT";
-		break;
+		switch ( sh_type )
+		  {
+		  case elf_ia64::SHT_IA_64_EXT:
+		    {
+		      result << "IA_64_EXT";
+		      break;
+		    }
+		  case elf_ia64::SHT_IA_64_UNWIND:
+		    {
+		      result << "IA_64_UNWIND";
+		      break;
+		    }
+		  case elf_ia64::SHT_IA_64_PRIORITY_INIT:
+		    {
+		      result << "IA_64_PRIORITY_INIT";
+		      break;
+		    }
+		  default:
+		    {
+		      result << "<unknown>";
+		      break;
+		    }
+		  }
 	      }
-	    default:
+
+	    trace::io_detail ( "Exiting Elf_Section_Header_Utils::get_Ia64_Section_Type_Name" );
+
+	    return result.str();
+	  }
+
+	  std::string
+	  elf_section_header_utils::get_osabi_name ( boost::uint32_t osabi )
+	  {
+
+	    trace::io_detail ( "Entering Elf_Section_Header_Utils::get_Osabi_Name" );
+
+	    std::stringstream result;
+
+	    switch ( osabi )
 	      {
-		result << "<unknown>";
-		break;
+	      case elf_common::ELFOSABI_NONE:     result << "UNIX - System V";
+	      case elf_common::ELFOSABI_HPUX:     result << "UNIX - HP-UX";
+	      case elf_common::ELFOSABI_NETBSD:       result << "UNIX - NetBSD";
+	      case elf_common::ELFOSABI_LINUX:        result << "UNIX - Linux";
+	      case elf_common::ELFOSABI_HURD:     result << "GNU/Hurd";
+	      case elf_common::ELFOSABI_SOLARIS:    result << "UNIX - Solaris";
+	      case elf_common::ELFOSABI_AIX:      result << "UNIX - AIX";
+	      case elf_common::ELFOSABI_IRIX:     result << "UNIX - IRIX";
+	      case elf_common::ELFOSABI_FREEBSD:    result << "UNIX - FreeBSD";
+	      case elf_common::ELFOSABI_TRU64:        result << "UNIX - TRU64";
+	      case elf_common::ELFOSABI_MODESTO:    result << "Novell - Modesto";
+	      case elf_common::ELFOSABI_OPENBSD:    result << "UNIX - OpenBSD";
+	      case elf_common::ELFOSABI_OPENVMS:    result << "VMS - OpenVMS";
+	      case elf_common::ELFOSABI_NSK:      result << "HP - Non-Stop Kernel";
+	      case elf_common::ELFOSABI_AROS:     result << "Amiga Research OS";
+	      case elf_common::ELFOSABI_STANDALONE: result << "Standalone App";
+	      case elf_common::ELFOSABI_ARM:      result << "ARM";
+	      default:
+		result << boost::format ( "<unknown: %x>" ) % osabi;
 	      }
-	    }
-	}
 
+	    trace::io_detail ( "Exiting Elf_Section_Header_Utils::get_Osabi_Name" );
 
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::IO,
-			   TraceLevel::DETAIL,
-			   "Exiting Elf_Section_Header_Utils::get_Ia64_Section_Type_Name" );
-#endif /* LIBREVERSE_DEBUG */
+	    return result.str();
+	  }
 
-
-      return result.str();
-    }
-
-    std::string
-    Elf_Section_Header_Utils::get_Osabi_Name ( boost::uint32_t osabi )
-    {
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::IO,
-			   TraceLevel::DETAIL,
-			   "Entering Elf_Section_Header_Utils::get_Osabi_Name" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-      std::stringstream result;
-
-      switch ( osabi )
-	{
-	case Elf_Common::ELFOSABI_NONE:     result << "UNIX - System V";
-	case Elf_Common::ELFOSABI_HPUX:     result << "UNIX - HP-UX";
-	case Elf_Common::ELFOSABI_NETBSD:       result << "UNIX - NetBSD";
-	case Elf_Common::ELFOSABI_LINUX:        result << "UNIX - Linux";
-	case Elf_Common::ELFOSABI_HURD:     result << "GNU/Hurd";
-	case Elf_Common::ELFOSABI_SOLARIS:    result << "UNIX - Solaris";
-	case Elf_Common::ELFOSABI_AIX:      result << "UNIX - AIX";
-	case Elf_Common::ELFOSABI_IRIX:     result << "UNIX - IRIX";
-	case Elf_Common::ELFOSABI_FREEBSD:    result << "UNIX - FreeBSD";
-	case Elf_Common::ELFOSABI_TRU64:        result << "UNIX - TRU64";
-	case Elf_Common::ELFOSABI_MODESTO:    result << "Novell - Modesto";
-	case Elf_Common::ELFOSABI_OPENBSD:    result << "UNIX - OpenBSD";
-	case Elf_Common::ELFOSABI_OPENVMS:    result << "VMS - OpenVMS";
-	case Elf_Common::ELFOSABI_NSK:      result << "HP - Non-Stop Kernel";
-	case Elf_Common::ELFOSABI_AROS:     result << "Amiga Research OS";
-	case Elf_Common::ELFOSABI_STANDALONE: result << "Standalone App";
-	case Elf_Common::ELFOSABI_ARM:      result << "ARM";
-	default:
-	  result << boost::format ( "<unknown: %x>" ) % osabi;
-	}
-
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::IO,
-			   TraceLevel::DETAIL,
-			   "Exiting Elf_Section_Header_Utils::get_Osabi_Name" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-      return result.str();
-    }
-
-  } /* namespace elf_module */
-} /* namespace libreverse */
+	} // namespace linux_elf
+      } // namespace file_readers
+    } // namespace input
+  } //  namespace io
+} // namespace reverse

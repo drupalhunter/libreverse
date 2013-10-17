@@ -131,6 +131,16 @@ namespace reverse {
 
     static void io_error ( const char* message );
 
+    template <typename T1>
+    static void io_error ( const char* message, T1 const& v1 )
+    {
+      write_trace ( trace_area::io,
+		    trace_level::error,
+		    boost::str ( boost::format ( message )
+				 % v1 ) );
+    }
+
+
     static void io_data ( const char* message );
 
     template <typename T>
@@ -202,6 +212,9 @@ namespace reverse {
     static void io_detail ( const char* ) {}
 
     static void io_error ( const char* ) {}
+
+    template <typename T1>
+    static void io_error ( const char* message, T1 const& v1 ) {}
 
     template <typename T>
     static void io_data ( const char*, T const& ) {}

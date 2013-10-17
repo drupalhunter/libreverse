@@ -1,22 +1,22 @@
 /*  Elf_ia64.h
 
-   Copyright (C) 2008 Stephen Torri
+    Copyright (C) 2008 Stephen Torri
 
-   This file is part of Libreverse.
+    This file is part of Libreverse.
 
-   Libreverse is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published
-   by the Free Software Foundation; either version 3, or (at your
-   option) any later version.
+    Libreverse is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published
+    by the Free Software Foundation; either version 3, or (at your
+    option) any later version.
 
-   Libreverse is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
+    Libreverse is distributed in the hope that it will be useful, but
+    WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with this program.  If not, see
-   <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see
+    <http://www.gnu.org/licenses/>.
 */
 
 /* IA-64 ELF support for BFD.
@@ -39,108 +39,117 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  */
 
-#ifndef _ELF_IA64_H
-#define _ELF_IA64_H
+#ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_IA64_HPP_INCLUDED
+#define REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_IA64_HPP_INCLUDED
 
-#include "Elf_Common.h"
+#include <reverse/io/input/file_readers/linux_elf/elf_common.hpp>
+
 #include <string>
 
-namespace libreverse {
-namespace elf_module {
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace linux_elf {
 
-  class Elf_ia64 {
-  public:
 
-    /* Bits in the e_flags field of the Elf64_Ehdr:  */
+	  class elf_ia64 {
+	  public:
 
-    static const boost::uint32_t EF_IA_64_MASKOS  = 0x0000000f;	/* OS-specific flags.  */
-    static const boost::uint32_t EF_IA_64_ARCH	   = 0xff000000;	/* Arch. version mask.  */
+	    /* Bits in the e_flags field of the Elf64_Ehdr:  */
 
-    /* ??? These four definitions are not part of the SVR4 ABI.
-       They were present in David's initial code drop, so it is probable
-       that they are used by HP/UX.  */
+	    static const boost::uint32_t EF_IA_64_MASKOS  = 0x0000000f;	/* OS-specific flags.  */
+	    static const boost::uint32_t EF_IA_64_ARCH	   = 0xff000000;	/* Arch. version mask.  */
 
-    static const boost::uint32_t EF_IA_64_TRAPNIL  = (1 << 0);	  // Trap NIL pointer dereferences.
-    static const boost::uint32_t EF_IA_64_EXT	    = (1 << 2);	  // Program uses arch. extensions.
-    static const boost::uint32_t EF_IA_64_BE	    = (1 << 3);	  // PSR BE bit set (big-endian).
-    static const boost::uint32_t EFA_IA_64_EAS2_3  = 0x23000000; // IA64 EAS 2.3.
+	    /* ??? These four definitions are not part of the SVR4 ABI.
+	       They were present in David's initial code drop, so it is probable
+	       that they are used by HP/UX.  */
 
-    static const boost::uint32_t EF_IA_64_ABI64    = (1 << 4); // 64-bit ABI.
-    // Not used yet.
-    static const boost::uint32_t EF_IA_64_REDUCEDFP          = (1 << 5); // Only FP6-FP11 used.
-    static const boost::uint32_t EF_IA_64_CONS_GP	      = (1 << 6); // gp as program wide constant.
-    static const boost::uint32_t EF_IA_64_NOFUNCDESC_CONS_GP = (1 << 7); // And no function descriptors.
-    // Not used yet.
-    static const boost::uint32_t EF_IA_64_ABSOLUTE	      = (1 << 8); // Load at absolute addresses.
+	    static const boost::uint32_t EF_IA_64_TRAPNIL  = (1 << 0);	  // Trap NIL pointer dereferences.
+	    static const boost::uint32_t EF_IA_64_EXT	    = (1 << 2);	  // Program uses arch. extensions.
+	    static const boost::uint32_t EF_IA_64_BE	    = (1 << 3);	  // PSR BE bit set (big-endian).
+	    static const boost::uint32_t EFA_IA_64_EAS2_3  = 0x23000000; // IA64 EAS 2.3.
 
-    static const std::string ELF_STRING_ia64_archext;
-    static const std::string ELF_STRING_ia64_pltoff;
-    static const std::string ELF_STRING_ia64_unwind;
-    static const std::string ELF_STRING_ia64_unwind_info;
-    static const std::string ELF_STRING_ia64_unwind_once;
-    static const std::string ELF_STRING_ia64_unwind_info_once;
-    /* .IA_64.unwind_hdr is only used by HP-UX.  */
-    static const std::string ELF_STRING_ia64_unwind_hdr;
+	    static const boost::uint32_t EF_IA_64_ABI64    = (1 << 4); // 64-bit ABI.
+	    // Not used yet.
+	    static const boost::uint32_t EF_IA_64_REDUCEDFP          = (1 << 5); // Only FP6-FP11 used.
+	    static const boost::uint32_t EF_IA_64_CONS_GP	      = (1 << 6); // gp as program wide constant.
+	    static const boost::uint32_t EF_IA_64_NOFUNCDESC_CONS_GP = (1 << 7); // And no function descriptors.
+	    // Not used yet.
+	    static const boost::uint32_t EF_IA_64_ABSOLUTE	      = (1 << 8); // Load at absolute addresses.
 
-    /* Bits in the sh_flags field of Elf64_Shdr:  */
-    static const boost::uint32_t SHF_IA_64_SHORT	= 0x10000000;	/* Section near gp.  */
-    static const boost::uint32_t SHF_IA_64_NORECOV	= 0x20000000;	/* Spec insns w/o recovery.  */
+	    static const std::string ELF_STRING_ia64_archext;
+	    static const std::string ELF_STRING_ia64_pltoff;
+	    static const std::string ELF_STRING_ia64_unwind;
+	    static const std::string ELF_STRING_ia64_unwind_info;
+	    static const std::string ELF_STRING_ia64_unwind_once;
+	    static const std::string ELF_STRING_ia64_unwind_info_once;
+	    /* .IA_64.unwind_hdr is only used by HP-UX.  */
+	    static const std::string ELF_STRING_ia64_unwind_hdr;
 
-    /* Possible values for sh_type in Elf64_Shdr: */
-    static const boost::uint32_t SHT_IA_64_EXT		= (Elf_Common::SHT_LOPROC + 0);	/* Extension bits.  */
-    static const boost::uint32_t SHT_IA_64_UNWIND	= (Elf_Common::SHT_LOPROC + 1);	/* Unwind bits.  */
-    static const boost::uint32_t SHT_IA_64_LOPSREG	= (Elf_Common::SHT_LOPROC + 0x8000000);
+	    /* Bits in the sh_flags field of Elf64_Shdr:  */
+	    static const boost::uint32_t SHF_IA_64_SHORT	= 0x10000000;	/* Section near gp.  */
+	    static const boost::uint32_t SHF_IA_64_NORECOV	= 0x20000000;	/* Spec insns w/o recovery.  */
 
-    /* ABI says (Elf_Common::SHT_LOPROC + 0xfffffff) but I think it's a typo -- this makes sense.  */
-    static const boost::uint32_t SHT_IA_64_HIPSREG	  = (Elf_Common::SHT_LOPROC + 0x8ffffff);
-    static const boost::uint32_t SHT_IA_64_PRIORITY_INIT = (Elf_Common::SHT_LOPROC + 0x9000000);
+	    /* Possible values for sh_type in Elf64_Shdr: */
+	    static const boost::uint32_t SHT_IA_64_EXT		= (elf_common::SHT_LOPROC + 0);	/* Extension bits.  */
+	    static const boost::uint32_t SHT_IA_64_UNWIND	= (elf_common::SHT_LOPROC + 1);	/* Unwind bits.  */
+	    static const boost::uint32_t SHT_IA_64_LOPSREG	= (elf_common::SHT_LOPROC + 0x8000000);
 
-    /* SHT_IA_64_HP_OPT_ANOT is only generated by HPUX compilers for its
-       optimization annotation section.  GCC does not generate it but we
-       want readelf to know what they are.  Do not use two capital Ns in
-       annotate or sed will turn it into 32 or 64 during the build.  */
-    static const boost::uint32_t SHT_IA_64_HP_OPT_ANOT	= 0x60000004;
+	    /* ABI says (elf_common::SHT_LOPROC + 0xfffffff) but I think it's a typo -- this makes sense.  */
+	    static const boost::uint32_t SHT_IA_64_HIPSREG	  = (elf_common::SHT_LOPROC + 0x8ffffff);
+	    static const boost::uint32_t SHT_IA_64_PRIORITY_INIT = (elf_common::SHT_LOPROC + 0x9000000);
 
-    /* Bits in the p_flags field of Elf64_Phdr:  */
-    static const boost::uint32_t PF_IA_64_NORECOV	= 0x80000000;
+	    /* SHT_IA_64_HP_OPT_ANOT is only generated by HPUX compilers for its
+	       optimization annotation section.  GCC does not generate it but we
+	       want readelf to know what they are.  Do not use two capital Ns in
+	       annotate or sed will turn it into 32 or 64 during the build.  */
+	    static const boost::uint32_t SHT_IA_64_HP_OPT_ANOT	= 0x60000004;
 
-    /* Possible values for p_type in Elf64_Phdr:  */
-    static const boost::uint32_t PT_IA_64_ARCHEXT	= (Elf_Common::PT_LOPROC + 0);	/* Arch extension bits,  */
-    static const boost::uint32_t PT_IA_64_UNWIND 	= (Elf_Common::PT_LOPROC + 1);	/* IA64 unwind bits.  */
+	    /* Bits in the p_flags field of Elf64_Phdr:  */
+	    static const boost::uint32_t PF_IA_64_NORECOV	= 0x80000000;
 
-    /* HP-UX specific values for p_type in Elf64_Phdr.
-       These values are currently just used to make
-       readelf more usable on HP-UX.  */
-    static const boost::uint32_t PT_IA_64_HP_OPT_ANOT	= (Elf_Common::PT_LOOS + 0x12);
-    static const boost::uint32_t PT_IA_64_HP_HSL_ANOT	= (Elf_Common::PT_LOOS + 0x13);
-    static const boost::uint32_t PT_IA_64_HP_STACK	= (Elf_Common::PT_LOOS + 0x14);
+	    /* Possible values for p_type in Elf64_Phdr:  */
+	    static const boost::uint32_t PT_IA_64_ARCHEXT	= (elf_common::PT_LOPROC + 0);	/* Arch extension bits,  */
+	    static const boost::uint32_t PT_IA_64_UNWIND 	= (elf_common::PT_LOPROC + 1);	/* IA64 unwind bits.  */
 
-    /* Possible values for d_tag in Elf64_Dyn:  */
+	    /* HP-UX specific values for p_type in Elf64_Phdr.
+	       These values are currently just used to make
+	       readelf more usable on HP-UX.  */
+	    static const boost::uint32_t PT_IA_64_HP_OPT_ANOT	= (elf_common::PT_LOOS + 0x12);
+	    static const boost::uint32_t PT_IA_64_HP_HSL_ANOT	= (elf_common::PT_LOOS + 0x13);
+	    static const boost::uint32_t PT_IA_64_HP_STACK	= (elf_common::PT_LOOS + 0x14);
 
-    static const boost::uint32_t DT_IA_64_PLT_RESERVE	= (Elf_Common::DT_LOPROC + 0);
+	    /* Possible values for d_tag in Elf64_Dyn:  */
 
-/* This section only used by HP-UX, The HP linker gives weak symbols
-   precedence over regular common symbols.  We want common to override
-   weak.  Using this common instead of SHN_COMMON does that.  */
-    static const boost::uint16_t SHN_IA_64_ANSI_COMMON = 0xFF00;
+	    static const boost::uint32_t DT_IA_64_PLT_RESERVE	= (elf_common::DT_LOPROC + 0);
 
-    /* IA64-specific relocation types: */
+	    /* This section only used by HP-UX, The HP linker gives weak symbols
+	       precedence over regular common symbols.  We want common to override
+	       weak.  Using this common instead of SHN_COMMON does that.  */
+	    static const boost::uint16_t SHN_IA_64_ANSI_COMMON = 0xFF00;
 
-    /* Relocs apply to specific instructions within a bundle.  The
-       least significant 2 bits of the address indicate which
-       instruction in the bundle the reloc refers to (0=first slot,
-       1=second slow, 2=third slot, 3=undefined) and the remaining
-       bits give the address of the bundle (16 byte aligned).
+	    /* IA64-specific relocation types: */
 
-       The top 5 bits of the reloc code specifies the expression type,
-       the low 3 bits the format of the data word being relocated.
-    */
-      static inline std::string get_Type (boost::uint32_t type);
+	    /* Relocs apply to specific instructions within a bundle.  The
+	       least significant 2 bits of the address indicate which
+	       instruction in the bundle the reloc refers to (0=first slot,
+	       1=second slow, 2=third slot, 3=undefined) and the remaining
+	       bits give the address of the bundle (16 byte aligned).
 
-  };
-} /* namespace elf_module */
-} /* namespace libreverse */
+	       The top 5 bits of the reloc code specifies the expression type,
+	       the low 3 bits the format of the data word being relocated.
+	    */
+	    static inline std::string get_type (boost::uint32_t type);
 
-#include "Elf_ia64.inl"
+	  };
 
-#endif /* _ELF_IA64_H */
+	} // namespace linux_elf
+      } // namespace file_readers
+    } // namespace input
+  } //  namespace io
+} // namespace reverse
+
+#include "elf_ia64.inl"
+
+#endif // ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_IA64_HPP_INCLUDED
