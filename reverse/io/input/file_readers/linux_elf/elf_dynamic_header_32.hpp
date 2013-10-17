@@ -19,44 +19,40 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ELF_DYNAMIC_HEADER_32_H
-#define ELF_DYNAMIC_HEADER_32_H
+#ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_DYNAMIC_HEADER_32_HPP_INCLUDED
+#define REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_DYNAMIC_HEADER_32_HPP_INCLUDED
 
-#include "Elf_Types.h"
-#include "io/input/File_Readers/Base_Header.h"
-#include <string>
-#include <vector>
-#include <boost/shared_ptr.hpp>
+#include <reverse/io/input/file_readers/linux_elf/elf_types.hpp>
 
-namespace libreverse { namespace elf_module {
+#include <boost/cstdint.hpp>
+#include <boost/fusion/adapted/struct/adapt_struct.hpp>
+#include <boost/variant.hpp>
 
-    /*!
-     * \class Elf_Dynamic_Header_32
-     * \date 2003
-     * \author Stephen Torri
-     */
-    class Elf_Dynamic_Header_32 : public header::Base_Header {
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace linux_elf {
 
-    public:
+	  /*!
+	   * \class Elf_Dynamic_Header_32
+	   * \date 2003
+	   * \author Stephen Torri
+	   */
+	  struct elf_dynamic_header_32 {
 
-        /*!
-         * \brief Convert bit ordering
-         * Convert the bit ordering from the target file bit ordering
-         * to the host system.
-         */
-        virtual void convert ();
+	    Elf32_Sword d_tag;
 
-        /*!
-         * \brief Return the contents of Elf_Dynamic_Header as a screen
-         * \return String represenation of contents of Elf_Dynamic_Header
-         */
-        virtual std::string toString (void);
+	    // d_tag controls the interpretation of d_un
+	    // - Elf32_Word d_val = integer value
+	    // - Elf32_Addr d_ptr = program virtual address	    
+	    boost::variant < Elf32_Word, Elf32_Addr > d_un;
+	  };
 
-        elf_types::Elf_Dynamic_Header_32::Tag_List_t m_dyn_tags;
+	} // namespace linux_elf
+      } // namespace file_readers
+    } // namespace input
+  } //  namespace io
+} // namespace reverse
 
-    };
-
-} /* namespace elf_module */
-} /* namespace libreverse */
-
-#endif /* ELF_DYNAMIC_HEADER_32_H */
+#endif // ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_DYNAMIC_HEADER_32_HPP_INCLUDED

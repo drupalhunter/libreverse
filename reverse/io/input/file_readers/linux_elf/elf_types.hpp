@@ -19,186 +19,27 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ELF_TYPES_H_
-#define ELF_TYPES_H_
+#ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_TYPES_HPP_INCLUDED
+#define REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_TYPES_HPP_INCLUDED
 
 #include <boost/cstdint.hpp>
-#include <boost/shared_ptr.hpp>
-#include <vector>
-#include <map>
-#include <string>
 
-namespace libreverse {
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace linux_elf {
 
-    namespace elf_module
-    {
-        class Elf_Dynamic_Header_32;
-	class Elf_Dynamic_Header_64;
-        class Elf_Dynamic_Tag_32;
-        class Elf_Dynamic_Tag_64;
-        class Elf_File;
-        class Elf_File_Header_32;
-        class Elf_File_Header_64;
-        class Elf_Header_32;
-        class Elf_Header_64;
-        class Elf_Header_Eident;
-        class Elf_Program_Header_32;
-        class Elf_Program_Header_64;
-        class Elf_Reader_32;
-        class Elf_Reader_64;
-        class Elf_Relocation_32;
-        class Elf_Relocation_64;
-        class Elf_Relocation_Add_32;
-        class Elf_Relocation_Add_64;
-        class Elf_Section_Header_32;
-        class Elf_Section_Header_64;
-        class Elf_Symbol_32;
-        class Elf_Symbol_64;
-    }
+	  typedef boost::uint32_t Elf32_Addr;
+	  typedef boost::uint16_t Elf32_Half;
+	  typedef boost::uint32_t Elf32_Off;
+	  typedef boost::int32_t Elf32_Sword;
+	  typedef boost::uint32_t Elf32_Word;
 
-    namespace elf_types {
+	} // namespace linux_elf
+      } // namespace file_readers
+    } // namespace input
+  } //  namespace io
+} // namespace reverse
 
-        class Elf_Dynamic_Tag_32 {
-        public:
-            typedef boost::shared_ptr < elf_module::Elf_Dynamic_Tag_32 > ptr_t;
-        };
-
-        class Elf_Dynamic_Tag_64 {
-        public:
-            typedef boost::shared_ptr < elf_module::Elf_Dynamic_Tag_64 > ptr_t;
-        };
-
-        class Elf_Dynamic_Header_32 {
-        public:
-            typedef boost::shared_ptr < elf_module::Elf_Dynamic_Header_32 > ptr_t;
-            typedef std::vector< elf_types::Elf_Dynamic_Tag_32::ptr_t > Tag_List_t;
-        };
-
-        class Elf_Dynamic_Header_64 {
-        public:
-            typedef boost::shared_ptr < elf_module::Elf_Dynamic_Header_64 > ptr_t;
-            typedef std::vector< elf_types::Elf_Dynamic_Tag_64::ptr_t > Tag_List_t;
-        };
-
-        class Elf_File {
-        public:
-            typedef boost::shared_ptr < elf_module::Elf_File > ptr_t;
-            typedef boost::shared_ptr < elf_module::Elf_File const > const_ptr_t;
-        };
-
-        class Elf_File_Header_32 {
-        public:
-            typedef boost::shared_ptr < elf_module::Elf_File_Header_32 > ptr_t;
-            typedef boost::shared_ptr < elf_module::Elf_File_Header_32 const > const_ptr_t;
-        };
-
-        class Elf_File_Header_64 {
-        public:
-	  typedef boost::shared_ptr < elf_module::Elf_File_Header_64 > ptr_t;
-	  typedef boost::shared_ptr < elf_module::Elf_File_Header_64 const > const_ptr_t;
-        };
-
-        class Elf_Program_Header_32 {
-        public:
-            typedef boost::shared_ptr < elf_module::Elf_Program_Header_32 > ptr_t;
-            typedef boost::shared_ptr < elf_module::Elf_Program_Header_32 const > const_ptr_t;
-        };
-
-        class Elf_Program_Header_64 {
-        public:
-            typedef boost::shared_ptr < elf_module::Elf_Program_Header_64 > ptr_t;
-            typedef boost::shared_ptr < elf_module::Elf_Program_Header_64 const > const_ptr_t;
-        };
-
-        class Elf_Reader_32 {
-        public:
-            typedef boost::shared_ptr < elf_module::Elf_Reader_32 > ptr_t;
-            typedef boost::shared_ptr < elf_module::Elf_Reader_32 const > const_ptr_t;
-        };
-
-        class Elf_Reader_64 {
-        public:
-            typedef boost::shared_ptr < elf_module::Elf_Reader_64 > ptr_t;
-            typedef boost::shared_ptr < elf_module::Elf_Reader_64 const > const_ptr_t;
-        };
-
-        class Elf_Relocation_32 {
-        public:
-            typedef boost::shared_ptr < elf_module::Elf_Relocation_32 > ptr_t;
-            typedef boost::shared_ptr < elf_module::Elf_Relocation_32 const > const_ptr_t;
-        };
-
-        class Elf_Relocation_64 {
-        public:
-            typedef boost::shared_ptr < elf_module::Elf_Relocation_64 > ptr_t;
-            typedef boost::shared_ptr < elf_module::Elf_Relocation_64 const > const_ptr_t;
-        };
-
-        class Elf_Relocation_Add_32 {
-        public:
-            typedef boost::shared_ptr < elf_module::Elf_Relocation_Add_32 > ptr_t;
-            typedef boost::shared_ptr < elf_module::Elf_Relocation_Add_32 const > const_ptr_t;
-        };
-
-        class Elf_Relocation_Add_64 {
-        public:
-            typedef boost::shared_ptr < elf_module::Elf_Relocation_Add_64 > ptr_t;
-            typedef boost::shared_ptr < elf_module::Elf_Relocation_Add_64 const > const_ptr_t;
-        };
-
-        class Elf_Section_Header_32 {
-        public:
-            typedef boost::shared_ptr < elf_module::Elf_Section_Header_32 > ptr_t;
-            typedef boost::shared_ptr < elf_module::Elf_Section_Header_32 const > const_ptr_t;
-        };
-
-        class Elf_Section_Header_64 {
-        public:
-            typedef boost::shared_ptr < elf_module::Elf_Section_Header_64 > ptr_t;
-            typedef boost::shared_ptr < elf_module::Elf_Section_Header_64 const > const_ptr_t;
-        };
-
-        class Elf_Symbol_32 {
-        public:
-            typedef boost::shared_ptr < elf_module::Elf_Symbol_32 > ptr_t;
-            typedef boost::shared_ptr < elf_module::Elf_Symbol_32 const > const_ptr_t;
-        };
-
-        class Elf_Symbol_64 {
-        public:
-            typedef boost::shared_ptr < elf_module::Elf_Symbol_64 > ptr_t;
-            typedef boost::shared_ptr < elf_module::Elf_Symbol_64 const > const_ptr_t;
-        };
-
-        class Elf_Header_32 {
-        public:
-            typedef boost::shared_ptr < elf_module::Elf_Header_32 > ptr_t;
-            typedef std::vector < elf_types::Elf_Program_Header_32::const_ptr_t > Program_Header_List_t;
-            typedef std::map < std::string, elf_types::Elf_Section_Header_32::const_ptr_t > Section_Header_Map_t;
-            typedef std::vector< std::string > Section_Header_Index_List_t;
-            typedef std::vector< elf_types::Elf_Symbol_32::const_ptr_t > Symbol_List_t;
-            typedef std::vector< elf_types::Elf_Relocation_32::const_ptr_t > Relocation_List_t;
-            typedef std::vector< elf_types::Elf_Relocation_Add_32::const_ptr_t > Relocation_Add_List_t;
-        };
-
-        class Elf_Header_64 {
-        public:
-            typedef boost::shared_ptr < elf_module::Elf_Header_64 > ptr_t;
-            typedef std::vector < elf_types::Elf_Program_Header_64::const_ptr_t > Program_Header_List_t;
-            typedef std::map < std::string, elf_types::Elf_Section_Header_64::const_ptr_t > Section_Header_Map_t;
-            typedef std::vector< std::string > Section_Header_Index_List_t;
-            typedef std::vector< elf_types::Elf_Symbol_64::const_ptr_t > Symbol_List_t;
-            typedef std::vector< elf_types::Elf_Relocation_64::const_ptr_t > Relocation_List_t;
-            typedef std::vector< elf_types::Elf_Relocation_Add_64::const_ptr_t > Relocation_Add_List_t;
-        };
-
-        class Elf_Header_Eident {
-        public:
-            typedef boost::shared_ptr < elf_module::Elf_Header_Eident > ptr_t;
-        };
-
-    } /* namespace elf_types */
-
-} /* namespace libreverse */
-
-#endif /* ELF_FILE_H_ */
+#endif // ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_TYPES_HPP_INCLUDED

@@ -22,7 +22,8 @@
 #ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_EIDENT_HEADER_HPP
 #define REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_EIDENT_HEADER_HPP
 
-#include <boost/cstdint.hpp>
+#include <reverse/io/input/file_readers/linux_elf/elf_types.hpp>
+
 #include <boost/fusion/adapted/struct/adapt_struct.hpp>
 
 namespace reverse {

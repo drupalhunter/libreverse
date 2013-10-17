@@ -59,13 +59,13 @@ namespace reverse {
 	    elf_eident_header base;
       
 	    /*! \brief  Object file type */
-	    boost::uint16_t e_type;
+	    Elf32_Half e_type;
       
 	    /*! \brief Required architecture for the file */
-	    boost::uint16_t e_machine;
+	    Elf32_Half e_machine;
       
 	    /*! \brief ELF version for the file */
-	    boost::uint32_t e_version;
+	    Elf32_Word e_version;
 
 	    /*!
 	     * \brief This memeber gives the virtual address to which the system

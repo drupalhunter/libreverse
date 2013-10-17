@@ -11,8 +11,7 @@ set ( IO_HEADERS
    file.hpp
    file_id.hpp
    output.hpp
-   string_converter.hpp
-   type_mapper.hpp )
+   string_converter.hpp )
 
 include_directories ( ${REVERSE_SOURCE_DIR} )
 
