@@ -22,7 +22,8 @@
 #ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_RELOCATION_32_HPP_INCLUDED
 #define REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_RELOCATION_32_HPP_INCLUDED
 
-#include <boost/cstdint.hpp>
+#include <reverse/io/input/file_readers/linux_elf/elf_types.hpp>
+
 #include <boost/fusion/adapted/struct/adapt_struct.hpp>
 
 namespace reverse {
@@ -46,7 +47,7 @@ namespace reverse {
 	     * object, the value is the virtual address of the storage unit
 	     * affected by the relocation. (Elf)
 	     */
-	    boost::uint32_t r_offset;
+	    Elf32_Addr r_offset;
 
 	    /*!
 	     * \brief This member gives both the symbol table index with respect
@@ -75,7 +76,7 @@ namespace reverse {
 	      applying ELF32_R_TYPE or ELF32_R_SYM, respectively, to the entry
 	      s r_info member.
 	    */
-	    boost::uint32_t r_info;
+	    Elf32_Word r_info;
 	  };
 
 	} // namespace linux_elf
@@ -86,8 +87,8 @@ namespace reverse {
 
 BOOST_FUSION_ADAPT_STRUCT (
 			   reverse::io::input::file_readers::linux_elf::elf_relocation_32,
-			   (boost::uint32_t, r_offset)
-			   (boost::uint32_t, r_info)
+			   (Elf32_Addr, r_offset)
+			   (Elf32_Word, r_info)
 )
 
 #endif // ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_RELOCATION_32_HPP_INCLUDED

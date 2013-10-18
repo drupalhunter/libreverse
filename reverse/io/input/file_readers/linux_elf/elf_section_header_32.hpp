@@ -22,7 +22,7 @@
 #ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_SECTION_HEADER_32_HPP
 #define REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_SECTION_HEADER_32_HPP
 
-#include <boost/cstdint.hpp>
+#include <reverse/io/input/file_readers/linux_elf/elf_types.hpp>
 
 #include <boost/fusion/adapted/struct/adapt_struct.hpp>
 
@@ -35,34 +35,34 @@ namespace reverse {
 	  struct elf_section_header_32 {
 	    
 	    /*! \brief Section name, index in string tbl */
-	    boost::uint32_t sh_name;
+	    Elf32_Word sh_name;
 	    
 	    /*! \brief Type of section */
-	    boost::uint32_t sh_type;
+	    Elf32_Word sh_type;
 	    
 	    /*! \brief Miscellaneous section attributes */
-	    boost::uint32_t sh_flags;
+	    Elf32_Word sh_flags;
 	    
 	    /*! \brief Section virtual addr at execution */
-	    boost::uint32_t sh_addr;
+	    Elf32_Word sh_addr;
 	    
 	    /*! \brief Section file offset */
-	    boost::uint32_t sh_offset;
+	    Elf32_Addr sh_offset;
 	    
 	    /*! \brief Size of section in bytes */
-	    boost::uint32_t sh_size;
+	    Elf32_Word sh_size;
 	    
 	    /*! \brief Index of another section */
-	    boost::uint32_t sh_link;
+	    Elf32_Word sh_link;
 	    
 	    /*! \brief Additional section information */
-	    boost::uint32_t sh_info;
+	    Elf32_Word sh_info;
 	    
 	    /*! \brief Section alignment */
-	    boost::uint32_t sh_addralign;
+	    Elf32_Word sh_addralign;
 	    
 	    /*! \brief Entry size if section holds table */
-	    boost::uint32_t sh_entsize;
+	    Elf32_Word sh_entsize;
 	    
 	  };
 	  
@@ -74,16 +74,16 @@ namespace reverse {
 
 BOOST_FUSION_ADAPT_STRUCT (
      struct reverse::io::input::file_readers::linux_elf::elf_section_header_32,
-     ( boost::uint32_t, sh_name )
-     ( boost::uint32_t, sh_type )
-     ( boost::uint32_t, sh_flags )
-     ( boost::uint32_t, sh_addr )
-     ( boost::uint32_t, sh_offset )
-     ( boost::uint32_t, sh_size )
-     ( boost::uint32_t, sh_link )
-     ( boost::uint32_t, sh_info )
-     ( boost::uint32_t, sh_addralign )
-     ( boost::uint32_t, sh_entsize )
+     ( Elf32_Word, sh_name )
+     ( Elf32_Word, sh_type )
+     ( Elf32_Word, sh_flags )
+     ( Elf32_Word, sh_addr )
+     ( Elf32_Addr, sh_offset )
+     ( Elf32_Word, sh_size )
+     ( Elf32_Word, sh_link )
+     ( Elf32_Word, sh_info )
+     ( Elf32_Word, sh_addralign )
+     ( Elf32_Word, sh_entsize )
 )
 
 #endif // ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_SECTION_HEADER_32_HPP

@@ -1,7 +1,8 @@
 #ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_PROGRAM_HEADER_32_GRAMMAR_HPP
 #define REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_PROGRAM_HEADER_32_GRAMMAR_HPP
 
-#include <boost/cstdint.hpp>
+#include <reverse/io/input/file_readers/linux_elf/elf_types.hpp>
+
 #include <boost/fusion/adapted/struct/adapt_struct.hpp>
 
 namespace reverse {
@@ -25,19 +26,19 @@ namespace reverse {
 	     * described or how to interpret the array element's
 	     * information. Type values and their meanings appear below. (Elf)
 	     */
-	    boost::uint32_t p_type;
+	    Elf32_Word p_type;
 
 	    /*!
 	     * \brief This member gives the offset from the beginning of the
 	     * file at which the first byte of the segment resides. (Elf)
 	     */
-	    boost::uint32_t p_offset;
+	    Elf32_Word p_offset;
 
 	    /*!
 	     * \brief This member gives the virtual address at which the first
 	     * byte of the segment resides in memory.
 	     */
-	    boost::uint32_t p_vaddr;
+	    Elf32_Word p_vaddr;
 
 	    /*!
 	     * \brief On systems for which physical addressing is relevant, this
@@ -46,24 +47,24 @@ namespace reverse {
 	     * this member has unspecified contents for executable files and
 	     * shared objects. (Elf)
 	     */
-	    boost::uint32_t p_paddr;
+	    Elf32_Word p_paddr;
 
 	    /*!
 	     * \brief This member gives the number of bytes in the file image of
 	     * the segment; it may be zero. (Elf)
 	     */
-	    boost::uint32_t p_filesz;
+	    Elf32_Word p_filesz;
 
 	    /*!
 	     * \brief This member gives the number of bytes in the memory image
 	     * of the segment; it may be zero. (Elf)
 	     */
-	    boost::uint32_t p_memsz;
+	    Elf32_Word p_memsz;
 
 	    /*!
 	     * \brief This member gives the flags relevant to the segment. (Elf)
 	     */
-	    boost::uint32_t p_flags;
+	    Elf32_Word p_flags;
 
 	    /*!
 	     * \brief This member gives the value to which the segments are
@@ -72,7 +73,7 @@ namespace reverse {
 	     * integral power of 2, and p_vaddr should equal p_offset modulo
 	     * p_align. (Elf)
 	     */
-	    boost::uint32_t p_align;
+	    Elf32_Word p_align;
 
 	  };
 
@@ -84,14 +85,14 @@ namespace reverse {
 
 BOOST_FUSION_ADAPT_STRUCT (
 			   struct reverse::io::input::file_readers::linux_elf::elf_program_header_32,
-			   ( boost::uint32_t, p_type )
-			   ( boost::uint32_t, p_offset )
-			   ( boost::uint32_t, p_vaddr )
-			   ( boost::uint32_t, p_paddr )
-			   ( boost::uint32_t, p_filesz )
-			   ( boost::uint32_t, p_memsz )
-			   ( boost::uint32_t, p_flags )
-			   ( boost::uint32_t, p_align )
+			   ( Elf32_Word, p_type )
+			   ( Elf32_Word, p_offset )
+			   ( Elf32_Word, p_vaddr )
+			   ( Elf32_Word, p_paddr )
+			   ( Elf32_Word, p_filesz )
+			   ( Elf32_Word, p_memsz )
+			   ( Elf32_Word, p_flags )
+			   ( Elf32_Word, p_align )
 			   )
 
 #endif /* ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_PROGRAM_HEADER_32_GRAMMAR_HPP */

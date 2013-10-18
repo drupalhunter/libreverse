@@ -40,15 +40,19 @@
    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 */
 
-#ifndef _ELF_SPARC_H
-#define _ELF_SPARC_H
+#ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_SPARC_HPP_INCLUDED
+#define REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_SPARC_HPP_INCLUDED
 
 /* Processor specific flags for the ELF header e_flags field.  */
 
 #include <boost/cstdint.hpp>
 #include <string>
 
-namespace libreverse { namespace elf_module {
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace linux_elf {
 
     class Elf_sparc {
     public:
@@ -197,9 +201,13 @@ namespace libreverse { namespace elf_module {
 
         static const boost::uint64_t DT_SPARC_REGISTER = 0x70000001;
     };
-} /* namespace elf_module */
-} /* namespace libreverse */
 
-#include "Elf_sparc.inl"
+	} // namespace linux_elf
+      } // namespace file_readers
+    } // namespace input
+  } //  namespace io
+} // namespace reverse
 
-#endif /* _ELF_SPARC_H */
+#include "elf_sparc.inl"
+
+#endif // ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_SPARC_HPP_INCLUDED

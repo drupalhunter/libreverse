@@ -22,7 +22,8 @@
 #ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_HEADER_32_HPP
 #define REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_HEADER_32_HPP
 
-#include <boost/cstdint.hpp>
+#include <reverse/io/input/file_readers/linux_elf/elf_types.hpp>
+
 #include <boost/fusion/adapted/struct/adapt_struct.hpp>
 
 namespace reverse {
@@ -34,53 +35,53 @@ namespace reverse {
 	  struct elf_header_32
 	  {
 	    /*! \brief  Object file type */
-	    boost::uint16_t e_type;
+	    Elf32_Half e_type;
 
 	    /*! \brief Required architecture for the file */
-	    boost::uint16_t e_machine;
+	    Elf32_Half e_machine;
 	    
 	    /*! \brief ELF version for the file */
-	    boost::uint32_t e_version;
+	    Elf32_Word e_version;
 	    
 	    /*!
 	     * \brief This memeber gives the virtual address to which the system
 	     * first transfer control. If the file has no associated entry
 	     * point, this member holds zero. [Elf Format]
 	     */
-	    boost::uint32_t e_entry;
+	    Elf32_Word e_entry;
 	    
 	    /*! \brief  Program header table's file offset in bytes */
-	    boost::uint32_t e_phoff;
+	    Elf32_Word e_phoff;
 	    
 	    /*! \brief  Section header table's file offset in bytes */
-	    boost::uint32_t e_shoff;
+	    Elf32_Word e_shoff;
 	    
 	    /*! \brief  Processor-specific flags associated with the file */
-	    boost::uint32_t e_flags;
+	    Elf32_Word e_flags;
 	    
 	    /*! \brief  ELF header size in bytes */
-	    boost::uint16_t e_ehsize;
+	    Elf32_Half e_ehsize;
 	    
 	    /*! \brief  Program header table entry size */
-	    boost::uint16_t e_phentsize;
+	    Elf32_Half e_phentsize;
 
 	    /*!
 	     * \brief This members holds the number of entries in the program
 	     * header table (bytes).
 	     */
-	    boost::uint16_t e_phnum;
+	    Elf32_Half e_phnum;
 	    
 	    /*! \brief  Section header table entry size (bytes) */
-	    boost::uint16_t e_shentsize;
+	    Elf32_Half e_shentsize;
 	    
 	    /*! \brief  Section header table entry count */
-	    boost::uint16_t e_shnum;
+	    Elf32_Half e_shnum;
 	    
 	    /*!
 	     * \brief Section header string table index of the entry associated
 	     * with the section name string table.
 	     */
-	    boost::uint16_t e_shstrndx;
+	    Elf32_Half e_shstrndx;
 	  };
 
 	} // namespace linux_elf
@@ -91,19 +92,19 @@ namespace reverse {
 
 BOOST_FUSION_ADAPT_STRUCT (
      struct reverse::io::input::file_readers::linux_elf::elf_header_32,
-     ( boost::uint16_t, e_type )
-     ( boost::uint16_t, e_machine )
-     ( boost::uint32_t, e_version )
-     ( boost::uint32_t, e_entry )
-     ( boost::uint32_t, e_phoff )
-     ( boost::uint32_t, e_shoff )
-     ( boost::uint32_t, e_flags )
-     ( boost::uint16_t, e_ehsize )
-     ( boost::uint16_t, e_phentsize )
-     ( boost::uint16_t, e_phnum )
-     ( boost::uint16_t, e_shentsize )
-     ( boost::uint16_t, e_shnum )
-     ( boost::uint16_t, e_shstrndx )
+     ( Elf32_Half, e_type )
+     ( Elf32_Half, e_machine )
+     ( Elf32_Word, e_version )
+     ( Elf32_Word, e_entry )
+     ( Elf32_Word, e_phoff )
+     ( Elf32_Word, e_shoff )
+     ( Elf32_Word, e_flags )
+     ( Elf32_Half, e_ehsize )
+     ( Elf32_Half, e_phentsize )
+     ( Elf32_Half, e_phnum )
+     ( Elf32_Half, e_shentsize )
+     ( Elf32_Half, e_shnum )
+     ( Elf32_Half, e_shstrndx )
 )
 
 #endif /* ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_HEADER_32_HPP */
