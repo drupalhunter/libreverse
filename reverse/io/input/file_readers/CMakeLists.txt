@@ -1,9 +1,9 @@
 project(io_readers)
 
 add_subdirectory ( linux_elf )
-add_subdirectory ( java_class )
-add_subdirectory ( mac_mach )
-add_subdirectory ( windows_pe )
+#add_subdirectory ( java_class )
+#add_subdirectory ( mac_mach )
+#add_subdirectory ( windows_pe )
 
 set ( IO_READERS_SOURCES
   reader_factory.cpp )

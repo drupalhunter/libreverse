@@ -926,7 +926,7 @@ namespace reverse {
 	    static const boost::uint32_t OHWA0_R4KEOP_CLEAN	= 0x00000002;
 	  };
 
-	} // namespace linux_elf
+ 	} // namespace linux_elf
       } // namespace file_readers
     } // namespace input
   } //  namespace io

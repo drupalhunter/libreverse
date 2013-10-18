@@ -1,12 +1,12 @@
 project(reverse)
 
-add_subdirectory(components)
-add_subdirectory(data_containers)
-add_subdirectory(errors)
+#add_subdirectory(components)
+#add_subdirectory(data_containers)
+#add_subdirectory(errors)
 #add_subdirectory(formulas)
-add_subdirectory(infrastructure)
+#add_subdirectory(infrastructure)
 add_subdirectory(io)
-add_subdirectory(meta)
+#add_subdirectory(meta)
 
 set ( REVERSE_SOURCE_DIR "${CMAKE_SOURCE_DIR}" CACHE INTERNAL "Include directory" )
 include_directories ( ${REVERSE_SOURCE_DIR} )
