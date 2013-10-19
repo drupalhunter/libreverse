@@ -56,19 +56,19 @@ namespace reverse {
 
             switch ( e_type )
 	      {
-	      case Elf_Common::ET_NONE:
+	      case elf_common::ET_NONE:
 		result << "NONE (None)";
 		break;
-	      case Elf_Common::ET_REL:
+	      case elf_common::ET_REL:
 		result << "REL (Relocatable file)";
 		break;
-	      case Elf_Common::ET_EXEC:
+	      case elf_common::ET_EXEC:
 		result << "EXEC (Executable file)";
 		break;
-	      case Elf_Common::ET_DYN:
+	      case elf_common::ET_DYN:
 		result << "DYN (Shared object file)";
 		break;
-	      case Elf_Common::ET_CORE:
+	      case elf_common::ET_CORE:
 		result << "CORE (Core file)";
 		break;
 	      default:
@@ -77,12 +77,12 @@ namespace reverse {
 		 * was the value of ET_HIPROC. So the test for the high limit
 		 * was always true.
 		 */
-		if ( e_type >= Elf_Common::ET_LOPROC )
+		if ( e_type >= elf_common::ET_LOPROC )
 		  {
 		    result << boost::format ( "Processor Specific: (%1%)" ) % e_type;
 		  }
-		else if ( ( e_type >= Elf_Common::ET_LOOS ) &&
-			  ( e_type <= Elf_Common::ET_HIOS ) )
+		else if ( ( e_type >= elf_common::ET_LOOS ) &&
+			  ( e_type <= elf_common::ET_HIOS ) )
 		  {
 		    result << boost::format ( "OS Specific: (%1%)" ) % e_type;
 		  }
@@ -98,7 +98,7 @@ namespace reverse {
 	  }
 
 	  std::string
-	  Elf_File_Header_Utils::get_File_Type_Meta ( boost::uint16_t e_type )
+	  elf_file_header_utils::get_file_type_meta ( boost::uint16_t e_type )
 	  {
 
 	    trace::io_detail ( "Entering Elf_File_Header_Utils::get_File_Type_Meta" );
@@ -107,19 +107,19 @@ namespace reverse {
 
             switch ( e_type )
 	      {
-	      case Elf_Common::ET_NONE:
+	      case elf_common::ET_NONE:
 		result = "elf:none";
 		break;
-	      case Elf_Common::ET_REL:
+	      case elf_common::ET_REL:
 		result = "elf:relocatable_object";
 		break;
-	      case Elf_Common::ET_EXEC:
+	      case elf_common::ET_EXEC:
 		result = "elf:executable";
 		break;
-	      case Elf_Common::ET_DYN:
+	      case elf_common::ET_DYN:
 		result = "elf:dynamically_linked_library";
 		break;
-	      case Elf_Common::ET_CORE:
+	      case elf_common::ET_CORE:
 		result = "elf:core_file";
 		break;
 	      default:
@@ -132,7 +132,7 @@ namespace reverse {
 	  }
 
 	  std::string
-	  Elf_File_Header_Utils::get_Arch_Name ( boost::uint16_t e_machine )
+	  elf_file_header_utils::get_arch_name ( boost::uint16_t e_machine )
 	  {
 
 	    trace::io_detail ( "Entering Elf_File_Header_Utils::get_Arch_Name" );
@@ -141,12 +141,12 @@ namespace reverse {
 
             switch ( e_machine )
 	      {
-	      case Elf_Common::EM_SPARC:
+	      case elf_common::EM_SPARC:
 		{
 		  value = "sun:sparc_v";
 		  break;
 		}
-	      case Elf_Common::EM_386:
+	      case elf_common::EM_386:
 		{
 		  value = "intel:i386";
 		  break;
@@ -155,7 +155,7 @@ namespace reverse {
                 {
 
 		  trace::io_error ( "The architecture for the file was %1%",
-				    Elf_File_Header_Utils::get_Machine_Name ( e_machine ) );
+				    elf_file_header_utils::get_machine_name ( e_machine ) );
 
 		  throw errors::file_reader_exception ( errors::file_reader_exception::unsupported_arch_type );
                 }
@@ -167,7 +167,7 @@ namespace reverse {
 	  }
 
 	  std::string
-	  Elf_File_Header_Utils::get_Machine_Name ( boost::uint16_t e_machine )
+	  elf_file_header_utils::get_machine_name ( boost::uint16_t e_machine )
 	  {
 
 	    trace::io_detail ( "Entering Elf_File_Header_Utils::get_Machine_Name" );
@@ -176,257 +176,257 @@ namespace reverse {
 
             switch ( e_machine )
 	      {
-	      case Elf_Common::EM_NONE:
+	      case elf_common::EM_NONE:
 		result << "None";
 		break;
-	      case Elf_Common::EM_M32:
+	      case elf_common::EM_M32:
 		result << "WE32100";
 		break;
-	      case Elf_Common::EM_SPARC:
+	      case elf_common::EM_SPARC:
 		result << "Sparc";
 		break;
-	      case Elf_Common::EM_386:
+	      case elf_common::EM_386:
 		result << "Intel 80386";
 		break;
-	      case Elf_Common::EM_68K:
+	      case elf_common::EM_68K:
 		result << "MC68000";
 		break;
-	      case Elf_Common::EM_88K:
+	      case elf_common::EM_88K:
 		result << "MC88000";
 		break;
-	      case Elf_Common::EM_486:
+	      case elf_common::EM_486:
 		result << "Intel 80486";
 		break;
-	      case Elf_Common::EM_860:
+	      case elf_common::EM_860:
 		result << "Intel 80860";
 		break;
-	      case Elf_Common::EM_MIPS:
+	      case elf_common::EM_MIPS:
 		result << "MIPS R3000";
 		break;
-	      case Elf_Common::EM_S370:
+	      case elf_common::EM_S370:
 		result << "IBM System/370";
 		break;
-	      case Elf_Common::EM_MIPS_RS3_LE:
+	      case elf_common::EM_MIPS_RS3_LE:
 		result << "MIPS R4000 big-endian";
 		break;
-	      case Elf_Common::EM_OLD_SPARCV9:
+	      case elf_common::EM_OLD_SPARCV9:
 		result << "Sparc v9 (old)";
 		break;
-	      case Elf_Common::EM_PARISC:
+	      case elf_common::EM_PARISC:
 		result << "HPPA";
 		break;
-	      case Elf_Common::EM_PPC_OLD:
+	      case elf_common::EM_PPC_OLD:
 		result << "Power PC (old)";
 		break;
-	      case Elf_Common::EM_SPARC32PLUS:
+	      case elf_common::EM_SPARC32PLUS:
 		result << "Sparc v8+" ;
 		break;
-	      case Elf_Common::EM_960:
+	      case elf_common::EM_960:
 		result << "Intel 90860";
 		break;
-	      case Elf_Common::EM_PPC:
+	      case elf_common::EM_PPC:
 		result << "PowerPC";
 		break;
-	      case Elf_Common::EM_PPC64:
+	      case elf_common::EM_PPC64:
 		result << "PowerPC64";
 		break;
-	      case Elf_Common::EM_V800:
+	      case elf_common::EM_V800:
 		result << "NEC V800";
 		break;
-	      case Elf_Common::EM_FR20:
+	      case elf_common::EM_FR20:
 		result << "Fujitsu FR20";
 		break;
-	      case Elf_Common::EM_RH32:
+	      case elf_common::EM_RH32:
 		result << "TRW RH32";
 		break;
-	      case Elf_Common::EM_MCORE:
+	      case elf_common::EM_MCORE:
 		result << "MCORE";
 		break;
-	      case Elf_Common::EM_ARM:
+	      case elf_common::EM_ARM:
 		result << "ARM";
 		break;
-	      case Elf_Common::EM_OLD_ALPHA:
+	      case elf_common::EM_OLD_ALPHA:
 		result << "Digital Alpha (old)";
 		break;
-	      case Elf_Common::EM_SH:
+	      case elf_common::EM_SH:
 		result << "Renesas / SuperH SH";
 		break;
-	      case Elf_Common::EM_SPARCV9:
+	      case elf_common::EM_SPARCV9:
 		result << "Sparc v9";
 		break;
-	      case Elf_Common::EM_TRICORE:
+	      case elf_common::EM_TRICORE:
 		result << "Siemens Tricore";
 		break;
-	      case Elf_Common::EM_ARC:
+	      case elf_common::EM_ARC:
 		result << "ARC";
 		break;
-	      case Elf_Common::EM_H8_300:
+	      case elf_common::EM_H8_300:
 		result << "Renesas H8/300";
 		break;
-	      case Elf_Common::EM_H8_300H:
+	      case elf_common::EM_H8_300H:
 		result << "Renesas H8/300H";
 		break;
-	      case Elf_Common::EM_H8S:
+	      case elf_common::EM_H8S:
 		result << "Renesas H8S";
 		break;
-	      case Elf_Common::EM_H8_500:
+	      case elf_common::EM_H8_500:
 		result << "Renesas H8/500";
 		break;
-	      case Elf_Common::EM_IA_64:
+	      case elf_common::EM_IA_64:
 		result << "Intel IA-64";
 		break;
-	      case Elf_Common::EM_MIPS_X:
+	      case elf_common::EM_MIPS_X:
 		result << "Stanford MIPS-X";
 		break;
-	      case Elf_Common::EM_COLDFIRE:
+	      case elf_common::EM_COLDFIRE:
 		result << "Motorola Coldfire";
 		break;
-	      case Elf_Common::EM_68HC12:
+	      case elf_common::EM_68HC12:
 		result << "Motorola M68HC12";
 		break;
-	      case Elf_Common::EM_ALPHA:
+	      case elf_common::EM_ALPHA:
 		result << "Alpha";
 		break;
-	      case Elf_Common::EM_CYGNUS_D10V:
-	      case Elf_Common::EM_D10V:
+	      case elf_common::EM_CYGNUS_D10V:
+	      case elf_common::EM_D10V:
 		result << "d10v";
 		break;
-	      case Elf_Common::EM_CYGNUS_D30V:
-	      case Elf_Common::EM_D30V:
+	      case elf_common::EM_CYGNUS_D30V:
+	      case elf_common::EM_D30V:
 		result << "d30v";
 		break;
-	      case Elf_Common::EM_CYGNUS_M32R:
-	      case Elf_Common::EM_M32R:
+	      case elf_common::EM_CYGNUS_M32R:
+	      case elf_common::EM_M32R:
 		result << "Renesas M32R (formerly Mitsubishi M32r)";
 		break;
-	      case Elf_Common::EM_CYGNUS_V850:
-	      case Elf_Common::EM_V850:
+	      case elf_common::EM_CYGNUS_V850:
+	      case elf_common::EM_V850:
 		result << "NEC v850";
 		break;
-	      case Elf_Common::EM_CYGNUS_MN10300:
-	      case Elf_Common::EM_MN10300:
+	      case elf_common::EM_CYGNUS_MN10300:
+	      case elf_common::EM_MN10300:
 		result << "mn10300";
 		break;
-	      case Elf_Common::EM_CYGNUS_MN10200:
-	      case Elf_Common::EM_MN10200:
+	      case elf_common::EM_CYGNUS_MN10200:
+	      case elf_common::EM_MN10200:
 		result << "mn10200";
 		break;
-	      case Elf_Common::EM_CYGNUS_FR30:
-	      case Elf_Common::EM_FR30:
+	      case elf_common::EM_CYGNUS_FR30:
+	      case elf_common::EM_FR30:
 		result << "Fujitsu FR30";
 		break;
-	      case Elf_Common::EM_CYGNUS_FRV:
+	      case elf_common::EM_CYGNUS_FRV:
 		result << "Fujitsu FR-V";
 		break;
-	      case Elf_Common::EM_PJ_OLD:
-	      case Elf_Common::EM_PJ:
+	      case elf_common::EM_PJ_OLD:
+	      case elf_common::EM_PJ:
 		result << "picoJava";
 		break;
-	      case Elf_Common::EM_MMA:
+	      case elf_common::EM_MMA:
 		result << "Fujitsu Multimedia Accelerator";
 		break;
-	      case Elf_Common::EM_PCP:
+	      case elf_common::EM_PCP:
 		result << "Siemens PCP";
 		break;
-	      case Elf_Common::EM_NCPU:
+	      case elf_common::EM_NCPU:
 		result << "Sony nCPU embedded RISC processor";
 		break;
-	      case Elf_Common::EM_NDR1:
+	      case elf_common::EM_NDR1:
 		result << "Denso NDR1 microprocesspr";
 		break;
-	      case Elf_Common::EM_STARCORE:
+	      case elf_common::EM_STARCORE:
 		result << "Motorola Star*Core processor";
 		break;
-	      case Elf_Common::EM_ME16:
+	      case elf_common::EM_ME16:
 		result << "Toyota ME16 processor";
 		break;
-	      case Elf_Common::EM_ST100:
+	      case elf_common::EM_ST100:
 		result << "STMicroelectronics ST100 processor";
 		break;
-	      case Elf_Common::EM_TINYJ:
+	      case elf_common::EM_TINYJ:
 		result << "Advanced Logic Corp. TinyJ embedded processor";
 		break;
-	      case Elf_Common::EM_FX66:
+	      case elf_common::EM_FX66:
 		result << "Siemens FX66 microcontroller";
 		break;
-	      case Elf_Common::EM_ST9PLUS:
+	      case elf_common::EM_ST9PLUS:
 		result << "STMicroelectronics ST9+ 8/16 bit microcontroller";
 		break;
-	      case Elf_Common::EM_ST7:
+	      case elf_common::EM_ST7:
 		result << "STMicroelectronics ST7 8-bit microcontroller";
 		break;
-	      case Elf_Common::EM_68HC16:
+	      case elf_common::EM_68HC16:
 		result << "Motorola MC68HC16 Microcontroller";
 		break;
-	      case Elf_Common::EM_68HC11:
+	      case elf_common::EM_68HC11:
 		result << "Motorola MC68HC11 Microcontroller";
 		break;
-	      case Elf_Common::EM_68HC08:
+	      case elf_common::EM_68HC08:
 		result << "Motorola MC68HC08 Microcontroller";
 		break;
-	      case Elf_Common::EM_68HC05:
+	      case elf_common::EM_68HC05:
 		result << "Motorola MC68HC05 Microcontroller";
 		break;
-	      case Elf_Common::EM_SVX:
+	      case elf_common::EM_SVX:
 		result << "Silicon Graphics SVx";
 		break;
-	      case Elf_Common::EM_ST19:
+	      case elf_common::EM_ST19:
 		result << "STMicroelectronics ST19 8-bit microcontroller";
 		break;
-	      case Elf_Common::EM_VAX:
+	      case elf_common::EM_VAX:
 		result << "Digital VAX";
 		break;
-	      case Elf_Common::EM_AVR_OLD:
-	      case Elf_Common::EM_AVR:
+	      case elf_common::EM_AVR_OLD:
+	      case elf_common::EM_AVR:
 		result << "Atmel AVR 8-bit microcontroller";
 		break;
-	      case Elf_Common::EM_CRIS:
+	      case elf_common::EM_CRIS:
 		result << "Axis Communications 32-bit embedded processor";
 		break;
-	      case Elf_Common::EM_JAVELIN:
+	      case elf_common::EM_JAVELIN:
 		result << "Infineon Technologies 32-bit embedded cpu";
 		break;
-	      case Elf_Common::EM_FIREPATH:
+	      case elf_common::EM_FIREPATH:
 		result << "Element 14 64-bit DSP processor";
 		break;
-	      case Elf_Common::EM_ZSP:
+	      case elf_common::EM_ZSP:
 		result << "LSI Logic's 16-bit DSP processor";
 		break;
-	      case Elf_Common::EM_MMIX:
+	      case elf_common::EM_MMIX:
 		result << "Donald Knuth's educational 64-bit processor";
 		break;
-	      case Elf_Common::EM_HUANY:
+	      case elf_common::EM_HUANY:
 		result << "Harvard Universitys's machine-independent object format";
 		break;
-	      case Elf_Common::EM_PRISM:
+	      case elf_common::EM_PRISM:
 		result << "Vitesse Prism";
 		break;
-	      case Elf_Common::EM_X86_64:
+	      case elf_common::EM_X86_64:
 		result << "Advanced Micro Devices X86-64";
 		break;
-	      case Elf_Common::EM_S390_OLD:
-	      case Elf_Common::EM_S390:
+	      case elf_common::EM_S390_OLD:
+	      case elf_common::EM_S390:
 		result << "IBM S/390";
 		break;
-	      case Elf_Common::EM_XSTORMY16:
+	      case elf_common::EM_XSTORMY16:
 		result << "Sanyo Xstormy16 CPU core";
 		break;
-	      case Elf_Common::EM_OPENRISC:
-	      case Elf_Common::EM_OR32:
+	      case elf_common::EM_OPENRISC:
+	      case elf_common::EM_OR32:
 		result << "OpenRISC";
 		break;
-	      case Elf_Common::EM_DLX:
+	      case elf_common::EM_DLX:
 		result << "OpenDLX";
 		break;
-	      case Elf_Common::EM_IP2K_OLD:
-	      case Elf_Common::EM_IP2K:
+	      case elf_common::EM_IP2K_OLD:
+	      case elf_common::EM_IP2K:
 		result << "Ubicom IP2xxx 8-bit microcontrollers";
 		break;
-	      case Elf_Common::EM_IQ2000:
+	      case elf_common::EM_IQ2000:
 		result << "Vitesse IQ2000";
 		break;
-	      case Elf_Common::EM_XTENSA_OLD:
-	      case Elf_Common::EM_XTENSA:
+	      case elf_common::EM_XTENSA_OLD:
+	      case elf_common::EM_XTENSA:
 		result << "Tensilica Xtensa Processor";
 		break;
 	      default:
@@ -439,7 +439,7 @@ namespace reverse {
 	  }
 
 	  std::string
-	  Elf_File_Header_Utils::decode_ARM_Machine_Flags ( boost::uint32_t e_flags )
+	  elf_file_header_utils::decode_arm_machine_flags ( boost::uint32_t e_flags )
 	  {
 
 	    trace::io_detail ( "Entering Elf_File_Header_Utils::decode_ARM_Machine_Flags" );
@@ -448,20 +448,20 @@ namespace reverse {
             boost::uint32_t eabi;
             bool unknown_abi = false;
 
-            eabi = Elf_arm::EF_ARM_EABI_VERSION ( e_flags );
-            e_flags &= ~ Elf_arm::EF_ARM_EABIMASK;
+            eabi = elf_arm::EF_ARM_EABI_VERSION ( e_flags );
+            e_flags &= ~ elf_arm::EF_ARM_EABIMASK;
 
             /* Handle "generic" ARM flags.  */
-            if ( e_flags & Elf_arm::EF_ARM_RELEXEC )
+            if ( e_flags & elf_arm::EF_ARM_RELEXEC )
 	      {
                 result <<", relocatable executable";
-                e_flags &= ~ Elf_arm::EF_ARM_RELEXEC;
+                e_flags &= ~ elf_arm::EF_ARM_RELEXEC;
 	      }
 
-            if ( e_flags & Elf_arm::EF_ARM_HASENTRY )
+            if ( e_flags & elf_arm::EF_ARM_HASENTRY )
 	      {
                 result << ", has entry point";
-                e_flags &= ~ Elf_arm::EF_ARM_HASENTRY;
+                e_flags &= ~ elf_arm::EF_ARM_HASENTRY;
 	      }
 
             /* Now handle EABI specific flags.  */
@@ -476,11 +476,11 @@ namespace reverse {
                     }
 		  break;
                 }
-	      case Elf_arm::EF_ARM_EABI_VER1:
+	      case elf_arm::EF_ARM_EABI_VER1:
                 {
 		  result << ", Version1 EABI";
 
-		  if ( e_flags & Elf_arm::EF_ARM_SYMSARESORTED )
+		  if ( e_flags & elf_arm::EF_ARM_SYMSARESORTED )
                     {
 		      result << ", sorted symbol tables";
                     }
@@ -491,83 +491,83 @@ namespace reverse {
 
 		  break;
                 }
-	      case Elf_arm::EF_ARM_EABI_VER2:
+	      case elf_arm::EF_ARM_EABI_VER2:
                 {
 		  result << ", Version2 EABI";
 
 		  /* Conflicts with EF_ARM_INTERWORK.  */
-		  if ( e_flags & Elf_arm::EF_ARM_SYMSARESORTED )
+		  if ( e_flags & elf_arm::EF_ARM_SYMSARESORTED )
                     {
 		      result << ", sorted symbol tables";
                     }
-		  if ( e_flags & Elf_arm::EF_ARM_DYNSYMSUSESEGIDX )
+		  if ( e_flags & elf_arm::EF_ARM_DYNSYMSUSESEGIDX )
                     {
 		      result << ", dynamic symbols use segment index";
                     }
-		  if ( e_flags & Elf_arm::EF_ARM_MAPSYMSFIRST )
+		  if ( e_flags & elf_arm::EF_ARM_MAPSYMSFIRST )
                     {
 		      result << ", mapping symbols precede others";
                     }
-		  if ( e_flags & ~ ( Elf_arm::EF_ARM_SYMSARESORTED |
-				     Elf_arm::EF_ARM_DYNSYMSUSESEGIDX |
-				     Elf_arm::EF_ARM_MAPSYMSFIRST ) )
+		  if ( e_flags & ~ ( elf_arm::EF_ARM_SYMSARESORTED |
+				     elf_arm::EF_ARM_DYNSYMSUSESEGIDX |
+				     elf_arm::EF_ARM_MAPSYMSFIRST ) )
                     {
 		      unknown_abi = true;
                     }
 
 		  break;
                 }
-	      case Elf_arm::EF_ARM_EABI_UNKNOWN:
+	      case elf_arm::EF_ARM_EABI_UNKNOWN:
                 {
 		  result << ", GNU EABI";
 
-		  if ( e_flags & Elf_arm::EF_ARM_INTERWORK )
+		  if ( e_flags & elf_arm::EF_ARM_INTERWORK )
                     {
 		      result << ", interworking enabled";
                     }
-		  if ( e_flags & Elf_arm::EF_ARM_APCS_26 )
+		  if ( e_flags & elf_arm::EF_ARM_APCS_26 )
                     {
 		      result << ", uses APCS/26";
                     }
-		  if ( e_flags & Elf_arm::EF_ARM_APCS_FLOAT )
+		  if ( e_flags & elf_arm::EF_ARM_APCS_FLOAT )
                     {
 		      result << ", uses APCS/float";
                     }
-		  if ( e_flags & Elf_arm::EF_ARM_PIC )
+		  if ( e_flags & elf_arm::EF_ARM_PIC )
                     {
 		      result << ", position independent";
                     }
-		  if ( e_flags & Elf_arm::EF_ARM_ALIGN8 )
+		  if ( e_flags & elf_arm::EF_ARM_ALIGN8 )
                     {
 		      result << ", 8 bit structure alignment";
                     }
-		  if ( e_flags & Elf_arm::EF_ARM_NEW_ABI )
+		  if ( e_flags & elf_arm::EF_ARM_NEW_ABI )
                     {
 		      result << ", uses new ABI";
                     }
-		  if ( e_flags & Elf_arm::EF_ARM_OLD_ABI )
+		  if ( e_flags & elf_arm::EF_ARM_OLD_ABI )
                     {
 		      result << ", uses old ABI";
                     }
-		  if ( e_flags & Elf_arm::EF_ARM_SOFT_FLOAT )
+		  if ( e_flags & elf_arm::EF_ARM_SOFT_FLOAT )
                     {
 		      result << ", software FP";
                     }
-		  if ( e_flags & Elf_arm::EF_ARM_MAVERICK_FLOAT )
+		  if ( e_flags & elf_arm::EF_ARM_MAVERICK_FLOAT )
                     {
 		      result << ", Maverick FP";
                     }
 
 
-		  if ( e_flags & ~ ( Elf_arm::EF_ARM_INTERWORK |
-				     Elf_arm::EF_ARM_APCS_26 |
-				     Elf_arm::EF_ARM_APCS_FLOAT |
-				     Elf_arm::EF_ARM_PIC |
-				     Elf_arm::EF_ARM_ALIGN8 |
-				     Elf_arm::EF_ARM_NEW_ABI |
-				     Elf_arm::EF_ARM_OLD_ABI |
-				     Elf_arm::EF_ARM_SOFT_FLOAT |
-				     Elf_arm::EF_ARM_MAVERICK_FLOAT ) )
+		  if ( e_flags & ~ ( elf_arm::EF_ARM_INTERWORK |
+				     elf_arm::EF_ARM_APCS_26 |
+				     elf_arm::EF_ARM_APCS_FLOAT |
+				     elf_arm::EF_ARM_PIC |
+				     elf_arm::EF_ARM_ALIGN8 |
+				     elf_arm::EF_ARM_NEW_ABI |
+				     elf_arm::EF_ARM_OLD_ABI |
+				     elf_arm::EF_ARM_SOFT_FLOAT |
+				     elf_arm::EF_ARM_MAVERICK_FLOAT ) )
                     {
 		      unknown_abi = true;
                     }
@@ -586,7 +586,7 @@ namespace reverse {
 	  }
 
 	  std::string
-	  Elf_File_Header_Utils::get_Machine_Flags ( boost::uint32_t e_flags,
+	  elf_file_header_utils::get_machine_flags ( boost::uint32_t e_flags,
 						     boost::uint16_t e_machine )
 	  {
 
@@ -601,47 +601,47 @@ namespace reverse {
 		  default:
 		    break;
 
-		  case Elf_Common::EM_ARM:
-		    result << decode_ARM_Machine_Flags ( e_flags );
+		  case elf_common::EM_ARM:
+		    result << decode_arm_machine_flags ( e_flags );
 		    break;
 
-		  case Elf_Common::EM_68K:
-		    if ( e_flags & Elf_m68k::EF_CPU32 )
+		  case elf_common::EM_68K:
+		    if ( e_flags & elf_m68k::EF_CPU32 )
 		      {
 			result << ", cpu32";
 		      }
 
-		    if ( e_flags & Elf_m68k::EF_M68000 )
+		    if ( e_flags & elf_m68k::EF_M68000 )
 		      {
 			result << ", m68000";
 		      }
 		    break;
 
-		  case Elf_Common::EM_PPC:
-		    if ( e_flags & Elf_ppc::EF_PPC_EMB )
+		  case elf_common::EM_PPC:
+		    if ( e_flags & elf_ppc::EF_PPC_EMB )
 		      {
 			result << ", emb";
 		      }
 
-		    if ( e_flags & Elf_ppc::EF_PPC_RELOCATABLE )
+		    if ( e_flags & elf_ppc::EF_PPC_RELOCATABLE )
 		      {
 			result << ", relocatable";
 		      }
 
-		    if ( e_flags & Elf_ppc::EF_PPC_RELOCATABLE_LIB )
+		    if ( e_flags & elf_ppc::EF_PPC_RELOCATABLE_LIB )
 		      {
 			result << ", relocatable-lib";
 		      }
 		    break;
 
-		  case Elf_Common::EM_V850:
-		  case Elf_Common::EM_CYGNUS_V850:
-		    switch ( e_flags & Elf_v850::EF_V850_ARCH )
+		  case elf_common::EM_V850:
+		  case elf_common::EM_CYGNUS_V850:
+		    switch ( e_flags & elf_v850::EF_V850_ARCH )
 		      {
-		      case Elf_v850::E_V850E_ARCH:
+		      case elf_v850::E_V850E_ARCH:
 			result << ", v850e";
 			break;
-		      case Elf_v850::E_V850_ARCH:
+		      case elf_v850::E_V850_ARCH:
 			result << ", v850";
 			break;
 		      default:
@@ -650,192 +650,192 @@ namespace reverse {
 		      }
 		    break;
 
-		  case Elf_Common::EM_M32R:
-		  case Elf_Common::EM_CYGNUS_M32R:
-		    if ( ( e_flags & Elf_m32r::EF_M32R_ARCH ) == Elf_m32r::E_M32R_ARCH )
+		  case elf_common::EM_M32R:
+		  case elf_common::EM_CYGNUS_M32R:
+		    if ( ( e_flags & elf_m32r::EF_M32R_ARCH ) == elf_m32r::E_M32R_ARCH )
 		      result << ", m32r";
 
 		    break;
 
-		  case Elf_Common::EM_MIPS:
-		  case Elf_Common::EM_MIPS_RS3_LE:
-		    if ( e_flags & Elf_mips::EF_MIPS_NOREORDER )
+		  case elf_common::EM_MIPS:
+		  case elf_common::EM_MIPS_RS3_LE:
+		    if ( e_flags & elf_mips::EF_MIPS_NOREORDER )
 		      {
 			result << ", noreorder";
 		      }
 
-		    if ( e_flags & Elf_mips::EF_MIPS_PIC )
+		    if ( e_flags & elf_mips::EF_MIPS_PIC )
 		      {
 			result << ", pic";
 		      }
 
-		    if ( e_flags & Elf_mips::EF_MIPS_CPIC )
+		    if ( e_flags & elf_mips::EF_MIPS_CPIC )
 		      {
 			result << ", cpic";
 		      }
 
-		    if ( e_flags & Elf_mips::EF_MIPS_UCODE )
+		    if ( e_flags & elf_mips::EF_MIPS_UCODE )
 		      {
 			result << ", ugen_reserved";
 		      }
 
-		    if ( e_flags & Elf_mips::EF_MIPS_ABI2 )
+		    if ( e_flags & elf_mips::EF_MIPS_ABI2 )
 		      {
 			result << ", abi2";
 		      }
 
-		    if ( e_flags & Elf_mips::EF_MIPS_OPTIONS_FIRST )
+		    if ( e_flags & elf_mips::EF_MIPS_OPTIONS_FIRST )
 		      {
 			result << ", odk first";
 		      }
 
-		    if ( e_flags & Elf_mips::EF_MIPS_32BITMODE )
+		    if ( e_flags & elf_mips::EF_MIPS_32BITMODE )
 		      {
 			result << ", 32bitmode";
 		      }
 
-		    switch ( ( e_flags & Elf_mips::EF_MIPS_MACH ) )
+		    switch ( ( e_flags & elf_mips::EF_MIPS_MACH ) )
 		      {
-		      case Elf_mips::E_MIPS_MACH_3900: result << ", 3900"; break;
-		      case Elf_mips::E_MIPS_MACH_4010: result << ", 4010"; break;
-		      case Elf_mips::E_MIPS_MACH_4100: result << ", 4100"; break;
-		      case Elf_mips::E_MIPS_MACH_4111: result << ", 4111"; break;
-		      case Elf_mips::E_MIPS_MACH_4120: result << ", 4120"; break;
-		      case Elf_mips::E_MIPS_MACH_4650: result << ", 4650"; break;
-		      case Elf_mips::E_MIPS_MACH_5400: result << ", 5400"; break;
-		      case Elf_mips::E_MIPS_MACH_5500: result << ", 5500"; break;
-		      case Elf_mips::E_MIPS_MACH_SB1:  result << ", sb1";  break;
+		      case elf_mips::E_MIPS_MACH_3900: result << ", 3900"; break;
+		      case elf_mips::E_MIPS_MACH_4010: result << ", 4010"; break;
+		      case elf_mips::E_MIPS_MACH_4100: result << ", 4100"; break;
+		      case elf_mips::E_MIPS_MACH_4111: result << ", 4111"; break;
+		      case elf_mips::E_MIPS_MACH_4120: result << ", 4120"; break;
+		      case elf_mips::E_MIPS_MACH_4650: result << ", 4650"; break;
+		      case elf_mips::E_MIPS_MACH_5400: result << ", 5400"; break;
+		      case elf_mips::E_MIPS_MACH_5500: result << ", 5500"; break;
+		      case elf_mips::E_MIPS_MACH_SB1:  result << ", sb1";  break;
 		      case 0:
 			/* We simply ignore the field in this case to avoid confusion:
-			   MIPS ELF does not specify Elf_mips::EF_MIPS_MACH, it is a GNU
+			   MIPS ELF does not specify elf_mips::EF_MIPS_MACH, it is a GNU
 			   extension.  */
 			break;
 		      default: result << ", unknown CPU"; break;
 		      }
 
-		    switch ( ( e_flags & Elf_mips::EF_MIPS_ABI ) )
+		    switch ( ( e_flags & elf_mips::EF_MIPS_ABI ) )
 		      {
-		      case Elf_mips::E_MIPS_ABI_O32: result << ", o32"; break;
-		      case Elf_mips::E_MIPS_ABI_O64: result << ", o64"; break;
-		      case Elf_mips::E_MIPS_ABI_EABI32: result << ", eabi32"; break;
-		      case Elf_mips::E_MIPS_ABI_EABI64: result << ", eabi64"; break;
+		      case elf_mips::E_MIPS_ABI_O32: result << ", o32"; break;
+		      case elf_mips::E_MIPS_ABI_O64: result << ", o64"; break;
+		      case elf_mips::E_MIPS_ABI_EABI32: result << ", eabi32"; break;
+		      case elf_mips::E_MIPS_ABI_EABI64: result << ", eabi64"; break;
 		      case 0:
 			/* We simply ignore the field in this case to avoid confusion:
-			   MIPS ELF does not specify Elf_mips::EF_MIPS_ABI, it is a GNU extension.
+			   MIPS ELF does not specify elf_mips::EF_MIPS_ABI, it is a GNU extension.
 			   This means it is likely to be an o32 file, but not for
 			   sure.  */
 			break;
 		      default: result << ", unknown ABI"; break;
 		      }
 
-		    if ( e_flags & Elf_mips::EF_MIPS_ARCH_ASE_MDMX )
+		    if ( e_flags & elf_mips::EF_MIPS_ARCH_ASE_MDMX )
 		      result << ", mdmx";
 
-		    if ( e_flags & Elf_mips::EF_MIPS_ARCH_ASE_M16 )
+		    if ( e_flags & elf_mips::EF_MIPS_ARCH_ASE_M16 )
 		      result << ", mips16";
 
-		    switch ( ( e_flags & Elf_mips::EF_MIPS_ARCH ) )
+		    switch ( ( e_flags & elf_mips::EF_MIPS_ARCH ) )
 		      {
-		      case Elf_mips::E_MIPS_ARCH_1: result << ", mips1"; break;
-		      case Elf_mips::E_MIPS_ARCH_2: result << ", mips2"; break;
-		      case Elf_mips::E_MIPS_ARCH_3: result << ", mips3"; break;
-		      case Elf_mips::E_MIPS_ARCH_4: result << ", mips4"; break;
-		      case Elf_mips::E_MIPS_ARCH_5: result << ", mips5"; break;
-		      case Elf_mips::E_MIPS_ARCH_32: result << ", mips32"; break;
-		      case Elf_mips::E_MIPS_ARCH_32R2: result << ", mips32r2"; break;
-		      case Elf_mips::E_MIPS_ARCH_64: result << ", mips64"; break;
+		      case elf_mips::E_MIPS_ARCH_1: result << ", mips1"; break;
+		      case elf_mips::E_MIPS_ARCH_2: result << ", mips2"; break;
+		      case elf_mips::E_MIPS_ARCH_3: result << ", mips3"; break;
+		      case elf_mips::E_MIPS_ARCH_4: result << ", mips4"; break;
+		      case elf_mips::E_MIPS_ARCH_5: result << ", mips5"; break;
+		      case elf_mips::E_MIPS_ARCH_32: result << ", mips32"; break;
+		      case elf_mips::E_MIPS_ARCH_32R2: result << ", mips32r2"; break;
+		      case elf_mips::E_MIPS_ARCH_64: result << ", mips64"; break;
 		      default: result << ", unknown ISA"; break;
 		      }
 
 		    break;
 
-		  case Elf_Common::EM_SPARCV9:
-		    if ( e_flags & Elf_sparc::EF_SPARC_32PLUS )
+		  case elf_common::EM_SPARCV9:
+		    if ( e_flags & elf_sparc::EF_SPARC_32PLUS )
 		      result << ", v8+";
 
-		    if ( e_flags & Elf_sparc::EF_SPARC_SUN_US1 )
+		    if ( e_flags & elf_sparc::EF_SPARC_SUN_US1 )
 		      result << ", ultrasparcI";
 
-		    if ( e_flags & Elf_sparc::EF_SPARC_SUN_US3 )
+		    if ( e_flags & elf_sparc::EF_SPARC_SUN_US3 )
 		      result << ", ultrasparcIII";
 
-		    if ( e_flags & Elf_sparc::EF_SPARC_HAL_R1 )
+		    if ( e_flags & elf_sparc::EF_SPARC_HAL_R1 )
 		      result << ", halr1";
 
-		    if ( e_flags & Elf_sparc::EF_SPARC_LEDATA )
+		    if ( e_flags & elf_sparc::EF_SPARC_LEDATA )
 		      result << ", ledata";
 
-		    if ( ( e_flags & Elf_sparc::EF_SPARCV9_MM ) == Elf_sparc::EF_SPARCV9_TSO )
+		    if ( ( e_flags & elf_sparc::EF_SPARCV9_MM ) == elf_sparc::EF_SPARCV9_TSO )
 		      result << ", tso";
 
-		    if ( ( e_flags & Elf_sparc::EF_SPARCV9_MM ) == Elf_sparc::EF_SPARCV9_PSO )
+		    if ( ( e_flags & elf_sparc::EF_SPARCV9_MM ) == elf_sparc::EF_SPARCV9_PSO )
 		      result << ", pso";
 
-		    if ( ( e_flags & Elf_sparc::EF_SPARCV9_MM ) == Elf_sparc::EF_SPARCV9_RMO )
+		    if ( ( e_flags & elf_sparc::EF_SPARCV9_MM ) == elf_sparc::EF_SPARCV9_RMO )
 		      result << ", rmo";
 		    break;
 
-		  case Elf_Common::EM_PARISC:
-		    switch ( e_flags & Elf_hppa::EF_PARISC_ARCH )
+		  case elf_common::EM_PARISC:
+		    switch ( e_flags & elf_hppa::EF_PARISC_ARCH )
 		      {
-		      case Elf_hppa::EFA_PARISC_1_0:
+		      case elf_hppa::EFA_PARISC_1_0:
 			result << ", PA-RISC 1.0";
 			break;
-		      case Elf_hppa::EFA_PARISC_1_1:
+		      case elf_hppa::EFA_PARISC_1_1:
 			result << ", PA-RISC 1.1";
 			break;
-		      case Elf_hppa::EFA_PARISC_2_0:
+		      case elf_hppa::EFA_PARISC_2_0:
 			result << ", PA-RISC 2.0";
 			break;
 		      default:
 			break;
 		      }
-		    if ( e_flags & Elf_hppa::EF_PARISC_TRAPNIL )
+		    if ( e_flags & elf_hppa::EF_PARISC_TRAPNIL )
 		      result << ", trapnil";
-		    if ( e_flags & Elf_hppa::EF_PARISC_EXT )
+		    if ( e_flags & elf_hppa::EF_PARISC_EXT )
 		      result << ", ext";
-		    if ( e_flags & Elf_hppa::EF_PARISC_LSB )
+		    if ( e_flags & elf_hppa::EF_PARISC_LSB )
 		      result << ", lsb";
-		    if ( e_flags & Elf_hppa::EF_PARISC_WIDE )
+		    if ( e_flags & elf_hppa::EF_PARISC_WIDE )
 		      result << ", wide";
-		    if ( e_flags & Elf_hppa::EF_PARISC_NO_KABP )
+		    if ( e_flags & elf_hppa::EF_PARISC_NO_KABP )
 		      result << ", no kabp";
-		    if ( e_flags & Elf_hppa::EF_PARISC_LAZYSWAP )
+		    if ( e_flags & elf_hppa::EF_PARISC_LAZYSWAP )
 		      result << ", lazyswap";
 		    break;
 
-		  case Elf_Common::EM_PJ:
-		  case Elf_Common::EM_PJ_OLD:
-		    if ( ( e_flags & Elf_pj::EF_PICOJAVA_NEWCALLS ) ==
-			 Elf_pj::EF_PICOJAVA_NEWCALLS )
+		  case elf_common::EM_PJ:
+		  case elf_common::EM_PJ_OLD:
+		    if ( ( e_flags & elf_pj::EF_PICOJAVA_NEWCALLS ) ==
+			 elf_pj::EF_PICOJAVA_NEWCALLS )
 		      result << ", new calling convention";
 
-		    if ( ( e_flags & Elf_pj::EF_PICOJAVA_GNUCALLS ) ==
-			 Elf_pj::EF_PICOJAVA_GNUCALLS )
+		    if ( ( e_flags & elf_pj::EF_PICOJAVA_GNUCALLS ) ==
+			 elf_pj::EF_PICOJAVA_GNUCALLS )
 		      result << ", gnu calling convention";
 		    break;
 
-		  case Elf_Common::EM_IA_64:
-		    if ( ( e_flags & Elf_ia64::EF_IA_64_ABI64 ) )
+		  case elf_common::EM_IA_64:
+		    if ( ( e_flags & elf_ia64::EF_IA_64_ABI64 ) )
 		      result << ", 64-bit";
 		    else
 		      result << ", 32-bit";
-		    if ( ( e_flags & Elf_ia64::EF_IA_64_REDUCEDFP ) )
+		    if ( ( e_flags & elf_ia64::EF_IA_64_REDUCEDFP ) )
 		      result << ", reduced fp model";
-		    if ( ( e_flags & Elf_ia64::EF_IA_64_NOFUNCDESC_CONS_GP ) )
+		    if ( ( e_flags & elf_ia64::EF_IA_64_NOFUNCDESC_CONS_GP ) )
 		      result << ", no function descriptors, constant gp";
-		    else if ( ( e_flags & Elf_ia64::EF_IA_64_CONS_GP ) )
+		    else if ( ( e_flags & elf_ia64::EF_IA_64_CONS_GP ) )
 		      result << ", constant gp";
-		    if ( ( e_flags & Elf_ia64::EF_IA_64_ABSOLUTE ) )
+		    if ( ( e_flags & elf_ia64::EF_IA_64_ABSOLUTE ) )
 		      result << ", absolute";
 		    break;
 
-		  case Elf_Common::EM_VAX:
-		    if ( ( e_flags & Elf_vax::EF_VAX_NONPIC ) )
+		  case elf_common::EM_VAX:
+		    if ( ( e_flags & elf_vax::EF_VAX_NONPIC ) )
 		      result << ", non-PIC";
-		    if ( ( e_flags & Elf_vax::EF_VAX_DFLOAT ) )
+		    if ( ( e_flags & elf_vax::EF_VAX_DFLOAT ) )
 		      result << ", D-Float";
-		    if ( ( e_flags & Elf_vax::EF_VAX_GFLOAT ) )
+		    if ( ( e_flags & elf_vax::EF_VAX_GFLOAT ) )
 		      result << ", G-Float";
 		    break;
 		  }

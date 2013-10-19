@@ -19,13 +19,17 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ELF_FILE_HEADER_UTILS_H_
-#define ELF_FILE_HEADER_UTILS_H_
+#ifndef REVERSE_IO_INPUT_FILE_READERS_ELF_FILE_HEADER_UTILS_HPP_INCLUDED
+#define REVERSE_IO_INPUT_FILE_READERS_ELF_FILE_HEADER_UTILS_HPP_INCLUDED
 
 #include <boost/cstdint.hpp>
 #include <string>
 
-namespace libreverse { namespace elf_module {
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace linux_elf {
 
     /*!
      * \class Elf_File_Header_Utils
@@ -47,7 +51,7 @@ namespace libreverse { namespace elf_module {
      *-----------------------------------------------------------------------------
      */
 
-    class Elf_File_Header_Utils {
+    class elf_file_header_utils {
     public:
 
         /*!
@@ -57,7 +61,7 @@ namespace libreverse { namespace elf_module {
          *
          * NOTE: Taken from readelf.c
          */
-      static std::string get_File_Type_Meta ( boost::uint16_t e_type );
+      static std::string get_file_type_meta ( boost::uint16_t e_type );
 
         /*!
          * \brief Returns the string representation of the cpu
@@ -67,7 +71,7 @@ namespace libreverse { namespace elf_module {
          * target file
          *
          */
-      static std::string get_Arch_Name ( boost::uint16_t e_machine );
+      static std::string get_arch_name ( boost::uint16_t e_machine );
 
 
         /*!
@@ -75,14 +79,14 @@ namespace libreverse { namespace elf_module {
          * \return String representation of machine name
          * NOTE: Taken from readelf.c
          */
-      static std::string get_Machine_Name ( boost::uint16_t e_machine );
+      static std::string get_machine_name ( boost::uint16_t e_machine );
 
         /*!
          * \brief Returns the machine flags
          * \return String representation of machine flags
          * NOTE: Taken from readelf.c
          */
-      static std::string get_Machine_Flags ( boost::uint32_t e_flags,
+      static std::string get_machine_flags ( boost::uint32_t e_flags,
 					     boost::uint16_t e_machine );
 
         /*!
@@ -90,13 +94,16 @@ namespace libreverse { namespace elf_module {
          * \return String representation of ARM machine flags
          * NOTE: Taken from readelf.c
          */
-      static std::string decode_ARM_Machine_Flags ( boost::uint32_t e_flags );
+      static std::string decode_arm_machine_flags ( boost::uint32_t e_flags );
 
-      static std::string get_File_Type_Name ( boost::uint16_t e_type );
+      static std::string get_file_type_name ( boost::uint16_t e_type );
 
     };
 
-} /* namespace elf_module */
-} /* namespace libreverse */
+	} // namespace linux_elf
+      } // namespace file_readers
+    } // namespace input
+  } //  namespace io
+} // namespace reverse
 
-#endif /* ELF_FILE_HEADER_UTILS_H */
+#endif // ifndef REVERSE_IO_INPUT_FILE_READERS_ELF_FILE_HEADER_UTILS_HPP_INCLUDED

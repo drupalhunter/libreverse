@@ -185,7 +185,7 @@ namespace reverse {
 
 
 	    /* Relocation macros.  */
-	    static inline std::string get_Type (boost::uint32_t type);
+	    static inline std::string get_type (boost::uint32_t type);
 
 	    /* NOTE: Need to figure what were are going to do with these
 
