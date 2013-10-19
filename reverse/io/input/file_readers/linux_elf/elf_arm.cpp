@@ -19,12 +19,19 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#include "Elf_arm.h"
-#include <iostream>
+#include <reverse/io/input/file_readers/linux_elf/elf_arm.hpp>
 
-namespace libreverse { namespace elf_module {
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace linux_elf {
 
-    const char* Elf_arm::ARM_NOTE_SECTION =  ".note.gnu.arm.ident";
+	  const char* elf_arm::ARM_NOTE_SECTION =  ".note.gnu.arm.ident";
 
-  } /* namespace elf_module */
-} /* namespace libreverse */
+	} // namespace linux_elf
+      } // namespace file_readers
+    } // namespace input
+  } //  namespace io
+} // namespace reverse
+

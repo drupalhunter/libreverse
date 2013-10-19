@@ -36,6 +36,12 @@ namespace reverse {
 	  typedef boost::int32_t Elf32_Sword;
 	  typedef boost::uint32_t Elf32_Word;
 
+	  typedef boost::uint64_t Elf64_Addr;
+	  typedef boost::uint16_t Elf64_Half;
+	  typedef boost::uint64_t Elf64_Off;
+	  typedef boost::int32_t Elf32_Sword;
+	  typedef boost::uint32_t Elf32_Word;
+
 	} // namespace linux_elf
       } // namespace file_readers
     } // namespace input

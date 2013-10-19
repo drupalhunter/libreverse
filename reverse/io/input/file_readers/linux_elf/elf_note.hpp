@@ -19,46 +19,52 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ELF_NOTE_H_
-#define ELF_NOTE_H_
+#ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_NOTE_HPP_INCLUDED
+#define REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_NOTE_HPP_INCLUDED
 
-#include <boost/cstdint.hpp>
+#include <reverse/io/input/file_readers/linux_elf/elf_types.hpp>
 
-namespace libreverse { namespace elf_module {
+#include <boost/fusion/adapted/struct/adapt_struct.hpp>
 
-  /*!
-   * \class Elf_Note
-   * \date 2003
-   * \author Stephen Torri
-   */
-  class Elf_Note
-  {
-  public:
+#include <string>
 
-    /*! \brief Default Destructor */
-    virtual ~Elf_Note(){}
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace linux_elf {
 
-    /*!
-     * \brief Convert the bit ordering from the target file bit ordering
-     * to the host system. If the host system and the target file
-     * match this is a no-op.
-     */
-    virtual void convert ();
+	  /*!
+	   * \class Elf_Note
+	   * \date 2003
+	   * \author Stephen Torri
+	   */
+	  struct Elf_Note
+	  {
+	    /*! \brief Size of entry's owner string */
+	    Elf32_Word m_namesz;
 
-    /*! \brief Size of entry's owner string */
-    boost::uint32_t m_namesz;
+	    /*! \brief  Size of the note descriptor */
+	    Elf32_Word  m_descsz;
 
-    /*! \brief  Size of the note descriptor */
-    boost::uint32_t m_descsz;
+	    /*! \brief Interpretation of the descriptor */
+	    Elf32_Word m_type;
 
-    /*! \brief Interpretation of the descriptor */
-    boost::uint32_t m_type;
+	    /*! \brief Start of the name+desc data */
+	    std::string m_name;
+	  };
 
-    /*! \brief Start of the name+desc data */
-    boost::int8_t   m_name;
-  };
+	} // namespace linux_elf
+      } // namespace file_readers
+    } // namespace input
+  } //  namespace io
+} // namespace reverse
 
-} /* namespace elf_module */
-} /* namespace libreverse */
+BOOST_FUSION_ADAPT_STRUCT (
+			   struct reverse::io::input::file_readers::linux_elf::elf_note,
+			   ( Elf32_Word, m_namesz )
+			   ( Elf32_Word, m_descsz )
+			   ( Elf32_Word, m_type )
+			   ( std::string, m_name )
 
-#endif /* ELF_NOTE_H_ */
+#endif // REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_NOTE_HPP_INCLUDED 
