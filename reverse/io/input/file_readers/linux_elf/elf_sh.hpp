@@ -90,7 +90,7 @@ namespace reverse {
 
 	    /* Symbol should be handled as DataLabel (attached to global SHN_UNDEF
 	       symbols).  */
-	    static const boost::uint8_t STT_DATALABEL = Elf_Common::STT_LOPROC;
+	    static const boost::uint8_t STT_DATALABEL = elf_common::STT_LOPROC;
 
 	    /**
 	     * Functions

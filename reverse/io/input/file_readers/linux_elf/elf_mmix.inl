@@ -83,7 +83,7 @@ namespace reverse {
 	      case 35: output = "R_MMIX_LOCAL"; break;
 	      default:
                 {
-		  trace::io_detail ( "Unknown mmix relocation type: %1%", type );
+		  trace::io_error ( "Unknown mmix relocation type: %1%", type );
 		  output = "unknown";
                 }
 	      }

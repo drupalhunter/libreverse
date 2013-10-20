@@ -105,7 +105,7 @@ namespace reverse {
 	      case 41: output = "R_ALPHA_TPREL16"; break;
 	      default:
 		{
-		  trace::io_detail ( "Unknown alpha relocation type: %1%", type );
+		  trace::io_error ( "Unknown alpha relocation type: %1%", type );
 		  output = "unknown";
 		}
 	      }

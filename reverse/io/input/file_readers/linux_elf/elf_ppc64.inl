@@ -139,7 +139,7 @@ namespace reverse {
                 }
 	      }
 
-	    trace::io_deteail ( "Exiting Elf_ppc64::get_Type" );
+	    trace::io_detail ( "Exiting Elf_ppc64::get_Type" );
     
 	    return output;
 

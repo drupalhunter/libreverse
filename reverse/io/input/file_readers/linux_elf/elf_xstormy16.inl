@@ -1,70 +1,55 @@
-#include "Elf_xstormy16.h"
-#include <iostream>
+#include <reverse/io/input/file_readers/linux_elf/elf_xstormy16.hpp>
+#include <reverse/trace.hpp>
 
-#ifdef LIBREVERSE_DEBUG
-#include "libreverse/Trace.h"
-using namespace libreverse::api;
-using namespace libreverse::trace;
-#endif /* LIBREVERSE_DEBUG */
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace linux_elf {
 
-namespace libreverse { namespace elf_module {
+	  inline std::string
+	  elf_xstormy16::get_type ( boost::uint32_t type )
+	  {
+	    trace::io_detail ( "Entering Elf_xstormy16::get_Type" );
 
-    inline std::string
-    Elf_xstormy16::get_Type ( boost::uint32_t type )
-    {
+	    std::string output;
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::IO,
-                             TraceLevel::DETAIL,
-                             "Entering Elf_xstormy16::get_Type" );
-#endif /* LIBREVERSE_DEBUG */
+	    switch (type)
+	      {
+	      case 0: output = "R_XSTORMY16_NONE"; break;
 
+	      case 1: output = "R_XSTORMY16_32"; break;
+	      case 2: output = "R_XSTORMY16_16"; break;
+	      case 3: output = "R_XSTORMY16_8"; break;
+	      case 4: output = "R_XSTORMY16_PC32"; break;
+	      case 5: output = "R_XSTORMY16_PC16"; break;
+	      case 6: output = "R_XSTORMY16_PC8"; break;
 
-        std::string output = "";
+	      case 7: output = "R_XSTORMY16_REL_12"; break;
+	      case 8: output = "R_XSTORMY16_24"; break;
+	      case 9: output = "R_XSTORMY16_FPTR16"; break;
 
-        switch (type)
-            {
-            case 0: output = "R_XSTORMY16_NONE"; break;
+	      case 10: output = "R_XSTORMY16_LO16"; break;
+	      case 11: output = "R_XSTORMY16_HI16"; break;
+	      case 12: output = "R_XSTORMY16_12"; break;
 
-            case 1: output = "R_XSTORMY16_32"; break;
-            case 2: output = "R_XSTORMY16_16"; break;
-            case 3: output = "R_XSTORMY16_8"; break;
-            case 4: output = "R_XSTORMY16_PC32"; break;
-            case 5: output = "R_XSTORMY16_PC16"; break;
-            case 6: output = "R_XSTORMY16_PC8"; break;
-
-            case 7: output = "R_XSTORMY16_REL_12"; break;
-            case 8: output = "R_XSTORMY16_24"; break;
-            case 9: output = "R_XSTORMY16_FPTR16"; break;
-
-            case 10: output = "R_XSTORMY16_LO16"; break;
-            case 11: output = "R_XSTORMY16_HI16"; break;
-            case 12: output = "R_XSTORMY16_12"; break;
-
-            case 128: output = "R_XSTORMY16_GNU_VTINHERIT"; break;
-            case 129: output = "R_XSTORMY16_GNU_VTENTRY"; break;
-            default:
+	      case 128: output = "R_XSTORMY16_GNU_VTINHERIT"; break;
+	      case 129: output = "R_XSTORMY16_GNU_VTENTRY"; break;
+	      default:
                 {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::IO,
-                             TraceLevel::DETAIL,
-			     boost::str ( boost::format ( "Unknown xstorym16 relocation type: %1%" ) % type ) );
-#endif /* LIBREVERSE_DEBUG */
-
-                    output = "unknown";
+		  trace::io_error ( "Unknown xstorym16 relocation type: %1%", type );
+		  output = "unknown";
                 }
-            }
+	      }
 
+	    trace::io_detail ( "Exiting Elf_xstormy16::get_Type" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::IO,
-                             TraceLevel::DETAIL,
-                             "Exiting Elf_xstormy16::get_Type" );
-#endif /* LIBREVERSE_DEBUG */
+	    return output;
+	  }
 
+	} // namespace linux_elf
+      } // namespace file_readers
+    } // namespace input
+  } //  namespace io
+} // namespace reverse
 
-        return output;
-    }
-} /* namespace elf_module */
-} /* namespace libreverse */

@@ -31,7 +31,7 @@ namespace reverse {
 	      case 12: output = "R_MCORE_JUMP_SLOT"; break;
 	      default:
                 {
-		  trace::io-error ( "Unknown mcore relocation type: %1%", type );
+		  trace::io_error ( "Unknown mcore relocation type: %1%", type );
 		  output = "unknown";
                 }
 	      }

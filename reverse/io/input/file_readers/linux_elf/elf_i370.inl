@@ -1,29 +1,22 @@
-#include "Elf_i370.h"
+#include <reverse/io/input/file_readers/linux_elf/elf_i370.hpp>
+#include <reverse/trace.hpp>
 
-#ifdef LIBREVERSE_DEBUG
-#include "libreverse/Trace.h"
-using namespace libreverse::api;
-using namespace libreverse::trace;
-#endif /* LIBREVERSE_DEBUG */
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace linux_elf {
 
-namespace libreverse { namespace elf_module {
+	  inline std::string
+	  elf_i370::get_type ( boost::uint32_t type )
+	  {
+	    trace::io_detail ( "Entering Elf_i370::get_Type" );
 
-    inline std::string
-    Elf_i370::get_Type ( boost::uint32_t type )
-    {
+	    std::string output;
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::IO,
-                             TraceLevel::DETAIL,
-                             "Entering Elf_i370::get_Type" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        std::string output = "";
-
-        switch (type)
-            {
-            case 0: output = "R_I370_NONE"; break;
+	    switch (type)
+	      {
+	      case 0: output = "R_I370_NONE"; break;
             case 1: output = "R_I370_ADDR31"; break;
             case 2: output = "R_I370_ADDR32"; break;
             case 3: output = "R_I370_ADDR16"; break; 
@@ -37,26 +30,18 @@ namespace libreverse { namespace elf_module {
             case 11: output = "R_I370_RELATIVE"; break;
             default:
                 {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::IO,
-                             TraceLevel::DETAIL,
-			     boost::str ( boost::format ( "Unknown i370 relocation type: %1%" ) % type ) );
-#endif /* LIBREVERSE_DEBUG */
-
-                    output = "unknown";
+		  trace::io_error ( "Unknown i370 relocation type: %1%", type );
+		  output = "unknown";
                 }
             }
 
+	    trace::io_detail ( "Exiting Elf_i370::get_Type" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::IO,
-                             TraceLevel::DETAIL,
-                             "Exiting Elf_i370::get_Type" );
-#endif /* LIBREVERSE_DEBUG */
+	    return output;
+	  }
 
-
-        return output;
-    }
-} /* namespace elf_module */
-} /* namespace libreverse */
+	} // namespace linux_elf
+      } // namespace file_readers
+    } // namespace input
+  } //  namespace io
+} // namespace reverse

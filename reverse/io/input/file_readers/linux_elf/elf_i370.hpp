@@ -1,22 +1,22 @@
 /*  Elf_i370.h
 
-   Copyright (C) 2008 Stephen Torri
+    Copyright (C) 2008 Stephen Torri
 
-   This file is part of Libreverse.
+    This file is part of Libreverse.
 
-   Libreverse is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published
-   by the Free Software Foundation; either version 3, or (at your
-   option) any later version.
+    Libreverse is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published
+    by the Free Software Foundation; either version 3, or (at your
+    option) any later version.
 
-   Libreverse is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
+    Libreverse is distributed in the hope that it will be useful, but
+    WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with this program.  If not, see
-   <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see
+    <http://www.gnu.org/licenses/>.
 */
 
 /*
@@ -45,51 +45,58 @@
   that most of this is not actually implemented by BFD.
 */
 
-#ifndef _ELF_I370_H
-#define _ELF_I370_H
+#ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_I370_HPP_INCLUDED
+#define REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_I370_HPP_INCLUDED
 
-#include "Elf_Common.h"
+#include <boost/cstdint.hpp>
 #include <string>
 
-namespace libreverse { namespace elf_module {
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace linux_elf {
 
-    class Elf_i370 {
-    public:
+	  class elf_i370 {
+	  public:
 
-        /*
-          i370 relocations
+	    /*
+	      i370 relocations
           
-          Note that there is really just one relocation that we currently
-          support (and only one that we seem to need, at the moment), and
-          that is the 31-bit address relocation.  Note that the 370/390
-          only supports a 31-bit (2GB) address space.
-        */
+	      Note that there is really just one relocation that we currently
+	      support (and only one that we seem to need, at the moment), and
+	      that is the 31-bit address relocation.  Note that the 370/390
+	      only supports a 31-bit (2GB) address space.
+	    */
 
-        static inline std::string get_Type ( boost::uint32_t type );
+	    static inline std::string get_type ( boost::uint32_t type );
 
-        /* Processor specific section headers, sh_type field */
+	    /* Processor specific section headers, sh_type field */
         
-        /* Link editor is to sort the entries in this section based on the
-           address specified in the associated symbol table entry.  */
-        static const boost::uint32_t SHT_ORDERED = Elf_Common::SHT_HIPROC;
+	    /* Link editor is to sort the entries in this section based on the
+	       address specified in the associated symbol table entry.  */
+	    static const boost::uint32_t SHT_ORDERED = elf_common::SHT_HIPROC;
     
-        /* i370 -mrelocatable flag */
-        static const boost::uint32_t EF_I370_RELOCATABLE =	0x00010000;
+	    /* i370 -mrelocatable flag */
+	    static const boost::uint32_t EF_I370_RELOCATABLE =	0x00010000;
 
-        /* i370 -mrelocatable-lib flag */
-        static const boost::uint32_t EF_I370_RELOCATABLE_LIB = 0x00008000;
+	    /* i370 -mrelocatable-lib flag */
+	    static const boost::uint32_t EF_I370_RELOCATABLE_LIB = 0x00008000;
 
-        /* Processor specific section flags, sh_flags field */
+	    /* Processor specific section flags, sh_flags field */
 
-        /* Link editor is to exclude this section from executable and
-           shared objects that it builds when those objects are not to be
-           furhter relocated.  */
-        static const boost::uint32_t SHF_EXCLUDE = 0x80000000;
-    };
+	    /* Link editor is to exclude this section from executable and
+	       shared objects that it builds when those objects are not to be
+	       furhter relocated.  */
+	    static const boost::uint32_t SHF_EXCLUDE = 0x80000000;
+	  };
 
-} /* namespace elf_module */
-} /* namespace libreverse */
+	} // namespace linux_elf
+      } // namespace file_readers
+    } // namespace input
+  } //  namespace io
+} // namespace reverse
 
-#include "Elf_i370.inl"
+#include "elf_i370.inl"
 
-#endif /* _ELF_I370_H */
+#endif // ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_I370_HPP_INCLUDED

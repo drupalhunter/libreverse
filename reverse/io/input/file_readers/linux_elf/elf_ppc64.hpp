@@ -1,4 +1,4 @@
-x/*  Elf_ppc64.h
+/*  Elf_ppc64.h
 
     Copyright (C) 2008 Stephen Torri
 
@@ -61,11 +61,11 @@ namespace reverse {
 	    static inline bool IS_PPC64_TLS_RELOC (boost::uint32_t value);
 
 	    /* Specify the start of the .glink section.  */
-	    static const boost::uint32_t DT_PPC64_GLINK = Elf_Common::DT_LOPROC;
+	    static const boost::uint32_t DT_PPC64_GLINK = elf_common::DT_LOPROC;
 
 	    /* Specify the start and size of the .opd section.  */
-	    static const boost::uint32_t DT_PPC64_OPD = (Elf_Common::DT_LOPROC + 1);
-	    static const boost::uint32_t DT_PPC64_OPDSZ = (Elf_Common::DT_LOPROC + 2);
+	    static const boost::uint32_t DT_PPC64_OPD = (elf_common::DT_LOPROC + 1);
+	    static const boost::uint32_t DT_PPC64_OPDSZ = (elf_common::DT_LOPROC + 2);
 
 	  };
 

@@ -1,22 +1,22 @@
 /*  Elf_xtensa.h
 
-   Copyright (C) 2008 Stephen Torri
+    Copyright (C) 2008 Stephen Torri
 
-   This file is part of Libreverse.
+    This file is part of Libreverse.
 
-   Libreverse is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published
-   by the Free Software Foundation; either version 3, or (at your
-   option) any later version.
+    Libreverse is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published
+    by the Free Software Foundation; either version 3, or (at your
+    option) any later version.
 
-   Libreverse is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
+    Libreverse is distributed in the hope that it will be useful, but
+    WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with this program.  If not, see
-   <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see
+    <http://www.gnu.org/licenses/>.
 */
 
 /*
@@ -42,65 +42,72 @@
 
 /* This file holds definitions specific to the Xtensa ELF ABI.  */
 
-#ifndef _ELF_XTENSA_H
-#define _ELF_XTENSA_H
+#ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_XTENSA_HPP_INCLUDED
+#define REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_XTENSA_HPP_INCLUDED
 
 #include <boost/cstdint.hpp>
 #include <string>
 
-namespace libreverse { namespace elf_module {
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace linux_elf {
 
-    class Elf_xtensa {
-    public:
+	  class elf_xtensa {
+	  public:
 
-        static inline std::string get_Type ( boost::uint32_t type );
+	    static inline std::string get_type ( boost::uint32_t type );
 
-        /* Processor-specific flags for the ELF header e_flags field.  */
+	    /* Processor-specific flags for the ELF header e_flags field.  */
     
-        /* Four-bit Xtensa machine type field.  */
-        static const boost::uint32_t EF_XTENSA_MACH  = 0x0000000f;
+	    /* Four-bit Xtensa machine type field.  */
+	    static const boost::uint32_t EF_XTENSA_MACH  = 0x0000000f;
 
-        /* Various CPU types.  */
-        static const boost::uint32_t E_XTENSA_MACH    = 0x00000000;
+	    /* Various CPU types.  */
+	    static const boost::uint32_t E_XTENSA_MACH    = 0x00000000;
 
-        /* Leave bits 0xf0 alone in case we ever have more than 16 cpu
-           types.  Highly unlikely, but what the heck.  */
+	    /* Leave bits 0xf0 alone in case we ever have more than 16 cpu
+	       types.  Highly unlikely, but what the heck.  */
 
-        static const boost::uint32_t EF_XTENSA_XT_INSN   = 0x00000100;
-        static const boost::uint32_t EF_XTENSA_XT_LIT   = 0x00000200;
+	    static const boost::uint32_t EF_XTENSA_XT_INSN   = 0x00000100;
+	    static const boost::uint32_t EF_XTENSA_XT_LIT   = 0x00000200;
 
-        /* Processor-specific dynamic array tags.  */
+	    /* Processor-specific dynamic array tags.  */
 
-        /* Offset of the table that records the GOT location(s).  */
-        static const boost::uint32_t DT_XTENSA_GOT_LOC_OFF   = 0x70000000;
+	    /* Offset of the table that records the GOT location(s).  */
+	    static const boost::uint32_t DT_XTENSA_GOT_LOC_OFF   = 0x70000000;
 
-        /* Number of entries in the GOT location table.  */
-        static const boost::uint32_t DT_XTENSA_GOT_LOC_SZ   = 0x70000001;
+	    /* Number of entries in the GOT location table.  */
+	    static const boost::uint32_t DT_XTENSA_GOT_LOC_SZ   = 0x70000001;
 
 
-        /* Definitions for instruction and literal property tables.  The
-           instruction tables for ".gnu.linkonce.t.*" sections are placed
-           in the following sections:
+	    /* Definitions for instruction and literal property tables.  The
+	       instruction tables for ".gnu.linkonce.t.*" sections are placed
+	       in the following sections:
 
-           instruction tables: .gnu.linkonce.x.* literal tables:
-           .gnu.linkonce.p.*
-        */
+	       instruction tables: .gnu.linkonce.x.* literal tables:
+	       .gnu.linkonce.p.*
+	    */
 
-        static std::string XTENSA_INSN_SEC_NAME;
-        static std::string XTENSA_LIT_SEC_NAME;
+	    static std::string XTENSA_INSN_SEC_NAME;
+	    static std::string XTENSA_LIT_SEC_NAME;
 
-        /*
-          typedef struct property_table_entry_t
-          {
-          bfd_vma address;
-          bfd_vma size;
-          } property_table_entry;
-        */
-    };
+	    /*
+	      typedef struct property_table_entry_t
+	      {
+	      bfd_vma address;
+	      bfd_vma size;
+	      } property_table_entry;
+	    */
+	  };
 
-} /* namespace elf_module */
-} /* namespace libreverse */
+	} // namespace linux_elf
+      } // namespace file_readers
+    } // namespace input
+  } //  namespace io
+} // namespace reverse
 
-#include "Elf_xtensa.inl"
+#include "elf_xtensa.inl"
 
-#endif /* _ELF_XTENSA_H */
+#endif // ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_XTENSA_HPP_INCLUDED

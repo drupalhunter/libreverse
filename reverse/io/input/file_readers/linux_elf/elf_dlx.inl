@@ -11,6 +11,7 @@ namespace reverse {
 	  elf_dlx::get_type ( boost::uint32_t type )
 	  {
 	    trace::io_detail ( "Entering Elf_dlx::get_Type" );
+	    std::string output;
 
 	    switch(type)
 	      {

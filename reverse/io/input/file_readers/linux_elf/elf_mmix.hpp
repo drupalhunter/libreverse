@@ -64,7 +64,7 @@ namespace reverse {
 
 	    /* Symbol attributes.  */
 	    /* A symbol with this section-index is a register.  */
-	    static const boost::uint16_t SHN_REGISTER	= Elf_Common::SHN_LOPROC;
+	    static const boost::uint16_t SHN_REGISTER	= elf_common::SHN_LOPROC;
 
 	    /* This section holds contents for each initialized register, at VMA
 	       regno*8.  A symbol relative to this section will be transformed to an

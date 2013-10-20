@@ -86,7 +86,7 @@ namespace reverse {
 	      case 0xE0: output = "R_860_HIGOTOFF"; break;
 	      default:
                 {
-		  trace::io_detail ( "Unknown i860 relocation type: %1%", type );
+		  trace::io_error ( "Unknown i860 relocation type: %1%", type );
 		  output = "unknown";
                 }
 

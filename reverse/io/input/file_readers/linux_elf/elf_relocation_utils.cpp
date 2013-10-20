@@ -86,200 +86,200 @@ namespace reverse {
 
 	      case elf_common::EM_M32R:
 	      case elf_common::EM_CYGNUS_M32R:
-		output = Elf_m32r::get_Type ( reloc_type );
+		output = elf_m32r::get_type ( reloc_type );
 		break;
 
 	      case elf_common::EM_386:
 	      case elf_common::EM_486:
-		output = elf_ix86::get_Type ( reloc_type );
+		output = elf_ix86::get_type ( reloc_type );
 		break;
 
 	      case elf_common::EM_68HC11:
 	      case elf_common::EM_68HC12:
-		output = elf_m68hc11::get_Type ( reloc_type );
+		output = elf_m68hc11::get_type ( reloc_type );
 		break;
 
 	      case elf_common::EM_68K:
-		output = elf_m68k::get_Type ( reloc_type );
+		output = elf_m68k::get_type ( reloc_type );
 		break;
 
 	      case elf_common::EM_960:
-		output = elf_i960::get_Type ( reloc_type );
+		output = elf_i960::get_type ( reloc_type );
 		break;
 
 	      case elf_common::EM_AVR:
 	      case elf_common::EM_AVR_OLD:
-		output = elf_avr::get_Type ( reloc_type );
+		output = elf_avr::get_type ( reloc_type );
 		break;
 
 	      case elf_common::EM_OLD_SPARCV9:
 	      case elf_common::EM_SPARC32PLUS:
 	      case elf_common::EM_SPARCV9:
 	      case elf_common::EM_SPARC:
-		output = elf_sparc::get_Type ( reloc_type );
+		output = elf_sparc::get_type ( reloc_type );
 		break;
 
 	      case elf_common::EM_V850:
 	      case elf_common::EM_CYGNUS_V850:
-		output = elf_v850::get_Type ( reloc_type );
+		output = elf_v850::get_type ( reloc_type );
 		break;
 
 	      case elf_common::EM_D10V:
 	      case elf_common::EM_CYGNUS_D10V:
-		output = elf_d10v::get_Type ( reloc_type );
+		output = elf_d10v::get_type ( reloc_type );
 		break;
 
 	      case elf_common::EM_D30V:
 	      case elf_common::EM_CYGNUS_D30V:
-		output = elf_d30v::get_Type ( reloc_type );
+		output = elf_d30v::get_type ( reloc_type );
 		break;
 
 	      case elf_common::EM_DLX:
-		output = elf_dlx::get_Type ( reloc_type );
+		output = elf_dlx::get_type ( reloc_type );
 		break;
 
 	      case elf_common::EM_SH:
-		output = elf_sh::get_Type ( reloc_type );
+		output = elf_sh::get_type ( reloc_type );
 		break;
 
 	      case elf_common::EM_MN10300:
 	      case elf_common::EM_CYGNUS_MN10300:
-		output = elf_mn10300::get_Type ( reloc_type );
+		output = elf_mn10300::get_type ( reloc_type );
 		break;
 
 	      case elf_common::EM_MN10200:
 	      case elf_common::EM_CYGNUS_MN10200:
-		output = elf_mn10200::get_Type ( reloc_type );
+		output = elf_mn10200::get_type ( reloc_type );
 		break;
 
 	      case elf_common::EM_FR30:
 	      case elf_common::EM_CYGNUS_FR30:
-		output = elf_fr30::get_Type ( reloc_type );
+		output = elf_fr30::get_type ( reloc_type );
 		break;
 
 	      case elf_common::EM_CYGNUS_FRV:
-		output = elf_frv::get_Type ( reloc_type );
+		output = elf_frv::get_type ( reloc_type );
 		break;
 
 	      case elf_common::EM_MCORE:
-		output = elf_mcore::get_Type ( reloc_type );
+		output = elf_mcore::get_type ( reloc_type );
 		break;
 
 	      case elf_common::EM_MMIX:
-		output = elf_mmix::get_Type ( reloc_type );
+		output = elf_mmix::get_type ( reloc_type );
 		break;
 
 	      case elf_common::EM_MSP430:
 	      case elf_common::EM_MSP430_OLD:
-		output = elf_msp430::get_Type ( reloc_type );
+		output = elf_msp430::get_type ( reloc_type );
 		break;
 
 	      case elf_common::EM_PPC:
-		output = elf_ppc::get_Type ( reloc_type );
+		output = elf_ppc::get_type ( reloc_type );
 		break;
 
 	      case elf_common::EM_PPC64:
-		output = elf_ppc64::get_Type ( reloc_type );
+		output = elf_ppc64::get_type ( reloc_type );
 		break;
 
 	      case elf_common::EM_MIPS:
 	      case elf_common::EM_MIPS_RS3_LE:
 		if ( bitsize == 32 )
 		  {
-		    output = elf_mips::get_Type ( reloc_type );
+		    output = elf_mips::get_type ( reloc_type );
 		  }
 		else
 		  {
-		    output = elf_mips::get_Type ( elf_mips::ELF64_MIPS_R_TYPE ( reloc_type ) );
+		    output = elf_mips::get_type ( elf_mips::elf64_mips_r_type ( reloc_type ) );
 
-		    output = elf_mips::get_Type ( elf_mips::ELF64_MIPS_R_TYPE2 ( reloc_type ) );
+		    output = elf_mips::get_type ( elf_mips::elf64_mips_r_type2 ( reloc_type ) );
 
-		    output = elf_mips::get_Type ( elf_mips::ELF64_MIPS_R_TYPE3 ( reloc_type ) );
+		    output = elf_mips::get_type ( elf_mips::elf64_mips_r_type3 ( reloc_type ) );
 		  }
 		break;
 
 	      case elf_common::EM_ALPHA:
-		output = elf_alpha::get_Type ( reloc_type );
+		output = elf_alpha::get_type ( reloc_type );
 		break;
 
 	      case elf_common::EM_ARM:
-		output = elf_arm::get_Type ( reloc_type );
+		output = elf_arm::get_type ( reloc_type );
 		break;
 
 	      case elf_common::EM_ARC:
-		output = elf_arc::get_Type ( reloc_type );
+		output = elf_arc::get_type ( reloc_type );
 		break;
 
 	      case elf_common::EM_PARISC:
-		output = elf_hppa::get_Type ( reloc_type );
+		output = elf_hppa::get_type ( reloc_type );
 		break;
 
 	      case elf_common::EM_H8_300:
 	      case elf_common::EM_H8_300H:
 	      case elf_common::EM_H8S:
-		output = elf_h8::get_Type ( reloc_type );
+		output = elf_h8::get_type ( reloc_type );
 		break;
 
 	      case elf_common::EM_OPENRISC:
 	      case elf_common::EM_OR32:
-		output = elf_or32::get_Type ( reloc_type );
+		output = elf_or32::get_type ( reloc_type );
 		break;
 
 	      case elf_common::EM_PJ:
 	      case elf_common::EM_PJ_OLD:
-		output = elf_pj::get_Type ( reloc_type );
+		output = elf_pj::get_type ( reloc_type );
 		break;
 	      case elf_common::EM_IA_64:
-		output = elf_ia64::get_Type ( reloc_type );
+		output = elf_ia64::get_type ( reloc_type );
 		break;
 
 	      case elf_common::EM_CRIS:
-		output = elf_cris::get_Type ( reloc_type );
+		output = elf_cris::get_type ( reloc_type );
 		break;
 
 	      case elf_common::EM_860:
-		output = elf_i860::get_Type ( reloc_type );
+		output = elf_i860::get_type ( reloc_type );
 		break;
 
 	      case elf_common::EM_X86_64:
-		output = elf_x86_64::get_Type ( reloc_type );
+		output = elf_x86_64::get_type ( reloc_type );
 		break;
 
 	      case elf_common::EM_S370:
-		output = elf_i370::get_Type ( reloc_type );
+		output = elf_i370::get_type ( reloc_type );
 		break;
 
 	      case elf_common::EM_S390_OLD:
 	      case elf_common::EM_S390:
-		output = elf_s390::get_Type ( reloc_type );
+		output = elf_s390::get_type ( reloc_type );
 		break;
 
 	      case elf_common::EM_XSTORMY16:
-		output = elf_xstormy16::get_Type ( reloc_type );
+		output = elf_xstormy16::get_type ( reloc_type );
 		break;
 
 	      case elf_common::EM_VAX:
-		output = elf_vax::get_Type ( reloc_type );
+		output = elf_vax::get_type ( reloc_type );
 		break;
 
 	      case elf_common::EM_IP2K:
 	      case elf_common::EM_IP2K_OLD:
-		output = elf_ip2k::get_Type ( reloc_type );
+		output = elf_ip2k::get_type ( reloc_type );
 		break;
 
 	      case elf_common::EM_IQ2000:
-		output = elf_iq2000::get_Type ( reloc_type );
+		output = elf_iq2000::get_type ( reloc_type );
 		break;
 
 	      case elf_common::EM_XTENSA_OLD:
 	      case elf_common::EM_XTENSA:
-		output = elf_xtensa::get_Type ( reloc_type );
+		output = elf_xtensa::get_type ( reloc_type );
 		break;
 	      }
 
 	    trace::io_detail ( "Exiting Elf_Relocation::get_Section_Type_Name" );
 
-            return result.str();
+            return output;
 	  }
 
 	} // namespace linux_elf
