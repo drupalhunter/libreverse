@@ -19,35 +19,41 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ELF_RELOCATION_UTILS_H
-#define ELF_RELOCATION_UTILS_H
+#ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_RELOCATION_UTILS_HPP_INCLUDED
+#define REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_RELOCATION_UTILS_HPP_INCLUDED
 
 #include <string>
 #include <boost/cstdint.hpp>
 
-namespace libreverse { namespace elf_module {
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace linux_elf {
 
-    /*!
-     * \class Elf_Relocation_Utils
-     * \date 2003
-     * \author Stephen Torri
-     */
-    class Elf_Relocation_Utils {
-    public:
+	  /*!
+	   * \date 2003
+	   * \author Stephen Torri
+	   */
+	  class elf_relocation_utils {
+	  public:
+	    
+	    /*!
+	     * \brief Return type name
+	     * \param machine_value CPU of the target
+	     * \param reloc_type Relocation type
+	     * \return String representation of section header type
+	     */
+	    static std::string get_section_type_name ( boost::uint16_t machine_value,
+						       boost::uint8_t reloc_type,
+						       boost::uint8_t bitsize );
+	    
+	  };
+	  
+	} // namespace linux_elf
+      } // namespace file_readers
+    } // namespace input
+  } //  namespace io
+} // namespace reverse
 
-        /*!
-         * \brief Return type name
-	 * \param machine_value CPU of the target
-	 * \param reloc_type Relocation type
-         * \return String representation of section header type
-         */
-      static std::string get_Section_Type_Name ( boost::uint16_t machine_value,
-						 boost::uint8_t reloc_type,
-						 boost::uint8_t bitsize );
-
-    };
-
-} /* namespace elf_module */
-} /* namespace libreverse */
-
-#endif /* ELF_RELOCATION_UTILS_H */
+#endif // ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_RELOCATION_UTILS_HPP_INCLUDED

@@ -41,24 +41,31 @@
   02111-1307, USA.
 */
 
-#ifndef _ELF_I386_H
-#define _ELF_I386_H
+#ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_IX86_HPP_INCLUDED
+#define REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_IX86_HPP_INCLUDED
 
 #include <boost/cstdint.hpp>
 #include <string>
 
-namespace libreverse { namespace elf_module {
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace linux_elf {
 
-  class Elf_ix86 {
-  public:
+	  class elf_ix86 {
+	  public:
+	    
+	    static inline std::string get_type (boost::uint32_t type);
+	    
+	  };
 
-      static inline std::string get_Type (boost::uint32_t type);
+	} // namespace linux_elf
+      } // namespace file_readers
+    } // namespace input
+  } //  namespace io
+} // namespace reverse
 
-  };
+#include "elf_ix86.inl"
 
-} /* namespace elf_module */
-} /* namespace libreverse */
-
-#include "Elf_ix86.inl"
-
-#endif
+#endif // ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_IX86_HPP_INCLUDED

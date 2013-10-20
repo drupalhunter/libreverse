@@ -1,22 +1,22 @@
 /*  Elf_alpha.h
 
-   Copyright (C) 2008 Stephen Torri
+    Copyright (C) 2008 Stephen Torri
 
-   This file is part of Libreverse.
+    This file is part of Libreverse.
 
-   Libreverse is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published
-   by the Free Software Foundation; either version 3, or (at your
-   option) any later version.
+    Libreverse is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published
+    by the Free Software Foundation; either version 3, or (at your
+    option) any later version.
 
-   Libreverse is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
+    Libreverse is distributed in the hope that it will be useful, but
+    WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with this program.  If not, see
-   <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see
+    <http://www.gnu.org/licenses/>.
 */
 
 /*
@@ -46,68 +46,76 @@
 /* This file holds definitions specific to the ALPHA ELF ABI.  Note
    that most of this is not actually implemented by BFD.  */
 
-#ifndef _ELF_ALPHA_H
-#define _ELF_ALPHA_H
+#ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_ALPHA_HPP_INCLUDED
+#define REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_ALPHA_HPP_INCLUDED
 
 #include <boost/cstdint.hpp>
 #include <string>
 
-namespace libreverse { namespace elf_module {
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace linux_elf {
 
-  class Elf_alpha {
-  public:
 
-    /* Processor specific flags for the ELF header e_flags field.  */
+	  class elf_alpha {
+	  public:
 
-    /* All addresses must be below 2GB.  */
-    static const boost::uint32_t EF_ALPHA_32BIT = 0x00000001;
+	    /* Processor specific flags for the ELF header e_flags field.  */
 
-    /* All relocations needed for relaxation with code movement are
-       present.  */
-    static const boost::uint32_t EF_ALPHA_CANRELAX = 0x00000002;
+	    /* All addresses must be below 2GB.  */
+	    static const boost::uint32_t EF_ALPHA_32BIT = 0x00000001;
 
-    /* Processor specific section flags.  */
+	    /* All relocations needed for relaxation with code movement are
+	       present.  */
+	    static const boost::uint32_t EF_ALPHA_CANRELAX = 0x00000002;
 
-    /* This section must be in the global data area.  */
-    static const boost::uint32_t SHF_ALPHA_GPREL = 0x10000000;
+	    /* Processor specific section flags.  */
 
-    /* Section contains some sort of debugging information.  The exact
-       format is unspecified.  It's probably ECOFF symbols.  */
-    static const boost::uint32_t SHT_ALPHA_DEBUG = 0x70000001;
+	    /* This section must be in the global data area.  */
+	    static const boost::uint32_t SHF_ALPHA_GPREL = 0x10000000;
 
-    /* Section contains register usage information. */
-    static const boost::uint32_t SHT_ALPHA_REGINFO = 0x70000002;
+	    /* Section contains some sort of debugging information.  The exact
+	       format is unspecified.  It's probably ECOFF symbols.  */
+	    static const boost::uint32_t SHT_ALPHA_DEBUG = 0x70000001;
 
-    /* A section of type SHT_MIPS_REGINFO contains the following
-       structure.  */
-    typedef struct
-    {
-      /* Mask of general purpose registers used.  */
-      unsigned long ri_gprmask;
-      /* Mask of co-processor registers used.  */
-      unsigned long ri_cprmask[4];
-      /* GP register value for this object file.  */
-      long ri_gp_value;
-    } Elf64_RegInfo;
+	    /* Section contains register usage information. */
+	    static const boost::uint32_t SHT_ALPHA_REGINFO = 0x70000002;
 
-    /* Special values for the st_other field in the symbol table.  */
-    static const boost::uint8_t STO_ALPHA_NOPV = 0x80;
-    static const boost::uint8_t STO_ALPHA_STD_GPLOAD =	0x88;
+	    /* A section of type SHT_MIPS_REGINFO contains the following
+	       structure.  */
+	    typedef struct
+	    {
+	      /* Mask of general purpose registers used.  */
+	      unsigned long ri_gprmask;
+	      /* Mask of co-processor registers used.  */
+	      unsigned long ri_cprmask[4];
+	      /* GP register value for this object file.  */
+	      long ri_gp_value;
+	    } Elf64_RegInfo;
 
-    static inline std::string get_Type ( boost::uint32_t type );
+	    /* Special values for the st_other field in the symbol table.  */
+	    static const boost::uint8_t STO_ALPHA_NOPV = 0x80;
+	    static const boost::uint8_t STO_ALPHA_STD_GPLOAD =	0x88;
 
-    static const boost::uint8_t LITUSE_ALPHA_ADDR = 0;
-    static const boost::uint8_t LITUSE_ALPHA_BASE = 1;
-    static const boost::uint8_t LITUSE_ALPHA_BYTOFF = 2;
-    static const boost::uint8_t LITUSE_ALPHA_JSR = 3;
-    static const boost::uint8_t LITUSE_ALPHA_TLSGD = 4;
-    static const boost::uint8_t LITUSE_ALPHA_TLSLDM = 5;
+	    static inline std::string get_type ( boost::uint32_t type );
 
-  };
+	    static const boost::uint8_t LITUSE_ALPHA_ADDR = 0;
+	    static const boost::uint8_t LITUSE_ALPHA_BASE = 1;
+	    static const boost::uint8_t LITUSE_ALPHA_BYTOFF = 2;
+	    static const boost::uint8_t LITUSE_ALPHA_JSR = 3;
+	    static const boost::uint8_t LITUSE_ALPHA_TLSGD = 4;
+	    static const boost::uint8_t LITUSE_ALPHA_TLSLDM = 5;
 
-} /* namespace elf_module */
-} /* namespace libreverse */
+	  };
 
-#include "Elf_alpha.inl"
+	} // namespace linux_elf
+      } // namespace file_readers
+    } // namespace input
+  } //  namespace io
+} // namespace reverse
 
-#endif /* _ELF_ALPHA_H */
+#include "elf_alpha.inl"
+
+#endif // ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_ALPHA_HPP_INCLUDED

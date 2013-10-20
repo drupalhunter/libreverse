@@ -19,100 +19,60 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ELF_RELOCATION_ADD_64_H
-#define ELF_RELOCATION_ADD_64_H
+#ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_RELOCATION_ADD_64_HPP
+#define REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_RELOCATION_ADD_64_HPP
 
-#include "Elf_Types.h"
+#include <reverse/io/input/file_readers/linux_elf/elf_types.hpp>
 
-#include "io/input/File_Readers/Base_Header.h"
+#include <boost/fusion/adapted/struct/adapt_struct.hpp>
 
-#include <boost/cstdint.hpp>
-#include <boost/shared_ptr.hpp>
-#include <string>
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace linux_elf {
 
-namespace libreverse { namespace elf_module {
+	  /*!
+	   * \date 2003
+	   * \author Stephen Torri
+	   */
+	  struct elf_relocation_add_64 {
 
-    /*!
-     * \class Elf_Relocation_Add_64
-     * \date 2003
-     * \author Stephen Torri
-     */
-    class Elf_Relocation_Add_64 : public header::Base_Header {
+	    /*!
+	     * \brief This member gives the location at which to apply the
+	     * relocation action. For a relocatable file, the value is the byte
+	     * offset from the beginning of the section to the storage unit
+	     * affected by the relocation. For an executable file or a shared
+	     * object, the value is the virtual address of the storage unit
+	     * affected by the relocation. (Elf)
+	     */
+	    Elf64_Addr r_offset;
 
-        friend class Elf_File;
+	    /*!
+	     * \brief This member gives both the symbol table index with respect
+	     * to which the relocation must be made, and the type of relocation
+	     * to apply. (Elf)
+	     */
+	    Elf64_Word r_info;
 
-    public:
+	    /*!
+	     * \brief This member specifies a constant addend used to compute the
+	     * value to be stored into the relocatable field. (Elf)
+	     */
+	    Elf64_Sword r_addend;
+	  };
 
-        Elf_Relocation_Add_64 ( elf_types::Elf_File_Header_64::const_ptr_t file_hdr );
+	} // namespace linux_elf
+      } // namespace file_readers
+    } // namespace input
+  } //  namespace io
+} // namespace reverse
 
-	virtual ~Elf_Relocation_Add_64(){}
+BOOST_FUSION_ADAPT_STRUCT (
+			   struct reverse::io::input::file_readers::linux_elf::elf_relocation_add_64,
+			   ( Elf64_Addr, r_offset )
+			   ( Elf64_Word, r_info )
+			   ( Elf64_Sword, r_addend )
+			   )
 
-        /*!
-         * \brief Convert the bit ordering from the target file bit ordering
-         * to the host system.
-         */
-        virtual void convert ();
-
-        /*!
-         * \brief String representation of Elf Header
-         * \return String output of header
-         */
-        std::string to_String (void) const;
-
-        /*!
-         * \brief Return type name
-         * \return String representation of section header type
-         */
-        std::string get_Section_Type_Name (void) const;
-
-        /*!
-         * \brief Return the index of the associated symbol in the symbol
-         * table
-         *
-         * \return Bit size of header
-         */
-        boost::uint64_t get_Symbol_Token_Index (void) const;
-
-    private:
-
-        /*!
-         * \brief This member gives the location at which to apply the
-         * relocation action. For a relocatable file, the value is the byte
-         * offset from the beginning of the section to the storage unit
-         * affected by the relocation. For an executable file or a shared
-         * object, the value is the virtual address of the storage unit
-         * affected by the relocation. (Elf)
-         */
-        boost::uint64_t r_offset;
-
-        /*!
-         * \brief This member gives both the symbol table index with respect
-         * to which the relocation must be made, and the type of relocation
-         * to apply. (Elf)
-         */
-        boost::uint64_t r_info;
-
-        /*!
-         * \brief This member specifies a constant addend used to compute the
-         * value to be stored into the relocatable field. (Elf)
-         */
-        boost::uint64_t r_addend;
-
-        /********************
-         * Helper variables
-         ********************/
-        boost::uint64_t m_symbol_table_index;
-
-        boost::uint64_t m_reloc_type;
-
-        /*!
-         * \brief Keep track of the File Header
-         */
-        elf_types::Elf_File_Header_64::const_ptr_t m_file_hdr;
-
-    };
-
-} /* namespace elf_module */
-} /* namespace libreverse */
-
-#endif /* ELF_RELOCATION_ADD_64_H */
+#endif // ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_RELOCATION_ADD_64_HPP

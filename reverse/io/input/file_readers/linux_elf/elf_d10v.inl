@@ -1,60 +1,46 @@
-#include "Elf_d10v.h"
+#include <reverse/io/input/file_readers/linux_elf/elf_d10v.hpp>
+#include <reverse/trace.hpp>
 
-#ifdef LIBREVERSE_DEBUG
-#include "libreverse/Trace.h"
-using namespace libreverse::api;
-using namespace libreverse::trace;
-#endif /* LIBREVERSE_DEBUG */
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace linux_elf {
 
-namespace libreverse { namespace elf_module {
+	  inline std::string
+	  elf_d10v::get_type ( boost::uint32_t type )
+	  {
+	    trace::io_detail ( "Entering Elf_d10v::get_Type" );
 
-    inline std::string
-    Elf_d10v::get_Type ( boost::uint32_t type )
-    {
+	    std::string output;
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::IO,
-                             TraceLevel::DETAIL,
-                             "Entering Elf_d10v::get_Type" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        std::string output = "";
-
-        switch (type)
-            {
-            case 0: output = "R_D10V_NONE"; break;
-            case 1: output = "R_D10V_10_PCREL_R"; break;
-            case 2: output = "R_D10V_10_PCREL_L"; break;
-            case 3: output = "R_D10V_16"; break;
-            case 4: output = "R_D10V_18"; break;
-            case 5: output = "R_D10V_18_PCREL"; break;
-            case 6: output = "R_D10V_32"; break;
-            case 7: output = "R_D10V_GNU_VTINHERIT"; break;
-            case 8: output = "R_D10V_GNU_VTENTRY"; break;
-            default:
+	    switch (type)
+	      {
+	      case 0: output = "R_D10V_NONE"; break;
+	      case 1: output = "R_D10V_10_PCREL_R"; break;
+	      case 2: output = "R_D10V_10_PCREL_L"; break;
+	      case 3: output = "R_D10V_16"; break;
+	      case 4: output = "R_D10V_18"; break;
+	      case 5: output = "R_D10V_18_PCREL"; break;
+	      case 6: output = "R_D10V_32"; break;
+	      case 7: output = "R_D10V_GNU_VTINHERIT"; break;
+	      case 8: output = "R_D10V_GNU_VTENTRY"; break;
+	      default:
                 {
+		  trace::io_error ( "Unknown d10v relocation type: ", type );
 
-#ifdef LIBREVERSE_DEBUG
-		  Trace::write_Trace ( TraceArea::IO,
-				       TraceLevel::ERROR,
-				       boost::str ( boost::format ( "Unknown d10v relocation type: " ) % type ) );
-#endif /* LIBREVERSE_DEBUG */
-
-
-                    output = "unknown";
+		  output = "unknown";
                 }
-            }
+	      }
+	
+	    trace::io_detail ( "Exiting Elf_d10v::get_Type" );
 
+	    return output;
+	  }
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::IO,
-                             TraceLevel::DETAIL,
-                             "Exiting Elf_d10v::get_Type" );
-#endif /* LIBREVERSE_DEBUG */
+	} // namespace linux_elf
+      } // namespace file_readers
+    } // namespace input
+  } //  namespace io
+} // namespace reverse
 
-
-        return output;
-    }
-} /* namespace elf_module */
-} /* namespace libreverse */

@@ -1,57 +1,44 @@
-#include "Elf_mn10200.h"
+#include <reverse/io/input/file_readers/linux_elf/elf_mn10200.hpp>
+#include <reverse/trace.hpp>
 
-#ifdef LIBREVERSE_DEBUG
-#include "libreverse/Trace.h"
-using namespace libreverse::api;
-using namespace libreverse::trace;
-#endif /* LIBREVERSE_DEBUG */
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace linux_elf {
 
-namespace libreverse { namespace elf_module {
+	  inline std::string
+	  elf_mn10200::get_type (boost::uint32_t type)
+	  {
+	    trace::io_detail ( "Entering Elf_mn10200::get_Type" );
 
-    inline std::string
-    Elf_mn10200::get_Type (boost::uint32_t type)
-    {
+	    std::string output;
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::IO,
-                             TraceLevel::DETAIL,
-                             "Entering Elf_mn10200::get_Type" );
-#endif /* LIBREVERSE_DEBUG */
+	    switch(type)
+	      {
+	      case 0: output = "R_MN10200_NONE"; break;
+	      case 1: output = "R_MN10200_32"; break;
+	      case 2: output = "R_MN10200_16"; break;
+	      case 3: output = "R_MN10200_8"; break;
+	      case 4: output = "R_MN10200_24"; break;
+	      case 5: output = "R_MN10200_PCREL8"; break;
+	      case 6: output = "R_MN10200_PCREL16"; break;
+	      case 7: output = "R_MN10200_PCREL24"; break;
+	      default:
+		{
+		  trace::io_error ( "Unknown mn10200 type: %1%", type );
+		  output = "unknown";
+		}
+	      }
 
+	    trace::io_detail ( "Exiting Elf_mn10200::get_Type" );
 
-        std::string output = "";
+	    return output;
+	  }
 
-        switch(type)
-            {
-            case 0: output = "R_MN10200_NONE"; break;
-            case 1: output = "R_MN10200_32"; break;
-            case 2: output = "R_MN10200_16"; break;
-            case 3: output = "R_MN10200_8"; break;
-            case 4: output = "R_MN10200_24"; break;
-            case 5: output = "R_MN10200_PCREL8"; break;
-            case 6: output = "R_MN10200_PCREL16"; break;
-            case 7: output = "R_MN10200_PCREL24"; break;
-            default:
-                {
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::IO,
-                             TraceLevel::ERROR,
-			     boost::str ( boost::format ( "Unknown mn10200 type: %1%" ) % type ) );
-#endif /* LIBREVERSE_DEBUG */
+	} // namespace linux_elf
+      } // namespace file_readers
+    } // namespace input
+  } //  namespace io
+} // namespace reverse
 
-                    output = "unknown";
-                }
-            }
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::IO,
-                             TraceLevel::DETAIL,
-                             "Exiting Elf_mn10200::get_Type" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        return output;
-    }
-} /* namespace elf_module */
-} /* namespace libreverse */

@@ -1,67 +1,53 @@
-#include "Elf_i960.h"
+#include <reverse/io/input/file_readers/linux_elf/elf_i960.hpp>
+#include <reverse/trace.hpp>
 
-#ifdef LIBREVERSE_DEBUG
-#include "libreverse/Trace.h"
-using namespace libreverse::api;
-using namespace libreverse::trace;
-#endif /* LIBREVERSE_DEBUG */
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace linux_elf {
 
-namespace libreverse { namespace elf_module {
+	  inline std::string
+	  elf_i960::get_type (boost::uint32_t type)
+	  {
+	    trace::io_detail ( "Entering Elf_i960::get_Type" );
 
-    inline std::string
-    Elf_i960::get_Type (boost::uint32_t type)
-    {
+	    std::string output;
+	    
+	    switch (type)
+	      {
+		
+	      case 0: output = "R_960_NONE"; break;
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::IO,
-                             TraceLevel::DETAIL,
-                             "Entering Elf_i960::get_Type" );
-#endif /* LIBREVERSE_DEBUG */
+	      case 1: output = "R_960_12"; break;
 
+	      case 2: output = "R_960_32"; break;
 
-        std::string output = "";
+	      case 3: output = "R_960_IP24"; break;
 
-        switch (type)
-            {
+	      case 4: output = "R_960_SUB"; break;
 
-            case 0: output = "R_960_NONE"; break;
+	      case 5: output = "R_960_OPTCALL"; break;
 
-            case 1: output = "R_960_12"; break;
+	      case 6: output = "R_960_OPTCALLX"; break;
 
-            case 2: output = "R_960_32"; break;
-
-            case 3: output = "R_960_IP24"; break;
-
-            case 4: output = "R_960_SUB"; break;
-
-            case 5: output = "R_960_OPTCALL"; break;
-
-            case 6: output = "R_960_OPTCALLX"; break;
-
-            case 7: output = "R_960_OPTCALLXA"; break;
-            default:
+	      case 7: output = "R_960_OPTCALLXA"; break;
+	      default:
                 {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::IO,
-                             TraceLevel::DETAIL,
-			     boost::str ( boost::format ( "Unknown i960 relocation type: %1%" ) % type ) );
-#endif /* LIBREVERSE_DEBUG */
-
-                    output = "Unknown";
+		  trace::io_error ( "Unknown i960 relocation type: %1%", type );
+		  output = "Unknown";
                 }
-            }
+	      }
 
+	    trace::io_detail ( "Exiting Elf_i960::get_Type" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::IO,
-                             TraceLevel::DETAIL,
-                             "Exiting Elf_i960::get_Type" );
-#endif /* LIBREVERSE_DEBUG */
+	    return output;
 
+	  }
 
-        return output;
+	} // namespace linux_elf
+      } // namespace file_readers
+    } // namespace input
+  } //  namespace io
+} // namespace reverse
 
-    }
-} /* namespace elf_module */
-} /* namespace libreverse */

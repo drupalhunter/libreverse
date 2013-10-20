@@ -1,22 +1,22 @@
 /*  Elf_h8.h
 
-   Copyright (C) 2008 Stephen Torri
+    Copyright (C) 2008 Stephen Torri
 
-   This file is part of Libreverse.
+    This file is part of Libreverse.
 
-   Libreverse is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published
-   by the Free Software Foundation; either version 3, or (at your
-   option) any later version.
+    Libreverse is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published
+    by the Free Software Foundation; either version 3, or (at your
+    option) any later version.
 
-   Libreverse is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
+    Libreverse is distributed in the hope that it will be useful, but
+    WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with this program.  If not, see
-   <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see
+    <http://www.gnu.org/licenses/>.
 */
 
 /*
@@ -40,35 +40,44 @@
   Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 */
 
-#ifndef _ELF_H8_H
-#define _ELF_H8_H
+#ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_H8_HPP_INCLUDED
+#define REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_H8_HPP_INCLUDED
 
 #include <boost/cstdint.hpp>
 #include <string>
 
-namespace libreverse { namespace elf_module {
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace linux_elf {
 
-    class Elf_h8 {
-    public:
+	  class elf_h8 {
+	  public:
 
-        static inline std::string get_Type ( boost::uint32_t type );
+	    static inline std::string get_type ( boost::uint32_t type );
 
-        /* Machine variant if we know it.  This field was invented at
-           Cygnus, but it is hoped that other vendors will adopt it.  If
-           some standard is developed, this code should be changed to
-           follow it. */
+	    /* Machine variant if we know it.  This field was invented at
+	       Cygnus, but it is hoped that other vendors will adopt it.  If
+	       some standard is developed, this code should be changed to
+	       follow it. */
 
-        static const boost::uint32_t EF_H8_MACH = 0x00FF0000;
-        static const boost::uint32_t E_H8_MACH_H8300 = 0x00800000;
-        static const boost::uint32_t E_H8_MACH_H8300H = 0x00810000;
-        static const boost::uint32_t E_H8_MACH_H8300S = 0x00820000;
-        static const boost::uint32_t E_H8_MACH_H8300HN = 0x00830000;
-        static const boost::uint32_t E_H8_MACH_H8300SN = 0x00840000;
-    };
+	    static const boost::uint32_t EF_H8_MACH = 0x00FF0000;
+	    static const boost::uint32_t E_H8_MACH_H8300 = 0x00800000;
+	    static const boost::uint32_t E_H8_MACH_H8300H = 0x00810000;
+	    static const boost::uint32_t E_H8_MACH_H8300S = 0x00820000;
+	    static const boost::uint32_t E_H8_MACH_H8300HN = 0x00830000;
+	    static const boost::uint32_t E_H8_MACH_H8300SN = 0x00840000;
+	  };
 
-} /* namespace elf_module */
-} /* namespace libreverse */
 
-#include "Elf_h8.inl"
+	} // namespace linux_elf
+      } // namespace file_readers
+    } // namespace input
+  } //  namespace io
+} // namespace reverse
 
-#endif
+
+#include "elf_h8.inl"
+
+#endif // ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_H8_HPP_INCLUDED

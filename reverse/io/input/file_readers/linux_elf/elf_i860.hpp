@@ -43,24 +43,32 @@
   02111-1307, USA.
 */
 
-#ifndef _ELF_I860_H
-#define _ELF_I860_H
+#ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_I860_HPP_INCLUDED
+#define REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_I860_HPP_INCLUDED
 
 #include <boost/cstdint.hpp>
 #include <string>
 
-namespace libreverse { namespace elf_module {
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace linux_elf {
 
-    /* Note: i860 ELF is defined to use only RELA relocations.  */
-    class Elf_i860 {
-    public:
+	  /* note: i860 elf is defined to use only rela relocations.  */
+	  class elf_i860 {
+	  public:
+	    
+	    static inline std::string get_type ( boost::uint32_t type );
 
-        static inline std::string get_Type ( boost::uint32_t type );
+	  };
 
-    };
-} /* namespace elf_module */
-} /* namespace libreverse */
+	} // namespace linux_elf
+      } // namespace file_readers
+    } // namespace input
+  } //  namespace io
+} // namespace reverse
 
-#include "Elf_i860.inl"
+#include "elf_i860.inl"
 
-#endif
+#endif // ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_I860_HPP_INCLUDED

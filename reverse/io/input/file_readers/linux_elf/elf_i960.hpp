@@ -41,24 +41,31 @@
    02111-1307, USA.
 */
 
-#ifndef _ELF_I960_H
-#define _ELF_I960_H
+#ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_I960_HPP_INCLUDED
+#define REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_I960_HPP_INCLUDED
 
 #include <boost/cstdint.hpp>
 #include <string>
 
-namespace libreverse {
-namespace elf_module {
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace linux_elf {
 
-  class Elf_i960 {
-  public:
+	  class elf_i960 {
+	  public:
 
-      static inline std::string get_Type (boost::uint32_t type);
+	    static inline std::string get_type (boost::uint32_t type);
+	    
+	  };
 
-  };
-} /* namespace elf_module */
-} /* namespace libreverse */
+	} // namespace linux_elf
+      } // namespace file_readers
+    } // namespace input
+  } //  namespace io
+} // namespace reverse
 
-#include "Elf_i960.inl"
+#include "elf_i960.inl"
 
-#endif /* _ELF_I960_H */
+#endif // ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_I960_HPP_INCLUDED

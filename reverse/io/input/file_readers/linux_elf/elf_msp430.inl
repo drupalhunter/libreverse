@@ -1,60 +1,45 @@
-#include "Elf_msp430.h"
+#include <reverse/io/input/file_readers/linux_elf/elf_msp430.hpp>
+#include <reverse/trace.hpp>
 
-#ifdef LIBREVERSE_DEBUG
-#include "libreverse/Trace.h"
-using namespace libreverse::api;
-using namespace libreverse::trace;
-#endif /* LIBREVERSE_DEBUG */
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace linux_elf {
 
+	  inline std::string
+	  elf_msp430::get_type (boost::uint32_t type)
+	  {
+	    trace::io_detail ( "Entering Elf_msp430::get_Type" );
 
-namespace libreverse { namespace elf_module {
+	    std::string output;
+	    
+	    switch (type)
+	      {
 
-    inline std::string
-    Elf_msp430::get_Type (boost::uint32_t type)
-    {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::IO,
-                             TraceLevel::DETAIL,
-                             "Entering Elf_msp430::get_Type" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        std::string output = "";
-
-        switch (type)
-            {
-
-            case 0: output = "R_MSP430_NONE"; break;
-            case 1: output = "R_MSP430_32"; break;
-            case 2: output = "R_MSP430_10_PCREL"; break;
-            case 3: output = "R_MSP430_16"; break;
-            case 4: output = "R_MSP430_16_PCREL"; break;
-            case 5: output = "R_MSP430_16_BYTE"; break;
-            case 6: output = "R_MSP430_16_PCREL_BYTE"; break;
-            default:
+	      case 0: output = "R_MSP430_NONE"; break;
+	      case 1: output = "R_MSP430_32"; break;
+	      case 2: output = "R_MSP430_10_PCREL"; break;
+	      case 3: output = "R_MSP430_16"; break;
+	      case 4: output = "R_MSP430_16_PCREL"; break;
+	      case 5: output = "R_MSP430_16_BYTE"; break;
+	      case 6: output = "R_MSP430_16_PCREL_BYTE"; break;
+	      default:
                 {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::IO,
-                             TraceLevel::ERROR,
-			     boost::str ( boost::format ( "Unknown msp430 type: %1%" ) % type ) );
-#endif /* LIBREVERSE_DEBUG */
-
-                    output = "unknown";
+		  trace::io_error ( "Unknown msp430 type: %1%", type );
+		  output = "unknown";
                 }
+	      }
 
-            }
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::IO,
-                             TraceLevel::DETAIL,
-                             "Exiting Elf_msp430::get_Type" );
-#endif /* LIBREVERSE_DEBUG */
-
+	    trace::io_detail ( "Exiting Elf_msp430::get_Type" );
     
-        return output;
-    }
-} /* namespace elf_module */
-} /* namespace libreverse */
+	    return output;
+	  }
+
+
+	} // namespace linux_elf
+      } // namespace file_readers
+    } // namespace input
+  } //  namespace io
+} // namespace reverse
+

@@ -43,26 +43,33 @@
   59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 */
 
-#ifndef _ELF_CRIS_H
-#define _ELF_CRIS_H
+#ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_CRIS_HPP_INCLUDED
+#define REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_CRIS_HPP_INCLUDED
 
 #include <boost/cstdint.hpp>
 #include <string>
 
-namespace libreverse { namespace elf_module {
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace linux_elf {
 
-  class Elf_cris {
+  class elf_cris {
   public:
 
-      static inline std::string get_Type ( boost::uint32_t type );
+      static inline std::string get_type ( boost::uint32_t type );
 
       /* User symbols in this file have a leading underscore.  */
       static const boost::uint32_t EF_CRIS_UNDERSCORE = 0x00000001;
   };
 
-} /* namespace elf_module */
-} /* namespace libreverse */
+	} // namespace linux_elf
+      } // namespace file_readers
+    } // namespace input
+  } //  namespace io
+} // namespace reverse
 
-#include "Elf_cris.inl"
+#include "elf_cris.inl"
 
-#endif /* _ELF_CRIS_H */
+#endif // ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_CRIS_HPP_INCLUDED

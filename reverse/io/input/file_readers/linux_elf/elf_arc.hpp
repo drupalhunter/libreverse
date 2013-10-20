@@ -1,22 +1,22 @@
 /*  Elf_arc.h
 
-   Copyright (C) 2008 Stephen Torri
+    Copyright (C) 2008 Stephen Torri
 
-   This file is part of Libreverse.
+    This file is part of Libreverse.
 
-   Libreverse is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published
-   by the Free Software Foundation; either version 3, or (at your
-   option) any later version.
+    Libreverse is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published
+    by the Free Software Foundation; either version 3, or (at your
+    option) any later version.
 
-   Libreverse is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
+    Libreverse is distributed in the hope that it will be useful, but
+    WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with this program.  If not, see
-   <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see
+    <http://www.gnu.org/licenses/>.
 */
 
 /*
@@ -44,41 +44,47 @@
 
 /* This file holds definitions specific to the ARC ELF ABI.  */
 
-#ifndef _ELF_ARC_H
-#define _ELF_ARC_H
+#ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_ARC_HPP_INCLUDED
+#define REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_ARC_HPP_INCLUDED
 
 #include <boost/cstdint.hpp>
 #include <string>
 
-namespace libreverse {
-namespace elf_module {
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace linux_elf {
 
-  class Elf_arc {
-  public:
+	  class elf_arc {
+	  public:
 
-    static inline std::string get_Type ( boost::uint32_t type );
+	    static inline std::string get_type ( boost::uint32_t type );
 
-    /* Processor specific flags for the ELF header e_flags field.  */
+	    /* Processor specific flags for the ELF header e_flags field.  */
 
-    /* Four bit ARC machine type field.  */
+	    /* Four bit ARC machine type field.  */
 
-    static const boost::uint32_t EF_ARC_MACH = 0x0000000f;
+	    static const boost::uint32_t EF_ARC_MACH = 0x0000000f;
 
-    /* Various CPU types.  */
-    static const boost::uint8_t E_ARC_MACH_ARC5 = 0;
-    static const boost::uint8_t E_ARC_MACH_ARC6 = 1;
-    static const boost::uint8_t E_ARC_MACH_ARC7 = 2;
-    static const boost::uint8_t E_ARC_MACH_ARC8 = 3;
+	    /* Various CPU types.  */
+	    static const boost::uint8_t E_ARC_MACH_ARC5 = 0;
+	    static const boost::uint8_t E_ARC_MACH_ARC6 = 1;
+	    static const boost::uint8_t E_ARC_MACH_ARC7 = 2;
+	    static const boost::uint8_t E_ARC_MACH_ARC8 = 3;
 
-    /* Leave bits 0xf0 alone in case we ever have more than 16 cpu types.  */
+	    /* Leave bits 0xf0 alone in case we ever have more than 16 cpu types.  */
 
-    /* File contains position independent code.  */
-    static const boost::uint32_t EF_ARC_PIC = 0x00000100;
-  };
+	    /* File contains position independent code.  */
+	    static const boost::uint32_t EF_ARC_PIC = 0x00000100;
+	  };
 
-} /* namespace elf_module */
-} /* namespace libreverse */
+	} // namespace linux_elf
+      } // namespace file_readers
+    } // namespace input
+  } //  namespace io
+} // namespace reverse
 
-#include "Elf_arc.inl"
+#include "elf_arc.inl"
 
-#endif /* _ELF_ARC_H */
+#endif // ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_ARC_HPP_INCLUDED

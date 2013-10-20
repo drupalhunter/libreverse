@@ -42,26 +42,33 @@
 */
 
 /* This file holds definitions specific to the MCore ELF ABI. */
-#ifndef _ELF_MORE_H
-#define _ELF_MORE_H
+#ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_MORE_HPP_INCLUDED
+#define REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_MORE_HPP_INCLUDED
 
 #include <boost/cstdint.hpp>
 #include <string>
 
-namespace libreverse { namespace elf_module {
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace linux_elf {
 
-    class Elf_mcore {
-    public:
+	  class elf_mcore {
+	  public:
+	    
+	    static inline std::string get_type (boost::uint32_t type);
+	    
+	    /* Section Attributes.  */
+	    static const boost::uint32_t SHF_MCORE_NOREAD = 0x80000000;
+	  };
 
-        static inline std::string get_Type (boost::uint32_t type);
+	} // namespace linux_elf
+      } // namespace file_readers
+    } // namespace input
+  } //  namespace io
+} // namespace reverse
 
-        /* Section Attributes.  */
-        static const boost::uint32_t SHF_MCORE_NOREAD = 0x80000000;
-    };
-
-} /* namespace elf_module */
-} /* namespace libreverse */
-
-#include "Elf_mcore.inl"
+#include "elf_mcore.inl"
 
 #endif /* _ELF_MCORE_H */

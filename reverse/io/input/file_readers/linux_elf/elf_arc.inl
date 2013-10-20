@@ -1,54 +1,39 @@
-#include "Elf_arc.h"
+#include <reverse/io/input/file_readers/linux_elf/elf_arc.hpp>
+#include <reverse/trace.hpp>
 
-#ifdef LIBREVERSE_DEBUG
-#include "libreverse/Trace.h"
-using namespace libreverse::api;
-using namespace libreverse::trace;
-#endif /* LIBREVERSE_DEBUG */
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace linux_elf {
 
-namespace libreverse { namespace elf_module {
+	  inline std::string
+	  elf_arc::get_type ( boost::uint32_t type )
+	  {
+	    trace::io_detail ( "Entering Elf_arc::get_Type" );
 
-    inline std::string
-    Elf_arc::get_Type ( boost::uint32_t type )
-    {
+	    std::string output;
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::IO,
-                             TraceLevel::DETAIL,
-                             "Entering Elf_arc::get_Type" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        std::string output = "";
-
-        switch (type)
-            {
-            case 0: output = "R_ARC_NONE"; break;
-            case 1: output = "R_ARC_32"; break;
-            case 2: output = "R_ARC_B26"; break;
-            case 3: output = "R_ARC_B22_PCREL"; break;
-            default:
+	    switch (type)
 	      {
-
-#ifdef LIBREVERSE_DEBUG
-		Trace::write_Trace ( TraceArea::IO,
-				     TraceLevel::ERROR,
-				     boost::str ( boost::format ( "Unknown arc relocation type: %1%" ) % type ) );
-#endif /* LIBREVERSE_DEBUG */
-
-		output = "unknown";
+	      case 0: output = "R_ARC_NONE"; break;
+	      case 1: output = "R_ARC_32"; break;
+	      case 2: output = "R_ARC_B26"; break;
+	      case 3: output = "R_ARC_B22_PCREL"; break;
+	      default:
+		{
+		  trace::io_error ( "Unknown arc relocation type: %1%", type );
+		  output = "unknown";
+		}
 	      }
-            }
 
+	    trace::io_detail ( "Exiting Elf_arc::get_Type" );
+	    return output;
+	  }
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::IO,
-                             TraceLevel::DETAIL,
-                            "Exiting Elf_arc::get_Type" );
-#endif /* LIBREVERSE_DEBUG */
+	} // namespace linux_elf
+      } // namespace file_readers
+    } // namespace input
+  } //  namespace io
+} // namespace reverse
 
-
-        return output;
-    }
-} /* namespace elf_module */
-} /* namespace libreverse */

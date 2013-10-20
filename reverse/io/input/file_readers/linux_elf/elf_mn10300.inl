@@ -1,61 +1,46 @@
-#include "Elf_mn10300.h"
+#include <reverse/io/input/file_readers/linux_elf/elf_mn10300.hpp>
+#include <reverse/trace.hpp>
 
-#ifdef LIBREVERSE_DEBUG
-#include "libreverse/Trace.h"
-using namespace libreverse::api;
-using namespace libreverse::trace;
-#endif /* LIBREVERSE_DEBUG */
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace linux_elf {
 
-namespace libreverse { namespace elf_module {
+	  inline std::string
+	  elf_mn10300::get_type (boost::uint32_t type)
+	  {
+	    trace::io_detail ( "Entering Elf_mn10300::get_Type" );
 
-    inline std::string
-    Elf_mn10300::get_Type (boost::uint32_t type)
-    {
+	    std::string output;
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::IO,
-                             TraceLevel::DETAIL,
-                             "Entering Elf_mn10300::get_Type" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        std::string output = "";
-
-        switch (type)
-            {
+	    switch (type)
+	      {
                 /* Relocations.  */
-            case 0: output = "R_MN10300_NONE"; break;
-            case 1: output = "R_MN10300_32"; break;
-            case 2: output = "R_MN10300_16"; break;
-            case 3: output = "R_MN10300_8"; break;
-            case 4: output = "R_MN10300_PCREL32"; break;
-            case 5: output = "R_MN10300_PCREL16"; break;
-            case 6: output = "R_MN10300_PCREL8"; break;
-            case 7: output = "R_MN10300_GNU_VTINHERIT"; break;
-            case 8: output = "R_MN10300_GNU_VTENTRY"; break;
-            case 9: output = "R_MN10300_24"; break;
-            default:
+	      case 0: output = "R_MN10300_NONE"; break;
+	      case 1: output = "R_MN10300_32"; break;
+	      case 2: output = "R_MN10300_16"; break;
+	      case 3: output = "R_MN10300_8"; break;
+	      case 4: output = "R_MN10300_PCREL32"; break;
+	      case 5: output = "R_MN10300_PCREL16"; break;
+	      case 6: output = "R_MN10300_PCREL8"; break;
+	      case 7: output = "R_MN10300_GNU_VTINHERIT"; break;
+	      case 8: output = "R_MN10300_GNU_VTENTRY"; break;
+	      case 9: output = "R_MN10300_24"; break;
+	      default:
                 {
-#ifdef LIBREVERSE_DEBUG
-		  Trace::write_Trace ( TraceArea::IO,
-				       TraceLevel::ERROR,
-				       boost::str ( boost::format ( "Unknown mn10300 relocation type: " ) % type ) ) ;
-#endif /* LIBREVERSE_DEBUG */
-
-                    output = "unknown";
+		  trace::io_error ( "Unknown mn10300 relocation type: ", type );
+		  output = "unknown";
                 }
-            }
+	      }
 
+	    trace::io_detail ( "Exiting Elf_mn10300::get_Type" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::IO,
-                             TraceLevel::DETAIL,
-                             "Exiting Elf_mn10300::get_Type" );
-#endif /* LIBREVERSE_DEBUG */
+	    return output;
+	  }
 
-
-        return output;
-    }
-
-} /* namespace elf_module */
-} /* namespace libreverse */
+	} // namespace linux_elf
+      } // namespace file_readers
+    } // namespace input
+  } //  namespace io
+} // namespace reverse

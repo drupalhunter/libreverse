@@ -40,26 +40,32 @@
   Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 */
 
-#ifndef _ELF_D10V_H
-#define _ELF_D10V_H
+#ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_D10V_HPP_INCLUDED
+#define REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_D10V_HPP_INCLUDED
 
 #include <boost/cstdint.hpp>
 #include <string>
 
-namespace libreverse {
-namespace elf_module {
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace linux_elf {
 
-  class Elf_d10v {
-  public:
+	  class elf_d10v {
+	  public:
+	    
+	    /* relocation types.  */
 
-    /* Relocation types.  */
+	    static inline std::string get_type ( boost::uint32_t type );
+	  };
 
-      static inline std::string get_Type ( boost::uint32_t type );
-  };
+	} // namespace linux_elf
+      } // namespace file_readers
+    } // namespace input
+  } //  namespace io
+} // namespace reverse
 
-} /* namespace elf_module */
-} /* namespace libreverse */
+#include "elf_d10v.inl"
 
-#include "Elf_d10v.inl"
-
-#endif
+#endif // ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_D10V_HPP_INCLUDED

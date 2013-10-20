@@ -1,22 +1,22 @@
 /*  Elf_mn10300.h
 
-   Copyright (C) 2008 Stephen Torri
+    Copyright (C) 2008 Stephen Torri
 
-   This file is part of Libreverse.
+    This file is part of Libreverse.
 
-   Libreverse is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published
-   by the Free Software Foundation; either version 3, or (at your
-   option) any later version.
+    Libreverse is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published
+    by the Free Software Foundation; either version 3, or (at your
+    option) any later version.
 
-   Libreverse is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
+    Libreverse is distributed in the hope that it will be useful, but
+    WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with this program.  If not, see
-   <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see
+    <http://www.gnu.org/licenses/>.
 */
 
 /*
@@ -43,38 +43,45 @@
 
 /* This file holds definitions specific to the MN10300 ELF ABI. */
 
-#ifndef _ELF_MN10300_H
-#define _ELF_MN10300_H
+#ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_MN10300_HPP_INCLUDED
+#define REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_MN10300_HPP_INCLUDED
 
 #include <boost/cstdint.hpp>
 #include <string>
 
-namespace libreverse { namespace elf_module {
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace linux_elf {
 
-    class Elf_mn10300 {
-    public:
+	  class elf_mn10300 {
+	  public:
 
-        /* Relocation types.  */
+	    /* Relocation types.  */
 
-        static inline std::string get_Type (boost::uint32_t type);
+	    static inline std::string get_type (boost::uint32_t type);
 
-        /* Machine variant if we know it.  This field was invented at
-           Cygnus, but it is hoped that other vendors will adopt it.  If
-           some standard is developed, this code should be changed to
-           follow it. */
-        static const boost::uint32_t EF_MN10300_MACH = 0x00FF0000;
+	    /* Machine variant if we know it.  This field was invented at
+	       Cygnus, but it is hoped that other vendors will adopt it.  If
+	       some standard is developed, this code should be changed to
+	       follow it. */
+	    static const boost::uint32_t EF_MN10300_MACH = 0x00FF0000;
 
-        /* Cygnus is choosing values between 80 and 9F; 00 - 7F should be
-           left for a future standard; the rest are open. */
+	    /* Cygnus is choosing values between 80 and 9F; 00 - 7F should be
+	       left for a future standard; the rest are open. */
 
-        static const boost::uint32_t E_MN10300_MACH_MN10300 = 0x00810000;
-        static const boost::uint32_t E_MN10300_MACH_AM33 = 0x00820000;
+	    static const boost::uint32_t E_MN10300_MACH_MN10300 = 0x00810000;
+	    static const boost::uint32_t E_MN10300_MACH_AM33 = 0x00820000;
 
-    };
+	  };
 
-} /* namespace elf_module */
-} /* namespace libreverse */
+	} // namespace linux_elf
+      } // namespace file_readers
+    } // namespace input
+  } //  namespace io
+} // namespace reverse
 
-#include "Elf_mn10300.inl"
+#include "elf_mn10300.inl"
 
-#endif /* _ELF_MN10300_H */
+#endif // ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_MN10300_HPP_INCLUDED

@@ -1,69 +1,52 @@
-#include "Elf_d30v.h"
+#include <reverse/io/input/file_readers/linux_elf/elf_d30v.hpp>
+#include <reverse/trace.hpp>
 
-#include <boost/format.hpp>
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace linux_elf {
 
-#ifdef LIBREVERSE_DEBUG
-#include "libreverse/Trace.h"
-using namespace libreverse::api;
-using namespace libreverse::trace;
-#endif /* LIBREVERSE_DEBUG */
+	  inline std::string
+	  elf_d30v::get_type ( boost::uint32_t type )
+	  {
+	    trace::io_detail ( "Entering Elf_d30v::get_Type" );
 
-namespace libreverse { namespace elf_module {
+	    std::string output;
 
-    inline std::string
-    Elf_d30v::get_Type ( boost::uint32_t type )
-    {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::IO,
-                             TraceLevel::DETAIL,
-                             "Entering Elf_d30v::get_Type" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        std::string output = "";
-
-        switch (type)
-            {
+	    switch (type)
+	      {
                 /* Relocations.  */
-            case 0: output = "R_D30V_NONE"; break;
-            case 1: output = "R_D30V_6"; break;
-            case 2: output = "R_D30V_9_PCREL"; break;
-            case 3: output = "R_D30V_9_PCREL_R"; break;
-            case 4: output = "R_D30V_15"; break;
-            case 5: output = "R_D30V_15_PCREL"; break;
-            case 6: output = "R_D30V_15_PCREL_R"; break;
-            case 7: output = "R_D30V_21"; break;
-            case 8: output = "R_D30V_21_PCREL"; break;
-            case 9: output = "R_D30V_21_PCREL_R"; break;
-            case 10: output = "R_D30V_32"; break;
-            case 11: output = "R_D30V_32_PCREL"; break;
-            case 12: output = "R_D30V_32_NORMAL"; break;
+	      case 0: output = "R_D30V_NONE"; break;
+	      case 1: output = "R_D30V_6"; break;
+	      case 2: output = "R_D30V_9_PCREL"; break;
+	      case 3: output = "R_D30V_9_PCREL_R"; break;
+	      case 4: output = "R_D30V_15"; break;
+	      case 5: output = "R_D30V_15_PCREL"; break;
+	      case 6: output = "R_D30V_15_PCREL_R"; break;
+	      case 7: output = "R_D30V_21"; break;
+	      case 8: output = "R_D30V_21_PCREL"; break;
+	      case 9: output = "R_D30V_21_PCREL_R"; break;
+	      case 10: output = "R_D30V_32"; break;
+	      case 11: output = "R_D30V_32_PCREL"; break;
+	      case 12: output = "R_D30V_32_NORMAL"; break;
                 
-            default:
+	      default:
                 {
-
-#ifdef LIBREVERSE_DEBUG
-		  Trace::write_Trace ( TraceArea::IO,
-				       TraceLevel::ERROR,
-				       boost::str ( boost::format ( "Unknown d30v relocation type: %1%" ) % type ) );
-#endif /* LIBREVERSE_DEBUG */
+		  trace::io_error ( "Unknown d30v relocation type: %1%", type );
 
 		  output = "unknown";
 
                 }
-            }
+	      }
 
+	    trace::io_detail ( "Exiting Elf_d30v::get_Type" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::IO,
-                             TraceLevel::DETAIL,
-                             "Exiting Elf_d30v::get_Type" );
-#endif /* LIBREVERSE_DEBUG */
+	    return output;
+	  }
 
-
-        return output;
-    }
-
-} /* namespace elf_module */
-} /* namespace libreverse */
+	} // namespace linux_elf
+      } // namespace file_readers
+    } // namespace input
+  } //  namespace io
+} // namespace reverse
