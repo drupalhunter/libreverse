@@ -1,62 +1,58 @@
 /*  Elf_Dynamic_Header_64.h
 
-   Copyright (C) 2008 Stephen Torri
+    Copyright (C) 2008 Stephen Torri
 
-   This file is part of Libreverse.
+    This file is part of Libreverse.
 
-   Libreverse is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published
-   by the Free Software Foundation; either version 3, or (at your
-   option) any later version.
+    Libreverse is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published
+    by the Free Software Foundation; either version 3, or (at your
+    option) any later version.
 
-   Libreverse is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
+    Libreverse is distributed in the hope that it will be useful, but
+    WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with this program.  If not, see
-   <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see
+    <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ELF_DYNAMIC_HEADER_64_H
-#define ELF_DYNAMIC_HEADER_64_H
+#ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_DYNAMIC_HEADER_64_HPP_INCLUDED
+#define REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_DYNAMIC_HEADER_64_HPP_INCLUDED
 
-#include "Elf_Types.h"
-#include "io/input/File_Readers/Base_Header.h"
-#include <string>
-#include <vector>
-#include <boost/shared_ptr.hpp>
+#include <reverse/io/input/file_readers/linux_elf/elf_types.hpp>
 
-namespace libreverse { namespace elf_module {
+#include <boost/cstdint.hpp>
+#include <boost/fusion/adapted/struct/adapt_struct.hpp>
+#include <boost/variant.hpp>
 
-    /*!
-     * \class Elf_Dynamic_Header_64
-     * \date 2003
-     * \author Stephen Torri
-     */
-    class Elf_Dynamic_Header_64 : public header::Base_Header {
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace linux_elf {
 
-    public:
+	  /*!
+	   * \class Elf_Dynamic_Header_64
+	   * \date 2003
+	   * \author Stephen Torri
+	   */
+	  struct Elf_Dynamic_Header_64 {
+	    
+	    Elf64_Sword d_tag;
 
-        /*!
-         * \brief Convert bit ordering
-         * Convert the bit ordering from the target file bit ordering
-         * to the host system.
-         */
-        virtual void convert ();
+	    // d_tag controls the interpretation of d_un
+	    // - Elf32_Word d_val = integer value
+	    // - Elf32_Addr d_ptr = program virtual address	    
+	    boost::variant < Elf64_Word, Elf64_Addr > d_un;
+	  };
 
-        /*!
-         * \brief Return the contents of Elf_Dynamic_Header as a screen
-         * \return String represenation of contents of Elf_Dynamic_Header
-         */
-        virtual std::string toString (void);
+	} // namespace linux_elf
+      } // namespace file_readers
+    } // namespace input
+  } //  namespace io
+} // namespace reverse
 
-        elf_types::Elf_Dynamic_Header_64::Tag_List_t m_dyn_tags;
-
-    };
-
-} /* namespace elf_module */
-} /* namespace libreverse */
-
-#endif /* ELF_DYNAMIC_HEADER_64_H */
+#endif // ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_DYNAMIC_HEADER_64_HPP_INCLUDED

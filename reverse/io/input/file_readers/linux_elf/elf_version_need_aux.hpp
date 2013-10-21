@@ -19,48 +19,56 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ELF_VERSION_NEED_AUX_H_
-#define ELF_VERSION_NEED_AUX_H_
+#ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_VERSION_NEED_AUX_HPP_INCLUDED
+#define REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_VERSION_NEED_AUX_HPP_INCLUDED
 
-#include "io/input/File_Readers/Base_Header.h"
+#include <reverse/io/input/file_readers/linux_elf/elf_types.hpp>
 
-namespace libreverse {
-namespace elf_module {
+#include <boost/fusion/adapted/struct/adapt_struct.hpp>
 
-  /*!
-   * \class Elf_Version_Need_Aux
-   * \date 2003
-   * \author Stephen Torri
-   */
-  class Elf_Version_Need_Aux : public header::Base_Header {
-  public:
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace linux_elf {
 
-    /*!
-     * \brief Convert bit ordering
-     *
-     * Convert the bit ordering from the target file bit ordering
-     * to the host system. If the host system and the target file
-     * match this is a no-op.
-     */
-    virtual void convert ();
+	  /*!
+	   * \class Elf_Version_Need_Aux
+	   * \date 2003
+	   * \author Stephen Torri
+	   */
+	  struct elf_version_need_aux {
 
-    /*! \brief Hash of dependency name */
-    boost::uint32_t vna_hash;
+	    /*! \brief Hash of dependency name */
+	    boost::uint32_t vna_hash;
 
-    /*! \brief Flags (VER_FLG_*). */
-    boost::uint16_t vna_flags;
+	    /*! \brief Flags (VER_FLG_*). */
+	    boost::uint16_t vna_flags;
 
-    /*! \brief Unused */
-    boost::uint16_t vna_other;
+	    /*! \brief Unused */
+	    boost::uint16_t vna_other;
+	    
+	    /*! \brief String table offset to version name. */
+	    boost::uint32_t vna_name;
+	    
+	    /*! \brief Offset to next vernaux. */
+	    boost::uint32_t vna_next;
+	  };
 
-    /*! \brief String table offset to version name. */
-    boost::uint32_t vna_name;
+	} // namespace linux_elf
+      } // namespace file_readers
+    } // namespace input
+  } //  namespace io
+} // namespace reverse
 
-    /*! \brief Offset to next vernaux. */
-    boost::uint32_t vna_next;
-  };
+BOOST_FUSION_ADAPT_STRUCT (
+			   struct reverse::io::input::file_readers::linux_elf::elf_version_need_aux,
+			   ( boost::uint32_t, vna_hash )
+			   ( boost::uint16_t, vna_flags )
+			   ( boost::uint16_t, vna_other )
+			   ( boost::uint32_t, vna_name )
+			   ( boost::uint32_t, vna_next )
+			   )
 
-} /* namespace elf_module */
-} /* namespace libreverse */
 
-#endif /* ELF_VERSION_NEED_AUX_H_ */
+#endif // ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_VERSION_NEED_AUX_HPP_INCLUDED

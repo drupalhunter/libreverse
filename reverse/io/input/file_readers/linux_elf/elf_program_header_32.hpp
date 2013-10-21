@@ -85,14 +85,14 @@ namespace reverse {
 
 BOOST_FUSION_ADAPT_STRUCT (
 			   struct reverse::io::input::file_readers::linux_elf::elf_program_header_32,
-			   ( Elf32_Word, p_type )
-			   ( Elf32_Word, p_offset )
-			   ( Elf32_Word, p_vaddr )
-			   ( Elf32_Word, p_paddr )
-			   ( Elf32_Word, p_filesz )
-			   ( Elf32_Word, p_memsz )
-			   ( Elf32_Word, p_flags )
-			   ( Elf32_Word, p_align )
+			   ( reverse::io::input::file_readers::linux_elf::Elf32_Word, p_type )
+			   ( reverse::io::input::file_readers::linux_elf::Elf32_Word, p_offset )
+			   ( reverse::io::input::file_readers::linux_elf::Elf32_Word, p_vaddr )
+			   ( reverse::io::input::file_readers::linux_elf::Elf32_Word, p_paddr )
+			   ( reverse::io::input::file_readers::linux_elf::Elf32_Word, p_filesz )
+			   ( reverse::io::input::file_readers::linux_elf::Elf32_Word, p_memsz )
+			   ( reverse::io::input::file_readers::linux_elf::Elf32_Word, p_flags )
+			   ( reverse::io::input::file_readers::linux_elf::Elf32_Word, p_align )
 			   )
 
 #endif /* ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_PROGRAM_HEADER_32_HPP */

@@ -19,29 +19,44 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ELF_SYMBOL_INFO_H_
-#define ELF_SYMBOL_INFO_H_
+#ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_SYMBOL_INFO_HPP_INCLUDED
+#define REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_SYMBOL_INFO_HPP_INCLUDED
 
-#include "io/Type_Mapper.h"
-#include "io/input/File_Readers/Base_Header.h"
+#include <reverse/io/input/file_readers/linux_elf/elf_types.hpp>
 
-namespace elf_module {
+#include <boost/fusion/adapted/struct/adapt_struct.hpp>
 
-/*!
- * \class Elf_Symbol_Info
- * \date 2003
- * \author Stephen Torri
- */
-class Elf_Symbol_Info : public libreverse::header::Base_Header {
- public:
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace linux_elf {
 
-  /*! \brief Symbol info section item: Define */
-  boost::uint16_t si_boundto;
+	  /*!
+	   * \class Elf_Symbol_Info
+	   * \date 2003
+	   * \author Stephen Torri
+	   */
+	  struct elf_symbol_info {
 
-  /*! \brief Symbol info section flags: Define */
-  boost::uint16_t si_flags;
-};
+	    /*! \brief Symbol info section item: Define */
+	    boost::uint16_t si_boundto;
 
-} /* Namespace elf */
+	    /*! \brief Symbol info section flags: Define */
+	    boost::uint16_t si_flags;
+	  };
 
-#endif /* ELF_SYMBOL_INFO_H_ */
+	} // namespace linux_elf
+      } // namespace file_readers
+    } // namespace input
+  } //  namespace io
+} // namespace reverse
+
+
+BOOST_FUSION_ADAPT_STRUCT (
+			   struct reverse::io::input::file_readers::linux_elf::elf_program_header_32,
+			   ( boost::uint16_t, si_boundto )
+			   ( boost::uint16_t, si_flags )
+			   )
+
+#endif // ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_SYMBOL_INFO_HPP_INCLUDED

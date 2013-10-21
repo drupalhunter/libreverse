@@ -74,16 +74,16 @@ namespace reverse {
 
 BOOST_FUSION_ADAPT_STRUCT (
      struct reverse::io::input::file_readers::linux_elf::elf_section_header_32,
-     ( Elf32_Word, sh_name )
-     ( Elf32_Word, sh_type )
-     ( Elf32_Word, sh_flags )
-     ( Elf32_Word, sh_addr )
-     ( Elf32_Addr, sh_offset )
-     ( Elf32_Word, sh_size )
-     ( Elf32_Word, sh_link )
-     ( Elf32_Word, sh_info )
-     ( Elf32_Word, sh_addralign )
-     ( Elf32_Word, sh_entsize )
+     ( reverse::io::input::file_readers::linux_elf::Elf32_Word, sh_name )
+     ( reverse::io::input::file_readers::linux_elf::Elf32_Word, sh_type )
+     ( reverse::io::input::file_readers::linux_elf::Elf32_Word, sh_flags )
+     ( reverse::io::input::file_readers::linux_elf::Elf32_Word, sh_addr )
+     ( reverse::io::input::file_readers::linux_elf::Elf32_Addr, sh_offset )
+     ( reverse::io::input::file_readers::linux_elf::Elf32_Word, sh_size )
+     ( reverse::io::input::file_readers::linux_elf::Elf32_Word, sh_link )
+     ( reverse::io::input::file_readers::linux_elf::Elf32_Word, sh_info )
+     ( reverse::io::input::file_readers::linux_elf::Elf32_Word, sh_addralign )
+     ( reverse::io::input::file_readers::linux_elf::Elf32_Word, sh_entsize )
 )
 
 #endif // ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_SECTION_HEADER_32_HPP

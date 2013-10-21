@@ -70,9 +70,9 @@ namespace reverse {
 	     * \param end Last position in input file.
 	     * \param elf_header_obj ELF header found in input file.
 	     */
-	    bool read_elf_header ( const char* iter,
-				   const char* end, 
-				   elf_header_32& elf_header_obj );
+	    bool read_elf_file_header ( const char* iter,
+					const char* end, 
+					elf_file_header_32& elf_header_obj );
      
 	    /* Read program header (32-bit) */
 	    bool read_elf_program_header ( char const* iter,

@@ -2,6 +2,7 @@
 #define REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_FILE_32_HPP
 
 #include <reverse/io/input/file_readers/linux_elf/elf_header_32.hpp>
+#include <reverse/io/input/file_readers/linux_elf/elf_file_header_32.hpp>
 #include <reverse/io/input/file_readers/linux_elf/elf_program_header_32.hpp>
 #include <reverse/io/input/file_readers/linux_elf/elf_section_header_32.hpp>
 
@@ -31,7 +32,7 @@ namespace reverse {
 
 BOOST_FUSION_ADAPT_STRUCT (
      struct reverse::io::input::file_readers::linux_elf::elf_file_32,
-     ( struct reverse::io::input::file_readers::linux_elf::elf_eident_header, base )
+     ( struct reverse::io::input::file_readers::linux_elf::elf_file_header_32, elf_file_header )
      ( struct reverse::io::input::file_readers::linux_elf::elf_header_32, elf_header )
      ( struct reverse::io::input::file_readers::linux_elf::elf_program_header_32, program_header )
      ( std::list < struct reverse::io::input::file_readers::linux_elf::elf_section_header_32 >, section_headers )

@@ -92,19 +92,19 @@ namespace reverse {
 
 BOOST_FUSION_ADAPT_STRUCT (
      struct reverse::io::input::file_readers::linux_elf::elf_header_32,
-     ( Elf32_Half, e_type )
-     ( Elf32_Half, e_machine )
-     ( Elf32_Word, e_version )
-     ( Elf32_Word, e_entry )
-     ( Elf32_Word, e_phoff )
-     ( Elf32_Word, e_shoff )
-     ( Elf32_Word, e_flags )
-     ( Elf32_Half, e_ehsize )
-     ( Elf32_Half, e_phentsize )
-     ( Elf32_Half, e_phnum )
-     ( Elf32_Half, e_shentsize )
-     ( Elf32_Half, e_shnum )
-     ( Elf32_Half, e_shstrndx )
+     ( reverse::io::input::file_readers::linux_elf::Elf32_Half, e_type )
+     ( reverse::io::input::file_readers::linux_elf::Elf32_Half, e_machine )
+     ( reverse::io::input::file_readers::linux_elf::Elf32_Word, e_version )
+     ( reverse::io::input::file_readers::linux_elf::Elf32_Word, e_entry )
+     ( reverse::io::input::file_readers::linux_elf::Elf32_Word, e_phoff )
+     ( reverse::io::input::file_readers::linux_elf::Elf32_Word, e_shoff )
+     ( reverse::io::input::file_readers::linux_elf::Elf32_Word, e_flags )
+     ( reverse::io::input::file_readers::linux_elf::Elf32_Half, e_ehsize )
+     ( reverse::io::input::file_readers::linux_elf::Elf32_Half, e_phentsize )
+     ( reverse::io::input::file_readers::linux_elf::Elf32_Half, e_phnum )
+     ( reverse::io::input::file_readers::linux_elf::Elf32_Half, e_shentsize )
+     ( reverse::io::input::file_readers::linux_elf::Elf32_Half, e_shnum )
+     ( reverse::io::input::file_readers::linux_elf::Elf32_Half, e_shstrndx )
 )
 
 #endif /* ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_HEADER_32_HPP */

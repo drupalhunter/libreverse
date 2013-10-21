@@ -44,6 +44,8 @@
 #ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_MMIX_HPP_INCLUDED
 #define REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_MMIX_HPP_INCLUDED
 
+#include <reverse/io/input/file_readers/linux_elf/elf_common.hpp>
+
 #include <boost/cstdint.hpp>
 #include <string>
 
