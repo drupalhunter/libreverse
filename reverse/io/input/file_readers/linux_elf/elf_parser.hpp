@@ -60,11 +60,6 @@ namespace reverse {
 			elf_file_64& output
 			);
 
-	    /* Read eident header from file */
-	    bool read_elf_header_eident ( char const* iter,
-					  char const* end,
-					  elf_eident_header& elf_eident_header_obj );
-
 	    /*! \brief Read ELF header
 	     * \param iter Current position in input file.
 	     * \param end Last position in input file.

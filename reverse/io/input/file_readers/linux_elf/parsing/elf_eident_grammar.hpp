@@ -18,7 +18,7 @@ namespace reverse {
                         struct elf_eident_header_grammar : boost::spirit::qi::grammar < Iterator, elf_eident_header() > {
                             elf_eident_header_grammar ()
                             : elf_eident_header_grammar::base_type ( elf_eident_header_info ) {
-                                using boost::spirit::qi::char_;
+			      using boost::spirit::qi::char_;
                                 using boost::spirit::qi::byte_;
                                 using boost::spirit::repository::qi::advance;
                                 using boost::spirit::qi::string;

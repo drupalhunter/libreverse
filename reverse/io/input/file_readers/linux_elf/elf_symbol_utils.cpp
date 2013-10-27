@@ -1,269 +1,222 @@
 
 /*  Elf_Symbol_Utils.cpp
 
-   Copyright (C) 2008 Stephen Torri
+    Copyright (C) 2008 Stephen Torri
 
-   This file is part of Libreverse.
+    This file is part of Libreverse.
 
-   Libreverse is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published
-   by the Free Software Foundation; either version 3, or (at your
-   option) any later version.
+    Libreverse is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published
+    by the Free Software Foundation; either version 3, or (at your
+    option) any later version.
 
-   Libreverse is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
+    Libreverse is distributed in the hope that it will be useful, but
+    WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with this program.  If not, see
-   <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see
+    <http://www.gnu.org/licenses/>.
 */
 
-#include "Elf_Symbol_Utils.h"
-#include "Elf_Common.h"
-#include "Elf_sparc.h"
-#include "Elf_hppa.h"
-#include "Elf_arm.h"
+#include <reverse/io/input/file_readers/linux_elf/elf_symbol_utils.hpp>
+#include <reverse/io/input/file_readers/linux_elf/elf_common.hpp>
+#include <reverse/io/input/file_readers/linux_elf/elf_sparc.hpp>
+#include <reverse/io/input/file_readers/linux_elf/elf_hppa.hpp>
+#include <reverse/io/input/file_readers/linux_elf/elf_arm.hpp>
+#include <reverse/trace.hpp>
 
-#include "io/Byte_Converter.h"
+#include <string>
 
-#include <sstream>
 #include <iomanip>
-#include <boost/format.hpp>
 
-#ifdef LIBREVERSE_DEBUG
-#include "Trace.h"
-using namespace libreverse::api;
-using namespace libreverse::trace;
-#endif /* LIBREVERSE_DEBUG */
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace linux_elf {
 
-namespace libreverse { namespace elf_module {
+	  std::string
+	  elf_symbol_utils::get_symbol_binding ( boost::uint8_t symbol_binding )
+	  {
+	    trace::io_detail ( "entering elf_symbol_utils::get_symbol_binding" );
 
-    std::string
-    Elf_Symbol_Utils::get_Symbol_Binding ( boost::uint8_t symbol_binding )
-    {
+	    std::string output_str;
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::IO,
-                             TraceLevel::DETAIL,
-                             "Entering Elf_Symbol_Utils::get_symbol_binding" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        std::stringstream output_str;
-
-        switch ( symbol_binding )
-            {
-            case Elf_Common::STB_LOCAL:   output_str << "LOCAL"; break;
-            case Elf_Common::STB_GLOBAL:  output_str << "GLOBAL"; break;
-            case Elf_Common::STB_WEAK:    output_str << "WEAK"; break;
-            default:
+	    switch ( symbol_binding )
+	      {
+	      case elf_common::STB_LOCAL:   output_str = "LOCAL"; break;
+	      case elf_common::STB_GLOBAL:  output_str = "GLOBAL"; break;
+	      case elf_common::STB_WEAK:    output_str = "WEAK"; break;
+	      default:
                 {
-                    if ((symbol_binding >= Elf_Common::STB_LOPROC) &&
-                        (symbol_binding <= Elf_Common::STB_HIPROC))
-                        {
-                            output_str << "<processor specific>: " << symbol_binding;
-                        }
-                    else if ((symbol_binding >= Elf_Common::STB_LOOS) &&
-                             (symbol_binding <= Elf_Common::STB_HIOS))
-                        {
-                            output_str << "<OS specific>: " << symbol_binding;
-                        }
-                    else
-                        {
-                            output_str << "<unknown>: " << symbol_binding;
-                        }
+		  if ((symbol_binding >= elf_common::STB_LOPROC) &&
+		      (symbol_binding <= elf_common::STB_HIPROC))
+		    {
+		      output_str = boost::str ( boost::format ( "<processor specific>: %1%" ) % symbol_binding );
+		    }
+		  else if ((symbol_binding >= elf_common::STB_LOOS) &&
+			   (symbol_binding <= elf_common::STB_HIOS))
+		    {
+		      output_str = boost::str ( boost::format ( "<OS specific>: %1%" ) % symbol_binding );
+		    }
+		  else
+		    {
+		      output_str = boost::str ( boost::format ( "<unknown>: %1%" ) % symbol_binding );
+		    }
                 }
-            }
+	      }
 
+	    trace::io_detail ( "Exiting elf_Symbol_Utils::get_Symbol_Binding" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::IO,
-                             TraceLevel::DETAIL,
-                             "Exiting Elf_Symbol_Utils::get_Symbol_Binding" );
-#endif /* LIBREVERSE_DEBUG */
+	    return output_str;
+	  }
 
+	  std::string
+	  elf_symbol_utils::get_symbol_index_type ( boost::uint16_t st_shndx )
+	  {
+	    trace::io_detail ( "entering elf_symbol_utils::get_symbol_index_type" );
 
-        return output_str.str();
-    }
+	    std::string output_str;
 
-    std::string
-    Elf_Symbol_Utils::get_Symbol_Index_Type ( boost::uint16_t st_shndx )
-    {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::IO,
-                             TraceLevel::DETAIL,
-                             "Entering Elf_Symbol_Utils::get_symbol_index_type" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        std::stringstream output_str;
-
-        switch (st_shndx)
-            {
-            case Elf_Common::SHN_UNDEF:	output_str << "UND"; break;
-            case Elf_Common::SHN_ABS:	        output_str << "ABS"; break;
-            case Elf_Common::SHN_COMMON:	output_str << "COM"; break;
-            default:
-                if ( (st_shndx >= Elf_Common::SHN_LOPROC) &&
-                     (st_shndx <= Elf_Common::SHN_HIPROC) )
-                    {
-                        output_str << boost::format ("PRC[%1%]") %
-                            boost::io::group( std::setfill('0'), std::hex,
-                                              std::setw(4), st_shndx);
-                    }
-                else if ( (st_shndx >= Elf_Common::SHN_LOOS) &&
-                          (st_shndx <= Elf_Common::SHN_HIOS) )
-                    {
-                        output_str << boost::format ("OS[%1%]") %
-                            boost::io::group(std::setfill('0'), std::hex,
-                                             std::setw(4), st_shndx);
-                    }
-                else if (st_shndx >= Elf_Common::SHN_LORESERVE)
-                    {
-                        output_str << boost::format ("RSV[%1%]") %
-                            boost::io::group(std::setfill('0'), std::hex,
-                                             std::setw(4), st_shndx);
-                    }
+	    switch (st_shndx)
+	      {
+	      case elf_common::SHN_UNDEF:	output_str = "UND"; break;
+	      case elf_common::SHN_ABS:	        output_str = "ABS"; break;
+	      case elf_common::SHN_COMMON:	output_str = "COM"; break;
+	      default:
+                if ( (st_shndx >= elf_common::SHN_LOPROC) &&
+                     (st_shndx <= elf_common::SHN_HIPROC) )
+		  {
+		    output_str = boost::str ( boost::format ("PRC[%1%]") %
+		      boost::io::group( std::setfill('0'), std::hex,
+					std::setw(4), st_shndx) );
+		  }
+                else if ( (st_shndx >= elf_common::SHN_LOOS) &&
+                          (st_shndx <= elf_common::SHN_HIOS) )
+		  {
+		    output_str = boost::str ( boost::format ("OS[%1%]") %
+					      boost::io::group(std::setfill('0'), std::hex,
+							       std::setw(4), st_shndx) ); 
+		  }
+                else if (st_shndx >= elf_common::SHN_LORESERVE)
+		  {
+		    output_str = boost::str ( boost::format ("RSV[%1%]") %
+					      boost::io::group(std::setfill('0'), std::hex,
+							       std::setw(4), st_shndx) );
+		  }
                 else
-                    {
-                        output_str << st_shndx;
-                    }
+		  {
+		    output_str = st_shndx;
+		  }
                 break;
-            }
+	      }
 
+	    trace::io_detail ( "exiting elf_symbol_utils::get_symbol_index_type" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::IO,
-                             TraceLevel::DETAIL,
-                             "Exiting Elf_Symbol_Utils::get_symbol_index_type" );
-#endif /* LIBREVERSE_DEBUG */
+	    return output_str;
+	  }
 
+	  std::string
+	  elf_symbol_utils::get_symbol_type ( boost::uint8_t symbol_type,
+					      boost::uint16_t e_machine )
+	  {
+	    trace::io_detail ( "entering elf_symbol_utils::get_symbol_type" );
 
-        return output_str.str();
-    }
+	    std::string output_str;
 
-    std::string
-    Elf_Symbol_Utils::get_Symbol_Type ( boost::uint8_t symbol_type,
-					boost::uint16_t e_machine )
-    {
+	    switch ( symbol_type )
+	      {
+	      case elf_common::STT_NOTYPE:	output_str = "NOTYPE"; break;
+	      case elf_common::STT_OBJECT:	output_str = "OBJECT"; break;
+	      case elf_common::STT_FUNC:	        output_str = "FUNC"; break;
+	      case elf_common::STT_SECTION:	output_str = "SECTION"; break;
+	      case elf_common::STT_FILE:	        output_str = "FILE"; break;
+	      case elf_common::STT_COMMON:	output_str = "COMMON"; break;
+	      case elf_common::STT_TLS:	        output_str = "TLS"; break;
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::IO,
-                             TraceLevel::DETAIL,
-                             "Entering Elf_Symbol_Utils::get_symbol_type" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        std::stringstream output_str;
-
-        switch ( symbol_type )
-            {
-            case Elf_Common::STT_NOTYPE:	output_str << "NOTYPE"; break;
-            case Elf_Common::STT_OBJECT:	output_str << "OBJECT"; break;
-            case Elf_Common::STT_FUNC:	        output_str << "FUNC"; break;
-            case Elf_Common::STT_SECTION:	output_str << "SECTION"; break;
-            case Elf_Common::STT_FILE:	        output_str << "FILE"; break;
-            case Elf_Common::STT_COMMON:	output_str << "COMMON"; break;
-            case Elf_Common::STT_TLS:	        output_str << "TLS"; break;
-
-            default:
-                if ( (symbol_type >= Elf_Common::STT_LOPROC) &&
-                     (symbol_type <= Elf_Common::STT_HIPROC) )
-                    {
-                        if ( (e_machine == Elf_Common::EM_ARM) &&
-                             (symbol_type == Elf_arm::STT_ARM_TFUNC) )
-                            {
-                                output_str << "THUMB_FUNC";
-                            }
-                        else if ( (e_machine == Elf_Common::EM_SPARCV9) &&
-                                  (symbol_type == Elf_sparc::STT_REGISTER) )
-                            {
-                                output_str << "REGISTER";
-                            }
-                        else if ( (e_machine == Elf_Common::EM_PARISC) &&
-                                  (symbol_type == Elf_hppa::STT_PARISC_MILLI) )
-                            {
-                                output_str << "PARISC_MILLI";
-                            }
-                        else
-                            {
-                                output_str << "<processor specific>: " << symbol_type;
-                            }
-                    }
-                else if ( (symbol_type >= Elf_Common::STT_LOOS) &&
-                          (symbol_type <= Elf_Common::STT_HIOS) )
-                    {
-                        if (e_machine == Elf_Common::EM_PARISC)
-                            {
-                                if (symbol_type == Elf_hppa::STT_HP_OPAQUE)
-                                    {
-                                        output_str << "HP_OPAQUE";
-                                    }
-                                else if (symbol_type == Elf_hppa::STT_HP_STUB)
-                                    {
-                                        output_str << "HP_STUB";
-                                    }
-                            }
-                        else {
-                            output_str << "<OS specific>: " << symbol_type;
-                        }
-                    }
+	      default:
+                if ( (symbol_type >= elf_common::STT_LOPROC) &&
+                     (symbol_type <= elf_common::STT_HIPROC) )
+		  {
+		    if ( (e_machine == elf_common::EM_ARM) &&
+			 (symbol_type == elf_arm::STT_ARM_TFUNC) )
+		      {
+			output_str = "THUMB_FUNC";
+		      }
+		    else if ( (e_machine == elf_common::EM_SPARCV9) &&
+			      (symbol_type == elf_sparc::STT_REGISTER) )
+		      {
+			output_str = "REGISTER";
+		      }
+		    else if ( (e_machine == elf_common::EM_PARISC) &&
+			      (symbol_type == elf_hppa::STT_PARISC_MILLI) )
+		      {
+			output_str = "PARISC_MILLI";
+		      }
+		    else
+		      {
+			output_str = boost::str ( boost::format ( "<processor specific>: %1%" ) % symbol_type );
+		      }
+		  }
+                else if ( (symbol_type >= elf_common::STT_LOOS) &&
+                          (symbol_type <= elf_common::STT_HIOS) )
+		  {
+		    if (e_machine == elf_common::EM_PARISC)
+		      {
+			if (symbol_type == elf_hppa::STT_HP_OPAQUE)
+			  {
+			    output_str = "HP_OPAQUE";
+			  }
+			else if (symbol_type == elf_hppa::STT_HP_STUB)
+			  {
+			    output_str = "HP_STUB";
+			  }
+		      }
+		    else {
+		      output_str = boost::str ( boost::format ( "<OS specific>: %1%" ) % symbol_type );
+		    }
+		  }
                 else
-                    {
-                        output_str << boost::format("<unknown>:%1% ") %
-                            boost::io::group( std::setfill('0'), std::hex,
-                                              std::setw(4), symbol_type);
-                    }
-            }
+		  {
+		    output_str = boost::str ( boost::format("<unknown>:%1% ") %
+					      boost::io::group( std::setfill('0'), std::hex,
+								std::setw(4), symbol_type) );
+		  }
+	      }
 
+	    trace::io_detail ( "exiting elf_symbol_utils::get_symbol_type" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::IO,
-                             TraceLevel::DETAIL,
-                             "Exiting Elf_Symbol_Utils::get_symbol_type" );
-#endif /* LIBREVERSE_DEBUG */
+	    return output_str;
+	  }
 
+	  std::string
+	  elf_symbol_utils::get_symbol_visibility ( boost::uint8_t st_other )
+	  {
+	    trace::io_detail ( "entering elf_symbol_utils::get_symbol_visibility" );
 
-        return output_str.str();
-    }
+	    std::string output_str;
 
-    std::string
-    Elf_Symbol_Utils::get_Symbol_Visibility ( boost::uint8_t st_other )
-    {
+	    boost::uint8_t visibility = (st_other & 0x3);
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::IO,
-                             TraceLevel::DETAIL,
-                             "Entering Elf_Symbol_Utils::get_symbol_visibility" );
-#endif /* LIBREVERSE_DEBUG */
+	    switch (visibility)
+	      {
+	      case elf_common::STV_DEFAULT:   output_str = "DEFAULT"; break;
+	      case elf_common::STV_INTERNAL:  output_str = "INTERNAL"; break;
+	      case elf_common::STV_HIDDEN:    output_str = "HIDDEN"; break;
+	      case elf_common::STV_PROTECTED: output_str = "PROTECTED"; break;
+	      default:                        output_str = "UKNOWN"; break;
+	      }
 
+	    trace::io_detail ( "exiting elf_symbol_utils::get_symbol_visibility" );
 
-        std::stringstream output_str;
+	    return output_str;
+	  }
 
-        boost::uint8_t visibility = (st_other & 0x3);
+	} // namespace linux_elf
+      } // namespace file_readers
+    } // namespace input
+  } //  namespace io
+} // namespace reverse
 
-        switch (visibility)
-            {
-            case Elf_Common::STV_DEFAULT:   output_str << "DEFAULT"; break;
-            case Elf_Common::STV_INTERNAL:  output_str << "INTERNAL"; break;
-            case Elf_Common::STV_HIDDEN:    output_str << "HIDDEN"; break;
-            case Elf_Common::STV_PROTECTED: output_str << "PROTECTED"; break;
-            default:                        output_str << "UKNOWN"; break;
-            }
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::IO,
-                             TraceLevel::DETAIL,
-                             "Exiting Elf_Symbol_Utils::get_symbol_visibility" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        return output_str.str();
-    }
-
-  } /* namespace elf_module */
-} /* namespace libreverse */

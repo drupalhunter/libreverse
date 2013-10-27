@@ -19,42 +19,49 @@
     <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ELF_SYMBOLS_Utils_H
-#define ELF_SYMBOLS_Utils_H
+#ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_SYMBOLS_UTILS_HPP
+#define REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_SYMBOLS_UTILS_HPP
 
-#include "io/input/File_Readers/Base_Header.h"
+#include <boost/cstdint.hpp>
 
 #include <string>
 
-namespace libreverse { namespace elf_module {
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace linux_elf {
 
-    /*!
-     * \class Elf_Symbol_Utils
-     * \date 2003
-     * \author Stephen Torri
-     */
-    class Elf_Symbol_Utils {
+	  /*!
+	   * \class Elf_Symbol_Utils
+	   * \date 2003
+	   * \author Stephen Torri
+	   */
+	  class elf_symbol_utils {
 
-    public:
+	  public:
 
-      /* These three functions disassemble and assemble a symbol table
-	 st_info field, which contains the symbol binding and symbol
-	 type.  The STB_ and STT_ defines identify the binding and
-	 type.  */
-      static std::string get_Symbol_Binding ( boost::uint8_t symbol_binding );
+	    /* These three functions disassemble and assemble a symbol table
+	       st_info field, which contains the symbol binding and symbol
+	       type.  The STB_ and STT_ defines identify the binding and
+	       type.  */
+	    static std::string get_symbol_binding ( boost::uint8_t symbol_binding );
         
-      static std::string get_Symbol_Type ( boost::uint8_t symbol_type,
-					   boost::uint16_t e_machine );
+	    static std::string get_symbol_type ( boost::uint8_t symbol_type,
+						 boost::uint16_t e_machine );
 
-      static std::string get_Symbol_Index_Type ( boost::uint16_t st_shndx );
+	    static std::string get_symbol_index_type ( boost::uint16_t st_shndx );
 
-      /* This function disassembles and assembles a symbol's visibility
-	 into the st_other field.  The STV_ defines specificy the actual
-	 visibility.  */
-      static std::string get_Symbol_Visibility ( boost::uint8_t st_other );
-    };
+	    /* this function disassembles and assembles a symbol's visibility
+	       into the st_other field.  the stv_ defines specificy the actual
+	       visibility.  */
+	    static std::string get_symbol_visibility ( boost::uint8_t st_other );
+	  };
 
-  } /* namespace elf_module */
-} /* namespace libreverse */
+	} // namespace linux_elf
+      } // namespace file_readers
+    } // namespace input
+  } //  namespace io
+} // namespace reverse
 
-#endif /* ELF_SYMBOLS_Utils_H */
+#endif // ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_SYMBOLS_UTILS_HPP

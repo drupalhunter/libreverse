@@ -19,12 +19,20 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#include "Elf_xtensa.h"
 
-namespace libreverse { namespace elf_module {
+#include <reverse/io/input/file_readers/linux_elf/elf_xtensa.hpp>
 
-    std::string Elf_xtensa::XTENSA_INSN_SEC_NAME  = ".xt.insn";
-    std::string Elf_xtensa::XTENSA_LIT_SEC_NAME   = ".xt.lit";
+namespace reverse {
+  namespace io {
+    namespace input {
+      namespace file_readers {
+	namespace linux_elf {
 
-} /* namespace elf_module */
-} /* namespace libreverse */
+	  std::string elf_xtensa::XTENSA_INSN_SEC_NAME  = ".xt.insn";
+	  std::string elf_xtensa::XTENSA_LIT_SEC_NAME   = ".xt.lit";
+
+	} // namespace linux_elf
+      } // namespace file_readers
+    } // namespace input
+  } //  namespace io
+} // namespace reverse

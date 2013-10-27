@@ -18,9 +18,11 @@
   <http://www.gnu.org/licenses/>.
 */
 
+#include <reverse/io/input/file_readers/linux_elf/elf_eident_header.hpp>
 #include <reverse/io/input/file_readers/linux_elf/elf_file_32.hpp>
+#include <reverse/io/input/file_readers/linux_elf/elf_file_header_32.hpp>
 #include <reverse/io/input/file_readers/linux_elf/elf_parser.hpp>
-#include <reverse/io/input/file_readers/linux_elf/parsing/elf_eident_grammar.hpp>
+
 #include <reverse/io/input/file_readers/linux_elf/parsing/elf_file_header_32_grammar.hpp>
 #include <reverse/io/input/file_readers/linux_elf/parsing/elf_program_header_32_grammar.hpp>
 #include <reverse/io/input/file_readers/linux_elf/parsing/elf_section_header_32_grammar.hpp>
@@ -43,8 +45,8 @@ namespace reverse {
 	    // Read Elf file header
 	    bool result = read_elf_file_header ( iter, end, output.elf_file_header );
      
-	    // 	 // Read Program Header
-	    // 	 result = read_elf_program_header ( iter, end, output.program_header );
+	    // Read Program Header
+	    result = read_elf_program_header ( iter, end, output.program_header );
 	 
 	    // Read Section header table
 
@@ -54,19 +56,6 @@ namespace reverse {
 	 
 	 
 	 
-	    return result;
-	  }
-	  bool elf_parser::read_elf_header_eident ( char const* iter,
-						    char const* end,
-						    elf_eident_header& elf_eident_header_obj )
-	  {
-	    linux_elf::parsing::elf_eident_header_grammar<char const*> eident_parser;
-
-	    bool result = boost::spirit::qi::parse ( iter,
-						     end,
-						     eident_parser,
-						     elf_eident_header_obj );
-
 	    return result;
 	  }
 
@@ -85,29 +74,29 @@ namespace reverse {
 	  }
 
 	  bool elf_parser::read_elf_program_header ( const char* iter,
-						     const char* end, 
-						     elf_program_header_32& program_header_obj )
+	  					     const char* end, 
+	  					     elf_program_header_32& program_header_obj )
 	  {
 	    linux_elf::parsing::elf_program_header_32_grammar<char const*> program_header_parser;
     
 	    bool result = boost::spirit::qi::parse ( iter,
-						     end,
-						     program_header_parser,
-						     program_header_obj );
+	  					     end,
+	  					     program_header_parser,
+	  					     program_header_obj );
     
 	    return result;
 	  }
 
 	  bool elf_parser::read_elf_section_header ( const char* iter,
-						     const char* end, 
-						     elf_section_header_32& section_header_obj )
+	  					     const char* end, 
+	  					     elf_section_header_32& section_header_obj )
 	  {
 	    linux_elf::parsing::elf_section_header_32_grammar<const char*> section_header_parser;
     
 	    bool result = boost::spirit::qi::parse ( iter,
-						     end,
-						     section_header_parser,
-						     section_header_obj );
+	  					     end,
+	  					     section_header_parser,
+	  					     section_header_obj );
     
 	    return result;
 	  }

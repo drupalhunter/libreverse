@@ -22,6 +22,8 @@
 #ifndef REVERSE_IO_INPUT_FILE_HEADERS_LINUX_ELF_ELF_FILE_HEADER_32_HPP_INCLUDED
 #define REVERSE_IO_INPUT_FILE_HEADERS_LINUX_ELF_ELF_FILE_HEADER_32_HPP_INCLUDED
 
+#define FUSION_MAX_VECTOR_SIZE 14
+
 #include <reverse/io/input/file_readers/linux_elf/elf_eident_header.hpp>
 #include <reverse/io/input/file_readers/linux_elf/elf_types.hpp>
 
