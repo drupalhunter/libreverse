@@ -19,57 +19,49 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#include <reverse/io/input/File_Readers/Reader_Factory.h>
-#include "io/input/File_Readers/Elf/Elf_Reader_32.h"
-#include "io/input/File_Readers/Elf/Elf_Reader_64.h"
-#include "io/input/File_Readers/Windows_PE/Reader_32.h"
-#include "io/input/File_Readers/Windows_PE/Reader_64.h"
-#include "io/input/File_Readers/Java_Class/Reader.h"
-#include "io/input/File_Readers/Mach/Mach_Reader_32.h"
-#include "io/input/File_Readers/Mach/Mach_Reader_64.h"
-#include "io/input/File_Readers/Mach/Fat_Reader.h"
-#include "io/File_ID.h"
-#include "File_Reader.h"
-#include "errors/API_Exception.h"
+#include <reverse/io/input/file_readers/reader_factory.hpp>
+#include <reverse/io/input/file_readers/linux_elf/elf_parser.hpp>
+#include <reverse/io/input/file_readers/windows_pe/reader_32.hpp>
+#include <reverse/io/input/file_readers/windows_pe/reader_64.hpp>
+#include <reverse/io/input/file_readers/java_class/reader.hpp>
+#include <reverse/io/input/file_readers/mach/mach_reader_32.hpp>
+#include <reverse/io/input/file_readers/mach/mach_reader_64.hpp>
+#include <reverse/io/input/file_readers/mach/fat_reader.hpp>
+#include <reverse/io/file_id.hpp>
+#include <reverse/io/input/file_reader.hpp>
+#include <reverse/trace.hpp>
 
 namespace reverse {
   namespace io {
     namespace input {
-      namespace File_Readers {
+      namespace file_readers {
 
-        Reader_Factory&
-        Reader_Factory::Instance ( void )
+        reader_factory&
+        reader_factory::instance ( void )
         {
-	  Trace::write_Trace ( TraceArea::IO,
-			       TraceLevel::DETAIL,
-			       "Inside Reader_Factory::Instance()" );
+	  trace::io_detail ( "inside reader_factory::instance()" );
 	  
-            static Reader_Factory fact_obj;
+            static reader_factory fact_obj;
             return fact_obj;
         }
 
-        Reader_Factory::Reader_Pair_t
-        Reader_Factory::create_Elf_Reader ( boost::shared_ptr < const File_ID >& target_file )
+        reader_factory::reader_pair_t
+        reader_factory::create_elf_reader ( boost::shared_ptr < const file_id >& target_file )
         {
-	  Trace::write_Trace ( TraceArea::IO,
-			       TraceLevel::DETAIL,
-			       "Inside Reader_Factory::create_Elf_Reader()" );
-
-	  Trace::write_Trace ( TraceArea::IO,
-			       TraceLevel::DATA,
-			       boost::str ( boost::format ( "target file: %1%" ) % target_file->get_Full_Name() ) );
-
+	  trace::io_detail ( "inside reader_factory::create_elf_reader()" );
+	  trace::io_data ( "target file: %1%", target_file->get_Full_Name() );
 
             // try 32-bit
-            elf_module::Elf_Reader_32::ptr_t tmp32_ptr ( new elf_module::Elf_Reader_32 ( target_file ) );
+	  boost::shared_ptr < reverse::io::input::file_readers::linux_elf::elf_reader_32 > tmp32_ptr =
+	    boost::make_shared < reverse::io::input::file_readers::linux_elf::elf_reader_32 > ( target_file );
 
-            if ( tmp32_ptr->support_File_Type () )
+	  if ( tmp32_ptr->support_File_Type () )
             {
-                return std::make_pair ( tmp32_ptr, true );
+	      return std::make_pair ( tmp32_ptr, true );
             }
-            else
+	  else
             {
-                return std::make_pair ( tmp32_ptr, false );
+	      return std::make_pair ( tmp32_ptr, false );
             }
         }
 

@@ -22,6 +22,8 @@
 #ifndef REVERSE_IO_INPUT_FILE_READERS_ELF_FILE_HEADER_UTILS_HPP_INCLUDED
 #define REVERSE_IO_INPUT_FILE_READERS_ELF_FILE_HEADER_UTILS_HPP_INCLUDED
 
+#include <reverse/io/input/file_readers/linux_elf/elf_types.hpp>
+
 #include <boost/cstdint.hpp>
 #include <string>
 
@@ -61,7 +63,7 @@ namespace reverse {
          *
          * NOTE: Taken from readelf.c
          */
-      static std::string get_file_type_meta ( boost::uint16_t e_type );
+      static std::string get_file_type_meta ( Elf32_Half e_type );
 
         /*!
          * \brief Returns the string representation of the cpu
@@ -71,7 +73,7 @@ namespace reverse {
          * target file
          *
          */
-      static std::string get_arch_name ( boost::uint16_t e_machine );
+      static std::string get_arch_name ( Elf32_Half e_machine );
 
 
         /*!
@@ -79,24 +81,24 @@ namespace reverse {
          * \return String representation of machine name
          * NOTE: Taken from readelf.c
          */
-      static std::string get_machine_name ( boost::uint16_t e_machine );
+      static std::string get_machine_name ( Elf32_Half e_machine );
 
         /*!
          * \brief Returns the machine flags
          * \return String representation of machine flags
          * NOTE: Taken from readelf.c
          */
-      static std::string get_machine_flags ( boost::uint32_t e_flags,
-					     boost::uint16_t e_machine );
+      static std::string get_machine_flags ( Elf32_Word e_flags,
+					     Elf32_Half e_machine );
 
         /*!
          * \brief Returns the ARM machine flags
          * \return String representation of ARM machine flags
          * NOTE: Taken from readelf.c
          */
-      static std::string decode_arm_machine_flags ( boost::uint32_t e_flags );
+      static std::string decode_arm_machine_flags ( Elf32_Word e_flags );
 
-      static std::string get_file_type_name ( boost::uint16_t e_type );
+      static std::string get_file_type_name ( Elf32_Half e_type );
 
     };
 

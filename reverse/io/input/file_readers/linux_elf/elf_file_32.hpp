@@ -19,7 +19,7 @@ namespace reverse {
 	  struct elf_file_32
 	  {  
 	    elf_file_header_32 elf_file_header;
-	    elf_program_header_32 program_header;
+	    std::vector < elf_program_header_32 > program_headers;
 	    //std::vector < elf_section_header_32 > section_headers;
 	  };
 
