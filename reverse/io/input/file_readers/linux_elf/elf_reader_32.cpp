@@ -50,14 +50,15 @@
 #include <reverse/io/input/file_readers/linux_elf/elf_meta_info.hpp>
 #include <reverse/io/file_id.hpp>
 
-#include <reverse/io/input/file_readers/linux_elf/data_containers/memory_map.hpp>
-#include <reverse/io/input/file_readers/linux_elf/io/file_id.hpp>
-#include <reverse/errors/io_exception.hpp>
+#include <reverse/data_containers/memory_map.hpp>
+#include <reverse/io/file_id.hpp>
+#include <reverse/errors/parsing_exception.hpp>
 
 #include <reverse/trace.hpp>
 
 #include <boost/interprocess/file_mapping.hpp>
 #include <boost/interprocess/mapped_region.hpp>
+#include <boost/make_shared.hpp>
 
 namespace reverse {
   namespace io {
@@ -82,13 +83,13 @@ namespace reverse {
 	    trace::io_detail ( "Entering elf_reader_32::read_headers" );
 
 	    // Create the file mapping
-	    boost::interprocess::file_mapping fm ( m_filename->get_full_name(), boost::interprocess::read_only );
+	    boost::interprocess::file_mapping fm ( m_filename->get_full_name().c_str(), boost::interprocess::read_only );
     
 	    // Map the file in memory
 	    boost::interprocess::mapped_region region ( fm, boost::interprocess::read_only );
     
 	    // Get the start address of the file in memory
-	    char const* iter = region.get_address();
+	    char const* iter = reinterpret_cast<char const*> ( region.get_address() );
 	    char const* end = iter + region.get_size();
     
 	    // Parse the file_hdr
@@ -97,7 +98,7 @@ namespace reverse {
 	    m_supported = parser.read ( iter, end, m_elf_file );
 	    if ( ! m_supported )
 	      {
-		throw errors::io_exception ( "Error parsing input file." );
+		throw errors::parsing_exception ( errors::parsing_exception::unknown_parsing_error );
 	      }
     
 	    // \todo Dump elf header (Karma generator?)
@@ -112,7 +113,7 @@ namespace reverse {
 	  {
 	    trace::io_detail ( "Entering Elf_Reader_32::get_File_Type" );
 
-	    std::string result = elf_meta_info::FILE_TYPE_32BIT;
+	    std::string result = elf_meta_info::file_type_32bit;
 
 	    return result;
 	  }
@@ -131,7 +132,7 @@ namespace reverse {
 	    trace::io_detail ( "entering elf_reader_32::get_memory_map" );
 
 	    // Get base address of the image
-	    Elf32_Word base_address = m_elf_file.program_headers.p_vaddr;
+	    Elf32_Word base_address = m_elf_file.program_headers[0].p_vaddr;
 	    Elf32_Addr highest_memory_address = 0;
 	    Elf32_Word highest_memory_size = 0;
 
@@ -139,7 +140,7 @@ namespace reverse {
 		  cpos != m_elf_file.program_headers.end();
 		  cpos++ )
 	      {
-		if ( (*cpos).p_type = elf_common::PT_LOAD )
+		if ( (*cpos).p_type == elf_common::PT_LOAD )
 		  {
 		    highest_memory_address = (*cpos).p_vaddr;
 		    highest_memory_size = (*cpos).p_memsz;
@@ -159,15 +160,16 @@ namespace reverse {
 		  {
 		    // Do nothing
 		  }
-	    
+	      }
+
 	    boost::uint32_t size = ( highest_memory_address + highest_memory_size ) - base_address;
 
 	    trace::io_data ( "elf_reader_32::get_memory_map - base_address = 0x%1$-08x (0x%2$-08x)",
 			     base_address,
-			     memory_size );
+			     size );
 
 	    boost::shared_ptr < data_containers::memory_map > result =
-	      boost::make_shared < data_container::Memory_Map > ( memory_size, base_address );
+	      boost::make_shared < data_containers::memory_map > ( size, base_address );
 
 	    // Steps to load elf
 	    /* 1. Build process image by loading all the sections.
@@ -210,7 +212,7 @@ namespace reverse {
 	    */
 	    Elf32_Half const elf_type = m_elf_file.elf_file_header.e_type;
 	    
-	    if ( elf_type != Elf_Common::ET_EXEC ) {
+	    if ( elf_type != elf_common::ET_EXEC ) {
 	      // ERROR
 	    }
 	    /* 2. Perform relocations */
@@ -223,7 +225,7 @@ namespace reverse {
 	  }
 
 	  std::string
-	  Elf_Reader_32::get_Section_String ( std::string name ) const
+	  elf_reader_32::get_section_string ( std::string name ) const
 	  {
 
 	    std::string output;

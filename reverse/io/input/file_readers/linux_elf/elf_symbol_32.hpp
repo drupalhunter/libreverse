@@ -88,12 +88,12 @@ namespace reverse {
 
 BOOST_FUSION_ADAPT_STRUCT (
 			   reverse::io::input::file_readers::linux_elf::elf_symbol_32,
-			   (Elf32_Word, st_name)
-			   (Elf32_Addr, st_value)
-			   (Elf32_Word, st_size)
+			   (reverse::io::input::file_readers::linux_elf::Elf32_Word, st_name)
+			   (reverse::io::input::file_readers::linux_elf::Elf32_Addr, st_value)
+			   (reverse::io::input::file_readers::linux_elf::Elf32_Word, st_size)
 			   (boost::uint8_t, st_info)
 			   (boost::uint8_t, st_other)
-			   (Elf32_Half, st_shndx)
+			   (reverse::io::input::file_readers::linux_elf::Elf32_Half, st_shndx)
 			   )
 
 

@@ -32,163 +32,93 @@
 
 namespace reverse {
 
-namespace data_containers {
-class memory_map;
-}
+  namespace data_containers {
+    class memory_map;
+  }
 
-namespace io {
+  namespace io {
 
-class file_id;
+    class file_id;
 
-namespace input {
-namespace file_readers {
-namespace linux_elf {
+    namespace input {
+      namespace file_readers {
+	namespace linux_elf {
 
-class elf_file_header_64;
-class elf_header_64;
-class elf_section_header_64;
-class elf_symbol_64;
+	  class elf_file_header_64;
+	  class elf_header_64;
+	  class elf_section_header_64;
+	  class elf_symbol_64;
 
-/*!
- * \class Elf_Reader_64
- * \date 2003
- * \author Stephen Torri
- */
-class elf_reader_64 : public io::file_reader {
-public:
+	  /*!
+	   * \class Elf_Reader_64
+	   * \date 2003
+	   * \author Stephen Torri
+	   */
+	  class elf_reader_64 : public io::file_reader {
+	  public:
 
-     /*!
-      * \brief Default Constructor
-      * \param target_file The file to be used for decompiling
-      */
-     elf_reader_64 ( boost::shared_ptr < const io::file_id > target_file );
+	    /*!
+	     * \brief Default Constructor
+	     * \param target_file The file to be used for decompiling
+	     */
+	    elf_reader_64 ( boost::shared_ptr < const io::file_id > target_file );
 
-     /*!
-      * \brief Default Destructor
-      */
-     virtual ~elf_reader_64();
+	    /*!
+	     * \brief Default Destructor
+	     */
+	    virtual ~elf_reader_64();
 
-     /*! \brief Elf_Header reference for this reader */
-     boost::shared_ptr < elf_header_64 > get_header ( void );
+	    virtual bool support_file_type ( void );
 
-     virtual bool support_file_type ( void );
+	    virtual void read_headers ( void );
 
-     virtual void read_headers ( void );
+	    virtual boost::shared_ptr < data_containers::memory_map > get_memory_map ( void );
 
-     virtual boost::shared_ptr < data_containers::memory_map > get_memory_map ( void );
+	    virtual std::string to_string ( void );
 
-     virtual std::string to_string ( void );
+	    virtual std::vector < std::string > get_text_strings ( void );
 
-     virtual std::vector < std::string > get_text_strings ( void );
+	    virtual std::vector < std::string > get_utf16_strings ( void );
 
-     virtual std::vector < std::string > get_utf16_strings ( void );
+	    /*---------------
+	     *   Functions
+	     *---------------*/
 
-     /*---------------
-      *   Functions
-      *---------------*/
+	    /*!
+	     * \brief Return the File Type of the target file
+	     */
+	    virtual std::string get_file_type ( void );
 
-     /*!
-      * \brief Get the Elf File Header from the file
-      */
-     void read_file_header ( void );
+	    virtual std::string get_section_string ( std::string name ) const;
 
-     /*!
-      * \brief Get the Elf Program Headers from the file
-      */
-     void read_program_headers ( void );
+	    virtual std::string get_string_name ( boost::uint64_t index ) const;
 
-     /*!
-      * \brief Return the File Type of the target file
-      */
-     virtual std::string get_file_type ( void );
+	    void set_symbol_name ( boost::shared_ptr < elf_symbol_64 > symbol_ptr );
 
-     /* !\brief Return the Architecture Type of the target file */
-     std::string get_arch_type ( void );
+	    const elf_file_64& get_file ( void ) const;
 
-     /* !\brief Return the offset for a section header */
-     std::string get_section_offset ( std::string name );
+	  private:
 
-     /* !\brief Return the offset for a section length */
-     std::string get_section_length ( std::string name );
+	    /*---------------
+	     *   Variables
+	     *---------------*/
 
-     /*!
-      * \brief Return the Entry Point of the target file
-      */
-     std::string get_entry_point ( void );
+	    /*! \brief elf file handle */
+	    struct elf_file_64 m_elf_file;
 
-     /*!
-      * \brief Return the Base Address of the target file
-      */
-     std::string get_base_address ( void );
+	    /*! \brief Support the Elf 64-bit file format. */
+	    bool m_supported;
 
-     /*!
-      * \brief Get the Section Headers from the file
-      */
-     void read_section_headers ( void );
+	    /*! \brief Filename of target. */
+	    boost::shared_ptr < const io::file_id > m_filename;
 
-     /*!
-      * \brief Get the Dynamic Headers from the file
-      */
-     void read_dynamic_headers ( void );
+	    boost::shared_ptr < data_containers::memory_map > m_string_table_ptr;
+	  };
 
-     /*!
-      * \brief Get the Symbols from the Symbols Token of the file
-      */
-     void read_symbol_token ( void );
-
-     /*!
-      * \brief Get the Relocation Headers from the file
-      */
-     void read_relocations ( void );
-
-     /*!
-      * \brief Get the Relocation headers (SHT_REL)
-      */
-     void read_relocation_headers ( boost::shared_ptr < const elf_section_header_64 > sec_hdr,
-                                    boost::shared_ptr < const elf_file_header_64 > file_hdr );
-
-     /*!
-      * \brief Get the Relocation Addend headers (SHT_RELA)
-      */
-     void read_relocation_addend_headers ( boost::shared_ptr < const elf_section_header_64 > sec_hdr,
-                                           boost::shared_ptr < const elf_file_header_64> file_hdr );
-
-     /*!
-      * \brief Get the Relocation symbols
-      */
-     void read_relocation_symbols ( boost::shared_ptr < const elf_section_header_64 > sec_hdr,
-                                    boost::shared_ptr < const elf_file_header_64> file_hdr );
-
-     virtual std::string get_section_string ( std::string name ) const;
-
-     virtual std::string get_string_name ( boost::uint64_t index ) const;
-
-     void set_symbol_name ( boost::shared_ptr < elf_symbol_64 > symbol_ptr );
-
-     const elf_file_64& get_file ( void ) const;
-
-private:
-
-     /*---------------
-      *   Variables
-      *---------------*/
-
-     /*! \brief elf file handle */
-     struct elf_file_64 m_elf_file;
-
-     /*! \brief Filename of target. */
-     boost::shared_ptr < const io::file_id > m_filename;
-     
-     /*! \brief Conversion of data read is required */
-     bool m_convert;
-
-     boost::shared_ptr < data_containers::memory_map > m_string_table_ptr;
-};
-
-} // namespace linux_elf
-} // namespace file_readers
-} // namespace input
-} // namespace io
+	} // namespace linux_elf
+      } // namespace file_readers
+    } // namespace input
+  } // namespace io
 } // namespace reverse
 
 #endif // ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_READER_64_HPP_INCLUDED

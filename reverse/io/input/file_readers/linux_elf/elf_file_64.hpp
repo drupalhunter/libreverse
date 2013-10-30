@@ -1,7 +1,7 @@
 #ifndef REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_HEADER_64_GRAMMAR_HPP
 #define REVERSE_IO_INPUT_FILE_READERS_LINUX_ELF_ELF_HEADER_64_GRAMMAR_HPP
 
-#include <reverse/io/input/file_readers/linux_elf/elf_eident_header.hpp>
+#include <reverse/io/input/file_readers/linux_elf/elf_file_header_64.hpp>
 #include <reverse/io/input/file_readers/linux_elf/elf_program_header_64.hpp>
 
 #include <boost/fusion/adapted/struct/adapt_struct.hpp>
@@ -14,8 +14,8 @@ namespace reverse {
 
 	  struct elf_file_64 {
 
-	    elf_eident_header base;
-	    elf_program_header_64 program_header;
+	    elf_file_header_64 elf_file_header;
+	    std::vector < elf_program_header_64 > program_headers;
      
 	  };
 

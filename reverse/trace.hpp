@@ -151,6 +151,14 @@ namespace reverse {
 		    boost::str ( boost::format ( message ) % value ) );
     }
 
+    template <typename T, typename S>
+    static void io_data ( const char* message, T const& value1, S const& value2 )
+    {
+      write_trace ( trace_area::io_data,
+		    trace_level::data,
+		    boost::str ( boost::format ( message ) % value1 % value2 ) );
+    }
+
     static void infrastructure_detail ( const char* message );
 
     static void infrastructure_error ( const char* message );
@@ -218,6 +226,10 @@ namespace reverse {
 
     template <typename T>
     static void io_data ( const char*, T const& ) {}
+
+    template <typename T, typename S>
+    static void io_data ( const char*, T const&, S const& )
+    {}
 
     static void infrastructure_detail ( const char* ){}
 

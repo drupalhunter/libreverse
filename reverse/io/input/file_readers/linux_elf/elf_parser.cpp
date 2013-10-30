@@ -44,9 +44,16 @@ namespace reverse {
 	  {
 	    // Read Elf file header
 	    bool result = read_elf_file_header ( iter, end, output.elf_file_header );
-     
-	    // Read Program Header
-	    result = read_elf_program_header ( iter, end, output.program_header );
+
+	    for ( Elf32_Half index = 0; index < output.elf_file_header.e_phnum; index++ )
+	      {
+		elf_program_header_32 prg_hdr;
+
+		// Read Program Header
+		result = read_elf_program_header ( iter, end, prg_hdr );
+
+		output.program_headers.push_back ( prg_hdr );
+	      }
 	 
 	    // Read Section header table
 

@@ -59,13 +59,13 @@ namespace reverse {
 	    elf_eident_header base;
       
 	    /*! \brief  Object file type */
-	    Elf32_Half e_type;
+	    Elf64_Half e_type;
       
 	    /*! \brief Required architecture for the file */
-	    Elf32_Half e_machine;
+	    Elf64_Half e_machine;
       
 	    /*! \brief ELF version for the file */
-	    Elf32_Word e_version;
+	    Elf64_Word e_version;
 
 	    /*!
 	     * \brief This memeber gives the virtual address to which the system
@@ -118,9 +118,9 @@ namespace reverse {
 BOOST_FUSION_ADAPT_STRUCT (
 			   struct reverse::io::input::file_readers::linux_elf::elf_file_header_64,
 			   ( struct reverse::io::input::file_readers::linux_elf::elf_eident_header, base )
-			   ( boost::uint16_t, e_type )
-			   ( boost::uint16_t, e_machine )
-			   ( boost::uint32_t, e_version )
+			   ( reverse::io::input::file_readers::linux_elf::Elf64_Half, e_type )
+			   ( reverse::io::input::file_readers::linux_elf::Elf64_Half, e_machine )
+			   ( reverse::io::input::file_readers::linux_elf::Elf64_Word, e_version )
 			   ( boost::uint64_t, e_entry )
 			   ( boost::uint64_t, e_phoff )
 			   ( boost::uint64_t, e_shoff )
