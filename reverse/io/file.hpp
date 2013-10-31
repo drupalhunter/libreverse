@@ -249,7 +249,7 @@ namespace reverse {
       /*!
        * \brief Reads the binary image from file
        */
-      void read_Image ();
+      void read_image ();
 
       UErrorCode m_error;
 

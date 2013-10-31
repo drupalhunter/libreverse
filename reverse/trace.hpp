@@ -140,6 +140,8 @@ namespace reverse {
 				 % v1 ) );
     }
 
+    static void io_error ( const char* message, const char* filename, int line );
+
 
     static void io_data ( const char* message );
 
@@ -223,6 +225,8 @@ namespace reverse {
 
     template <typename T1>
     static void io_error ( const char* message, T1 const& v1 ) {}
+
+    static void io_error ( const char* message, const char* filename, int line ){}
 
     template <typename T>
     static void io_data ( const char*, T const& ) {}

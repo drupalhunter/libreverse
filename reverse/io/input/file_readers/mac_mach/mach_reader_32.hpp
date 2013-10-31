@@ -19,25 +19,32 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#ifndef MACH_READER_32_H_
-#define MACH_READER_32_H_
+#ifndef REVERSE_IO_INPUT_FILE_READERS_MAC_MACH_MACH_READER_32_HPP_INCLUDED
+#define REVERSE_IO_INPUT_FILE_READERS_MAC_MACH_MACH_READER_32_HPP_INCLUDED
 
-#include "io/input/File_Readers/File_Reader.h"
-#include "io/IO_Types.h"
-#include "Mach_File.h"
-#include "Mach_Types.h"
+#include <reverse/io/input/file_readers/file_reader.hpp>
+#include <reverse/io/input/file_readers/mac_mach/mach_file.hpp>
 
-namespace libreverse
-{
-    namespace mach_module
-    {
+namespace reverse {
+
+  namespace data_containers {
+    class memory_map;
+  }
+
+  namespace io {
+
+    class file_id;
+
+    namespace input {
+      namespace file_readers {
+	namespace mac_mach {
 
         /*!
-         * \class Mach_Reader_32
+         * \class mach_reader_32
          * \date 2007
-         * \author Stephen Torri
+         * \author stephen torri
          */
-        class Mach_Reader_32 : public io::File_Reader
+        class mach_reader_32 : public io::file_reader
         {
         public:
 

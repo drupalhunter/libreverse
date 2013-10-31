@@ -33,18 +33,12 @@
 namespace reverse {
   namespace io {
 
-    class String_Converter {
+    class string_converter {
     public:
 
-      static inline std::string convert_From_UTF16_String ( std::vector<UChar> const& input_string )
+      static inline std::string convert_from_utf16_string ( std::vector<UChar> const& input_string )
       {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( trace_area::IO,
-                             trace_level::DETAIL,
-                             "Entering String_Converter::convert_From_UTF16_String" );
-#endif /* LIBREVERSE_DEBUG */
-
+	trace::io_detail ( "Entering String_Converter::convert_From_UTF16_String" );
 
         UErrorCode m_error ( U_ZERO_ERROR );
         UConverter* m_conv = ucnv_open ( NULL, &m_error );

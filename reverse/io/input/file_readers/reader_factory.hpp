@@ -54,7 +54,7 @@ namespace reverse {
 	   */
 	  static reader_factory& instance (void);
 
-	  boost::shared_ptr < file_reader> create_file_reader ( std::string filename );
+	  boost::shared_ptr < file_reader > create_file_reader ( std::string filename );
 
 	  /*!
 	   * \brief Remove the reader associated with the filename from the list
@@ -73,37 +73,37 @@ namespace reverse {
 	   */
 	  reader_pair_t create_elf_reader ( boost::shared_ptr < const file_id >& target_file );
 
-	  /*!
-	   * \brief WPEF Reader generated to support target file
-	   * \param target_file The reference to the file being decompiled
-	   * \return Pointer to the appropriate reader for this target file
-	   */
-	  reader_pair_t create_wpef_reader ( boost::shared_ptr < const file_id >& target_file );
+	  // /*!
+	  //  * \brief WPEF Reader generated to support target file
+	  //  * \param target_file The reference to the file being decompiled
+	  //  * \return Pointer to the appropriate reader for this target file
+	  //  */
+	  // reader_pair_t create_wpef_reader ( boost::shared_ptr < const file_id >& target_file );
 
-	  /*!
-	   * \brief Java class Reader generated to support target file
-	   * \param target_file The reference to the file being decompiled
-	   * \return Pointer to the appropriate reader for this target file
-	   */
-	  reader_pair_t create_java_reader ( boost::shared_ptr < const file_id >& target_file );
+	  // /*!
+	  //  * \brief Java class Reader generated to support target file
+	  //  * \param target_file The reference to the file being decompiled
+	  //  * \return Pointer to the appropriate reader for this target file
+	  //  */
+	  // reader_pair_t create_java_reader ( boost::shared_ptr < const file_id >& target_file );
 
-	  /*!
-	   * \brief Mach Reader generated to support target file
-	   * \param target_file The reference to the file being decompiled
-	   * \return Pointer to the appropriate reader for this target file
-	   */
-	  reader_pair_t create_mach_reader ( boost::shared_ptr < const file_id >& target_file );
+	  // /*!
+	  //  * \brief Mach Reader generated to support target file
+	  //  * \param target_file The reference to the file being decompiled
+	  //  * \return Pointer to the appropriate reader for this target file
+	  //  */
+	  // reader_pair_t create_mach_reader ( boost::shared_ptr < const file_id >& target_file );
 
-	  /*!
-	   * \brief Mach Fat Reader generated to support target file
-	   * \param target_file The reference to the file being decompiled
-	   * \return Pointer to the appropriate reader for this target file
-	   */
-	  reader_pair_t create_mach_fat_reader ( boost::shared_ptr < const file_id >& target_file );
+	  // /*!
+	  //  * \brief Mach Fat Reader generated to support target file
+	  //  * \param target_file The reference to the file being decompiled
+	  //  * \return Pointer to the appropriate reader for this target file
+	  //  */
+	  // reader_pair_t create_mach_fat_reader ( boost::shared_ptr < const file_id >& target_file );
 
 	  // TRUE = little endian
 	  // FALSE = big endian
-	  bool detect_host_endian (void);
+	  //bool detect_host_endian (void);
 
 	  reader_factory(){}
 

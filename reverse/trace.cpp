@@ -144,6 +144,15 @@ static void io_error ( const char* message )
      write_trace ( trace_area::io, trace_level::error, message );
 }
 
+static void io_error ( const char* message, const char* filename, int line )
+{
+  trace::write_trace ( trace_area::io,
+		       trace_level::error,
+		       boost::str ( boost::format ( message )
+				    % filename
+				    % line ) );
+}
+
 static void io_data ( const char* message )
 {
      write_trace ( trace_area::io, trace_level::data, message );
@@ -166,7 +175,7 @@ static void infrastructure_data ( const char* message )
 
 static void infrastructure_error ( const char* message, const char* filename, unsigned int line )
 {
-     trace::write_trace ( trace_area::infrastructure,
+  trace::write_trace ( trace_area::infrastructure,
                           trace_level::error,
                           boost::str ( boost::format ( message )
                                        % filename
