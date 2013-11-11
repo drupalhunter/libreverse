@@ -23,7 +23,6 @@
 #define REVERSE_DATA_CONTAINERS_MEMORY_MAP_HPP_INCLUDED
 
 #include <boost/cstdint.hpp>
-#include <boost/enable_shared_from_this.hpp>
 #include <boost/shared_ptr.hpp>
 
 #include <iostream>
@@ -34,7 +33,7 @@
 namespace reverse {
   namespace data_containers {
 
-    class memory_map : public boost::enable_shared_from_this<memory_map>
+    class memory_map
     {
     public:
       
@@ -91,9 +90,11 @@ namespace reverse {
        * \brief Set up a memory map of a set size with the contents
        * of the input file stream.
        *
-       * \param input_ref Input file stream where data is stored.
+       * \param start Input file stream where data is stored.
        *
-       * \param base_address The memory address of the first byte
+       * \param size Length of the input file stream
+       *
+       * \param base_address Address of where the input data is located
        *
        * \pre size has a value of 0 or more
        *
@@ -106,7 +107,8 @@ namespace reverse {
        * value of the input variable 'base_address' or the default
        * value of zero
        */
-      explicit memory_map ( std::ifstream& input_ref,
+      explicit memory_map ( void* start,
+			    std::size_t size,
 			    boost::uint32_t base_address = 0 );
 
       /**

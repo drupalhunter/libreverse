@@ -19,6 +19,7 @@
     <http://www.gnu.org/licenses/>.
 */
 
+#include <reverse/data_containers/memory_map.hpp>
 #include <reverse/errors/io_exception.hpp>
 #include <reverse/errors/reverse_exception.hpp>
 #include <reverse/io/file.hpp>
@@ -28,6 +29,8 @@
 #include <reverse/trace.hpp>
 
 #include <boost/format.hpp>
+#include <boost/interprocess/file_mapping.hpp>
+#include <boost/interprocess/mapped_region.hpp>
 #include <boost/make_shared.hpp>
 
 #include <unicode/ustring.h>
@@ -101,27 +104,15 @@ namespace reverse {
 	
       if ( ! name.empty() )
 	{
-	  std::ifstream file_handle_ref ( name.c_str(),
-					  std::ios::binary | std::ios::in );
+	  // \todo Add boost mapped image
 
-	  if ( ! file_handle_ref.is_open() ) // Expecting result of is_open() to be true
-	    {
-	      trace::io_data ( "Error opening %1%  %2%",
-				name,
-				strerror ( errno ) );
-	      trace::io_error ( "Exception throw in %s at line %d"
-				__FILE__,
-				__LINE__ );
+	  boost::interprocess::file_mapping file_map ( name.c_str(), boost::interprocess::read_only );
+	  boost::interprocess::mapped_region mapped_data ( file_map, boost::interprocess::read_only );
 
-	      throw errors::io_exception ( errors::io_exception::fatal_io_error );
-	    }
-
-
-	  file_handle_ref.seekg ( 0, std::ios::beg );
+	  void* start = mapped_data.get_address();
+	  std::size_t size = mapped_data.get_size();
 	    
-	  m_file_img = boost::make_shared < data_containers::memory_map > ( file_handle_ref );
-		
-	  file_handle_ref.close();
+	  m_file_img = boost::make_shared < data_containers::memory_map > ( start, size );
 	}
       else
 	{
@@ -227,19 +218,13 @@ namespace reverse {
 
       trace::io_detail ( "Exiting File::read_UTF16_String" );
 
-      return estring_converter::convert_from_utf16_string ( input_string );
+      return string_converter::convert_from_utf16_string ( input_string );
     }
 
     std::string
-    File::read_UTF8_String ( boost::uint32_t length )
+    file::read_utf8_string ( boost::uint32_t length )
     {
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( trace_area::IO,
-			   trace_level::DETAIL,
-			   "Entering File::read_UTF8_String" );
-#endif /* LIBREVERSE_DEBUG */
-
+      trace::io_detail ( "Entering File::read_UTF8_String" );
 
       m_error = U_ZERO_ERROR;
 
@@ -255,33 +240,17 @@ namespace reverse {
 	  input_string.push_back ( input_byte );
 	}
 
-      std::vector<UChar> utf16_dest_string = String_Converter::convert_From_UTF8_String ( input_string );
+      std::vector<UChar> utf16_dest_string = string_converter::convert_from_utf8_string ( input_string );
 
+      trace::io_detail ( "Exiting File::read_UTF8_String" );
 
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( trace_area::IO,
-			   trace_level::DATA,
-			   "Exiting File::read_UTF8_String" );
-
-      Trace::write_Trace ( trace_area::IO,
-			   trace_level::DETAIL,
-			   "Exiting File::read_UTF8_String" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-      return String_Converter::convert_From_UTF16_String ( utf16_dest_string );
+      return string_converter::convert_from_utf16_string ( utf16_dest_string );
     }
 
     std::vector<UChar>
-    File::read_8bit_Java_Unicode_String ( boost::uint32_t length )
+    file::read_8bit_java_unicode_string ( boost::uint32_t length )
     {
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( trace_area::IO,
-			   trace_level::DETAIL,
-			   "Entering File::read_8bit_Java_Unicode_String" );
-#endif /* LIBREVERSE_DEBUG */
-
+      trace::io_detail ( "Entering File::read_8bit_Java_Unicode_String" );
 
       std::vector<UChar> input_string;
 
@@ -294,15 +263,9 @@ namespace reverse {
 	  // Read first byte
 	  this->read ( &x_byte );
 
-
-#ifdef LIBREVERSE_DEBUG
-	  Trace::write_Trace ( trace_area::IO,
-			       trace_level::DATA,
-			       boost::str ( boost::format ( "(0x%|1$X|) X_Byte: %|2$X|" )
-					    % m_file_img->get_Previous_Position_Address()
-					    % static_cast<boost::uint16_t> ( x_byte ) ) );
-#endif /* LIBREVERSE_DEBUG */
-
+	  trace::io_data ( "(0x%|1$X|) X_Byte: %|2$X|",
+			   m_file_img->get_previous_position_address(),
+			   static_cast<boost::uint16_t> ( x_byte ) );
 
 	  // Check to see if the 7th bit is 0
 	  if ( ( x_byte & 0x80 ) == 0x0 )
@@ -310,13 +273,7 @@ namespace reverse {
 	      // Single byte representing a 16-bit char
 	      boost::uint16_t val = x_byte & 0x7F;
 
-
-#ifdef LIBREVERSE_DEBUG
-	      Trace::write_Trace ( trace_area::IO,
-				   trace_level::DATA,
-				   boost::str ( boost::format ( "    Val: %|1$X|" ) % val ) );
-#endif /* LIBREVERSE_DEBUG */
-
+	      trace::io_data ( "    Val: %|1$X|", val );
 
 	      input_string.push_back ( val );
 
@@ -327,45 +284,21 @@ namespace reverse {
 	      // Two bytes representing a 16-bit char
 	      this->read ( &y_byte );
 
-
-#ifdef LIBREVERSE_DEBUG
-	      Trace::write_Trace ( trace_area::IO,
-				   trace_level::DATA,
-				   boost::str ( boost::format ( "(0x%|1$X|) Y_Byte: %|2$X|" )
-						% m_file_img->get_Previous_Position_Address()
-						% static_cast<boost::uint16_t> ( y_byte ) ) );
-#endif /* LIBREVERSE_DEBUG */
-
+	      trace::io_data ( "(0x%|1$X|) Y_Byte: %|2$X|",
+			       m_file_img->get_previous_position_address(),
+			       static_cast<boost::uint16_t> ( y_byte ) );
 
 	      boost::uint16_t high_bits = ( x_byte & 0x1F ) << 6;
 
-
-#ifdef LIBREVERSE_DEBUG
-	      Trace::write_Trace ( trace_area::IO,
-				   trace_level::DATA,
-				   boost::str ( boost::format ( "    high bits: %|1$02X|" ) % high_bits ) );
-#endif /* LIBREVERSE_DEBUG */
-
+	      trace::io_data ( "    high bits: %|1$02X|", high_bits );
 
 	      boost::uint16_t low_bits = y_byte & 0x3F;
 
-
-#ifdef LIBREVERSE_DEBUG
-	      Trace::write_Trace ( trace_area::IO,
-				   trace_level::DATA,
-				   boost::str ( boost::format ( "    low bits: %|1$02X|" ) % low_bits ) );
-#endif /* LIBREVERSE_DEBUG */
-
+	      trace::io_data ( "    low bits: %|1$02X|", low_bits );
 
 	      boost::uint16_t val = high_bits + low_bits;
 
-
-#ifdef LIBREVERSE_DEBUG
-	      Trace::write_Trace ( trace_area::IO,
-				   trace_level::DATA,
-				   boost::str ( boost::format ( "    Val: %|1$02X|" ) % val ) );
-#endif /* LIBREVERSE_DEBUG */
-
+	      trace::io_data ( "    Val: %|1$02X|", val );
 
 	      input_string.push_back ( val );
 
@@ -376,27 +309,15 @@ namespace reverse {
 	      // Three bytes representing a 16-bit char
 	      this->read ( &y_byte );
 
-
-#ifdef LIBREVERSE_DEBUG
-	      Trace::write_Trace ( trace_area::IO,
-				   trace_level::DATA,
-				   boost::str ( boost::format ( "(0x%|1$X|) X_Byte: %|2$X|" )
-						% m_file_img->get_Previous_Position_Address()
-						% static_cast<boost::uint16_t> ( y_byte ) ) );
-#endif /* LIBREVERSE_DEBUG */
-
+	      trace::io_data ( "(0x%|1$X|) X_Byte: %|2$X|",
+			       m_file_img->get_previous_position_address(),
+			       static_cast<boost::uint16_t> ( y_byte ) );
 
 	      this->read ( &z_byte );
-
-
-#ifdef LIBREVERSE_DEBUG
-	      Trace::write_Trace ( trace_area::IO,
-				   trace_level::DATA,
-				   boost::str ( boost::format ( "(0x%|1$X|) X_Byte: %|2$X|" )
-						% m_file_img->get_Previous_Position_Address()
-						% static_cast<boost::uint16_t> ( z_byte ) ) );
-#endif /* LIBREVERSE_DEBUG */
-
+	      
+	      trace::io_data ( "(0x%|1$X|) X_Byte: %|2$X|",
+			       m_file_img->get_previous_position_address(),
+			       static_cast<boost::uint16_t> ( z_byte ) );
 
 	      boost::uint16_t high_bits = ( x_byte & 0xF ) << 12;
 	      boost::uint16_t mid_bits = ( y_byte & 0x3F ) << 6;
@@ -406,41 +327,23 @@ namespace reverse {
 	      input_string.push_back ( val );
 	      i += 3;
 	    }
-#ifdef LIBREVERSE_DEBUG
 	  else
 	    {
-	      Trace::write_Trace ( trace_area::IO,
-				   trace_level::DATA,
-				   boost::str ( boost::format ( "Unhandled byte (%X)" )
-						% x_byte ) );
+	      trace::io_data ( "Unhandled byte (%X)", x_byte );
 	    }
-#endif /* LIBREVERSE_DEBUG */
-
 	}
 
       input_string.push_back ( '\0' );
 
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( trace_area::IO,
-			   trace_level::DETAIL,
-			   "Exiting File::read_8bit_Java_Unicode_String" );
-#endif /* LIBREVERSE_DEBUG */
-
+      trace::io_detail ( "Exiting File::read_8bit_Java_Unicode_String" );
 
       return input_string;
     }
 
     std::string
-    File::read_String ( boost::uint32_t length )
+    file::read_string ( boost::uint32_t length )
     {
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( trace_area::IO,
-			   trace_level::DETAIL,
-			   "Entering File::read_String" );
-#endif /* LIBREVERSE_DEBUG */
-
+      trace::io_detail ( "Entering File::read_String" );
 
       std::string input_string ( "" );
 
@@ -460,31 +363,16 @@ namespace reverse {
 	    }
 	}
 
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( trace_area::IO,
-			   trace_level::DATA,
-			   boost::str ( boost::format ( "Input string: %1%" ) % input_string ) );
-
-      Trace::write_Trace ( trace_area::IO,
-			   trace_level::DETAIL,
-			   "Exiting File::read_String" );
-#endif /* LIBREVERSE_DEBUG */
-
+      trace::io_data ( "Input string: %1%", input_string );
+      trace::io_detail ( "Exiting File::read_String" );
 
       return input_string;
     }
 
     std::string
-    File::read_Null_Terminated_String ( void )
+    file::read_null_terminated_string ( void )
     {
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( trace_area::IO,
-			   trace_level::DETAIL,
-			   "Entering File::read_Null_Terminated_String" );
-#endif /* LIBREVERSE_DEBUG */
-
+      trace::io_detail ( "Entering File::read_Null_Terminated_String" );
 
       std::string input_string ( "" );
 
@@ -505,17 +393,8 @@ namespace reverse {
 	    }
 	}
 
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( trace_area::IO,
-			   trace_level::DATA,
-			   boost::str ( boost::format ( "Input string: %1%" ) % input_string ) );
-
-      Trace::write_Trace ( trace_area::IO,
-			   trace_level::DETAIL,
-			   "Exiting File::read_Null_Terminated_String" );
-#endif /* LIBREVERSE_DEBUG */
-
+      trace::io_data ( "Input string: %1%", input_string );
+      trace::io_detail ( "Exiting File::read_Null_Terminated_String" );
 
       return input_string;
     }

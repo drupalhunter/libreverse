@@ -88,7 +88,8 @@ namespace libreverse {
 
     }
 
-    Memory_Map::Memory_Map ( std::ifstream& input_ref,
+    Memory_Map::Memory_Map ( void* start,
+			     std::size_t size,
                              boost::uint32_t base_address )
         : m_present_pos ( 0 ),
           m_previous_pos ( 0 ),

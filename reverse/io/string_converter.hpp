@@ -22,6 +22,8 @@
 #ifndef REVERSE_IO_STRING_CONVERTER_HPP_INCLUDED
 #define REVERSE_IO_STRING_CONVERTER_HPP_INCLUDED
 
+#include <reverse/trace.hpp>
+
 #include <boost/cstdint.hpp>
 
 #include <unicode/ucnv.h>
@@ -70,27 +72,15 @@ namespace reverse {
         
         std::string output ( &(*(dest_string.begin())), zero_pos - dest_string.begin() );
 
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( trace_area::IO,
-                             trace_level::DETAIL,
-                             "Exiting String_Converter::convert_From_UTF16_String" );
-#endif /* LIBREVERSE_DEBUG */
-
+	trace::io_detail ( "Exiting String_Converter::convert_From_UTF16_String" );
 
         return output;
       }
 
-      static inline std::string convert_From_UTF16_String ( std::vector<unsigned char>::const_iterator& input_begin,
+      static inline std::string convert_from_utf16_string ( std::vector<unsigned char>::const_iterator& input_begin,
 							    boost::uint32_t& input_size )
       {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( trace_area::IO,
-                             trace_level::DETAIL,
-                             "Entering String_Converter::convert_From_UTF16_String" );
-#endif /* LIBREVERSE_DEBUG */
-
+	trace::io_detail ( "Entering String_Converter::convert_From_UTF16_String" );
 
         UErrorCode m_error ( U_ZERO_ERROR );
         UConverter* m_conv = ucnv_open ( NULL, &m_error );
@@ -123,27 +113,15 @@ namespace reverse {
         
         std::string output ( &(*(dest_string.begin())), zero_pos - dest_string.begin() );
 
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( trace_area::IO,
-                             trace_level::DETAIL,
-                             "Exiting String_Converter::convert_From_UTF16_String" );
-#endif /* LIBREVERSE_DEBUG */
-
+	trace::io_detail ( "Exiting String_Converter::convert_From_UTF16_String" );
 
         return output;
       }
 
       /* Convert UTF-8 string to UTF-16 */
-      static inline std::vector<UChar> convert_From_UTF8_String ( std::vector<char> const& input_string )
+      static inline std::vector<UChar> convert_from_utf8_string ( std::vector<char> const& input_string )
       {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( trace_area::IO,
-                             trace_level::DETAIL,
-                             "Entering String_Converter::convert_From_UTF8_String" );
-#endif /* LIBREVERSE_DEBUG */
-
+	trace::io_detail ( "Entering String_Converter::convert_From_UTF8_String" );
 
         UErrorCode m_error ( U_ZERO_ERROR );
         std::vector<UChar> utf16_dest_string;
@@ -178,21 +156,14 @@ namespace reverse {
 
 	  }
 
-
-#ifdef LIBREVERSE_DEBUG
         if ( U_FAILURE ( m_error ) )
 	  {
-	    Trace::write_Trace ( trace_area::IO,
-				 trace_level::ERROR,
-				 boost::str ( boost::format("String_Converter::convert_From_UTF8_String: %1X (%2s)")
-					      % m_error % u_errorName ( m_error ) ) );
+	    trace::io_data ( "String_Converter::convert_From_UTF8_String: %1X (%2s)",
+			      m_error,
+			      ( u_errorName ( m_error ) ) );
 	  }
 
-        Trace::write_Trace ( trace_area::IO,
-                             trace_level::DETAIL,
-                             "String_Converter::convert_From_UTF8_String" );
-#endif /* LIBREVERSE_DEBUG */
-
+	trace::io_detail ( "String_Converter::convert_From_UTF8_String" );
 
         return utf16_dest_string;
       }
