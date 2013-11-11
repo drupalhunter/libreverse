@@ -13,6 +13,6 @@ set ( IO_READERS_HEADERS
   file_reader.hpp
   reader_factory.hpp )
 
-include_directories ( ${REVERSE_SOURCE_DIR} )
+include_directories ( ${CMAKE_SOURCE_DIR} )
 
 add_library ( io_readers ${IO_READERS_SOURCES} ${IO_READERS_HEADERS} )

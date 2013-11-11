@@ -9,7 +9,7 @@ add_subdirectory(io)
 #add_subdirectory(meta)
 
 set ( REVERSE_SOURCE_DIR "${CMAKE_SOURCE_DIR}" CACHE INTERNAL "Include directory" )
-include_directories ( ${REVERSE_SOURCE_DIR} )
+include_directories ( ${CMAKE_SOURCE_DIR} )
 
 set ( REVERSE_SOURCES
 reverse.cpp
@@ -41,6 +41,8 @@ add_library ( reverse_static STATIC ${REVERSE_SOURCES} ${REVERSE_HEADERS} ${REVE
 add_library ( reverse SHARED ${REVERSE_SOURCES} ${REVERSE_HEADERS} ${REVERSE_DEPENDENCIES} )
 set_target_properties ( reverse_static PROPERTIES OUTPUT_NAME reverse )
 
-install ( TARGETS reverse LIBRARY DESTINATION lib COMPONENT libraries )
+INSTALL(TARGETS reverse
+   LIBRARY DESTINATION lib
+   COMPONENT libraries)
 install ( TARGETS reverse_static ARCHIVE DESTINATION lib COMPONENT libraries )
 install ( FILES ${REVERSE_HEADERS} DESTINATION include/reverse )

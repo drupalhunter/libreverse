@@ -30,7 +30,19 @@ IF(EXPAT_FOUND)
   set ( HAVE_EXPAT 1 )  
 ENDIF(EXPAT_FOUND)
 
+SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules")
+
 configure_file(${CMAKE_SOURCE_DIR}/reverse/include/config.h.in ${CMAKE_BINARY_DIR}/reverse/include/config.h)
+
+install ( FILES Modules/FindLibReverse.cmake
+   DESTINATION /usr/share/cmake/Modules )
+
+set ( CPACK_RPM_PACKAGE_SUMMARY "${CPACK_PACKAGE_DESCRIPTION}" )
+set ( CPACK_RPM_PACKAGE_NAME "reverse-devel" )
+set ( CPACK_RPM_PACKAGE_VERSION ${CPACK_PACKAGE_VERSION} )
+set ( CPACK_RPM_PACKAGE_GROUP "Development/Libraries" )
+set ( CPACK_RPM_PACKAGE_VENDOR "Stephen Torri<storri@torri.org>" )
+set ( CPACK_RPM_PACKAGE_DESCRIPTION ${CPACK_PACKAGE_DESCRIPTION} )
 
 set ( CPACK_PACKAGE_DESCRIPTION "Library for reverse engineering binary programs" )
 set ( CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README" )
@@ -39,13 +51,8 @@ set ( CPACK_PACKAGE_VERSION_MAJOR "1" )
 set ( CPACK_PACKAGE_VERSION_MINOR "0" )
 set ( CPACK_PACKAGE_VERSION_PATCH "0" )
 
-set ( CPACK_RPM_PACKAGE_SUMMARY "${CPACK_PACKAGE_DESCRIPTION}" )
-set ( CPACK_RPM_PACKAGE_NAME "reverse-devel" )
-set ( CPACK_RPM_PACKAGE_VERSION ${CPACK_PACKAGE_VERSION} )
 set ( CPACK_RPM_PACKAGE_LICENSE "GPL" )
-set ( CPACK_RPM_PACKAGE_GROUP "System Environment/Libraries" )
-set ( CPACK_RPM_PACKAGE_VENDOR "Stephen Torri<storri@torri.org>" )
-set ( CPACK_RPM_PACKAGE_DESCRIPTION ${CPACK_PACKAGE_DESCRIPTION} )
+
 
 include(CPack)
 
