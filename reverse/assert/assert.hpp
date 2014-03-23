@@ -27,155 +27,145 @@
    Assertions and Exceptions".  It was modified to use templates
    instead of macros for checking types. */
 
-#include "reverse/bad_assert.hpp"
-#include "reverse/Trace.h"
+#include <reverse/assert/bad_assert.hpp>
+#include <reverse/trace.hpp>
 
 #include <boost/cstdint.hpp>
+#include <boost/format.hpp>
 
 #include <iostream>
 #include <sstream>
 #include <string>
 
-
 namespace reverse {
-  namespace assert {
 
-    template <typename Exception>
-    class __bool_assert {
-    public:
+  template <typename Exception>
+  class __bool_assert {
+  public:
     
-      __bool_assert ( bool bool_expression,
-		      const char* file,
-		      boost::int32_t line,
-		      std::string message )
-      {
-	reverse::trace::Trace::write_Trace
-	  ( reverse::api::TraceArea::ERROR_HANDLING,
-	    reverse::api::TraceLevel::DETAIL,
-	    "Entering __bool_assert" );
+    __bool_assert ( bool bool_expression,
+		    const char* file,
+		    boost::int32_t line,
+		    std::string message )
+    {
+      trace::write_trace ( reverse::trace_area::error_handling,
+			   reverse::trace_level::detail,
+			   "Entering __bool_assert" );
+	
+      if ( ! bool_expression )
+	{
+	  throw Exception ( file,
+			    line,
+			    message );
+	}
+    }
+  };
 
-	if ( ! bool_expression )
-	  {
-	    throw Exception ( file,
-			      line,
-			      message );
-	  }
-      }
-    };
+  template <typename Pointer_Type, typename Exception>
+  class __null_assert {
+  public:
+
+    __null_assert ( Pointer_Type* ptr,
+		    const char* file,
+		    boost::int32_t line,
+		    std::string message )
+    {
+      trace::write_trace ( reverse::trace_area::error_handling,
+			   reverse::trace_level::detail,
+			   "Entering __null_assert" );
+	
+      trace::write_trace ( reverse::trace_area::error_handling,
+			   reverse::trace_level::detail,
+			   boost::str ( boost::format ( " The pointer value is equal to %X" ) % ptr ) );
+
+      if ( ! ptr )
+	{
+	  throw Exception ( file,
+			    line,
+			    message );
+	}
+    }
+  };
+    
+  class assert {
+  public:
+#ifdef REVERSE_DEBUG
+    template <typename Exception>
+    static inline void bool_check ( bool expression,
+				    std::string message = "" )
+    {
+      trace::write_trace ( reverse::trace_area::error_handling,
+			   reverse::trace_level::detail,
+			   "Entering Assert::bool_check (Custom Exception)" );
+	
+      __bool_assert<Exception>::__bool_assert ( expression,
+						__FILE__,
+						__LINE__ ,
+						message );
+    }
+
+    static inline void bool_check ( bool expression,
+				    std::string message = "" )
+    {
+      trace::write_trace ( reverse::trace_area::error_handling,
+			   reverse::trace_level::detail,
+			   "Entering Assert::bool_check (Default Exception)" );
+
+      __bool_assert<bad_assert>::__bool_assert ( expression,
+						 __FILE__,
+						 __LINE__ ,
+						 message );
+    }
 
     template <typename Pointer_Type, typename Exception>
-    class __null_assert {
-    public:
+    static inline void null_check ( Pointer_Type* expression,
+				    std::string message = "" )
+    {
+      trace::write_trace ( reverse::trace_area::error_handling,
+			   reverse::trace_level::detail,
+			   "Entering Assert::null_check (Custom Exception)" );
 
-      __null_assert ( Pointer_Type* ptr,
-		      const char* file,
-		      boost::int32_t line,
-		      std::string message )
-      {
-	reverse::trace::Trace::write_Trace
-	  ( reverse::api::TraceArea::ERROR_HANDLING,
-	    reverse::api::TraceLevel::DETAIL,
-	    "Entering __null_assert" );
+      typename __null_assert<Pointer_Type, Exception>::__null_assert ( expression,
+								       __FILE__,
+								       __LINE__ ,
+								       message );
+    }
 
-	reverse::trace::Trace::write_Trace
-	  ( reverse::api::TraceArea::ERROR_HANDLING,
-	    reverse::api::TraceLevel::DETAIL,
-	    boost::str ( boost::format ( " The pointer value is equal to %X" ) % ptr ) );
+    template <typename Pointer_Type>
+    static inline void null_check ( Pointer_Type* expression,
+				    std::string message = "" )
+    {
+      trace::write_trace ( reverse::trace_area::error_handling,
+			   reverse::trace_level::detail,
+			   "Entering Assert::null_check (Default Exception)" );
 
-	if ( ! ptr )
-	  {
-	    throw Exception ( file,
-			      line,
-			      message );
-	  }
-      }
-    };
-    
-    
-    class Assert {
-    public:
-#ifdef REVERSE_DEBUG
-      template <typename Exception>
-      static inline void bool_check ( bool expression,
-				      std::string message = "" )
-      {
-	reverse::trace::Trace::write_Trace
-	  ( reverse::api::TraceArea::ERROR_HANDLING,
-	    reverse::api::TraceLevel::DETAIL,
-	    "Entering Assert::bool_check (Custom Exception)" );
-
-	__bool_assert<Exception>::__bool_assert ( expression,
-						  __FILE__,
-						  __LINE__ ,
-						  message );
-      }
-
-      static inline void bool_check ( bool expression,
-				      std::string message = "" )
-      {
-	reverse::trace::Trace::write_Trace
-	  ( reverse::api::TraceArea::ERROR_HANDLING,
-	    reverse::api::TraceLevel::DETAIL,
-	    "Entering Assert::bool_check (Default Exception)" );
-
-	__bool_assert<bad_assert>::__bool_assert ( expression,
-						      __FILE__,
-						      __LINE__ ,
-						      message );
-      }
-
-      template <typename Pointer_Type, typename Exception>
-      static inline void null_check ( Pointer_Type* expression,
-				      std::string message = "" )
-      {
-	reverse::trace::Trace::write_Trace
-	  ( reverse::api::TraceArea::ERROR_HANDLING,
-	    reverse::api::TraceLevel::DETAIL,
-	    "Entering Assert::null_check (Custom Exception)" );
-
-	typename __null_assert<Pointer_Type, Exception>::__null_assert ( expression,
-									 __FILE__,
-									 __LINE__ ,
-									 message );
-      }
-
-      template <typename Pointer_Type>
-      static inline void null_check ( Pointer_Type* expression,
-				      std::string message = "" )
-      {
-	reverse::trace::Trace::write_Trace
-	  ( reverse::api::TraceArea::ERROR_HANDLING,
-	    reverse::api::TraceLevel::DETAIL,
-	    "Entering Assert::null_check (Default Exception)" );
-
-	typename __null_assert<Pointer_Type, bad_assert>::__null_assert ( expression,
-									     __FILE__,
-									     __LINE__ ,
-									     message );
-      }
+      typename __null_assert<Pointer_Type, bad_assert>::__null_assert ( expression,
+									__FILE__,
+									__LINE__ ,
+									message );
+    }
 #else
-      template <typename Exception>
-      static inline void bool_check ( bool,
-				      std::string )
-      {}
+    template <typename Exception>
+    static inline void bool_check ( bool,
+				    std::string )
+    {}
 
-      static inline void bool_check ( bool,
-				      std::string )
-      {}
+    static inline void bool_check ( bool,
+				    std::string )
+    {}
 
-      template <typename Pointer_Type, typename Exception>
-      static inline void null_check ( Pointer_Type*,
-				      std::string )
-      {}
+    template <typename Pointer_Type, typename Exception>
+    static inline void null_check ( Pointer_Type*,
+				    std::string )
+    {}
 
-      template <typename Pointer_Type>
-      static inline void null_check ( Pointer_Type*,
-				      std::string )
-      {}
+    template <typename Pointer_Type>
+    static inline void null_check ( Pointer_Type*,
+				    std::string )
+    {}
 #endif /* REVERSE_DEBUG */
-    };
+  };
 
-  } /* namespace assert */
 } /* namespace reverse */
 
 #endif /* REVERSE_ASSERT_H */

@@ -19,34 +19,27 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#include "Meta_Object.h"
-#include <sstream>
-#include "errors/Configuration_Exception.h"
+#include <reverse/assert/assert.hpp>
+#include <reverse/meta/meta_object.hpp>
+#include <reverse/errors/configuration_exception.hpp>
+#include <reverse/trace.hpp>
+
 #include <boost/format.hpp>
-#include "Trace.h"
-#include "Assert.h"
 
-using namespace libreverse::api;
-using namespace libreverse::assert;
-using namespace libreverse::trace;
+namespace reverse {
+  namespace meta {
 
-namespace libreverse { namespace meta {
+    boost::uint8_t const meta_object::string = 0;
+    boost::uint8_t const meta_object::hex = 1;
 
-    boost::uint8_t const Meta_Object::STRING = 0;
-    boost::uint8_t const Meta_Object::HEX = 1;
-
-    Meta_Object::Meta_Object ( void )
+    meta_object::meta_object ( void )
     {
-        Trace::write_Trace ( TraceArea::META,
-                             TraceLevel::DETAIL,
-                             "Inside Meta_Object constructor" );
+      trace::meta_detail ( "Inside meta_object constructor" );
     }
 
-    Meta_Object::Meta_Object ( Meta_Object const& rhs )
+    meta_object::meta_object ( meta_object const& rhs )
     {
-        Trace::write_Trace ( TraceArea::META,
-                             TraceLevel::DETAIL,
-                             "Entering Meta_Object copy constructor" );
+      trace::meta_detail ( "Entering meta_object copy constructor" );
 
         /*
           std::string key = "";
@@ -70,246 +63,199 @@ namespace libreverse { namespace meta {
                     rhs.m_info_map.end(),
                     std::inserter ( m_info_map, m_info_map.begin() ) );
 
-        Trace::write_Trace ( TraceArea::META,
-                             TraceLevel::DETAIL,
-                             "Exiting Meta_Object copy constructor" );
-
+	trace::meta_detail ( "Exiting meta_object copy constructor" );
     }
 
     void
-    Meta_Object::add ( std::string key,
+    meta_object::add ( std::string key,
                        std::string value,
                        boost::uint8_t type )
     {
-        Trace::write_Trace ( TraceArea::META,
-                             TraceLevel::DETAIL,
-                             "Entering Meta_Object::add" );
+      trace::meta_detail ( "Entering meta_object::add" );
 
-        Assert::bool_check ( ! key.empty(), "Key must not be empty" );
-        Assert::bool_check ( ! value.empty(), "Input value must not be empty" );
-        Assert::bool_check ( this->is_Valid_Type ( type ), "Input type must be an a valid type" );
+      assert::bool_check ( ! key.empty(), "Key must not be empty" );
+      assert::bool_check ( ! value.empty(), "Input value must not be empty" );
+      assert::bool_check ( this->is_valid_type ( type ), "Input type must be an a valid type" );
 
-        Data_Pair_t data = std::make_pair ( value, type );
+      data_pair_t data = std::make_pair ( value, type );
 
-        std::pair<Meta_Object::iterator,bool> result =
-            m_info_map.insert ( std::make_pair ( key, data ) );
+      std::pair<meta_object::iterator,bool> result =
+	m_info_map.insert ( std::make_pair ( key, data ) );
 
-        Assert::bool_check ( result.second, "Insertion must be complete without error." );
+      assert::bool_check ( result.second, "Insertion must be complete without error." );
 
-        Trace::write_Trace ( TraceArea::META,
-                             TraceLevel::DETAIL,
-                             "Exiting Meta_Object::add" );
+      trace::meta_detail ( "Exiting meta_object::add" );
     }
 
     void
-    Meta_Object::append ( Meta_Object::const_ptr_t meta_ptr )
+    meta_object::append ( meta_object::const_ptr_t meta_ptr )
     {
-        Trace::write_Trace ( TraceArea::META,
-                             TraceLevel::DETAIL,
-                             "Entering Meta_Object::append" );
+      trace::meta_detail ( "Entering meta_object::append" );
 
-        Assert::null_check ( meta_ptr.get(), "Input meta_ptr must not be NULL" );
+      assert::null_check ( meta_ptr.get(), "Input meta_ptr must not be NULL" );
 
-        m_info_map.insert ( meta_ptr->begin(),
-                            meta_ptr->end() );
+      m_info_map.insert ( meta_ptr->begin(),
+			  meta_ptr->end() );
 
-        Trace::write_Trace ( TraceArea::META,
-                             TraceLevel::DETAIL,
-                             "Exiting Meta_Object::append" );
+      trace::meta_detail ( "Exiting meta_object::append" );
     }
 
-    Meta_Object::Data_Pair_t
-    Meta_Object::get_Value ( std::string key ) const
+    meta_object::data_pair_t
+    meta_object::get_value ( std::string key ) const
     {
-        Trace::write_Trace ( TraceArea::META,
-                             TraceLevel::DETAIL,
-                             "Entering Meta_Object::get_Value" );
+      trace::meta_detail ( "Entering meta_object::get_Value" );
 
-        Data_t::const_iterator pos = m_info_map.find ( key );
+      data_t::const_iterator pos = m_info_map.find ( key );
 
-        if ( pos != m_info_map.end() )
-            {
-                Meta_Object::Data_Pair_t data = pos->second;
-                assert ( ! (data.first).empty() );
-                assert ( this->is_Valid_Type ( data.second ) );
+      if ( pos != m_info_map.end() )
+	{
+	  meta_object::data_pair_t data = pos->second;
+	  assert::bool_check ( ! (data.first).empty(), "Meta data is empty" );
+	  assert::bool_check ( this->is_valid_type ( data.second ), "Meta data is not valid" );
+	  
+	  return data;
+	}
+      else
+	{
+	  trace::meta_error ( "meta_object::get_Value - unknown key: %s", key );
+	  throw errors::meta_exception ( errors::meta_exception::invalid_key );
+	}
 
-                return data;
-            }
-        else
-            {
-                Trace::write_Trace ( TraceArea::META,
-                                     TraceLevel::ERROR,
-                                     boost::str ( boost::format ( "Meta_Object::get_Value - unknown key: %s" )
-                                                  % key ));
-
-                throw errors::Meta_Exception
-                    ( errors::Meta_Exception::INVALID_KEY );
-            }
-
-        Trace::write_Trace ( TraceArea::META,
-                             TraceLevel::DETAIL,
-                             "Exiting Meta_Object::get_Value" );
+      trace::meta_detail ( "Exiting meta_object::get_Value" );
     }
 
-    Meta_Object::iterator
-    Meta_Object::begin (void)
+    meta_object::iterator
+    meta_object::begin (void)
     {
-        Trace::write_Trace ( TraceArea::META,
-                             TraceLevel::DETAIL,
-                             "Inside Meta_Object::begin" );
+      trace::meta_detail ( "Inside meta_object::begin" );
 
-        return m_info_map.begin();
+      return m_info_map.begin();
     }
 
-    Meta_Object::const_iterator const
-    Meta_Object::begin (void) const
+    meta_object::const_iterator const
+    meta_object::begin (void) const
     {
-        Trace::write_Trace ( TraceArea::META,
-                             TraceLevel::DETAIL,
-                             "Inside Meta_Object::begin (const)" );
+      trace::meta_detail ( "Inside meta_object::begin (const)" );
 
-        return m_info_map.begin();
+      return m_info_map.begin();
     }
 
-    Meta_Object::iterator
-    Meta_Object::end (void)
+    meta_object::iterator
+    meta_object::end (void)
     {
-        Trace::write_Trace ( TraceArea::META,
-                             TraceLevel::DETAIL,
-                             "Inside Meta_Object::end" );
+      trace::meta_detail ( "Inside meta_object::end" );
 
-        return m_info_map.end();
+      return m_info_map.end();
     }
 
-    Meta_Object::const_iterator const
-    Meta_Object::end (void) const
+    meta_object::const_iterator const
+    meta_object::end (void) const
     {
-        Trace::write_Trace ( TraceArea::META,
-                             TraceLevel::DETAIL,
-                             "Inside Meta_Object::end (const)" );
+      trace::meta_detail ( "Inside meta_object::end (const)" );
 
-        return m_info_map.end();
+      return m_info_map.end();
     }
 
-    Meta_Object::size_t
-    Meta_Object::size (void) const
+    meta_object::size_t
+    meta_object::size (void) const
     {
-        Trace::write_Trace ( TraceArea::META,
-                             TraceLevel::DETAIL,
-                             "Inside Meta_Object::size" );
+      trace::meta_detail ( "Inside meta_object::size" );
 
-        return m_info_map.size();
+      return m_info_map.size();
     }
 
 
     std::string
-    Meta_Object::to_String () const
+    meta_object::to_string () const
     {
-        Trace::write_Trace ( TraceArea::META,
-                             TraceLevel::DETAIL,
-                             "Entering Meta_Object::to_String" );
+      trace::meta_detail ( "Entering meta_object::to_string" );
 
-        std::stringstream output;
+      std::stringstream output;
+      
+      if ( ! m_info_map.empty() )
+	{
+	  
+	  output << "-----------------------" << std::endl
+		 << "      meta_object" << std::endl
+		 << "-----------------------" << std::endl;
+	  
+	  for ( data_t::const_iterator pos = m_info_map.begin();
+		pos != m_info_map.end();
+		pos++ )
+	    {
+	      data_pair_t data = pos->second;
+	      
+	      switch ( data.second )
+		{
+		case hex:
+		  {
+		    output << boost::format ( "%1% = %2$X" ) %
+		      pos->first %
+		      this->convert_to_uint32 ( data.first )
+			   << std::endl;
+		    break;
+		  }
+		case string:
+		default:
+		  {
+		    output << boost::format ( "%1% = %2%" ) %
+		      pos->first %
+		      data.first
+			   << std::endl;
+		  }
+		}
+	    }
+	}
+      
+      trace::meta_detail ( "Exiting meta_object::to_String" );
 
-        if ( ! m_info_map.empty() )
-            {
-
-                output << "-----------------------" << std::endl
-                       << "      Meta_Object" << std::endl
-                       << "-----------------------" << std::endl;
-
-                for ( Data_t::const_iterator pos = m_info_map.begin();
-                      pos != m_info_map.end();
-                      pos++ )
-                    {
-                        Data_Pair_t data = pos->second;
-
-                        switch ( data.second )
-                            {
-                            case HEX:
-                                {
-                                    output << boost::format ( "%1% = %2$X" ) %
-                                        pos->first %
-                                        this->convert_To_UInt32 ( data.first )
-                                           << std::endl;
-                                    break;
-                                }
-                            case STRING:
-                            default:
-                                {
-                                    output << boost::format ( "%1% = %2%" ) %
-                                        pos->first %
-                                        data.first
-                                           << std::endl;
-                                }
-                            }
-                    }
-            }
-
-        Trace::write_Trace ( TraceArea::META,
-                             TraceLevel::DETAIL,
-                             "Exiting Meta_Object::to_String" );
-
-        return output.str();
+      return output.str();
     }
 
     bool
-    Meta_Object::is_Valid_Type ( boost::uint8_t type ) const
+    meta_object::is_valid_type ( boost::uint8_t type ) const
     {
-        Trace::write_Trace ( TraceArea::META,
-                             TraceLevel::DETAIL,
-                             "Entering Meta_Object::is_Valid_Type" );
+      trace::meta_detail ( "entering meta_object::is_valid_type" );
 
-        bool result = false;
+      bool result = false;
+	
+      switch ( type )
+	{
+	case string:
+	case hex:
+	  result = true;
+	  break;
+	default:
+	  result = false;
+	}
+      
+      trace::meta_detail ( "Exiting meta_object::is_valid_type" );
 
-        switch ( type )
-            {
-            case STRING:
-            case HEX:
-                result = true;
-                break;
-            default:
-                result = false;
-            }
-
-        Trace::write_Trace ( TraceArea::META,
-                             TraceLevel::DETAIL,
-                             "Exiting Meta_Object::is_Valid_Type" );
-
-        return result;
+      return result;
     }
 
-    Meta_Object&
-    Meta_Object::operator= ( Meta_Object const& rhs )
+    meta_object&
+    meta_object::operator= ( meta_object const& rhs )
     {
-        Trace::write_Trace ( TraceArea::META,
-                             TraceLevel::DETAIL,
-                             "Entering Meta_Object::operator=" );
+      trace::meta_detail ( "Entering meta_object::operator=" );
 
-
-        Meta_Object temp ( rhs );
-        swap ( temp );
-
-        Trace::write_Trace ( TraceArea::META,
-                             TraceLevel::DETAIL,
-                             "Exiting Meta_Object::operator=" );
-
-        return *this;
+      meta_object temp ( rhs );
+      swap ( temp );
+      
+      trace::meta_detail ( "Exiting meta_object::operator=" );
+      
+      return *this;
     }
-
+    
     void
-    Meta_Object::swap ( Meta_Object& rhs )
+    meta_object::swap ( meta_object& rhs )
     {
-        Trace::write_Trace ( TraceArea::META,
-                             TraceLevel::DETAIL,
-                             "Entering Meta_Object::swap" );
-
+      trace::meta_detail ( "Entering meta_object::swap" );
+      
         m_info_map.swap ( rhs.m_info_map );
-
-        Trace::write_Trace ( TraceArea::META,
-                             TraceLevel::DETAIL,
-                             "Exiting Meta_Object::swap" );
+	
+      trace::meta_detail ( "Exiting meta_object::swap" );
     }
 
-} /* namespace meta */
-} /* namespace libreverse */
+  } /* namespace meta */
+} /* namespace reverse */
