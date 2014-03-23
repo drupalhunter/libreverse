@@ -1,32 +1,18 @@
 cmake_minimum_required(VERSION 2.8.12.1)
 project(libreverse)
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/Modules")
+
 include(CheckIncludeFiles)
 
 add_subdirectory(reverse)
 add_subdirectory(testing)
 
 SET(Boost_USE_MULTITHREAD ON)
+
 FIND_PACKAGE(Boost)
-IF(Boost_FOUND)
-  include_directories ( ${Boost_INCLUDE_DIRS} )
-  list ( APPEND ADDITIONAL_LIBS ${Boost_LIBRARY_DIRS} )
-  set ( HAVE_BOOST 1 )
-ENDIF(Boost_FOUND)
-
-FIND_PACKAGE(ICU)
-IF(ICU_FOUND)
-  include_directories(${ICU_INCLUDE_DIR})
-  list ( APPEND ADDITIONAL_LIBS ${ICU_LIBRARIES} )
-  set ( HAVE_ICU 1 )
-ENDIF(ICU_FOUND)
-
+FIND_PACKAGE(ICU REQUIRED)
 FIND_PACKAGE(EXPAT)
-IF(EXPAT_FOUND)
-  include_directories(${EXPAT_INCLUDE_DIR})
-  list ( APPEND ADDITIONAL_LIBS ${EXPAT_LIBRARIES} )
-  set ( HAVE_EXPAT 1 )  
-ENDIF(EXPAT_FOUND)
 
 configure_file(${CMAKE_SOURCE_DIR}/reverse/include/config.h.in ${CMAKE_BINARY_DIR}/reverse/include/config.h)
 
