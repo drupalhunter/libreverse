@@ -6,8 +6,6 @@ include(CheckIncludeFiles)
 add_subdirectory(reverse)
 add_subdirectory(testing)
 
-SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeScripts)
-
 SET(Boost_USE_MULTITHREAD ON)
 FIND_PACKAGE(Boost)
 IF(Boost_FOUND)
@@ -30,15 +28,10 @@ IF(EXPAT_FOUND)
   set ( HAVE_EXPAT 1 )  
 ENDIF(EXPAT_FOUND)
 
-SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules")
-
 configure_file(${CMAKE_SOURCE_DIR}/reverse/include/config.h.in ${CMAKE_BINARY_DIR}/reverse/include/config.h)
 
-install ( FILES Modules/FindLibReverse.cmake
-   DESTINATION /usr/share/cmake/Modules )
-
 set ( CPACK_RPM_PACKAGE_SUMMARY "${CPACK_PACKAGE_DESCRIPTION}" )
-set ( CPACK_RPM_PACKAGE_NAME "reverse-devel" )
+set ( CPACK_RPM_PACKAGE_NAME "${PROJECT_NAME}" )
 set ( CPACK_RPM_PACKAGE_VERSION ${CPACK_PACKAGE_VERSION} )
 set ( CPACK_RPM_PACKAGE_GROUP "Development/Libraries" )
 set ( CPACK_RPM_PACKAGE_VENDOR "Stephen Torri<storri@torri.org>" )

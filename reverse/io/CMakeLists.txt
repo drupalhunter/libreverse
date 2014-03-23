@@ -26,6 +26,7 @@ target_link_libraries ( reverse_io io_readers io_elf )
 
 install ( TARGETS reverse_io LIBRARY DESTINATION lib COMPONENT libraries )
 install ( TARGETS reverse_io_static ARCHIVE DESTINATION lib COMPONENT libraries )
+install ( FILES ${IO_HEADERS} DESTINATION include/reverse/io )
 
 
 
