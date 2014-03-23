@@ -182,6 +182,24 @@ static void infrastructure_error ( const char* message, const char* filename, un
                                        % line ) );
 }
 
+static void meta_detail ( const char* message )
+{
+     write_trace ( trace_area::meta, trace_level::detail, message );
+}
+
+static void meta_error ( const char* message )
+{
+     write_trace ( trace_area::meta, trace_level::error, message );
+}
+
+static void meta_error ( const char* message, const char* filename, unsigned int line )
+{
+     trace::write_trace ( trace_area::meta,
+                          trace_level::error,
+                          boost::str ( boost::format ( message )
+                                       % filename
+                                       % line ) );
+}
 
 #endif // ifdef LIBREVERSE_DEBUG
 

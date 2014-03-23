@@ -24,6 +24,7 @@
 
 #include <boost/cstdint.hpp>
 #include <boost/shared_ptr.hpp>
+
 namespace reverse {
 
   class trace {
@@ -176,6 +177,22 @@ namespace reverse {
     }
 
     static void infrastructure_error ( const char* message, const char* filename, unsigned int line );
+
+    static void meta_detail ( const char* message );
+
+    static void meta_error ( const char* message );
+
+    static void meta_error ( const char* message, const char* filename, unsigned int line );
+
+    template <typename T1>
+    static void meta_error ( const char* message, T1 const& v1 )
+    {
+      write_trace ( trace_area::meta,
+		    trace_level::error,
+		    boost::str ( boost::format ( message )
+				 % v1 ) );
+    }
+
     
 #else
     static bool write_trace ( boost::uint32_t, boost::uint32_t, const char* ) { return true; }
@@ -246,6 +263,12 @@ namespace reverse {
     {}
 
     static void infrastructure_error ( const char*, const char*, unsigned int ) {}
+
+    static void meta_detail ( const char* ) {}
+    static void meta_error ( const char* ) {}
+    static void meta_error ( const char*, const char*, unsigned int ) {}
+    template <typename T1>
+    static void meta_error ( const char* message, T1 const& v1 ) {}
     
 #endif
 
