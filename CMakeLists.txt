@@ -5,14 +5,16 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/Modules")
 
 include(CheckIncludeFiles)
 
-add_subdirectory(reverse)
-add_subdirectory(testing)
-
+SET(Boost_USE_STATIC_LIBS OFF)
 SET(Boost_USE_MULTITHREAD ON)
 
-FIND_PACKAGE(Boost)
+FIND_PACKAGE(Boost REQUIRED COMPONENTS program_options )
 FIND_PACKAGE(ICU REQUIRED)
 FIND_PACKAGE(EXPAT)
+
+add_subdirectory(reverse)
+add_subdirectory(testing)
+add_subdirectory(tools)
 
 configure_file(${CMAKE_SOURCE_DIR}/reverse/include/config.h.in ${CMAKE_BINARY_DIR}/reverse/include/config.h)
 

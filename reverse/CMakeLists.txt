@@ -1,4 +1,4 @@
-project(reverse)
+project(libreverse)
 
 #add_subdirectory(components)
 #add_subdirectory(data_containers)
@@ -35,14 +35,14 @@ trace_state.hpp
 transfer_types.hpp )
 
 set ( REVERSE_DEPENDENCIES components data_containers infrastructure io meta )
-# io_elf io_windows_pe io_java_class io_mach io_readers reverse_exceptions comp_input comp_output inf_data_source inf_visitor comp_grnn comp_instruction_decoders )
+# io_windows_pe io_java_class io_mach io_readers reverse_exceptions comp_input comp_output inf_data_source inf_visitor comp_grnn comp_instruction_decoders )
 
-add_library ( reverse_static STATIC ${REVERSE_SOURCES} ${REVERSE_HEADERS} ${REVERSE_DEPENDENCIES} )
-add_library ( reverse SHARED ${REVERSE_SOURCES} ${REVERSE_HEADERS} ${REVERSE_DEPENDENCIES} )
-set_target_properties ( reverse_static PROPERTIES OUTPUT_NAME reverse )
+add_library ( libreverse_static STATIC ${REVERSE_SOURCES} ${REVERSE_HEADERS} ${REVERSE_DEPENDENCIES} )
+add_library ( libreverse SHARED ${REVERSE_SOURCES} ${REVERSE_HEADERS} ${REVERSE_DEPENDENCIES} )
+set_target_properties ( libreverse_static PROPERTIES OUTPUT_NAME reverse )
 
-INSTALL(TARGETS reverse
+INSTALL(TARGETS libreverse
    LIBRARY DESTINATION lib
    COMPONENT libraries)
-install ( TARGETS reverse_static ARCHIVE DESTINATION lib COMPONENT libraries )
+install ( TARGETS libreverse_static ARCHIVE DESTINATION lib COMPONENT libraries )
 install ( FILES ${REVERSE_HEADERS} DESTINATION include/reverse )

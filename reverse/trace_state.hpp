@@ -19,8 +19,8 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#ifndef REVERSE_TRACE_HPP_INCLUDED
-#define REVERSE_TRACE_HPP_INCLUDED
+#ifndef REVERSE_TRACE_STATE_HPP_INCLUDED
+#define REVERSE_TRACE_STATE_HPP_INCLUDED
 
 #include <reverse/reverse.hpp>
 
@@ -86,4 +86,4 @@ namespace reverse {
 
 } // namespace reverse
 
-#endif // #ifndef REVERSE_TRACE_HPP_INCLUDED
+#endif // #ifndef REVERSE_TRACE_STATE_HPP_INCLUDED

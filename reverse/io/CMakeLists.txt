@@ -21,8 +21,8 @@ set_target_properties ( reverse_io_static PROPERTIES OUTPUT_NAME reverse_io )
 
 #target_link_libraries ( reverse_io_static io_readers io_elf io_java_class io_mach io_windows_pe )
 #target_link_libraries ( reverse_io io_readers io_elf io_java_class io_mach io_windows_pe )
-target_link_libraries ( reverse_io_static io_readers io_elf )
-target_link_libraries ( reverse_io io_readers io_elf )
+target_link_libraries ( reverse_io_static reverse_io_readers reverse_io_elf )
+target_link_libraries ( reverse_io reverse_io_readers reverse_io_elf )
 
 install ( TARGETS reverse_io LIBRARY DESTINATION lib COMPONENT libraries )
 install ( TARGETS reverse_io_static ARCHIVE DESTINATION lib COMPONENT libraries )

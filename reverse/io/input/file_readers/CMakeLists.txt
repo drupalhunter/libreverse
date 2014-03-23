@@ -1,4 +1,4 @@
-project(io_readers)
+project(reverse_io_readers)
 
 add_subdirectory ( linux_elf )
 #add_subdirectory ( java_class )
@@ -15,4 +15,4 @@ set ( IO_READERS_HEADERS
 
 include_directories ( ${CMAKE_SOURCE_DIR} )
 
-add_library ( io_readers ${IO_READERS_SOURCES} ${IO_READERS_HEADERS} )
+add_library ( ${PROJECT_NAME} ${IO_READERS_SOURCES} ${IO_READERS_HEADERS} )
