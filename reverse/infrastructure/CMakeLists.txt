@@ -1,4 +1,4 @@
-project(infrastructure)
+project(reverse_infrastructure)
 
 add_subdirectory ( data_source )
 add_subdirectory ( visitor )
@@ -48,9 +48,8 @@ set ( INFRASTRUCTURE_HEADERS
 
 include_directories ( ${REVERSE_SOURCE_DIR} )
 
-add_library ( infrastructure_static ${INFRASTRUCTURE_SOURCES} ${INFRASTRUCTURE_HEADERS} )
-add_library ( infrastructure SHARED ${INFRASTRUCTURE_SOURCES} ${INFRASTRUCTURE_HEADERS} )
-set_target_properties ( infrastructure_static PROPERTIES OUTPUT_NAME infrastructure )
+add_library ( ${PROJECT_NAME} ${INFRASTRUCTURE_SOURCES} ${INFRASTRUCTURE_HEADERS} )
 
-install ( TARGETS infrastructure LIBRARY DESTINATION lib COMPONENT libraries )
-install ( TARGETS infrastructure_static ARCHIVE DESTINATION lib COMPONENT libraries )
+install ( TARGETS ${PROJECT_NAME} LIBRARY
+  DESTINATION lib COMPONENT libraries
+  ARCHIVE DESTINATION lib COMPONENT libraries )

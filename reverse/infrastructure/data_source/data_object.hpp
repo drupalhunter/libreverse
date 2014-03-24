@@ -41,25 +41,31 @@ namespace reverse {
 
       explicit data_object ();
 
+      explicit data_object ( const boost::shared_ptr < const data_containers::filename>& data );
+
+      explicit data_object ( const boost::shared_ptr < const data_containers::control_flow_graph_sequence>& data );
+
+      explicit data_object ( const boost::shared_ptr < const data_containers::memory_map>& data );
+
       explicit data_object ( data_object const& rhs );
 
       ~data_object(){}
             
       meta::meta_object::const_ptr_t getmeta() const;
 
-      void set_data ( boost::shared_ptr < const data_container::filename >& data );
+      void set_data ( boost::shared_ptr < const data_containers::filename >& data );
 
-      void set_data ( boost::shared_ptr < const data_container::control_flow_graph_sequence>& data );
+      void set_data ( boost::shared_ptr < const data_containers::control_flow_graph_sequence>& data );
 
-      void set_data ( boost::shared_ptr < const data_container::memory_map>& data );
+      void set_data ( boost::shared_ptr < const data_containers::memory_map>& data );
 
       void put_meta ( boost::shared_ptr < const meta::meta_object>& meta_ptr );
 
-      boost::shared_ptr < const data_container::filename> get_filename ( void ) const;
+      boost::shared_ptr < const data_containers::filename> get_filename ( void ) const;
 
-      boost::shared_ptr < const data_container::control_flow_graph_sequence> get_control_flow_graph_sequence (void) const;
+      boost::shared_ptr < const data_containers::control_flow_graph_sequence> get_control_flow_graph_sequence (void) const;
 
-      boost::shared_ptr < const data_container::memory_map> get_memory_map () const;
+      boost::shared_ptr < const data_containers::memory_map> get_memory_map () const;
 
       std::string to_string (void) const;
 
@@ -70,9 +76,9 @@ namespace reverse {
     private:
 
       boost::shared_ptr < const meta::meta_object> m_meta;
-      boost::shared_ptr < const data_container::filename> m_filename;
-      boost::shared_ptr < const data_container::control_flow_graph_sequence> m_graph;
-      boost::shared_ptr < const data_container::memory_map> m_map;
+      boost::shared_ptr < const data_containers::filename> m_filename;
+      boost::shared_ptr < const data_containers::control_flow_graph_sequence> m_graph;
+      boost::shared_ptr < const data_containers::memory_map> m_map;
     };
 
     } // namespace data_source

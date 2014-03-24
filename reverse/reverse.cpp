@@ -30,12 +30,14 @@
 #include <reverse/errors/reverse_exception.hpp>
 #include <reverse/infrastructure/component_state.hpp>
 #include <reverse/infrastructure/configurator.hpp>
+#include <reverse/infrastructure/data_source/data_source_factory.hpp>
+#include <reverse/infrastructure/data_source/file_data_source_config.hpp>
 #include <reverse/infrastructure/data_source/memory_data_transfer.hpp>
 #include <reverse/infrastructure/data_source/memory_data_source_config.hpp>
-#include <reverse/infrastructure/data_source/data_source_t.hpp>
 #include <reverse/trace.hpp>
 
 #include <boost/filesystem/operations.hpp>
+#include <boost/format.hpp>
 #include <boost/make_shared.hpp>
 
 namespace reverse {
@@ -114,24 +116,14 @@ namespace reverse {
             // The first component will receive its data via a file. The rest
             // of the components will receive it by memory for now. So we
             // create the input data source (file type)
-	    boost::shared_ptr < infrastructure::data_source::memory_data_source_config > mem_config =
-	      boost::make_shared < infrastructure::data_source::memory_data_source_config > ();
 
-	    boost::shared_ptr < infrastructure::data_source::memory_data_transfer> mem_ptr =
-	      boost::make_shared<infrastructure::data_source::memory_data_transfer> ( mem_config );
+	    boost::shared_ptr < const infrastructure::data_source::file_data_source_config > file_config =
+	      boost::make_shared < const infrastructure::data_source::file_data_source_config > ( target_file );
 
-            boost::shared_ptr < infrastructure::data_source::data_source < infrastructure::data_source::memory_data_transfer > > input_data =
-	      boost::make_shared<infrastructure::data_source::data_source < infrastructure::data_source::memory_data_transfer > > (mem_ptr);
+	    boost::shared_ptr < infrastructure::data_source::data_source_factory > fact_ptr = infrastructure::data_source::data_source_factory::instance();
+	    fact_ptr->init ( file_config );
 
-	    boost::shared_ptr < infrastructure::data_source::data_object > input_data_source_ptr =
-	      boost::make_shared < infrastructure::data_source::data_object >();
-
-	    boost::shared_ptr < const data_container::filename > file_ptr = 
-	      boost::make_shared<data_container::filename> ( target_file );
-
-            input_data_source_ptr->set_data ( file_ptr );
-
-            input_data->put ( input_data_source_ptr );
+	    boost::shared_ptr < const infrastructure::data_source::data_source_base > input_data_source_ptr = fact_ptr->get_data_source ( 0 );
 
             // Create component graph from suggested configuration files
             //  Configuration files are in three parts
@@ -149,7 +141,7 @@ namespace reverse {
             // Output: Change return type to give back a pair < Data_Source_Base, Component>
             // which contains the output data and the last component
             reverse_impl::return_type_t input_results_ptr =
-                m_executor.execute_input_section ( m_graph, input_data, comp_ptr );
+                m_executor.execute_input_section ( m_graph, input_data_source_ptr, comp_ptr );
 
 
             // FUTURE: We could take the meta information from the
@@ -175,7 +167,7 @@ namespace reverse {
 
         }
         catch ( errors::reverse_exception& re )
-            {
+	  {
                 std::cerr << boost::format("exception:(%d) %s")
                     % re.name()
                     % re.id() << std::endl;

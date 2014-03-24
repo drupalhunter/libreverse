@@ -19,32 +19,32 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#include <reverse/errors/File_Reader_Exception.h>
+#include <reverse/errors/file_reader_exception.hpp>
 
 namespace reverse {
   namespace errors {
 
-  const char* File_Reader_Exception::m_exception_name =
-  "File_Reader_Exception";
+  const char* file_reader_exception::m_exception_name =
+  "file_reader_exception";
 
-  const char* File_Reader_Exception::m_messages [] = {
+  const char* file_reader_exception::m_messages [] = {
     "Unsupported file type given.",  // UNSUPPORTED_FILE_TYPE
     "Index given is outside the bounds of the data structure", // OUT_OF_BOUNDS
     "Unsupported arch type found.", //UNSUPPORTED_ARCH_TYPE,
   };
 
-  File_Reader_Exception::File_Reader_Exception ( boost::uint32_t message_id )
-    : Reverse_Exception ( message_id )
+  file_reader_exception::file_reader_exception ( boost::uint32_t message_id )
+    : reverse_exception ( message_id )
   {}
 
   const char*
-  File_Reader_Exception::what (void) const throw ()
+  file_reader_exception::what (void) const throw ()
   {
     return m_messages[m_id];
   }
 
   const char*
-  File_Reader_Exception::name (void) const throw ()
+  file_reader_exception::name (void) const throw ()
   {
     return m_exception_name;
   }

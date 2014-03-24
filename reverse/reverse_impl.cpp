@@ -52,7 +52,7 @@ namespace reverse {
 
     reverse_impl::return_type_t
     reverse_impl::execute_input_section ( boost::shared_ptr < infrastructure::component_graph::map_t > m_graph,
-                                          boost::shared_ptr < infrastructure::data_source::data_source_base > init_data_ptr,
+                                          boost::shared_ptr < const infrastructure::data_source::data_source_base > init_data_ptr,
                                           boost::shared_ptr < infrastructure::component > init_comp_ptr )
     {
       trace::api_detail ( "entering reverse_impl::execute_input_section" );
@@ -285,9 +285,9 @@ namespace reverse {
         output_file.close();
     }
 
-  boost::shared_ptr < infrastructure::data_source::data_source_base >
+  boost::shared_ptr < const infrastructure::data_source::data_source_base >
   reverse_impl::process_graph ( boost::shared_ptr < const infrastructure::component_graph > graph_ptr,
-				boost::shared_ptr < infrastructure::data_source::data_source_base > val ) const
+				boost::shared_ptr < const infrastructure::data_source::data_source_base > val ) const
     {
       trace::api_detail ( "entering reverse_impl::process_graph" );
 
@@ -325,7 +325,9 @@ namespace reverse {
 
 	trace::api_detail ( "exiting reverse_impl::process_graph" );
 
-        return result.first;
+	boost::shared_ptr < const infrastructure::data_source::data_source_base > output_data_source_ptr = result.first;
+
+	return output_data_source_ptr;
     }
 
 } /* namespace libreverse */

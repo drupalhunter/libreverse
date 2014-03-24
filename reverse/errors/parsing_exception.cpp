@@ -19,41 +19,42 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#include "Parsing_Exception.h"
+#include <reverse/errors/parsing_exception.hpp>
 
-namespace libreverse { namespace errors {
+namespace reverse {
+  namespace errors {
 
-  const char* Parsing_Exception::m_exception_name = "Parsing_Exception";
+    const char* parsing_exception::m_exception_name = "parsing_exception";
+    
+    const char* parsing_exception::m_messages [] = {
+      "unknown parsing error received.",  // unknown_parsing_error
+      "unable to open target file.", // cannot_open
+      "invalid format found in file", // invalid_format
+      "internal parsing error.", // internal_parsing_error
+      "unknown component requested.", // unknown_component
+      "unknwon xml element.", // unknown_element
+      "unknown type requested.", // unknown_type
+      "unknown cpu requested.", // unknown_cpu
+      "file did not contain any data", // empty_file
+      "file missing from target location", // missing_file
+    };
 
-  const char* Parsing_Exception::m_messages [] = {
-    "Unknown parsing error received.",  // UNKNOWN_PARSING_ERROR
-    "Unable to open target file.", // CANNOT_OPEN
-    "Invalid format found in file", // INVALID_FORMAT
-    "Internal parsing error.", // INTERNAL_PARSING_ERROR
-    "Unknown component requested.", // UNKNOWN_COMPONENT
-    "Unknwon XML element.", // UNKNOWN_ELEMENT
-    "Unknown type requested.", // UNKNOWN_TYPE
-    "Unknown CPU requested.", // UNKNOWN_CPU
-    "File did not contain any data", // EMPTY_FILE
-    "File missing from target location", // MISSING_FILE
-  };
+    parsing_exception::parsing_exception ( boost::uint32_t message_id )
+      : reverse_exception ( message_id )
+    {}
+    
+    const char*
+    parsing_exception::what (void) const throw ()
+    {
+      return m_messages[m_id];
+    }
+    
+    const char*
+    parsing_exception::name (void) const throw ()
+    {
+      return m_exception_name;
+    }
 
-  Parsing_Exception::Parsing_Exception ( boost::uint32_t message_id )
-    : Reverse_Exception ( message_id )
-  {}
-
-  const char*
-  Parsing_Exception::what (void) const throw ()
-  {
-    return m_messages[m_id];
-  }
-
-  const char*
-  Parsing_Exception::name (void) const throw ()
-  {
-    return m_exception_name;
-  }
-
-} /* namespace errors */
-} /* namespace libreverse */
+  } /* namespace errors */
+} /* namespace reverse */
 

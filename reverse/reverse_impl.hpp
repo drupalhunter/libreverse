@@ -58,7 +58,7 @@ namespace reverse {
 	  
   public:
 
-    typedef std::pair < boost::shared_ptr < infrastructure::data_source::data_source_base >,
+    typedef std::pair < boost::shared_ptr < const infrastructure::data_source::data_source_base >,
 			boost::shared_ptr < infrastructure::component > >
     return_type_t;
 
@@ -82,7 +82,7 @@ namespace reverse {
      */
     return_type_t
     execute_input_section ( boost::shared_ptr < infrastructure::component_graph::map_t > m_graph,
-			    boost::shared_ptr < infrastructure::data_source::data_source_base > init_data_ptr,
+			    boost::shared_ptr < const infrastructure::data_source::data_source_base > init_data_ptr,
 			    boost::shared_ptr < infrastructure::component > init_comp_ptr );
 
     return_type_t
@@ -97,9 +97,9 @@ namespace reverse {
     void print_graph ( infrastructure::component_graph const& graph_ref,
 		       std::string name ) const;
 
-    boost::shared_ptr < infrastructure::data_source::data_source_base >
+    boost::shared_ptr < const infrastructure::data_source::data_source_base >
     process_graph ( boost::shared_ptr < const infrastructure::component_graph > graph_ptr,
-		    boost::shared_ptr < infrastructure::data_source::data_source_base > val ) const;
+		    boost::shared_ptr < const infrastructure::data_source::data_source_base > val ) const;
   };
 
 } // namespace reverse

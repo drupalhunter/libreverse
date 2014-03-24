@@ -100,13 +100,13 @@ namespace libreverse { namespace data_container {
     }
 
     std::string
-    Filename::to_String () const
+    Filename::data () const
     {
 
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
                              TraceLevel::DETAIL,
-                             "Inside Filename::to_String" );
+                             "Inside Filename::data" );
 #endif /* LIBREVERSE_DEBUG */
 
         return m_data;

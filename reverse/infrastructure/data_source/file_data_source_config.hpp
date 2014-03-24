@@ -49,35 +49,39 @@ This file was generated on Fri Sep 10 2004 at 21:33:48
 The original location of this file is 
 **************************************************************************/
 
-#ifndef FILE_DATA_SOURCE_CONFIG_H
-#define FILE_DATA_SOURCE_CONFIG_H
+#ifndef REVERSE_INFRASTRUCTURE_DATA_SOURCE_FILE_DATA_SOURCE_CONFIG_HPP_INCLUDED
+#define REVERSE_INFRASTRUCTURE_DATA_SOURCE_FILE_DATA_SOURCE_CONFIG_HPP_INCLUDED
+
+#include <reverse/infrastructure/data_source/data_source_config_base.hpp>
+
+#include <boost/shared_ptr.hpp>
 
 #include <string>
-#include <boost/shared_ptr.hpp>
-#include "Data_Source_Config_Base.h"
 
-namespace libreverse { namespace infrastructure {
+namespace reverse {
+  namespace infrastructure {
+    namespace data_source {
 
-    class File_Data_Source_Config : public Data_Source_Config_Base {
-    public:
+      class file_data_source_config : public data_source_config_base {
+      public:
+	
+        explicit file_data_source_config ( std::string prefix = "file" );
 
-        explicit File_Data_Source_Config ( std::string prefix = "File" );
+        explicit file_data_source_config ( file_data_source_config const& rhs );
 
-        explicit File_Data_Source_Config ( File_Data_Source_Config const& rhs );
+        virtual ~file_data_source_config ();
 
-        virtual ~File_Data_Source_Config ();
+        std::string get_filename (void) const;
 
-        std::string get_Filename (void) const;
+        virtual boost::uint32_t get_type() const;
 
-        virtual boost::uint32_t get_Type() const;
+        virtual void set_id ( boost::uint32_t id );
 
-        virtual void set_ID ( boost::uint32_t id );
+        virtual boost::uint32_t get_id (void) const;
 
-        virtual boost::uint32_t get_ID (void) const;
+        file_data_source_config& operator= ( file_data_source_config const& rhs );
 
-        File_Data_Source_Config& operator= ( File_Data_Source_Config const& rhs );
-
-        void swap ( File_Data_Source_Config& rhs );
+        void swap ( file_data_source_config& rhs );
 
     private:
 
@@ -91,8 +95,9 @@ namespace libreverse { namespace infrastructure {
         static boost::uint32_t const type;
     };
 
-} /* namespace infrastructure */
-} /* namespace libreverse */
+    } // namespace data_source
+  } // namespace infrastructure
+} // namespace reverse
 
-#endif //FILE_DATA_SOURCE_CONFIG_H
+#endif //REVERSE_INFRASTRUCTURE_DATA_SOURCE_FILE_DATA_SOURCE_CONFIG_HPP_INCLUDED
 

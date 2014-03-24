@@ -31,13 +31,13 @@
 
 namespace reverse {
 
-  namespace data_container {
+  namespace data_containers {
 
     class control_flow_graph_sequence;
     class filename;
     class memory_map;
 
-  } // namespace data_container
+  } // namespace data_containers
 
   namespace meta {
 
@@ -64,6 +64,7 @@ namespace reverse {
        * \param id unique id for the instance of this filter
        */
       explicit component_data ( boost::uint32_t id );
+
 
       /*!
        * \brief copy constructor
@@ -119,25 +120,26 @@ namespace reverse {
 
       boost::shared_ptr < infrastructure::data_source::data_source_base> get_data_source (void) const;
 
+      void set_output_data ( boost::shared_ptr<const data_containers::filename> file_ptr );
+
+      void set_output_data ( boost::shared_ptr<const data_containers::control_flow_graph_sequence> graph_ptr );
+
+      void set_output_data ( boost::shared_ptr<const data_containers::memory_map> map_ptr );
+
+
       bool is_filename_set (void) const;
 
       bool is_control_flow_graph_sequence_set (void) const;
 
       bool is_memory_map_set (void) const;
 
-      boost::shared_ptr<const data_container::filename> get_input_filename(void) const;
+      boost::shared_ptr<const data_containers::filename> get_input_filename(void) const;
 
-      boost::shared_ptr<const data_container::control_flow_graph_sequence> get_input_control_flow_graph_sequence(void) const;
+      boost::shared_ptr<const data_containers::control_flow_graph_sequence> get_input_control_flow_graph_sequence(void) const;
 
-      boost::shared_ptr<const data_container::memory_map> get_input_memory_map(void) const;
+      boost::shared_ptr<const data_containers::memory_map> get_input_memory_map(void) const;
 
-      void set_output_data ( boost::shared_ptr<const data_container::filename> file_ptr );
-
-      void set_output_data ( boost::shared_ptr<const data_container::control_flow_graph_sequence> graph_ptr );
-
-      void set_output_data ( boost::shared_ptr<const data_container::memory_map> map_ptr );
-
-      void set_output_meta_data ( boost::shared_ptr < meta::meta_object>& meta_ptr );
+      void set_append_meta_data ( boost::shared_ptr < const meta::meta_object >& meta_ptr );
 
       component_data::input_token_t::const_iterator get_source_list_begin (void) const;
       
@@ -162,11 +164,10 @@ namespace reverse {
 
       boost::shared_ptr < infrastructure::data_source::data_object > m_data_obj_ptr;
 
-      boost::shared_ptr < meta::meta_object > m_meta_ptr;
-
-      boost::shared_ptr < const data_container::filename > m_filename_ptr;
-      boost::shared_ptr < const data_container::control_flow_graph_sequence > m_graph_ptr;
-      boost::shared_ptr < const data_container::memory_map > m_map_ptr;
+      boost::shared_ptr < const meta::meta_object > m_meta_ptr;
+      boost::shared_ptr < const data_containers::filename > m_filename_ptr;
+      boost::shared_ptr < const data_containers::control_flow_graph_sequence > m_graph_ptr;
+      boost::shared_ptr < const data_containers::memory_map > m_map_ptr;
 
     };
 

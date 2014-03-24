@@ -28,7 +28,7 @@
 #include <vector>
 
 namespace reverse {
-  namespace data_container {
+  namespace data_containers {
 
     class instruction;
 
@@ -65,7 +65,7 @@ namespace reverse {
       std::vector<std::string> m_comments;
     };
 
-  }  // namespace data_container
+  }  // namespace data_containers
 } // namespace reverse
 
 

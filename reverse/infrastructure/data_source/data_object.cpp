@@ -66,51 +66,14 @@ namespace libreverse { namespace infrastructure {
 
     }
 
-    Data_Object::Data_Object ( Data_Object const& rhs )
-        : m_meta ( new meta::Meta_Object ( *rhs.m_meta ) )
-    {
-        // Test equality? We say that they are true copies but are they
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Entering Data_Object copy constructor" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        if ( rhs.m_filename.get() != 0 )
-            {
-                m_filename.reset ( new data_container::Filename ( *rhs.m_filename ) );
-            }
-        
-        if ( rhs.m_graph.get() != 0 )
-            {
-                m_graph.reset ( new data_container::Control_Flow_Graph_Sequence ( *rhs.m_graph ) );
-            }
-
-        if ( rhs.m_map.get() != 0 )
-            {
-                m_map.reset ( new data_container::Memory_Map ( *rhs.m_map ) );
-            }
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Exiting Data_Object copy constructor" );
-#endif /* LIBREVERSE_DEBUG */
-
-    }
-
     void
-    Data_Object::set_Data ( boost::shared_ptr < const Filename>& data )
+    Data_Object::Data_Object ( const boost::shared_ptr < const Filename>& data )
     {
 
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
                              TraceLevel::DETAIL,
-                             "Entering Data_Object::set_Data (Filename)" );
+                             "Entering Data_Object::Data_Object (Filename)" );
 #endif /* LIBREVERSE_DEBUG */
 
 
@@ -137,26 +100,26 @@ namespace libreverse { namespace infrastructure {
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
 			     TraceLevel::INFO,
-			     boost::str ( boost::format("Data_Object::setData - Filename = %s (Ptr count = %d, Input Ptr count = %d)")
+			     boost::str ( boost::format("Data_Object::Data_Object - Filename = %s (Ptr count = %d, Input Ptr count = %d)")
 					  % m_filename->to_String()
 					  % m_filename.use_count()
 					  % data.use_count() ) );
 
         Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
                              TraceLevel::DETAIL,
-                             "Exiting Data_Object::set_Data (Filename)" );
+                             "Exiting Data_Object::Data_Object (Filename)" );
 #endif /* LIBREVERSE_DEBUG */
 
     }
 
     void
-    Data_Object::set_Data ( boost::shared_ptr < const Control_Flow_Graph_Sequence>& data )
+    Data_Object::Data_Object ( boost::shared_ptr < const Control_Flow_Graph_Sequence>& data )
     {
 
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
                              TraceLevel::DETAIL,
-                             "Entering Data_Object::set_Data (Control_Flow_Graph_Sequence)" );
+                             "Entering Data_Object::Data_Object (Control_Flow_Graph_Sequence)" );
 #endif /* LIBREVERSE_DEBUG */
 
         if ( data.get() == 0 )
@@ -181,19 +144,19 @@ namespace libreverse { namespace infrastructure {
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
                              TraceLevel::DETAIL,
-                             "Exiting Data_Object::set_Data (Control_Flow_Graph_Sequence)" );
+                             "Exiting Data_Object::Data_Object (Control_Flow_Graph_Sequence)" );
 #endif /* LIBREVERSE_DEBUG */
 
     }
 
     void
-    Data_Object::set_Data ( boost::shared_ptr < const Memory_Map>& data )
+    Data_Object::Data_Object ( boost::shared_ptr < const Memory_Map>& data )
     {
 
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
                              TraceLevel::DETAIL,
-                             "Entering Data_Object::set_Data (Memory_Map)" );
+                             "Entering Data_Object::Data_Object (Memory_Map)" );
 #endif /* LIBREVERSE_DEBUG */
 
 
@@ -218,10 +181,49 @@ namespace libreverse { namespace infrastructure {
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
                              TraceLevel::DETAIL,
-                             "Exiting Data_Object::set_Data (Memory_Map)" );
+                             "Exiting Data_Object::Data_Object (Memory_Map)" );
 #endif /* LIBREVERSE_DEBUG */
 
     }
+
+
+    Data_Object::Data_Object ( Data_Object const& rhs )
+        : m_meta ( new meta::Meta_Object ( *rhs.m_meta ) )
+    {
+        // Test equality? We say that they are true copies but are they
+
+
+#ifdef LIBREVERSE_DEBUG
+        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
+                             TraceLevel::DETAIL,
+                             "Entering Data_Object copy constructor" );
+#endif /* LIBREVERSE_DEBUG */
+
+
+        if ( rhs.m_filename.get() != 0 )
+            {
+                m_filename.reset ( new data_containers::Filename ( *rhs.m_filename ) );
+            }
+        
+        if ( rhs.m_graph.get() != 0 )
+            {
+                m_graph.reset ( new data_containers::Control_Flow_Graph_Sequence ( *rhs.m_graph ) );
+            }
+
+        if ( rhs.m_map.get() != 0 )
+            {
+                m_map.reset ( new data_containers::Memory_Map ( *rhs.m_map ) );
+            }
+
+
+#ifdef LIBREVERSE_DEBUG
+        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
+                             TraceLevel::DETAIL,
+                             "Exiting Data_Object copy constructor" );
+#endif /* LIBREVERSE_DEBUG */
+
+    }
+
 
     void
     Data_Object::put_Meta ( boost::shared_ptr < const Meta_Object>& meta_ptr )

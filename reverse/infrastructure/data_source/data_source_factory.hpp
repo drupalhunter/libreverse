@@ -54,7 +54,7 @@ namespace reverse {
 	 * @param transfer_type
 	 * @param source_config
 	 */
-	void init ( boost::shared_ptr < infrastructure::data_source::data_source_config_base > source_config );
+	void init ( boost::shared_ptr < const infrastructure::data_source::data_source_config_base > source_config );
 
       private:
 	
@@ -68,7 +68,7 @@ namespace reverse {
 	/**
 	 *
 	 */
-	boost::shared_ptr < infrastructure::data_source::data_source_config_base > m_src_config;
+	boost::shared_ptr < const infrastructure::data_source::data_source_config_base > m_src_config;
 
       };
     } // namespace data_source

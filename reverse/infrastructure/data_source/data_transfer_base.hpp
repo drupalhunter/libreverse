@@ -85,7 +85,7 @@ namespace reverse {
          *
          * @param data
          */
-        virtual void put ( boost::shared_ptr< infrastructure::data_source::data_object>& data ) = 0;
+        virtual void put ( boost::shared_ptr< const infrastructure::data_source::data_object>& data ) = 0;
 
       };
 

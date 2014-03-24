@@ -1,39 +1,39 @@
 /*  Reverse_Exception.cpp
 
-   Copyright (C) 2008 Stephen Torri
+    Copyright (C) 2008 Stephen Torri
 
-   This file is part of Libreverse.
+    This file is part of Libreverse.
 
-   Libreverse is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published
-   by the Free Software Foundation; either version 3, or (at your
-   option) any later version.
+    Libreverse is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published
+    by the Free Software Foundation; either version 3, or (at your
+    option) any later version.
 
-   Libreverse is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
+    Libreverse is distributed in the hope that it will be useful, but
+    WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with this program.  If not, see
-   <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see
+    <http://www.gnu.org/licenses/>.
 */
 
-#include "Reverse_Exception.h"
+#include <reverse/errors/reverse_exception.hpp>
 
-namespace libreverse { namespace errors {
+namespace reverse { namespace errors {
 
-    Reverse_Exception::Reverse_Exception ( boost::uint32_t message_id )
-        : std::exception(),
-          m_id ( message_id )
+    reverse_exception::reverse_exception ( boost::uint32_t message_id )
+      : std::exception(),
+	m_id ( message_id )
     {}
 
     boost::uint32_t const&
-    Reverse_Exception::id (void) const throw()
+    reverse_exception::id (void) const throw()
     {
-        return m_id;
+      return m_id;
     }
 
 
-} /* namespace errors */
-} /* namespace libreverse */
+  } /* namespace errors */
+} /* namespace reverse */

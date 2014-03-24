@@ -106,7 +106,7 @@ namespace reverse {
 
 	  }
 
-      void put ( boost::shared_ptr < infrastructure::data_source::data_object>& data)
+      void put ( boost::shared_ptr < const infrastructure::data_source::data_object>& data )
 	{
 
 #ifdef LIBREVERSE_DEBUG

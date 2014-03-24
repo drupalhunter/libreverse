@@ -19,15 +19,16 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#include "IO_Exception.h"
+#include <reverse/errors/io_exception.hpp>
 
-namespace libreverse { namespace errors {
+namespace reverse {
+  namespace errors {
 
-    const char* IO_Exception::m_exception_name = "IO_Exception";
+    const char* io_exception::m_exception_name = "io_exception";
 
-    const char* IO_Exception::m_messages [] = {
+    const char* io_exception::m_messages [] = {
         "Invalid file name given.",  // INVALID_FILE_NAME
-        "Fatal IO error occured during file operation.", // FATAL_IO_ERROR
+        "Fatal IO error occured during file operation.", // FATAL_io_eRROR
         "Invalid path name given for file.", // INVALID_PATH_NAME
         "Invalid pointer given. The pointer is referring to an address out of the range of the data structure.", // OUT_OF_RANGE
         "Invalid index given.", // INVALID_INDEX
@@ -35,22 +36,22 @@ namespace libreverse { namespace errors {
 	"Bad input received from input file", // BAD_INPUT
     };
 
-    IO_Exception::IO_Exception ( boost::uint32_t message_id )
-        : Reverse_Exception ( message_id )
+    io_exception::io_exception ( boost::uint32_t message_id )
+        : reverse_exception ( message_id )
     {}
 
     const char*
-    IO_Exception::what (void) const throw ()
+    io_exception::what (void) const throw ()
     {
         return m_messages[m_id];
     }
 
     const char*
-    IO_Exception::name (void) const throw ()
+    io_exception::name (void) const throw ()
     {
         return m_exception_name;
     }
 
-} /* namespace errors */
-} /* namespace libreverse */
+  } /* namespace errors */
+} /* namespace reverse */
 

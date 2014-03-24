@@ -28,7 +28,7 @@
 #include <vector>
 
 namespace reverse {
-  namespace data_container {
+  namespace data_containers {
 
     class control_flow_graph;
 
@@ -66,7 +66,7 @@ namespace reverse {
 
     };
 
-  } // namespace data_container
+  } // namespace data_containers
 } // namespace reverse
 
 #endif // #ifndef REVERSE_DATA_CONTAINER_CONTROL_FLOW_GRAPH_SEQEUENCE_HPP_INCLUDED

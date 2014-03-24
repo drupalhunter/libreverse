@@ -35,7 +35,7 @@ namespace reverse {
     };
 
     configuration_exception::configuration_exception ( boost::uint32_t message_id )
-      : Reverse_Exception ( message_id )
+      : reverse_exception ( message_id )
     {}
 
     const char*

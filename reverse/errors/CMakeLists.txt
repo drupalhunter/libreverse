@@ -1,4 +1,4 @@
-project(exceptions)
+project(reverse_errors)
 
 set ( EXCEPTIONS_SOURCES
   api_exception.cpp
@@ -28,9 +28,8 @@ set ( EXCEPTIONS_HEADERS
 
 include_directories ( ${REVERSE_SOURCE_DIR} )
 
-add_library ( exceptions_static ${EXCEPTIONS_SOURCES} ${EXCEPTIONS_HEADERS} )
-add_library ( exceptions SHARED ${EXCEPTIONS_SOURCES} ${EXCEPTIONS_HEADERS} )
-set_target_properties ( exceptions_static PROPERTIES OUTPUT_NAME exceptions )
+add_library ( ${PROJECT_NAME} ${EXCEPTIONS_SOURCES} ${EXCEPTIONS_HEADERS} )
 
-install ( TARGETS exceptions LIBRARY DESTINATION lib COMPONENT libraries )
-install ( TARGETS exceptions_static ARCHIVE DESTINATION lib COMPONENT libraries )
+install ( TARGETS ${PROJECT_NAME} LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION lib
+  COMPONENT libraries )

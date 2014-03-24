@@ -61,7 +61,7 @@ namespace reverse {
        * children needing the results. initial thoughts are that this
        * is second value is unnecessary.
        */
-      typedef std::pair< boost::shared_ptr < infrastructure::data_source::data_source_base >,
+      typedef std::pair< boost::shared_ptr < const infrastructure::data_source::data_source_base >,
 			 graph_t::degree_size_type >
       result_data_t;
 

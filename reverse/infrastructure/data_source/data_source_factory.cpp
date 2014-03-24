@@ -229,7 +229,7 @@ namespace libreverse { namespace infrastructure {
         return m_factory;
     }
 
-    void Data_Source_Factory::init ( infrastructure_types::Data_Source_Config_Base::ptr_t source_config )
+    void Data_Source_Factory::init ( boost::shared_ptr < const infrastructure::data_source::data_source_config_base > source_config )
     {
 
 #ifdef LIBREVERSE_DEBUG

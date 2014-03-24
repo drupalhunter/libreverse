@@ -164,6 +164,37 @@ namespace reverse {
 
     static void infrastructure_detail ( const char* message );
 
+    template <typename T1>
+    static void infrastructure_error ( const char* message, T1 const& v1 )
+    {
+      write_trace ( trace_area::infrastructure,
+		    trace_level::error,
+		    boost::str ( boost::format ( message )
+				 % v1 ) );
+    }
+
+    template <typename T1, typename T2>
+    static void infrastructure_error ( const char* message, T1 const& v1, T2 const& v2 )
+    {
+      write_trace ( trace_area::infrastructure,
+		    trace_level::error,
+		    boost::str ( boost::format ( message )
+				 % v1
+				 % v2 ) );
+    }
+
+
+    template <typename T1, typename T2, typename T3>
+    static void infrastructure_error ( const char* message, T1 const& v1, T2 const& v2, T3 const& v3 )
+    {
+      write_trace ( trace_area::infrastructure,
+		    trace_level::error,
+		    boost::str ( boost::format ( message )
+				 % v1
+				 % v2
+				 % v3 ) );
+    }
+
     static void infrastructure_error ( const char* message );
 
     static void infrastructure_data ( const char* message );
@@ -174,6 +205,14 @@ namespace reverse {
       write_trace ( trace_area::infrastructure_data,
 		    trace_level::data,
 		    boost::str ( boost::format ( message ) % value ) );
+    }
+
+    template <typename T, typename V>
+    static void infrastructure_data ( const char* message, T const& v1,  V const& v2 )
+    {
+      write_trace ( trace_area::infrastructure_data,
+		    trace_level::data,
+		    boost::str ( boost::format ( message ) % v1 % v2 ) );
     }
 
     static void infrastructure_error ( const char* message, const char* filename, unsigned int line );
@@ -254,12 +293,29 @@ namespace reverse {
 
     static void infrastructure_detail ( const char* ){}
 
+    template <typename T1>
+    static void infrastructure_error ( const char*, T1 const& )
+    {}
+
+    template <typename T1, typename T2>
+    static void infrastructure_error ( const char* message, T1 const& v1, T2 const& v2 )
+    {}
+
+
+    template <typename T1, typename T2, typename T3>
+    static void infrastructure_error ( const char*, T1 const&, T2 const&, T3 const& )
+    {}
+
     static void infrastructure_error ( const char* ){}
 
     static void infrastructure_data ( const char* ){}
 
     template <typename T>
     static void infrastructure_data ( const char*, T const& )
+    {}
+
+    template <typename T, typename V>
+    static void infrastructure_data ( const char* message, T const&,  V const& )
     {}
 
     static void infrastructure_error ( const char*, const char*, unsigned int ) {}

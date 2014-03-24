@@ -22,12 +22,13 @@
 #ifndef REVERSE_DATA_CONTAINERS_FILENAME_HPP_INCLUDED
 #define REVERSE_DATA_CONTAINERS_FILENAME_HPP_INCLUDED
 
+#include <boost/format.hpp>
 #include <boost/shared_ptr.hpp>
 
 #include <string>
 
 namespace reverse {
-  namespace data_container {
+  namespace data_containers {
 
     class filename
     {
@@ -39,7 +40,7 @@ namespace reverse {
 
         virtual ~filename (){}
 
-        std::string to_string () const;
+        std::string data () const;
 
         filename& operator= ( filename const& rhs );
 
@@ -52,6 +53,12 @@ namespace reverse {
          */
         std::string m_data;
     };
+
+    std::ostream& operator<< ( std::ostream& os, boost::shared_ptr < const filename> & rhs )
+    {
+      os << boost::format ( "  filename: %s" ) % rhs->data();
+      return os;
+    }
 
   } // namespace data_containers
 } // namespace reverse
