@@ -19,611 +19,364 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#include "Component_Graph.h"
-#include "Component.h"
-#include <iostream>
-#include <sstream>
+#include <reverse/errors/api_exception.hpp>
+#include <reverse/errors/component_exception.hpp>
+#include <reverse/infrastructure/component_graph.hpp>
+#include <reverse/infrastructure/component.hpp>
+#include <reverse/trace.hpp>
+
 #include <boost/format.hpp>
 #include <boost/graph/topological_sort.hpp>
-#include "errors/API_Exception.h"
 
-#ifdef LIBREVERSE_DEBUG
-#include "Trace.h"
-using namespace libreverse::api;
-using namespace libreverse::trace;
-#endif /* LIBREVERSE_DEBUG */
+#include <iostream>
+#include <sstream>
 
-namespace libreverse { namespace infrastructure {
+namespace reverse {
+  namespace infrastructure {
 
-    Component_Graph::Component_Graph ()
+    component_graph::component_graph ()
     {
+      trace::infrastructure_detail ( "Entering Component_Graph constructor" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Entering Component_Graph constructor" );
-#endif /* LIBREVERSE_DEBUG */
+      m_comp_map = get( boost::vertex_name, m_graph );
 
-
-        m_comp_map = get( boost::vertex_name, m_graph );
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Exiting Component_Graph constructor" );
-#endif /* LIBREVERSE_DEBUG */
-
+      trace::infrastructure_detail ( "Exiting Component_Graph constructor" );
     }
 
-    Component_Graph::Component_Graph ( Component_Graph const& rhs )
+    component_graph::component_graph ( component_graph const& rhs )
         : m_graph ( rhs.m_graph )
     {
+      trace::infrastructure_detail ( "Entering Component_Graph copy constructor" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Entering Component_Graph copy constructor" );
-#endif /* LIBREVERSE_DEBUG */
+      std::copy ( rhs.m_index.begin(),
+		  rhs.m_index.end(),
+		  std::inserter ( m_index, m_index.end() ) );
+      
+      m_comp_map = get( boost::vertex_name, m_graph );
 
-
-        std::copy ( rhs.m_index.begin(),
-                    rhs.m_index.end(),
-                    std::inserter ( m_index, m_index.end() ) );
-
-        m_comp_map = get( boost::vertex_name, m_graph );
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Exiting Component_Graph copy constructor" );
-#endif /* LIBREVERSE_DEBUG */
-
+      trace::infrastructure_detail ( "Exiting Component_Graph copy constructor" );
     }
 
     void
-    Component_Graph::add_Component ( infrastructure_types::Component::ptr_t obj_ptr )
+    component_graph::add_component ( boost::shared_ptr < infrastructure::component >& obj_ptr )
     {
+      trace::infrastructure_detail ( "Entering Component_Graph::add_Component" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Entering Component_Graph::add_Component" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        bool no_duplicate;
-        infrastructure_types::Component_Graph::IdVertexMap_t::iterator pos;
-        infrastructure_types::Component_Graph::Vertex_t node;
+      bool no_duplicate = false;
+      infrastructure::component_graph::idvertexmap_t::iterator pos;
+      infrastructure::component_graph::vertex_t node;
 
         if ( ! obj_ptr )
             {
+	      trace::infrastructure_error ( "Exception throw in %s at line %d",
+					    __FILE__,
+					    __LINE__ );
 
-#ifdef LIBREVERSE_DEBUG
-                Trace::write_Trace
-                    ( TraceArea::INFRASTRUCTURE,
-                      TraceLevel::ERROR,
-                      boost::str ( boost::format("Exception throw in %s at line %d")
-                                   % __FILE__
-                                   % __LINE__ ) );
-#endif /* LIBREVERSE_DEBUG */
-
-                throw errors::Component_Exception
-                    ( errors::Component_Exception::NULL_POINTER );
+	      throw errors::component_exception ( errors::component_exception::null_pointer );
             }
 
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             boost::str ( boost::format( "Add Component for id %d")
-                                          % obj_ptr->get_ID() ) );
-#endif /* LIBREVERSE_DEBUG */
-
-        boost::tie (pos, no_duplicate) = m_index.insert
-            ( std::make_pair ( obj_ptr->get_ID(),
-                               infrastructure_types::Component_Graph::Vertex_t() ) );
+        trace::infrastructure_data ( "Add Component for id %d", obj_ptr->get_id() );
+	
+        boost::tie (pos, no_duplicate) = m_index.insert ( std::make_pair ( obj_ptr->get_id(),
+									   infrastructure::component_graph::vertex_t() ) );
     
         if ( no_duplicate )
-            {
+	  {
+	    trace::infrastructure_data ( "no duplicate with id = %d", obj_ptr->get_id() );
 
-#ifdef LIBREVERSE_DEBUG
-                Trace::write_Trace
-                    ( TraceArea::INFRASTRUCTURE,
-                      TraceLevel::DETAIL,
-                      boost::str ( boost::format("no duplicate with id = %d")
-                                   % obj_ptr->get_ID() ) );
-#endif /* LIBREVERSE_DEBUG */
+	    // Insertion was successful
+	    // Make a new vertex and return handle to 'node'
+	    node = add_vertex ( m_graph );
 
-                // Insertion was successful
-                // Make a new vertex and return handle to 'node'
-                node = add_vertex ( m_graph );
+	    // Assign component to vertex position
+	    m_comp_map[node] = obj_ptr;
 
-                // Assign component to vertex position
-                m_comp_map[node] = obj_ptr;
+	    // Add vertex handle to map position
+	    pos->second = node;
 
-                // Add vertex handle to map position
-                pos->second = node;
+	    for ( infrastructure::component_data::input_token_t::const_iterator cpos = obj_ptr->get_source_list_begin();
+		  cpos != obj_ptr->get_source_list_end();
+		  ++cpos )
+	      {
+		trace::infrastructure_data ( "parent(id=%d) for child(id=%d)", 
+					     (*cpos).first,
+					     obj_ptr->get_id() );
 
-                for ( infrastructure_types::Component_Data::Input_Token_t::const_iterator cpos =
-                          obj_ptr->get_Source_List_Begin();
-                      cpos != obj_ptr->get_Source_List_End();
-                      ++cpos )
-                    {
-
-#ifdef LIBREVERSE_DEBUG
-                        Trace::write_Trace
-                            ( TraceArea::INFRASTRUCTURE,
-                              TraceLevel::DETAIL,
-                              boost::str ( boost::format("parent(id=%d) for child(id=%d)")
-                                           % (*cpos).first
-                                           % obj_ptr->get_ID() ) );
-#endif /* LIBREVERSE_DEBUG */
-
-                        this->add_Child ( (*cpos).first, node );
-                    }
-            }
+		this->add_child ( (*cpos).first, node );
+	      }
+	  }
         else
-            {
+	  {
+	    trace::infrastructure_error ( "ERROR: Duplicate source found. Skipping Component" );
+	  }
 
-#ifdef LIBREVERSE_DEBUG
-                Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                                     TraceLevel::WARN,
-                                     "ERROR: Duplicate source found. Skipping Component" );
-#endif /* LIBREVERSE_DEBUG */
-
-            }
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Exiting Component_Graph::add_Component" );
-#endif /* LIBREVERSE_DEBUG */
-
+        trace::infrastructure_detail ( "Exiting Component_Graph::add_Component" );
     }
 
     void
-    Component_Graph::add_Child ( boost::uint32_t parent_id,
-                                 infrastructure_types::Component_Graph::Vertex_t& child_node )
+    component_graph::add_child ( boost::uint32_t parent_id,
+                                 infrastructure::component_graph::vertex_t& child_node )
     {
+      trace::infrastructure_detail ( "Entering Component_Graph::add_Child (uint32,vertex)" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Entering Component_Graph::add_Child (uint32,vertex)" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        infrastructure_types::Component_Graph::IdVertexMap_t::iterator parent_pos;
+      infrastructure::component_graph::idvertexmap_t::iterator parent_pos;
 
         parent_pos = m_index.find (parent_id);
-
+	
         if ( parent_pos == m_index.end() )
-            {
-                infrastructure_types::Component::ptr_t obj_ptr = m_comp_map[child_node];
+	  {
+	    boost::shared_ptr < infrastructure::component > obj_ptr = m_comp_map[child_node];
 
+	    trace::infrastructure_error ( "ERROR: Cannot find parent. Skipping adding component #%d (%s)",
+					  obj_ptr->get_id(),
+					  obj_ptr->get_name() );
+	    return;
+	  }
 
-#ifdef LIBREVERSE_DEBUG
-                Trace::write_Trace
-                    ( TraceArea::INFRASTRUCTURE,
-                      TraceLevel::WARN,
-                      boost::str ( boost::format ( "ERROR: Cannot find parent. Skipping adding component #%d (%s)" )
-                                   % obj_ptr->get_ID()
-                                   % obj_ptr->get_Name() ) );
-#endif /* LIBREVERSE_DEBUG */
-
-                return;
-            }
-
-        infrastructure_types::Component_Graph::Vertex_t parent_node = parent_pos->second;
+        infrastructure::component_graph::vertex_t parent_node = parent_pos->second;
 
         if (! (add_edge ( parent_node, child_node, m_graph).second ) )
-            {
+	  {
+	    boost::shared_ptr < infrastructure::component > obj_ptr = m_comp_map[child_node];
 
-#ifdef LIBREVERSE_DEBUG
-                infrastructure_types::Component::ptr_t obj_ptr = m_comp_map[child_node];
+	    trace::infrastructure_error ( "ERROR: duplicate edge exists from %d to %s",
+					  parent_id,
+					  obj_ptr->get_id() );
+	    
+	    trace::infrastructure_error ( "Skipping the edge" );
+	  }
 
-                Trace::write_Trace
-                    ( TraceArea::INFRASTRUCTURE,
-                      TraceLevel::WARN,
-                      boost::str ( boost::format ( "ERROR: duplicate edge exists from %d to %s" )
-                                   % parent_id
-                                   % obj_ptr->get_ID() ) );
-
-                Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                                     TraceLevel::WARN,
-                                     "Skipping the edge" );
-#endif /* LIBREVERSE_DEBUG */
-
-            }
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Exiting Component_Graph::add_Child (uint32,vertex)" );
-#endif /* LIBREVERSE_DEBUG */
-
+        trace::infrastructure_detail ( "Exiting Component_Graph::add_Child (uint32,vertex)" );
     }
 
-    infrastructure_types::Component_Graph::Graph_t const&
-    Component_Graph::get_Graph () const
+    infrastructure::component_graph::graph_t const&
+    component_graph::get_graph () const
     {
+      trace::infrastructure_detail ( "Inside Component_Graph::get_Graph ()" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Inside Component_Graph::get_Graph ()" );
-#endif /* LIBREVERSE_DEBUG */
-
-        return m_graph;
+      return m_graph;
     }
 
-    infrastructure_types::Component::ptr_t
-    Component_Graph::get_Component ( infrastructure_types::Component_Graph::Vertex_t node) const
+    boost::shared_ptr < infrastructure::component >
+    component_graph::get_component ( infrastructure::component_graph::vertex_t const& node) const
     {
+      trace::infrastructure_detail ( "Inside Component_Graph::get_Component (vertex)" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Inside Component_Graph::get_Component (vertex)" );
-#endif /* LIBREVERSE_DEBUG */
-
-        return m_comp_map[node];
+      return m_comp_map[node];
     }
 
-    infrastructure_types::Component::ptr_t
-    Component_Graph::get_End_Component ( void )
+    boost::shared_ptr < infrastructure::component >
+    component_graph::get_end_component ( void ) const
     {
+      trace::infrastructure_detail ( "Entering Component_Graph::get_End_Component" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Entering Component_Graph::get_End_Component" );
-#endif /* LIBREVERSE_DEBUG */
+      typedef std::vector<infrastructure::component_graph::vertex_t> m_container;
+      m_container comp_list;
+      boost::topological_sort ( m_graph, std::back_inserter ( comp_list ) );
+      m_container::const_iterator pos = comp_list.begin();
 
+      infrastructure::component_graph::vertex_t node = (*pos);
 
-        typedef std::vector<infrastructure_types::Component_Graph::Vertex_t> m_container;
-        m_container comp_list;
-        boost::topological_sort ( m_graph, std::back_inserter ( comp_list ) );
+      trace::infrastructure_detail ( "Exiting Component_Graph::get_End_Component" );
 
-        /*
-          infrastructure_types::Component_Graph::IdVertexMap_t::const_reverse_iterator pos = m_index.rbegin();
-        */
-        m_container::const_iterator pos = comp_list.begin();
-        //infrastructure_types::Component_Graph::Vertex_t node = (*pos).second;
-        infrastructure_types::Component_Graph::Vertex_t node = (*pos);
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Exiting Component_Graph::get_End_Component" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        return m_comp_map[node];
+      return m_comp_map[node];
     }
 
-    infrastructure_types::Component_Graph::Vertex_t const&
-    Component_Graph::get_Vertex (  boost::uint32_t id ) const
+    infrastructure::component_graph::vertex_t const&
+    component_graph::get_vertex (  boost::uint32_t id ) const
     {
+      trace::infrastructure_detail ( "Entering Component_Graph::get_Vertex (uint32)" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Entering Component_Graph::get_Vertex (uint32)" );
-#endif /* LIBREVERSE_DEBUG */
+      infrastructure::component_graph::idvertexmap_t::const_iterator pos = m_index.find ( id );
 
-        infrastructure_types::Component_Graph::IdVertexMap_t::const_iterator pos = m_index.find ( id );
+      if ( pos == m_index.end() )
+	{
+	  trace::infrastructure_error ( "Exception throw in %s at line %d", 
+					__FILE__,
+					__LINE__ );
 
-        if ( pos == m_index.end() )
-            {
+	  throw errors::component_exception ( errors::component_exception::invalid_index );
+	}
 
-#ifdef LIBREVERSE_DEBUG
-                Trace::write_Trace
-                    ( TraceArea::INFRASTRUCTURE,
-                      TraceLevel::ERROR,
-                      boost::str ( boost::format("Exception throw in %s at line %d")
-                                   % __FILE__
-                                   % __LINE__ ) );
-#endif /* LIBREVERSE_DEBUG */
-
-                throw errors::Component_Exception
-                    ( errors::Component_Exception::INVALID_INDEX );
-            }
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Exiting Component_Graph::get_Vertex (uint32)" );
-#endif /* LIBREVERSE_DEBUG */
-
+        trace::infrastructure_detail ( "Exiting Component_Graph::get_Vertex (uint32)" );
 
         return pos->second;
     }
 
     void
-    Component_Graph::initialize_Source ( boost::shared_ptr < infrastructure::component >& source_ptr )
+    component_graph::initialize_source ( boost::shared_ptr < infrastructure::component >& source_ptr )
     {
+      trace::infrastructure_detail ( "Entering Component_Graph::initialize_Source" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Entering Component_Graph::initialize_Source" );
-#endif /* LIBREVERSE_DEBUG */
+      if ( ! source_ptr )
+	{
+	  trace::infrastructure_error ( "Exception throw in %s at line %d",
+					__FILE__,
+					__LINE__ );
 
+	  throw errors::component_exception ( errors::component_exception::null_pointer );
+	}
 
-        if ( ! source_ptr )
-            {
+      // Previous object ( data from previous graph / input to framework ): id = 0
+      // Source object: id = 1
+      infrastructure::component_graph::idvertexmap_t::const_iterator pos = m_index.find ( 1 );
 
-#ifdef LIBREVERSE_DEBUG
-	      Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-				   TraceLevel::ERROR,
-				   boost::str ( boost::format("Exception throw in %s at line %d")
-						% __FILE__
-						% __LINE__ ) );
-#endif /* LIBREVERSE_DEBUG */
-
-
-                throw errors::Component_Exception
-                    ( errors::Component_Exception::NULL_POINTER );
-            }
-
-        // Previous object ( data from previous graph / input to framework ): id = 0
-        // Source object: id = 1
-        infrastructure_types::Component_Graph::IdVertexMap_t::const_iterator pos = m_index.find ( 1 );
-
-        if ( pos == m_index.end() )
-            {
-
-
-#ifdef LIBREVERSE_DEBUG
-               Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-				    TraceLevel::DATA,
-				    "Used index of 1" );
-
-	       Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-				    TraceLevel::ERROR,
-				    boost::str ( boost::format("Exception throw in %s at line %d")
-						 % __FILE__
-						 % __LINE__ ) );
-#endif /* LIBREVERSE_DEBUG */
-
+      if ( pos == m_index.end() )
+	{
+	  trace::infrastructure_data ( "Used index of 1" );
+	  trace::infrastructure_error ( "Exception throw in %s at line %d",
+					__FILE__,
+					__LINE__ );
 	       
-                throw errors::Component_Exception
-                    ( errors::Component_Exception::INVALID_INDEX );
-            }
+                throw errors::component_exception ( errors::component_exception::invalid_index );
+	}
+      
+        infrastructure::component_graph::vertex_t node = pos->second;
+	boost::shared_ptr < infrastructure::component > first_comp_ptr = m_comp_map[node];
 
-        infrastructure_types::Component_Graph::Vertex_t node = pos->second;
-        infrastructure_types::Component::ptr_t first_comp_ptr = m_comp_map[node];
+        first_comp_ptr->add_input_source (0);
 
-        first_comp_ptr->add_Input_Source (0);
+        first_comp_ptr->received_input_source_data (0);
 
-        first_comp_ptr->received_Input_Source_Data (0);
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Exiting Component_Graph::initialize_Source" );
-#endif /* LIBREVERSE_DEBUG */
-
+        trace::infrastructure_detail ( "Exiting Component_Graph::initialize_Source" );
     }
 
     bool
-    Component_Graph::empty () const
+    component_graph::empty () const
     {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Inside Component_Graph::empty ()" );
-#endif /* LIBREVERSE_DEBUG */
+        trace::infrastructure_detail ( "Inside Component_Graph::empty ()" );
 
         return boost::num_vertices ( m_graph ) == 0;
     }
 
-    infrastructure_types::Component_Graph::Component_List_t
-    Component_Graph::get_Parent_List ( const infrastructure_types::Component_Graph::Vertex_t& v_ref )
+    infrastructure::component_graph::component_list_t
+    component_graph::get_parent_list ( const infrastructure::component_graph::vertex_t& v_ref )
     {
+      trace::infrastructure_detail ( "Entering Component_Graph::get_Parent_List (vertex)" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Entering Component_Graph::get_Parent_List (vertex)" );
-#endif /* LIBREVERSE_DEBUG */
+      infrastructure::component_graph::component_list_t output;
 
+      boost::shared_ptr < infrastructure::component > comp_ptr = this->get_component ( v_ref );
 
-        infrastructure_types::Component_Graph::Component_List_t output;
-
-        infrastructure_types::Component::ptr_t comp_ptr = this->get_Component ( v_ref );
-
-        // For each entry, X,  in the source list of this component
-        for ( infrastructure_types::Component_Data::Input_Token_t::const_iterator cpos =
-                  comp_ptr->get_Source_List_Begin();
-              cpos != comp_ptr->get_Source_List_End();
-              ++cpos )
+      // For each entry, X,  in the source list of this component
+      for ( infrastructure::component_data::input_token_t::const_iterator cpos =
+	      comp_ptr->get_source_list_begin();
+	    cpos != comp_ptr->get_source_list_end();
+	    ++cpos )
             {
-                //   Get component for X
-                //   Add X to output list
-                output.push_back ( this->get_Component ( (*cpos).first ) );
-                cpos++;
+	      //   Get component for X
+	      //   Add X to output list
+	      output.push_back ( this->get_component ( (*cpos).first ) );
+	      cpos++;
             }
 
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Exiting Component_Graph::get_Parent_List (vertex)" );
-#endif /* LIBREVERSE_DEBUG */
+        trace::infrastructure_detail ( "Exiting Component_Graph::get_Parent_List (vertex)" );
 
         return output;
     }
 
-    infrastructure_types::Component_Graph::Component_List_t
-    Component_Graph::get_Parent_List ( boost::uint32_t id  )
+    infrastructure::component_graph::component_list_t
+    component_graph::get_parent_list ( boost::uint32_t id  )
     {
+      trace::infrastructure_detail ( "Entering Component_Graph::get_Parent_List (uint32)" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Entering Component_Graph::get_Parent_List (uint32)" );
-#endif /* LIBREVERSE_DEBUG */
+      infrastructure::component_graph::idvertexmap_t::const_iterator pos = m_index.find ( id );
+      if ( pos == m_index.end() )
+	{
+	  trace::infrastructure_error ( "Exception throw in %s at line %d",
+					__FILE__,
+					__LINE__ );
 
+	  throw errors::component_exception ( errors::component_exception::invalid_index );
+	}
 
-        infrastructure_types::Component_Graph::IdVertexMap_t::const_iterator pos = m_index.find ( id );
-        if ( pos == m_index.end() )
-            {
-
-
-#ifdef LIBREVERSE_DEBUG
-                Trace::write_Trace
-                    ( TraceArea::INFRASTRUCTURE,
-                      TraceLevel::ERROR,
-                      boost::str ( boost::format("Exception throw in %s at line %d")
-                                   % __FILE__
-                                   % __LINE__ ) );
-#endif /* LIBREVERSE_DEBUG */
-
-
-                throw errors::Component_Exception
-                    ( errors::Component_Exception::INVALID_INDEX );
-            }
-
-        infrastructure_types::Component_Graph::Component_List_t output;
+        infrastructure::component_graph::component_list_t output;
 
         // Grab component for this id
-        infrastructure_types::Component::ptr_t comp_ptr = this->get_Component ( id );
+	boost::shared_ptr < infrastructure::component > comp_ptr = this->get_component ( id );
 
         // For each entry, X,  in the source list of this component
     
-        for ( infrastructure_types::Component_Data::Input_Token_t::const_iterator cpos =
-                  comp_ptr->get_Source_List_Begin();
-              cpos != comp_ptr->get_Source_List_End();
+        for ( infrastructure::component_data::input_token_t::const_iterator cpos = comp_ptr->get_source_list_begin();
+              cpos != comp_ptr->get_source_list_end();
               ++cpos )
-            {
-                //   Get component for X
-                //   Add X to output list
-                output.push_back ( this->get_Component ( (*cpos).first ) );
-                cpos++;
-            }
+	  {
+	    //   Get component for X
+	    //   Add X to output list
+	    output.push_back ( this->get_component ( (*cpos).first ) );
+	    cpos++;
+	  }
 
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Exiting Component_Graph::get_Parent_List (uint32)" );
-#endif /* LIBREVERSE_DEBUG */
+        trace::infrastructure_detail ( "Exiting Component_Graph::get_Parent_List (uint32)" );
 
         return output;
     }
 
-    Component_Graph&
-    Component_Graph::operator= ( Component_Graph const& rhs )
+    component_graph&
+    component_graph::operator= ( component_graph const& rhs )
     {
+      trace::infrastructure_detail ( "Entering Component_Graph::operator= (assignment)" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Entering Component_Graph::operator= (assignment)" );
-#endif /* LIBREVERSE_DEBUG */
+      component_graph temp ( rhs );
+      swap ( temp );
 
+      trace::infrastructure_detail ( "Exiting Component_Graph::operator= (assignment)" );
 
-        Component_Graph temp ( rhs );
-        swap ( temp );
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Exiting Component_Graph::operator= (assignment)" );
-#endif /* LIBREVERSE_DEBUG */
-
-        return *this;
+      return *this;
     }
 
     void
-    Component_Graph::swap ( Component_Graph& rhs )
+    component_graph::swap ( component_graph& rhs )
     {
+      trace::infrastructure_detail ( "Entering Component_Graph::swap" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Entering Component_Graph::swap" );
-#endif /* LIBREVERSE_DEBUG */
+      m_graph.swap ( rhs.m_graph );
+      std::swap ( m_index, rhs.m_index );
+      std::swap ( m_comp_map, rhs.m_comp_map );
 
-
-        m_graph.swap ( rhs.m_graph );
-        std::swap ( m_index, rhs.m_index );
-        std::swap ( m_comp_map, rhs.m_comp_map );
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Exiting Component_Graph::swap" );
-#endif /* LIBREVERSE_DEBUG */
-
-
+      trace::infrastructure_detail ( "Exiting Component_Graph::swap" );
     }
 
     std::string
-    Component_Graph::to_String ( void ) const
+    component_graph::to_string ( void ) const
     {
+      trace::infrastructure_detail ( "Entering Component_Graph::to_String" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Entering Component_Graph::to_String" );
-#endif /* LIBREVERSE_DEBUG */
+      std::stringstream output;
 
+      infrastructure::component_graph::graph_t::out_edge_iterator pos;
+      infrastructure::component_graph::graph_t::out_edge_iterator end;
+      infrastructure::component_graph::graph_t::vertex_descriptor node;
+      boost::shared_ptr < infrastructure::component > child_comp_ptr;
 
-        std::stringstream output;
+      for ( infrastructure::component_graph::idvertexmap_t::const_iterator cpos = m_index.begin();
+	    cpos != m_index.end();
+	    ++cpos )
+	{
+	  boost::shared_ptr < infrastructure::component > comp_ptr = this->get_component( (*cpos).second );
 
-        infrastructure_types::Component_Graph::Graph_t::out_edge_iterator pos;
-        infrastructure_types::Component_Graph::Graph_t::out_edge_iterator end;
-        infrastructure_types::Component_Graph::Graph_t::vertex_descriptor node;
-        infrastructure_types::Component::ptr_t child_comp_ptr;
+	  output << boost::format("%s(%d) - children = ")
+	    % comp_ptr->get_name()
+	    % (*cpos).first << std::endl;
 
-        for ( infrastructure_types::Component_Graph::IdVertexMap_t::const_iterator cpos
-                  = m_index.begin();
-              cpos != m_index.end();
-              ++cpos )
-            {
-                infrastructure_types::Component::ptr_t comp_ptr =
-                    this->get_Component( (*cpos).second );
+	  // For all children, print out path from vertex id to child id
+	  for ( boost::tie(pos,end) = out_edges( (*cpos).second, m_graph );
+		pos != end;
+		++pos )
+	    {
+	      node = target (*pos, m_graph);
+	      child_comp_ptr = this->get_component(node);
+	      output << boost::format("    %d -> %d;")
+		% comp_ptr->get_id()
+		% child_comp_ptr->get_id()
+		     << std::endl;
+	    }
+	}
 
-                output << boost::format("%s(%d) - children = ")
-                    % comp_ptr->get_Name()
-                    % (*cpos).first
-                       << std::endl;
-
-                // For all children, print out path from vertex id to child id
-                for ( boost::tie(pos,end) = out_edges( (*cpos).second, m_graph );
-                      pos != end;
-                      ++pos )
-                    {
-                        node = target (*pos, m_graph);
-                        child_comp_ptr = this->get_Component(node);
-                        output << boost::format("    %d -> %d;")
-                            % comp_ptr->get_ID()
-                            % child_comp_ptr->get_ID()
-                               << std::endl;
-                    }
-            }
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Exiting Component_Graph::to_String" );
-#endif /* LIBREVERSE_DEBUG */
+        trace::infrastructure_detail ( "Exiting Component_Graph::to_String" );
 
         return output.str();
     }
-} /* namepsace infrastructure */
-} /* namespace libreverse */
+
+  } /* namepsace infrastructure */
+} /* namespace reverse */

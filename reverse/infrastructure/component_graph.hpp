@@ -143,7 +143,7 @@ namespace reverse {
 
       component_graph ( component_graph const& rhs );
 
-      void add_component ( boost::shared_ptr < const infrastructure::component > & obj_ptr );
+      void add_component ( boost::shared_ptr < infrastructure::component > & obj_ptr );
 
       void add_child ( boost::uint32_t parent_id,
 		       infrastructure::component_graph::vertex_t& child_node );
