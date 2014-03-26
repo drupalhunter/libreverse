@@ -19,22 +19,27 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#ifndef COMPONENT_STATE_ALGORITHM_H_
-#define COMPONENT_STATE_ALGORITHM_H_
+#ifndef REVERSE_INFRASTRUCTURE_COMPONENT_STATE_ALGORITHM_HPP_INCLUDED
+#define REVERSE_INFRASTRUCTURE_COMPONENT_STATE_ALGORITHM_HPP_INCLUDED
+
+#include <reverse/infrastructure/component_graph.hpp>
 
 #include <boost/shared_ptr.hpp>
-#include "Component_Types.h"
 
-namespace libreverse { namespace infrastructure {
+namespace reverse {
+  namespace infrastructure {
 
-    class Component_State_Algorithm
+    class component_actor;
+    class component_state;
+
+    class component_state_algorithm
     {
     public:
 
         /*!
          * \brief Default constructor
          */
-        virtual ~Component_State_Algorithm(){}
+        virtual ~component_state_algorithm(){}
 
         /**
          *  Component_State_Algorithm API
@@ -53,7 +58,7 @@ namespace libreverse { namespace infrastructure {
          *
          * \return ID number (copy)
          */
-        virtual boost::uint32_t get_ID (void) const = 0;
+        virtual boost::uint32_t get_id (void) const = 0;
 
         /**
          * Based upon the state:
@@ -62,19 +67,19 @@ namespace libreverse { namespace infrastructure {
          *
          *   WORKING: Call process on the Component_Working_Algorithm_Impl
          */
-        virtual void run ( infrastructure_types::Component_Actor::ptr_t child_ptr,
-                           infrastructure_types::Component_Graph::Data_Map_t* data_ptr ) = 0;
+      virtual void run ( boost::shared_ptr < infrastructure::component_actor > child_ptr,
+			 infrastructure::component_graph::data_map_t* data_ptr ) = 0;
 
-        /**
-         * If the mode is valid and different this object
-         * we set the state in the Component_State
-         */
-        virtual void switch_State ( infrastructure_types::Component_State::ptr_t state_ptr,
-                                    boost::uint32_t mode ) = 0;
+      /**
+       * If the mode is valid and different this object
+       * we set the state in the Component_State
+       */
+      virtual void switch_state ( boost::shared_ptr < infrastructure::component_state > state_ptr,
+				  boost::uint32_t mode ) = 0;
 
     };
 
-} /* namespace infrastructure */
+  } /* namespace infrastructure */
 } /* namespace libreverse */
 
-#endif /* COMPONENT_STATE_ALGORITHM_H_ */
+#endif /* REVERSE_INFRASTRUCTURE_COMPONENT_STATE_ALGORITHM_HPP_INCLUDED */
