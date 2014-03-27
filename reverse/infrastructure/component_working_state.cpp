@@ -19,157 +19,89 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#include "Component_Working_State.h"
-#include "Component_Actor.h"
-#include "Component_Data.h"
-#include "Component_State.h"
-#include "infrastructure/Component.h"
+#include <reverse/trace.hpp>
+#include <reverse/infrastructure/component_working_state.hpp>
+#include <reverse/infrastructure/component_actor.hpp>
+#include <reverse/infrastructure/component_data.hpp>
+#include <reverse/infrastructure/component_state.hpp>
+#include <reverse/infrastructure/component.hpp>
+
 #include <boost/format.hpp>
 
-#ifdef LIBREVERSE_DEBUG
-#include "Trace.h"
-using namespace libreverse::api;
-using namespace libreverse::trace;
-#endif /* LIBREVERSE_DEBUG */
+namespace reverse {
+  namespace infrastructure {
 
-namespace libreverse { namespace infrastructure {
-
-    Component_Working_State::Component_Working_State ( infrastructure_types::Component_Data::ptr_t data_ptr )
+    component_working_state::component_working_state ( boost::shared_ptr < infrastructure::component_data > data_ptr )
         : m_data_ptr ( data_ptr )
     {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Inside Component_Working_State constructor" );
-#endif /* LIBREVERSE_DEBUG */
-
+      trace::infrastructure_detail ( "Inside Component_Working_State constructor" );
     }
 
-    Component_Working_State::Component_Working_State( Component_Working_State const& rhs )
-        : Component_State_Algorithm ( rhs ),
+    component_working_state::component_working_state( component_working_state const& rhs )
+        : component_state_algorithm ( rhs ),
           m_data_ptr ( rhs.m_data_ptr )
     {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Inside Component_Working_State copy constructor" );
-#endif /* LIBREVERSE_DEBUG */
-
+      trace::infrastructure_detail ( "Inside Component_Working_State copy constructor" );
     }
 
     boost::uint32_t
-    Component_Working_State::get_ID (void) const
+    component_working_state::get_id (void) const
     {
+      trace::infrastructure_detail ( "Inside Component_Working_State::get_ID" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Inside Component_Working_State::get_ID" );
-#endif /* LIBREVERSE_DEBUG */
-
-        return m_data_ptr->get_ID();
+      return m_data_ptr->get_id();
     }
 
     void
-    Component_Working_State::run ( infrastructure_types::Component_Actor::ptr_t child_ptr,
-                                   infrastructure_types::Component_Graph::Data_Map_t* input_data_ptr )
+    component_working_state::run ( boost::shared_ptr < infrastructure::component_actor > child_ptr,
+                                   infrastructure::component_graph::data_map_t* input_data_ptr )
     {
+      trace::infrastructure_detail ( "Entering Component_Working_State::run" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Entering Component_Working_State::run" );
-#endif /* LIBREVERSE_DEBUG */
+      m_data_ptr->gather_inputs ( input_data_ptr );
 
-        m_data_ptr->gather_Inputs ( input_data_ptr );
+      // Call child process function to do work.
+      child_ptr->process ();
 
-        // Call child process function to do work.
-        child_ptr->process ();
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Exiting Component_Working_State::run" );
-#endif /* LIBREVERSE_DEBUG */
-
+      trace::infrastructure_detail ( "Exiting Component_Working_State::run" );
     }
 
     void
-    Component_Working_State::switch_State ( infrastructure_types::Component_State::ptr_t state_ptr,
+    component_working_state::switch_state ( boost::shared_ptr < infrastructure::component_state > state_ptr,
                                             boost::uint32_t mode )
     {
+      trace::infrastructure_detail ( "Entering Component_Working_State::switch_State" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             boost::str ( boost::format ( "Entering Component_Working_State::switch_State (id=%d)" )
-                                          % state_ptr->get_ID() ) );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        if ( mode == Component::SOURCE_MODE )
-            {
-                state_ptr->set_State ( state_ptr->m_source_state_ptr );
-            }
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             boost::str ( boost::format ( "Exiting Component_Working_State::switch_State (id=%d)" )
-                                          % state_ptr->get_ID() ) );
-#endif /* LIBREVERSE_DEBUG */
-
+      if ( mode == component::source_mode )
+	{
+	  state_ptr->set_state ( state_ptr->m_source_state_ptr );
+	}
+      
+      trace::infrastructure_detail ( "Exiting Component_Working_State::switch_State" );
     }
     
-    Component_Working_State&
-    Component_Working_State::operator= ( Component_Working_State const& rhs )
+    component_working_state&
+    component_working_state::operator= ( component_working_state const& rhs )
     {
+      trace::infrastructure_detail ( "Entering Component_Working_State::operator= (assignment)" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Entering Component_Working_State::operator= (assignment)" );
-#endif /* LIBREVERSE_DEBUG */
+      component_working_state temp ( rhs );
+      swap ( temp );
 
+      trace::infrastructure_detail ( "Exiting Component_Working_State::operator= (assignment)" );
 
-        Component_Working_State temp ( rhs );
-        swap ( temp );
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Exiting Component_Working_State::operator= (assignment)" );
-#endif /* LIBREVERSE_DEBUG */
-
-        return *this;
+      return *this;
     }
 
     void
-    Component_Working_State::swap ( Component_Working_State& rhs )
+    component_working_state::swap ( component_working_state& rhs )
     {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Entering Component_Working_State::swap" );
-#endif /* LIBREVERSE_DEBUG */
-
+        trace::infrastructure_detail ( "Entering Component_Working_State::swap" );
 
         m_data_ptr.swap ( rhs.m_data_ptr );
 
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Exiting Component_Working_State::swap" );
-#endif /* LIBREVERSE_DEBUG */
-
+        trace::infrastructure_detail ( "Exiting Component_Working_State::swap" );
     }
     
-} /* namespace infrastructure */
-} /* namespace libreverse */
+  } /* namespace infrastructure */
+} /* namespace reverse */

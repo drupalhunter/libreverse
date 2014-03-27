@@ -99,7 +99,7 @@ namespace reverse {
       //---------------------------------
       //      state access methods
       //---------------------------------
-      void set_state ( boost::shared_ptr < const infrastructure::component_state_algorithm > );
+      void set_state ( boost::shared_ptr < infrastructure::component_state_algorithm > );
 
       boost::shared_ptr < infrastructure::component_data > m_data_ptr;
 

@@ -19,62 +19,64 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#ifndef COMPONENT_WORKING_STATE_H_
-#define COMPONENT_WORKING_STATE_H_
+#ifndef REVERSE_INFRASTRUCTURE_COMPONENT_WORKING_STATE_HPP_INCLUDED
+#define REVERSE_INFRASTRUCTURE_COMPONENT_WORKING_STATE_HPP_INCLUDED
 
-#include "infrastructure/Component_State_Algorithm.h"
+#include <reverse/infrastructure/component_data.hpp>
+#include <reverse/infrastructure/component_state_algorithm.hpp>
 
-namespace libreverse { namespace infrastructure {
+namespace reverse {
+  namespace infrastructure {
 
-    class Component_Working_State : public Component_State_Algorithm
+    class component_working_state : public component_state_algorithm
     {
     public:
 
-        /*!
-         * \brief Constructor
-         * \param id Unique id for the instance of this filter
-         */
-        explicit Component_Working_State ( infrastructure_types::Component_Data::ptr_t comp_ptr );
+      /*!
+       * \brief Constructor
+       * \param id Unique id for the instance of this filter
+       */
+      explicit component_working_state ( boost::shared_ptr < infrastructure::component_data > comp_ptr );
 
-        /*!
-         * \brief Copy constructor
-         */
-        Component_Working_State ( const Component_Working_State& ref );
+      /*!
+       * \brief Copy constructor
+       */
+      component_working_state ( const component_working_state& ref );
 
-        /*!
-         * \brief Default constructor
-         */
-        virtual ~Component_Working_State(){}
+      /*!
+       * \brief Default constructor
+       */
+      virtual ~component_working_state(){}
 
-        /**
-         *  Component_Working_State API
-         */
+      /**
+       *  Component_Working_State API
+       */
+      
+      /**
+       * \brief Return the ID number of this Component_Working_State
+       *
+       * \return ID number
+       */
+        virtual boost::uint32_t get_id (void) const;
 
-        /**
-         * \brief Return the ID number of this Component_Working_State
-         *
-         * \return ID number
-         */
-        virtual boost::uint32_t get_ID (void) const;
+      virtual void run ( boost::shared_ptr < infrastructure::component_actor > child_ptr,
+			 infrastructure::component_graph::data_map_t* input_data_ptr );
 
-        virtual void run ( infrastructure_types::Component_Actor::ptr_t child_ptr,
-                           infrastructure_types::Component_Graph::Data_Map_t* input_data_ptr );
+      virtual void switch_state ( boost::shared_ptr < infrastructure::component_state > state_ptr,
+				  boost::uint32_t id );
 
-        virtual void switch_State ( infrastructure_types::Component_State::ptr_t state_ptr,
-                                    boost::uint32_t id );
-
-        Component_Working_State& operator= ( Component_Working_State const& ref );
-
-        void swap ( Component_Working_State& ref );
-
+      component_working_state& operator= ( component_working_state const& ref );
+      
+      void swap ( component_working_state& ref );
+      
     private:
 
         // An algorithm has a pointer to the data to perform work
-        infrastructure_types::Component_Data::ptr_t m_data_ptr;
+      boost::shared_ptr < infrastructure::component_data > m_data_ptr;
 
     };
 
-} /* namespace infrastructure */
-} /* namespace libreverse */
+  } /* namespace infrastructure */
+} /* namespace reverse */
 
-#endif /* COMPONENT_WORKING_STATE_H_ */
+#endif /* REVERSE_INFRASTRUCTURE_COMPONENT_WORKING_STATE_HPP_INCLUDED */

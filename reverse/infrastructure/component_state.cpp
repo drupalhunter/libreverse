@@ -19,343 +19,221 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#include "Component_State.h"
-#include "Component_Actor.h"
-#include "Component_Data.h"
-#include "Component_Source_State.h"
-#include "Component_Working_State.h"
-#include "Component.h"
-#include "infrastructure/data_source/Data_Object.h"
-#include <iostream>
+#include <reverse/trace.hpp>
+#include <reverse/errors/component_exception.hpp>
+#include <reverse/infrastructure/component_state.hpp>
+#include <reverse/infrastructure/component_actor.hpp>
+#include <reverse/infrastructure/component_data.hpp>
+#include <reverse/infrastructure/component_graph.hpp>
+#include <reverse/infrastructure/component_source_state.hpp>
+#include <reverse/infrastructure/component_working_state.hpp>
+#include <reverse/infrastructure/component.hpp>
+#include <reverse/infrastructure/data_source/data_object.hpp>
+
 #include <boost/format.hpp>
 
-#ifdef LIBREVERSE_DEBUG
-#include "Trace.h"
-using namespace libreverse::api;
-using namespace libreverse::trace;
-#endif /* LIBREVERSE_DEBUG */
+#include <iostream>
 
-namespace libreverse { namespace infrastructure {
+namespace reverse {
+  namespace infrastructure {
 
-    Component_State::Component_State ( boost::uint32_t id )
-        :  m_data_ptr ( new Component_Data( id ) ),
-           m_working_state_ptr ( new Component_Working_State ( m_data_ptr ) ),
-           m_source_state_ptr ( new Component_Source_State ( m_data_ptr ) ),
+    component_state::component_state ( boost::uint32_t id )
+        :  m_data_ptr ( new component_data( id ) ),
+           m_working_state_ptr ( new component_working_state ( m_data_ptr ) ),
+           m_source_state_ptr ( new component_source_state ( m_data_ptr ) ),
            m_present_state_ptr ( m_working_state_ptr )
     {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Inside Component_State constructor" );
-#endif /* LIBREVERSE_DEBUG */
-
+      trace::infrastructure_detail ( "Inside Component_State constructor" );
     }
 
-    Component_State::Component_State ( Component_State const& rhs )
-        : boost::enable_shared_from_this<Component_State> (rhs),
-          m_data_ptr ( new Component_Data( *rhs.m_data_ptr ) ),
-          m_working_state_ptr ( new Component_Working_State ( m_data_ptr ) ),
-          m_source_state_ptr ( new Component_Source_State ( m_data_ptr ) ),
+    component_state::component_state ( component_state const& rhs )
+        : boost::enable_shared_from_this<component_state> (rhs),
+          m_data_ptr ( new component_data( *rhs.m_data_ptr ) ),
+          m_working_state_ptr ( new component_working_state ( m_data_ptr ) ),
+          m_source_state_ptr ( new component_source_state ( m_data_ptr ) ),
           m_present_state_ptr ( m_working_state_ptr )
     {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Inside Component_State copy constructor" );
-#endif /* LIBREVERSE_DEBUG */
-
+      trace::infrastructure_detail ( "Inside Component_State copy constructor" );
     }
 
     void
-    Component_State::switch_State ( boost::uint32_t mode )
+    component_state::switch_state ( boost::uint32_t mode )
     {
+      trace::infrastructure_detail ( "Entering Component_State::switch_State" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Entering Component_State::switch_State" );
-#endif /* LIBREVERSE_DEBUG */
+      if ( this->check_mode_value ( mode ) )
+	{
+	  m_present_state_ptr->switch_state ( this->shared_from_this(),
+					      mode );
+	}
+      else
+	{
+	  std::cerr << boost::format("Exception throw in %s at line %d")
+	    % __FILE__
+	    % __LINE__
+		    << std::endl;
+	  
+	  throw errors::component_exception ( errors::component_exception::invalid_state );
+	}
 
-        if ( this->check_Mode_Value ( mode ) )
-            {
-                m_present_state_ptr->switch_State ( this->shared_from_this(),
-                                                    mode );
-            }
-        else
-            {
-                std::cerr << boost::format("Exception throw in %s at line %d")
-                    % __FILE__
-                    % __LINE__
-                          << std::endl;
-
-                throw errors::Component_Exception
-                    ( errors::Component_Exception::INVALID_STATE );
-            }
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Exiting Component_State::switch_State" );
-#endif /* LIBREVERSE_DEBUG */
-
+      trace::infrastructure_detail ( "Exiting Component_State::switch_State" );
     }
 
     void
-    Component_State::set_State ( infrastructure_types::Component_State_Algorithm::ptr_t state_ptr )
+    component_state::set_state ( boost::shared_ptr < infrastructure::component_state_algorithm > state_ptr )
     {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Entering Component_State::set_State" );
-#endif /* LIBREVERSE_DEBUG */
-
-        if ( state_ptr.get() != 0 )
-            {
-                m_present_state_ptr = state_ptr;
-            }
-        else
-            {
-                std::cerr << boost::format("Exception throw in %s at line %d")
-                    % __FILE__
-                    % __LINE__
-                          << std::endl;
-
-                throw errors::Component_Exception
-                    ( errors::Component_Exception::NULL_POINTER );
-            }
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Exiting Component_State::switch_State" );
-#endif /* LIBREVERSE_DEBUG */
-
+      trace::infrastructure_detail ( "Entering Component_State::set_State" );
+      
+      if ( state_ptr.get() != 0 )
+	{
+	  m_present_state_ptr = state_ptr;
+	}
+      else
+	{
+	  std::cerr << boost::format("Exception throw in %s at line %d")
+	    % __FILE__
+	    % __LINE__
+		    << std::endl;
+	  
+	  throw errors::component_exception ( errors::component_exception::null_pointer );
+	}
+      
+      trace::infrastructure_detail ( "Exiting Component_State::switch_State" );
     }
 
     bool
-    Component_State::check_Mode_Value ( boost::uint32_t mode )
+    component_state::check_mode_value ( boost::uint32_t mode )
     {
+      trace::infrastructure_detail ( "Entering Component_State::check_Mode_Value" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Entering Component_State::check_Mode_Value" );
-#endif /* LIBREVERSE_DEBUG */
+      bool result = false;
 
-        bool result = false;
+      if ( ( mode == component::working_mode ) ||
+	   ( mode == component::source_mode ) )
+	{
+	  result = true;
+	}
 
-        if ( ( mode == Component::WORKING_MODE ) ||
-             ( mode == Component::SOURCE_MODE ) )
-            {
-                result = true;
-            }
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Exiting Component_State::check_Mode_Value" );
-#endif /* LIBREVERSE_DEBUG */
-
-        return result;
+      trace::infrastructure_detail ( "Exiting Component_State::check_Mode_Value" );
+      return result;
     }
 
     boost::uint32_t
-    Component_State::get_ID (void) const
+    component_state::get_id (void) const
     {
+        trace::infrastructure_detail ( "Inside Component_State::get_ID" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Inside Component_State::get_ID" );
-#endif /* LIBREVERSE_DEBUG */
-
-        return m_present_state_ptr->get_ID();
+        return m_present_state_ptr->get_id();
     }
 
     void
-    Component_State::run ( infrastructure_types::Component_Actor::ptr_t child_ptr,
-                           Graph_Base::Data_Map_t* data_ptr )
+    component_state::run ( boost::shared_ptr < infrastructure::component_actor > child_ptr,
+                           infrastructure::component_graph::data_map_t* data_ptr )
     {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Inside Component_State::run" );
-#endif /* LIBREVERSE_DEBUG */
+        trace::infrastructure_detail ( "Inside Component_State::run" );
 
         m_present_state_ptr->run ( child_ptr, data_ptr );
     }
 
-  infrastructure_types::Data_Source_Base::ptr_t
-  Component_State::results ( void ) const
+      boost::shared_ptr < infrastructure::data_source::data_source_base >
+    component_state::results ( void ) const
     {
+      trace::infrastructure_detail ( "Entering Component_State::results" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Entering Component_State::results" );
-#endif /* LIBREVERSE_DEBUG */
+      // At this point the Component_State_Algorithm has done its work.
+      // The resutling data has been stored in the Component_Data. So
+      // all we have to do is return the pointer.
+      boost::shared_ptr < infrastructure::data_source::data_source_base > resulting_data_ptr = m_data_ptr->get_data_source();
 
-        // At this point the Component_State_Algorithm has done its work.
-        // The resutling data has been stored in the Component_Data. So
-        // all we have to do is return the pointer.
-        infrastructure_types::Data_Source_Base::ptr_t resulting_data_ptr = m_data_ptr->get_Data_Source();
+      trace::infrastructure_detail ( "Exiting Component_State::results" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Exiting Component_State::results" );
-#endif /* LIBREVERSE_DEBUG */
-
-        return resulting_data_ptr;
-    }
-
-
-    void
-    Component_State::add_Input_Source ( boost::uint32_t id )
-    {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Inside Component_State::add_Input_Source" );
-#endif /* LIBREVERSE_DEBUG */
-
-        m_data_ptr->add_Input_Source ( id );
+      return resulting_data_ptr;
     }
 
     void
-    Component_State::received_Input_Source_Data ( boost::uint32_t id )
+    component_state::add_input_source ( boost::uint32_t id )
     {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Entering Component_State::received_Input_Source_Data" );
-#endif /* LIBREVERSE_DEBUG */
-
-        if ( m_data_ptr->find ( id ) )
-            {
-                std::cout
-                    << boost::format("Node(%d) - initialized with data from component #%d")
-                    % m_data_ptr->get_ID()
-                    % id
-                    << std::endl;
-
-                m_data_ptr->received_Input_Source_Data ( id );
-            }
-        else
-            {
-                std::cerr << boost::format("Exception throw in %s at line %d")
-                    % __FILE__
-                    % __LINE__
-                          << std::endl;
-
-                throw errors::Component_Exception
-                    ( errors::Component_Exception::INVALID_INDEX );
-            }
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Exiting Component_State::received_Input_Source_Data" );
-#endif /* LIBREVERSE_DEBUG */
-
+      trace::infrastructure_detail ( "Inside Component_State::add_Input_Source" );
+      m_data_ptr->add_input_source ( id );
     }
 
-  infrastructure_types::Component_Data::ptr_t
-  Component_State::get_Data (void) const
-  {
+    void
+    component_state::received_input_source_data ( boost::uint32_t id )
+    {
+      trace::infrastructure_detail ( "Entering Component_State::received_Input_Source_Data" );
+      if ( m_data_ptr->find ( id ) )
+	{
+	  std::cout
+	    << boost::format("Node(%d) - initialized with data from component #%d")
+	    % m_data_ptr->get_id()
+	    % id
+	    << std::endl;
 
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                           TraceLevel::DETAIL,
-                           "Inside Component_State::get_Data" );
-#endif /* LIBREVERSE_DEBUG */
+	  m_data_ptr->received_input_source_data ( id );
+	}
+      else
+	{
+	  std::cerr << boost::format("Exception throw in %s at line %d")
+	    % __FILE__
+	    % __LINE__
+		    << std::endl;
+	  
+	  throw errors::component_exception ( errors::component_exception::invalid_index );
+	}
+      
+      trace::infrastructure_detail ( "Exiting Component_State::received_Input_Source_Data" );
+    }
+
+    boost::shared_ptr < infrastructure::component_data >
+    component_state::get_data (void) const
+    {
+
+      trace::infrastructure_detail ( "Inside Component_State::get_Data" );
 
       return m_data_ptr;
-  }
+    }
 
-  infrastructure_types::Component_Data::Input_Token_t::const_iterator
-  Component_State::get_Source_List_Begin (void) const
-  {
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                           TraceLevel::DETAIL,
-                           "Inside Component_State::get_Source_List_Begin" );
-#endif /* LIBREVERSE_DEBUG */
-
-      return m_data_ptr->get_Source_List_Begin();
-  }
-
-  infrastructure_types::Component_Data::Input_Token_t::const_iterator
-  Component_State::get_Source_List_End (void) const
-  {
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                           TraceLevel::DETAIL,
-                           "Inside Component_State::get_Source_List_End" );
-#endif /* LIBREVERSE_DEBUG */
-
-      return m_data_ptr->get_Source_List_End();
-  }
-
-    Component_State&
-    Component_State::operator= ( Component_State const& rhs )
+    infrastructure::component_data::input_token_t::const_iterator
+    component_state::get_source_list_begin (void) const
     {
+      trace::infrastructure_detail ( "Inside Component_State::get_Source_List_Begin" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Entering Component_State::operator= (assignment)" );
-#endif /* LIBREVERSE_DEBUG */
+      return m_data_ptr->get_source_list_begin();
+    }
 
+    infrastructure::component_data::input_token_t::const_iterator
+    component_state::get_source_list_end (void) const
+    {
+      trace::infrastructure_detail ( "Inside Component_State::get_Source_List_End" );
 
-        Component_State temp ( rhs );
-        swap ( temp );
+      return m_data_ptr->get_source_list_end();
+    }
+    
+    component_state&
+    component_state::operator= ( component_state const& rhs )
+    {
+      trace::infrastructure_detail ( "entering component_state::operator= (assignment)" );
 
+      component_state temp ( rhs );
+      swap ( temp );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Exiting Component_State::operator= (assignment)" );
-#endif /* LIBREVERSE_DEBUG */
+      trace::infrastructure_detail ( "Exiting Component_State::operator= (assignment)" );
 
-        return *this;
+      return *this;
     }
 
     void
-    Component_State::swap ( Component_State& rhs )
+    component_state::swap ( component_state& rhs )
     {
+      trace::infrastructure_detail ( "Entering Component_State::swap" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Entering Component_State::swap" );
-#endif /* LIBREVERSE_DEBUG */
+      m_data_ptr.swap ( rhs.m_data_ptr );
+      m_working_state_ptr.swap ( rhs.m_working_state_ptr );
+      m_source_state_ptr.swap ( rhs.m_source_state_ptr );
+      m_present_state_ptr.swap ( rhs.m_present_state_ptr );
 
-
-        m_data_ptr.swap ( rhs.m_data_ptr );
-        m_working_state_ptr.swap ( rhs.m_working_state_ptr );
-        m_source_state_ptr.swap ( rhs.m_source_state_ptr );
-        m_present_state_ptr.swap ( rhs.m_present_state_ptr );
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Exiting Component_State::swap" );
-#endif /* LIBREVERSE_DEBUG */
-
+      trace::infrastructure_detail ( "Exiting Component_State::swap" );
     }
 
-} /* namespace infrastructure */
-} /* namespace libreverse */
+  } /* namespace infrastructure */
+} /* namespace reverse */
