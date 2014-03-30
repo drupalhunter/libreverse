@@ -19,25 +19,29 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#ifndef FORMULA_PARSER_H_
-#define FORMULA_PARSER_H_
+#ifndef REVERSE_INFRASTRUCTURE_FORMULA_PARSER_HPP_INCLUDED
+#define REVERSE_INFRASTRUCTURE_FORMULA_PARSER_HPP_INCLUDED
 
-#include "Formula_Tag_Names.h"
+#include <reverse/infrastructure/formula_tag_names.hpp>
+
 #include <boost/shared_ptr.hpp>
 #include <boost/cstdint.hpp>
+
 #include <vector>
 #include <stack>
-#include "XMLExpatParser.h"
-#include "Component_Types.h"
 
-namespace libreverse { namespace infrastructure {
+#include "expatpp.h"
 
-    class Formula_Parser : public XMLExpatParser {
+
+namespace reverse {
+  namespace infrastructure {
+
+    class formula_parser : public expatpp {
     public:
 
-        Formula_Parser();
+        formula_parser();
 
-        virtual ~Formula_Parser(){}
+        virtual ~formula_parser(){}
 
         infrastructure_types::Component_Graph::ptr_t get_Graph ( std::string filename,
                                                                  std::string directory );
@@ -60,16 +64,17 @@ namespace libreverse { namespace infrastructure {
 
         void print_Component_List (void) const;
 
-        infrastructure_types::Component_Graph::ptr_t m_graph;
-        Formula_Tag_Names m_tag;
-        std::vector<int> m_predecessor_list;
-        int m_id;
-        std::string m_name;
-        std::string m_file;
+      boost::shared_ptr < infrastructure_types::component_graph > m_graph;
+      formula_tag_names m_tag;
+      std::vector<int> m_predecessor_list;
+      int m_id;
+      std::string m_name;
+      std::string m_file;
 
-        std::stack<std::string> m_element_list;
+      std::stack<std::string> m_element_list;
     };
-} /* namespace infrastructure */
-} /* namespace libreverse */
 
-#endif /* FORMULA_PARSER_H_ */
+  } /* namespace infrastructure */
+} /* namespace reverse */
+
+#endif /* REVERSE_INFRASTRUCTURE_FORMULA_PARSER_HPP_INCLUDED */

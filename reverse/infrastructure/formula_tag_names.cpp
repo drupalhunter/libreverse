@@ -19,17 +19,18 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#include "Formula_Tag_Names.h"
+#include <reverse/infrastructure/formula_tag_names.hpp>
 
-namespace libreverse { namespace infrastructure {
+namespace libreverse {
+  namespace infrastructure {
 
-    std::string const Formula_Tag_Names::TAG_FORMULA_MAP = "formula_map";
-    std::string const Formula_Tag_Names::TAG_NODE = "node";
-    std::string const Formula_Tag_Names::TAG_PREDECESSORS = "predecessors";
-    std::string const Formula_Tag_Names::TAG_NAME = "name";
-    std::string const Formula_Tag_Names::TAG_NODE_REF = "node_ref";
-    std::string const Formula_Tag_Names::ATTRIBUTE_ID = "id";
-    std::string const Formula_Tag_Names::ATTRIBUTE_IDREF = "idref";
+    std::string const formula_tag_names::TAG_FORMULA_MAP = "formula_map";
+    std::string const formula_tag_names::TAG_NODE = "node";
+    std::string const formula_tag_names::TAG_PREDECESSORS = "predecessors";
+    std::string const formula_tag_names::TAG_NAME = "name";
+    std::string const formula_tag_names::TAG_NODE_REF = "node_ref";
+    std::string const formula_tag_names::ATTRIBUTE_ID = "id";
+    std::string const formula_tag_names::ATTRIBUTE_IDREF = "idref";
 
-} /* namespace infrastructure */
-} /* namespace libreverse */
+  } /* namespace infrastructure */
+} /* namespace reverse */

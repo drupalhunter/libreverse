@@ -20,49 +20,53 @@
 */
 
 
-#ifndef CONFIGURATION_PARSER_H_
-#define CONFIGURATION_PARSER_H_
+#ifndef REVERSE_INFRASTRUCTURE_CONFIGURATION_PARSER_HPP_INCLUDED
+#define REVERSE_INFRASTRUCTURE_CONFIGURATION_PARSER_HPP_INCLUDED
 
-#include "Configuration_Tag_Names.h"
-#include "Component_Types.h"
+#include <reverse/infrastructure/configuration_tag_names.hpp>
+
+#include <expatpp.h>
+
 #include <string>
 #include <stack>
-#include "XMLExpatParser.h"
 
-namespace libreverse { namespace infrastructure {
+namespace reverse {
+  namespace infrastructure {
 
-    class Configuration_Parser : public XMLExpatParser {
+    class configuration_data;
+
+    class configuration_parser : public expatpp {
     public:
 
-        explicit Configuration_Parser ( std::string file = "" );
+      explicit configuration_parser ( std::string file = "" );
+      
+      virtual ~configuration_parser();
 
-        virtual ~Configuration_Parser();
+      boost::shared_ptr < infrastructure::configuration_data > parse_data (void);
 
-        infrastructure_types::Configuration_Data::ptr_t parse_Data (void);
+      virtual void startElement ( const XML_Char* element_name,
+				  const XML_Char** attributes );
+      
+      virtual void charData ( const std::string& element_value );
 
-        virtual void startElement ( const std::string& element_name,
-                                    const Attribute_Map_t& attributes );
+      virtual void endElement ( const std::string& element_name );
 
-        virtual void charData ( const std::string& element_value );
-
-        virtual void endElement ( const std::string& element_name );
-
-        std::string get_Configuration_File (void) const;
+      std::string get_configuration_file (void) const;
 
     private:
 
-        std::string m_file;
-        Configuration_Tag_Names m_tag;
-        std::string m_host;
-        std::string m_user;
-        std::string m_password;
+      std::string m_file;
+      configuration_tag_names m_tag;
+      std::string m_host;
+      std::string m_user;
+      std::string m_password;
+      
+      std::stack<std::string> m_element_list;
 
-        std::stack<std::string> m_element_list;
-
-        infrastructure_types::Configuration_Data::ptr_t m_data_ptr;
+      boost::shared_ptr < infrastructure::configuration_data > m_data_ptr;
     };
 
-} /* namespace infrastructure */
-} /* namespace libreverse */
+  } /* namespace infrastructure */
+} /* namespace reverse */
 
-#endif /* CONFIGURATION_PARSER_H_ */
+#endif /* REVERSE_INFRASTRUCTURE_CONFIGURATION_PARSER_HPP_INCLUDED */

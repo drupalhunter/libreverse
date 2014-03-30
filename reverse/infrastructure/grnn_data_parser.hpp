@@ -19,53 +19,53 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#ifndef GRNN_DATA_PARSER_H_
-#define GRNN_DATA_PARSER_H_
+#ifndef REVERSE_INFRASTRUCTURE_GRNN_DATA_PARSER_HPP_INCLUDED
+#define REVERSE_INFRASTRUCTURE_GRNN_DATA_PARSER_HPP_INCLUDED
 
-#include "GRNN_Data_Tag_Names.h"
-#include "Component_Types.h"
-
-#include "components/input/grnn/Classifier_Types.h"
+#include <reverse/infrastructure/grnn_data_tag_names.hpp>
 
 #include <boost/shared_ptr.hpp>
 #include <boost/cstdint.hpp>
+
+#include <expatpp.h>
+
 #include <vector>
 #include <stack>
-#include "XMLExpatParser.h"
+
 
 
 namespace libreverse { namespace infrastructure {
 
-    class GRNN_Data_Parser : public XMLExpatParser {
+    class GRNN_Data_Parser : public expatpp {
     public:
 
-        GRNN_Data_Parser();
+        grnn_data_parser();
 
-        virtual ~GRNN_Data_Parser(){}
+      virtual ~grnn_data_parser(){}
+      
+      boost::shared_ptr < components::input::grnn::grnn_data_map > get_data_map ( std::string filename );
 
-	classifier_types::GRNN_Data_Map::ptr_t get_Data_Map ( std::string filename );
+      virtual void startElement ( const std::string& element_name,
+				  const Attribute_Map_t& attributes );
 
-        virtual void startElement ( const std::string& element_name,
-                                    const Attribute_Map_t& attributes );
-
-        virtual void charData ( const std::string& element_value );
-
-        virtual void endElement ( const std::string& element_name );
+      virtual void charData ( const std::string& element_value );
+      
+      virtual void endElement ( const std::string& element_name );
 
     private:
 
-        static const int MATCH;
+      static const int MATCH;
+      
+      boost::shared_ptr < components::input::grnn::grnn_data_map > m_data_map;
+      grnn_data_tag_names m_tag;
 
-        classifier_types::GRNN_Data_Map::ptr_t m_data_map;
-        GRNN_Data_Tag_Names m_tag;
-
-	std::string m_type;
-	double m_sigma;
-        std::string m_file;
-
+      std::string m_type;
+      double m_sigma;
+      std::string m_file;
+      
         std::stack<std::string> m_element_list;
     };
-} /* namespace infrastructure */
-} /* namespace libreverse */
+  } /* namespace infrastructure */
+} /* namespace reverse */
 
-#endif /* GRNN_DATA_PARSER_H_ */
+#endif /* REVERSE_INFRASTRUCTURE_GRNN_DATA_PARSER_HPP_INCLUDED */

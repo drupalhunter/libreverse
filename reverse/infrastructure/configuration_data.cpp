@@ -19,191 +19,110 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#include "Configuration_Data.h"
-#include "errors/Configuration_Exception.h"
-#include "errors/Component_Exception.h"
-#include "infrastructure/data_source/Memory_Data_Source_Config.h"
-#include "include/config.h"
-#include <iostream>
+#include <reverse/trace.hpp>
+#include <reverse/errors/configuration_exception.hpp>
+#include <reverse/errors/component_exception.hpp>
+#include <reverse/infrastructure/configuration_data.hpp>
+#include <reverse/infrastructure/data_source/memory_data_source_config.hpp>
+
 #include <boost/format.hpp>
 
-#ifdef LIBREVERSE_DEBUG
-#include "Trace.h"
-using namespace libreverse::api;
-using namespace libreverse::trace;
-#endif /* LIBREVERSE_DEBUG */
+#include <iostream>
 
-namespace libreverse { namespace infrastructure {
+namespace reverse {
+  namespace infrastructure {
 
-    Configuration_Data::Configuration_Data()
-        : m_data ( new Memory_Data_Source_Config() )
+    configuration_data::configuration_data()
+      : m_data ( new infrastructure::data_source::memory_data_source_config() )
     {
-
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			   TraceLevel::DETAIL,
-			   "Inside Configuration_Data Constructor" );
-#endif /* LIBREVERSE_DEBUG */
-
+      trace::infrastructure_detail ( "Inside Configuration_Data Constructor" );
     }
 
-    boost::shared_ptr<Data_Source_Config_Base>
-    Configuration_Data::get_Transfer_Config()
+    boost::shared_ptr<infrastructure::data_source::data_source_config_base>
+    configuration_data::get_transfer_config()
     {
+      trace::infrastructure_detail ( "Inside Configuration_Data::get_Transfer_Config" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::DETAIL,
-                             "Inside Configuration_Data::get_Transfer_Config" );
-#endif /* LIBREVERSE_DEBUG */
-
-        return m_data;
+      return m_data;
     }
 
     void
-    Configuration_Data::set_Transfer_Config ( infrastructure_types::Data_Source_Config_Base::ptr_t obj_ptr )
+    configuration_data::set_transfer_config ( boost::shared_ptr < infrastructure::data_source::data_source_config_base > obj_ptr )
     {
+      trace::infrastructure_detail ( "Entering Configuration_Data::set_Transfer_Config" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::DETAIL,
-                             "Entering Configuration_Data::set_Transfer_Config" );
-#endif /* LIBREVERSE_DEBUG */
+      if ( obj_ptr.get() == 0 )
+	{
+	  trace::infrastructure_error ( "Exception throw in %s at line %d",
+					__FILE__,
+				        __LINE__ );
 
+	  throw errors::component_exception ( errors::component_exception::null_pointer );
+	}
+      else
+	{
+	  m_data = obj_ptr;
+	}
 
-        if ( obj_ptr.get() == 0 )
-            {
-
-
-#ifdef LIBREVERSE_DEBUG
-                Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-				     TraceLevel::ERROR,
-				     boost::str(boost::format("Exception throw in %s at line %d")
-						% __FILE__
-						% __LINE__ ) );
-#endif /* LIBREVERSE_DEBUG */
-
-
-                throw errors::Component_Exception
-                    ( errors::Component_Exception::NULL_POINTER );
-            }
-        else
-            {
-                m_data = obj_ptr;
-            }
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::DETAIL,
-                             "Exiting Configuration_Data::set_Transfer_Config" );
-#endif /* LIBREVERSE_DEBUG */
-
+      trace::infrastructure_detail ( "Exiting Configuration_Data::set_Transfer_Config" );
     }
 
     void
-    Configuration_Data::set_Formula_Directory ( std::string const& obj )
+    configuration_data::set_formula_directory ( std::string const& obj )
     {
+      trace::infrastructure_detail ( "Entering Configuration_Data::set_Formula_Directory" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::DETAIL,
-                             "Entering Configuration_Data::set_Formula_Directory" );
-#endif /* LIBREVERSE_DEBUG */
+      if ( obj.empty() )
+	{
+	  trace::infrastructure_error ( "Exception throw in %s at line %d",
+					__FILE__,
+					__LINE__ );
 
+	  throw errors::configuration_exception ( errors::configuration_exception::EMPTY_INPUT );
+	}
+      else
+	{
+	  m_formula_directory = obj;
+	}
 
-        if ( obj.empty() )
-            {
-
-
-#ifdef LIBREVERSE_DEBUG
-                Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-				     TraceLevel::ERROR,
-				     boost::str(boost::format("Exception throw in %s at line %d")
-						% __FILE__
-						% __LINE__ ) );
-#endif /* LIBREVERSE_DEBUG */
-
-                throw errors::Configuration_Exception
-                    ( errors::Configuration_Exception::EMPTY_INPUT );
-            }
-        else
-            {
-                m_formula_directory = obj;
-            }
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::DETAIL,
-                             "Exiting Configuration_Data::set_Formula_Directory" );
-#endif /* LIBREVERSE_DEBUG */
-
+      trace::infrastructure_detail ( "Exiting Configuration_Data::set_Formula_Directory" );
     }
 
     std::string
-    Configuration_Data::get_Formula_Directory (void) const
+    configuration_data::get_formula_directory (void) const
     {
+      trace::infrastructure_detail ( "Inside Configuration_Data::get_Formula_Directory" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::DETAIL,
-                             "Inside Configuration_Data::get_Formula_Directory" );
-#endif /* LIBREVERSE_DEBUG */
-
-        return m_formula_directory;
+      return m_formula_directory;
     }
 
     void
-    Configuration_Data::set_GRNN_Data_File ( std::string const& obj )
+    configuration_data::set_grnn_data_file ( std::string const& obj )
     {
+      trace::infrastructure_detail ( "Entering Configuration_Data::set_GRNN_Data_Directory" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::DETAIL,
-                             "Entering Configuration_Data::set_GRNN_Data_Directory" );
-#endif /* LIBREVERSE_DEBUG */
+      if ( obj.empty() )
+	{
+	  trace::infrastructure_error ( "Exception throw in %s at line %d",
+					__FILE__,
+				        __LINE__ );
 
-        if ( obj.empty() )
-            {
+	  throw errors::configuration_exception ( errors::configuration_exception::EMPTY_INPUT );
+	}
+      else
+	{
+	  m_grnn_data_file = obj;
+	}
 
-#ifdef LIBREVERSE_DEBUG
-                Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-				     TraceLevel::ERROR,
-				     boost::str(boost::format("Exception throw in %s at line %d")
-						% __FILE__
-						% __LINE__ ) );
-#endif /* LIBREVERSE_DEBUG */
-
-
-                throw errors::Configuration_Exception
-                    ( errors::Configuration_Exception::EMPTY_INPUT );
-            }
-        else
-            {
-                m_grnn_data_file = obj;
-            }
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::DETAIL,
-                             "Exiting Configuration_Data::set_DLL_Directory" );
-#endif /* LIBREVERSE_DEBUG */
-
+      trace::infrastructure_detail ( "Exiting Configuration_Data::set_DLL_Directory" );
     }
 
     std::string
-    Configuration_Data::get_GRNN_Data_File (void) const
+    configuration_data::get_grnn_data_file (void) const
     {
+      trace::infrastructure_detail ( "Inside Configuration_Data::get_GRNN_Data_File" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::DETAIL,
-                             "Inside Configuration_Data::get_GRNN_Data_File" );
-#endif /* LIBREVERSE_DEBUG */
-
-        return m_grnn_data_file;
+      return m_grnn_data_file;
     }
 
     /*
@@ -234,21 +153,15 @@ namespace libreverse { namespace infrastructure {
     */
 
     void
-    Configuration_Data::dump (void) const
+    configuration_data::dump (void) const
     {
+      trace::infrastructure_detail ( "Entering Configuration_Data::dump" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::DETAIL,
-                             "Entering Configuration_Data::dump" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        std::cout << "Configuration Data" << std::endl
-                  << "--------------------------------" << std::endl
-                  << std::endl
-                  << "  Formula Directory: " << m_formula_directory << std::endl
-                  << "  GRNN Data File: " << m_grnn_data_file << std::endl;
+      std::cout << "Configuration Data" << std::endl
+		<< "--------------------------------" << std::endl
+		<< std::endl
+		<< "  Formula Directory: " << m_formula_directory << std::endl
+		<< "  GRNN Data File: " << m_grnn_data_file << std::endl;
 
         /*
           for ( DLL_Map_t::const_iterator pos = m_dll_map.begin();
@@ -262,13 +175,9 @@ namespace libreverse { namespace infrastructure {
           }
         */
 
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::DETAIL,
-                             "Exiting Configuration_Data::dump" );
-#endif /* LIBREVERSE_DEBUG */
+      trace::infrastructure_detail ( "Exiting Configuration_Data::dump" );
 
     }
-} /* namespace infrastructure */
-} /* namespace libreverse */
+
+  } /* namespace infrastructure */
+} /* namespace reverse */

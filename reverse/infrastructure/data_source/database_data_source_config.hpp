@@ -53,9 +53,9 @@ The original location of this file is
 #define REVERSE_INFRASTRUCTURE_DATA_SOURCE_DATABASE_DATA_SOURCE_CONFIG_HPP_INCLUDED
 
 #include <string>
-#include "data_source_config_base.h"
+#include <reverse/infrastructure/data_source/data_source_config_base.hpp>
 
-namespace libreverse {
+namespace reverse {
   namespace infrastructure {
     namespace data_source {
 
@@ -111,7 +111,7 @@ namespace libreverse {
 
     } // namespace data_source
   } // namespace infrastructure
-} // namespace libreverse
+} // namespace reverse
 
 #endif // #ifndef REVERSE_INFRASTRUCTURE_DATA_SOURCE_DATABASE_DATA_SOURCE_CONFIG_HPP_INCLUDED
 

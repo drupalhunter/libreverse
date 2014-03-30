@@ -79,7 +79,7 @@ namespace reverse {
        */
       void register_factory ( boost::shared_ptr < infrastructure::data_source::data_source_factory_base >& fact_ptr);
 
-      boost::shared_ptr < std::map < std::string, boost::shared_ptr < infrastructure::component_graph > > >
+      boost::shared_ptr < infrastructure::component_graph::map_t >
       get_graph ( boost::uint32_t input_id,
 		  boost::uint32_t output_id );
 

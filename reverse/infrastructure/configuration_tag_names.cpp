@@ -19,20 +19,20 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#include "Configuration_Tag_Names.h"
+#include <reverse/infrastructure/configuration_tag_names.hpp>
 
-namespace libreverse {
-namespace infrastructure {
+namespace reverse {
+  namespace infrastructure {
 
-    std::string const Configuration_Tag_Names::TAG_TRANSFER_TYPE = "transfer_type";
-    std::string const Configuration_Tag_Names::TAG_FORMULA_DIRECTORY = "formula_directory";
-    std::string const Configuration_Tag_Names::TAG_FILE_PREFIX = "file_prefix";
-    std::string const Configuration_Tag_Names::TAG_DATABASE = "database";
-    std::string const Configuration_Tag_Names::TAG_MEMORY = "memory";
-    std::string const Configuration_Tag_Names::TAG_HOST = "host";
-    std::string const Configuration_Tag_Names::TAG_USER = "user";
-    std::string const Configuration_Tag_Names::TAG_PASSWORD = "password";
-    std::string const Configuration_Tag_Names::TAG_GRNN_DATA_FILE = "grnn_data_file";
+    std::string const configuration_tag_names::TAG_TRANSFER_TYPE = "transfer_type";
+    std::string const configuration_tag_names::TAG_FORMULA_DIRECTORY = "formula_directory";
+    std::string const configuration_tag_names::TAG_FILE_PREFIX = "file_prefix";
+    std::string const configuration_tag_names::TAG_DATABASE = "database";
+    std::string const configuration_tag_names::TAG_MEMORY = "memory";
+    std::string const configuration_tag_names::TAG_HOST = "host";
+    std::string const configuration_tag_names::TAG_USER = "user";
+    std::string const configuration_tag_names::TAG_PASSWORD = "password";
+    std::string const configuration_tag_names::TAG_GRNN_DATA_FILE = "grnn_data_file";
 
-} /* namespace infrastructure */
-} /* namespace libreverse */
+  } /* namespace infrastructure */
+} /* namespace reverse */

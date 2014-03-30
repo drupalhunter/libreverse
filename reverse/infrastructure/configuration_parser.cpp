@@ -19,289 +19,176 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#include "Configuration_Parser.h"
-#include "infrastructure/data_source/Database_Data_Source_Config.h"
-#include "infrastructure/data_source/File_Data_Source_Config.h"
-#include "infrastructure/data_source/Memory_Data_Source_Config.h"
-#include "infrastructure/Configuration_Data.h"
-#include "include/config.h"
+#include <reverse/trace.hpp>
+#include <reverse/data_containers/memory_map.hpp>
+#include <reverse/errors/parsing_exception.hpp>
+#include <reverse/infrastructure/configuration_parser.hpp>
+#include <reverse/infrastructure/data_source/database_data_source_config.hpp>
+#include <reverse/infrastructure/data_source/file_data_source_config.hpp>
+#include <reverse/infrastructure/data_source/memory_data_source_config.hpp>
+#include <reverse/infrastructure/configuration_data.hpp>
+
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/format.hpp>
+#include <boost/make_shared.hpp>
+
 #include <iostream>
 #include <fstream>
-#include "data_containers/Memory_Map.h"
-#include "errors/Parsing_Exception.h"
 
-#ifdef LIBREVERSE_DEBUG
-#include "Trace.h"
-using namespace libreverse::api;
-using namespace libreverse::trace;
-#endif /* LIBREVERSE_DEBUG */
+namespace reverse {
+  namespace infrastructure {
 
-namespace libreverse { namespace infrastructure {
-
-    Configuration_Parser::Configuration_Parser ( std::string file )
+    configuration_parser::configuration_parser ( std::string file )
         : m_file (""),
 	  m_host (""),
 	  m_user (""),
 	  m_password (""),
-          m_data_ptr (new Configuration_Data())
+          m_data_ptr (new configuration_data()),
+	  expatpp ()
     {
+#warning Todo: Implement JSON Spirit
+      trace::infrastructure_detail ( "Entering Configuration_Parser Constructor" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::DETAIL,
-                             "Entering Configuration_Parser Constructor" );
-#endif /* LIBREVERSE_DEBUG */
+      // if ( ! file.empty() )
+      // 	{
+      // 	  m_file = file;
+      // 	}
 
-
-        if ( ! file.empty() )
-            {
-                m_file = file;
-            }
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::DETAIL,
-                             "Exiting Configuration_Parser Constructor" );
-#endif /* LIBREVERSE_DEBUG */
-
+      trace::infrastructure_detail ( "Exiting Configuration_Parser Constructor" );
     }
 
-    Configuration_Parser::~Configuration_Parser ()
+    configuration_parser::~configuration_parser ()
     {
+        trace::infrastructure_detail ( "Entering Configuration_Parser destructor" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::DETAIL,
-                             "Entering Configuration_Parser destructor" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        if ( ! m_element_list.empty() )
-            {
-                
-
-#ifdef LIBREVERSE_DEBUG
-	      Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-				   TraceLevel::WARN,
-				   boost::str ( boost::format("(WW) Found %d items still on the stack.")
-						% m_element_list.size() ) );
-#endif /* LIBREVERSE_DEBUG */
-
+        // if ( ! m_element_list.empty() )
+        //     {
+	//       trace::infrastructure_error ( "(WW) Found %d items still on the stack.", m_element_list.size() );
 	      
-                while ( ! m_element_list.empty() )
-                    {
-
-#ifdef LIBREVERSE_DEBUG
-                        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-					     TraceLevel::WARN,
-					     boost::str ( boost::format("  %s")
-							  % m_element_list.top() ) ) ;
-#endif /* LIBREVERSE_DEBUG */
-
+	//       while ( ! m_element_list.empty() )
+	// 	{
+	// 	  trace::infrastructure_error ( "  %s", m_element_list.top() );
                         
-                        m_element_list.pop();
-                    }
-            }
+	// 	  m_element_list.pop();
+	// 	}
+        //     }
 
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::DETAIL,
-                             "Exiting Configuration_Parser destructor" );
-#endif /* LIBREVERSE_DEBUG */
-
+        trace::infrastructure_detail ( "Exiting Configuration_Parser destructor" );
     }
 
     // Parser
-    infrastructure_types::Configuration_Data::ptr_t
-    Configuration_Parser::parse_Data (void)
+    boost::shared_ptr < infrastructure::configuration_data >
+    configuration_parser::parse_data (void)
     {
+      trace::infrastructure_detail ( "Entering Configuration_Parser::parse_Data" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::DETAIL,
-                             "Entering Configuration_Parser::parse_Data" );
-#endif /* LIBREVERSE_DEBUG */
+      // if ( ! boost::filesystem::exists ( m_file ) )
+      // 	{
+      // 	  // Error creating
+      // 	  trace::infrastructure_error ( "Configuration_Parser::parse_Data - cannot find %s", m_file );
 
+      // 	  // Throw exception
+      // 	  throw errors::parsing_exception ( errors::parsing_exception::missing_file );
+      // 	}
 
-        if ( ! boost::filesystem::exists ( m_file ) )
-            {
+      // std::ifstream input ( m_file.c_str() );
+      
+      // data_containers::memory_map input_data ( input, input.tellg() );
+      
+      //   // Parse file
+      // XML_Status result = this->XML_Parse ( reinterpret_cast<const char*>(&(*input_data.begin())),
+      // 					    input_data.size(),
 
+      // 	  {
+      // 	    trace::infrastructure_error ( "%s at line %d in %s",
+      // 					  getErrorString ( getErrorCode() ),
+      // 					  getCurrentLineNumber(),
+      // 					  m_file );
 
-#ifdef LIBREVERSE_DEBUG
-                // Error creating
-                Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-				     TraceLevel::ERROR,
-				     boost::str(boost::format
-						("Configuration_Parser::parse_Data - cannot find %s")
-						% m_file) );
-#endif /* LIBREVERSE_DEBUG */
-
-                // Throw exception
-                throw errors::Parsing_Exception
-                    ( errors::Parsing_Exception::MISSING_FILE );
-            }
-
-        std::ifstream input ( m_file.c_str() );
-
-        data_container::Memory_Map input_data ( input );
-
-        // Create parser
-        if ( ! this->createParser() )
-            {
-
-#ifdef LIBREVERSE_DEBUG
-                // Error creating
-                Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-				     TraceLevel::ERROR,
-				     "Configuration_Parser::parse_Data - error creating parser");
-#endif /* LIBREVERSE_DEBUG */
-
-                // Throw exception
-                throw errors::Parsing_Exception
-                    ( errors::Parsing_Exception::UNKNOWN_PARSING_ERROR );
-            }
-
-        // Parse file
-
-        if ( ! this->parse ( reinterpret_cast<const char*>(&(*input_data.begin())),
-                             input_data.size() ) )
-            {
-
-#ifdef LIBREVERSE_DEBUG
-                Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-				     TraceLevel::ERROR,
-				     boost::str(boost::format
-						("%s at line %d in %s")
-						% getErrorString ( getErrorCode() )
-						% getCurrentLineNumber()
-						% m_file ) );
-#endif /* LIBREVERSE_DEBUG */
-
-
-                // Throw exception
-                throw errors::Parsing_Exception
-                    ( errors::Parsing_Exception::INVALID_FORMAT );
-            }
+      // 	    // Throw exception
+      // 	    throw errors::parsing_exception ( errors::parsing_exception::invalid_format );
+      // 	  }
                            
-        this->destroyParser();
+      //   this->destroyParser();
 
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::DETAIL,
-                             "Exiting Configuration_Parser::parse_Data" );
-#endif /* LIBREVERSE_DEBUG */
+      //   trace::infrastructure_detail ( "Exiting Configuration_Parser::parse_Data" );
 
         return m_data_ptr;
     }
 
     void
-    Configuration_Parser::startElement ( const std::string& element_name,
-                                         const Attribute_Map_t& )//attributes )
+    configuration_parser::startElement ( const XML_Char* element_name,
+                                         const XML_Char** )//attributes )
     {
+      trace::infrastructure_detail ( "Inside Configuration_Parser::startElement" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::DETAIL,
-                             "Inside Configuration_Parser::startElement" );
-#endif /* LIBREVERSE_DEBUG */
-
-        m_element_list.push ( element_name );
+      //      m_element_list.push ( element_name );
     }
 
-    void Configuration_Parser::charData ( const std::string& element_value )
+    void configuration_parser::charData ( const std::string& element_value )
     {
+        trace::infrastructure_detail ( "Entering Configuration_Parser::charData" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::DETAIL,
-                             "Entering Configuration_Parser::charData" );
-#endif /* LIBREVERSE_DEBUG */
+        // std::string present_element = m_element_list.top();
 
-        std::string present_element = m_element_list.top();
-
-        if ( present_element.compare ( m_tag.TAG_FORMULA_DIRECTORY ) == 0 )
-            {
-                m_data_ptr->set_Formula_Directory ( element_value );
-            }
-        else if ( present_element.compare ( m_tag.TAG_FILE_PREFIX ) == 0 )
-            {
-                infrastructure_types::File_Data_Source_Config::ptr_t file_ptr ( new File_Data_Source_Config ( element_value ) );
-
-                m_data_ptr->set_Transfer_Config ( file_ptr );
-            }
-        else if ( present_element.compare ( m_tag.TAG_MEMORY ) == 0 )
-            {
-                infrastructure_types::Memory_Data_Source_Config::ptr_t mem_ptr ( new Memory_Data_Source_Config () );
-
-                m_data_ptr->set_Transfer_Config ( mem_ptr );
-            }
-        else if ( present_element.compare ( m_tag.TAG_HOST ) == 0 )
-            {
-                this->m_host = element_value;
-            }
-        else if ( present_element.compare ( m_tag.TAG_USER ) == 0 )
-            {
-                this->m_user = element_value;
-            }
-        else if ( present_element.compare ( m_tag.TAG_PASSWORD ) == 0 )
-            {
-                this->m_password = element_value;
-            }
-        else if ( present_element.compare ( m_tag.TAG_GRNN_DATA_FILE ) == 0 )
-            {
-                std::string grnn_file = element_value;
-
-                m_data_ptr->set_GRNN_Data_File ( grnn_file );
-            }
-        else
-            {
-                // Do nothing
-            }
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::DETAIL,
-                             "Exiting Configuration_Parser::charData" );
-#endif /* LIBREVERSE_DEBUG */
-
+        // if ( present_element.compare ( m_tag.TAG_FORMULA_DIRECTORY ) == 0 )
+        //     {
+        //         m_data_ptr->set_formula_directory ( element_value );
+        //     }
+        // else if ( present_element.compare ( m_tag.TAG_FILE_PREFIX ) == 0 )
+	//   {
+	//     boost::shared_ptr < infrastructure::file_data_source_config > file_ptr = boost::make_shared < infrastructure::file_data_source_config > ( element_value );
+	//     m_data_ptr->set_transfer_config ( file_ptr );
+	//   }
+        // else if ( present_element.compare ( m_tag.TAG_MEMORY ) == 0 )
+	//   {
+	//     boost::shared_ptr < infrastructure::memory_data_source_config > mem_ptr = boost::make_shared < infrastructure::memory_data_source_config> ();
+	//     m_data_ptr->set_transfer_config ( mem_ptr );
+	//   }
+        // else if ( present_element.compare ( m_tag.TAG_HOST ) == 0 )
+	//   {
+	//     this->m_host = element_value;
+	//   }
+        // else if ( present_element.compare ( m_tag.TAG_USER ) == 0 )
+	//   {
+	//     this->m_user = element_value;
+	//   }
+        // else if ( present_element.compare ( m_tag.TAG_PASSWORD ) == 0 )
+	//   {
+	//     this->m_password = element_value;
+	//   }
+        // else if ( present_element.compare ( m_tag.TAG_GRNN_DATA_FILE ) == 0 )
+	//   {
+	//     std::string grnn_file = element_value;
+	//     m_data_ptr->set_grnn_data_file ( grnn_file );
+	//   }
+        // else
+	//   {
+	//     // Do nothing
+	//   }
+	
+        trace::infrastructure_detail ( "Exiting Configuration_Parser::charData" );
     }
 
     void
-    Configuration_Parser::endElement ( const std::string& element_name )
+    configuration_parser::endElement ( const std::string& element_name )
     {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::DETAIL,
-                             "Entering Configuration_Parser::endElement" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        if ( element_name.compare ( m_tag.TAG_DATABASE ) == 0 )
-            {
-                infrastructure_types::Database_Data_Source_Config::ptr_t db_ptr ( new Database_Data_Source_Config ( this->m_host,
-														    this->m_user,
-														    this->m_password ) );
-                
-                m_data_ptr->set_Transfer_Config ( db_ptr );
-            }
-
-        m_element_list.pop();
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::DETAIL,
-                             "Exiting Configuration_Parser::endElement" );
-#endif /* LIBREVERSE_DEBUG */
-
+      trace::infrastructure_detail ( "Entering Configuration_Parser::end_element" );
+      
+      // if ( element_name.compare ( m_tag.TAG_DATABASE ) == 0 )
+      // 	{
+      // 	  boost::shared_ptr < infrastructure::data_source::database_data_source_config > db_ptr =
+      // 	    boost::make_shared < infrastructure::data_source::database_data_source_config > ( this->m_host,
+      // 											      this->m_user,
+      // 											      this->m_password );
+      
+      // 	  m_data_ptr->set_transfer_config ( db_ptr );
+      // 	}
+      
+      // m_element_list.pop();
+      
+      trace::infrastructure_detail ( "Exiting configuration_parser::end_element" );
     }
 
     /*
@@ -393,17 +280,12 @@ namespace libreverse { namespace infrastructure {
 */
 
     std::string
-    Configuration_Parser::get_Configuration_File (void) const
+    configuration_parser::get_configuration_file (void) const
     {
+      trace::infrastructure_detail ( "Inside Configuration_Parser::get_Configuration_File" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::DETAIL,
-                             "Inside Configuration_Parser::get_Configuration_File" );
-#endif /* LIBREVERSE_DEBUG */
-
-        return m_file;
+      return m_file;
     }
 
-} /* namespace infrastructure */
-} /* namespace libreverse */
+  } /* namespace infrastructure */
+} /* namespace reverse */

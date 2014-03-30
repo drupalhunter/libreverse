@@ -19,15 +19,15 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#ifndef FORMULA_TAG_NAMES_H
-#define FORMULA_TAG_NAMES_H
+#ifndef REVERSE_INFRASTRUCTURE_FORMULA_TAG_NAMES_HPP_INCLUDED
+#define REVERSE_INFRASTRUCTURE_FORMULA_TAG_NAMES_HPP_INCLUDED
 
 #include <string>
 
-namespace libreverse {
-namespace infrastructure {
+namespace breverse {
+  namespace infrastructure {
 
-    class Formula_Tag_Names {
+    class formula_tag_names {
     public:
         static std::string const TAG_FORMULA_MAP;
         static std::string const TAG_NODE;
@@ -39,8 +39,8 @@ namespace infrastructure {
 
     };
 
-} /* namespace infrastructure */
-} /* namespace libreverse */
+  } /* namespace infrastructure */
+} /* namespace reverse */
 
-#endif /* FORMULA_TAG_NAMES_H */
+#endif /* REVERSE_INFRASTRUCTURE_FORMULA_TAG_NAMES_HPP_INCLUDED */
 
