@@ -61,7 +61,7 @@
 #include "io/File_ID.h"
 #include "io/String_Converter.h"
 #include "io/Preconditions.h"
-#include "data_containers/Memory_Map.h"
+#include "data_containers/memory_map.h"
 #include "errors/IO_Exception.h"
 #include "errors/Internal_Exception.h"
 #include <sstream>
@@ -397,7 +397,7 @@ namespace libreverse { namespace wpef_module {
 	  // Calculate base address of map
 	  boost::uint32_t base_address = opt_hdr_ptr->get_Base_Of_Code() + opt_hdr_ptr->get_Image_Base();
 
-	  data_types::Memory_Map::ptr_t loaded_image ( new data_container::Memory_Map ( opt_hdr_ptr->get_Size_Of_Image(),
+	  data_types::memory_map::ptr_t loaded_image ( new data_container::memory_map ( opt_hdr_ptr->get_Size_Of_Image(),
 											base_address ) );
 
 	  /*
@@ -465,12 +465,12 @@ namespace libreverse { namespace wpef_module {
 			   "Exiting Reader_64::preload" );
     }
 
-    data_types::Memory_Map::ptr_t
-    Reader_64::get_Memory_Map ( void )
+    data_types::memory_map::ptr_t
+    Reader_64::get_memory_map ( void )
     {
       this->read_Headers();
       
-      return m_loaded_file->get_Memory_Map();
+      return m_loaded_file->get_memory_map();
     }
 
     std::string
@@ -1170,7 +1170,7 @@ namespace libreverse { namespace wpef_module {
 	//--------------------------------------
 	//   Debug entries
 	//--------------------------------------
-	data_types::Memory_Map::ptr_t map_ptr =
+	data_types::memory_map::ptr_t map_ptr =
 	m_loaded_file->get_Map_Ptr();
 
 	boost::uint32_t const address =

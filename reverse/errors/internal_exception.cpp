@@ -29,7 +29,7 @@ namespace reverse {
     const char* internal_exception::m_messages [] = {
         "String Parameter given was empty.\nThe parameter must NOT be empty.",  // EMPTY_STRING
         "Input value was not an acceptable value for this function.\nDouble check the calling function to confirm the parameter value.", // INVALID_VALUE
-        "Input pointer is not initialized. Double check where the call is make to this function to ensure the pointer is initialized.", // NULL_POINTER
+        "Input pointer is not initialized. Double check where the call is make to this function to ensure the pointer is initialized.", // null_pointer
         "Unable to allocate memory for the required object. This may be a indicator of a memory leak or non-enough system memory to process the input file.", // BAD_ALLOC
         "Unsupported feature was requested. Contact the developers of libreverse if you feel that this feature should be supported", // UNSUPPORTED_FEATURE
         "Unable to perform I/O operation", // IO_ERROR

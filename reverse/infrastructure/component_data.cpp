@@ -240,37 +240,37 @@ namespace reverse {
     void
     component_data::set_output_data ( boost::shared_ptr < const data_containers::filename > file_ptr )
     {
-      trace::infrastructure_detail ( "Entering component_data::component_data (Filename)" );
+      trace::infrastructure_detail ( "Entering component_data::component_data (filename)" );
       
       m_data_obj_ptr->set_data ( file_ptr );
 
-      trace::infrastructure_detail ( "Exiting component_data::component_data (Filename)" );
+      trace::infrastructure_detail ( "Exiting component_data::component_data (filename)" );
     }
 
     void
     component_data::set_output_data ( boost::shared_ptr < const data_containers::control_flow_graph_sequence > graph_ptr )
     {
-      trace::infrastructure_detail ( "Entering component_data::set_Output_Data (Control_Flow_Graph_Sequence)" );
+      trace::infrastructure_detail ( "Entering component_data::set_Output_Data (control_flow_graph_sequence)" );
 
       m_data_obj_ptr->set_data ( graph_ptr );
 
-      trace::infrastructure_detail ( "Exiting component_data::set_Output_Data (Control_Flow_Graph_Sequence)" );
+      trace::infrastructure_detail ( "Exiting component_data::set_Output_Data (control_flow_graph_sequence)" );
     }
 
     void
     component_data::set_output_data ( boost::shared_ptr < const data_containers::memory_map > map_ptr )
     {
-      trace::infrastructure_detail ( "Entering component_data::set_Output_Data (Memory_Map)" );
+      trace::infrastructure_detail ( "Entering component_data::set_Output_Data (memory_map)" );
 
       m_data_obj_ptr->set_data ( map_ptr );
 
-      trace::infrastructure_detail ( "Exiting component_data::set_Output_Data (Memory_Map)" );
+      trace::infrastructure_detail ( "Exiting component_data::set_Output_Data (memory_map)" );
     }
 
     bool
     component_data::is_filename_set (void) const
     {
-      trace::infrastructure_detail ( "Entering component_data::is_Filename_Set" );
+      trace::infrastructure_detail ( "Entering component_data::is_filename_Set" );
 
       bool result = false;
       
@@ -279,7 +279,7 @@ namespace reverse {
 	  result = true;
 	}
 
-      trace::infrastructure_detail ( "Exiting component_data::is_Filename_Set" );
+      trace::infrastructure_detail ( "Exiting component_data::is_filename_Set" );
 
       return result;
     }
@@ -287,7 +287,7 @@ namespace reverse {
     bool
     component_data::is_control_flow_graph_sequence_set (void) const
     {
-      trace::infrastructure_detail ( "Entering component_data::is_Control_Flow_Graph_Sequence_Set" );
+      trace::infrastructure_detail ( "Entering component_data::is_control_flow_graph_sequence_Set" );
 
       bool result = false;
       
@@ -296,7 +296,7 @@ namespace reverse {
 	  result = true;
 	}
 
-      trace::infrastructure_detail ( "Exiting component_data::is_Control_Flow_Graph_Sequence_Set" );
+      trace::infrastructure_detail ( "Exiting component_data::is_control_flow_graph_sequence_Set" );
 
       return result;
     }
@@ -321,7 +321,7 @@ namespace reverse {
     boost::shared_ptr<const data_containers::filename>
     component_data::get_input_filename(void) const
     {
-      trace::infrastructure_detail ( "Inside component_data::get_Input_Filename" );
+      trace::infrastructure_detail ( "Inside component_data::get_Input_filename" );
 
       return m_filename_ptr;
     }
@@ -440,7 +440,7 @@ namespace reverse {
       
       if ( m_data_obj_ptr )
 	{
-	  output << m_data_obj_ptr->to_string() << std::endl;
+	  output << m_data_obj_ptr << std::endl;
 	}
       
       if ( m_meta_ptr )

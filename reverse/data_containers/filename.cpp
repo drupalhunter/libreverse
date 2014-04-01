@@ -1,4 +1,4 @@
-/*  Filename.cpp
+/*  filename.cpp
 
    Copyright (C) 2008 Stephen Torri
 
@@ -19,7 +19,7 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#include "Filename.h"
+#include "filename.h"
 
 #ifdef LIBREVERSE_DEBUG
 #include "Trace.h"
@@ -29,62 +29,62 @@ using namespace libreverse::trace;
 
 namespace libreverse { namespace data_container {
 
-    Filename::Filename (std::string data)
+    filename::filename (std::string data)
         : m_data ( data )
     {
 
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
                              TraceLevel::DETAIL,
-                             "Inside Filename constructor" );
+                             "Inside filename constructor" );
 #endif /* LIBREVERSE_DEBUG */
 
     }
 
-    Filename::Filename ( Filename const& rhs )
+    filename::filename ( filename const& rhs )
         : m_data ( rhs.m_data )
     {
 
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
                              TraceLevel::DETAIL,
-                             "Inside Filename copy constructor" );
+                             "Inside filename copy constructor" );
 #endif /* LIBREVERSE_DEBUG */
 
     }
 
-    Filename&
-    Filename::operator= ( Filename const& rhs )
+    filename&
+    filename::operator= ( filename const& rhs )
     {
 
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
                              TraceLevel::DETAIL,
-                             "Entering Filename::operator= (assignment)" );
+                             "Entering filename::operator= (assignment)" );
 #endif /* LIBREVERSE_DEBUG */
 
 
-        Filename temp ( rhs );
+        filename temp ( rhs );
         swap ( temp );
 
 
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
                              TraceLevel::DETAIL,
-                             "Exiting Filename::operator= (assignment)" );
+                             "Exiting filename::operator= (assignment)" );
 #endif /* LIBREVERSE_DEBUG */
 
         return *this;
     }
 
     void
-    Filename::swap ( Filename& rhs )
+    filename::swap ( filename& rhs )
     {
 
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
                              TraceLevel::DETAIL,
-                             "Entering Filename::swap" );
+                             "Entering filename::swap" );
 #endif /* LIBREVERSE_DEBUG */
 
 
@@ -94,19 +94,19 @@ namespace libreverse { namespace data_container {
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
                              TraceLevel::DETAIL,
-                             "Exiting Filename::swap" );
+                             "Exiting filename::swap" );
 #endif /* LIBREVERSE_DEBUG */
 
     }
 
     std::string
-    Filename::data () const
+    filename::data () const
     {
 
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
                              TraceLevel::DETAIL,
-                             "Inside Filename::data" );
+                             "Inside filename::data" );
 #endif /* LIBREVERSE_DEBUG */
 
         return m_data;

@@ -21,7 +21,7 @@
 
 #include <boost/test/unit_test.hpp>
 #include "Null_Component.h"
-#include "libreverse/data_containers/Filename.h"
+#include "libreverse/data_containers/filename.h"
 #include "libreverse/infrastructure/data_source/Memory_Data_Source_Config.h"
 #include "libreverse/infrastructure/data_source/Memory_Data_Transfer.h"
 #include "libreverse/infrastructure/data_source/Data_Source_T.h"
@@ -56,7 +56,7 @@ void test_second_constructor ()
 }
 
 
-meta::Meta_Object::const_ptr_t
+meta::meta_object::const_ptr_t
 helper_run_test ( infrastructure_types::Component::ptr_t target_ptr,
                   std::string target_file )
 {
@@ -65,8 +65,8 @@ helper_run_test ( infrastructure_types::Component::ptr_t target_ptr,
     infrastructure_types::Component_Graph::Data_Map_t data_map_ref;
 
     // Add Data Source with filename added
-    data_types::Filename::const_ptr_t input_file
-        ( new data_container::Filename ( target_file.insert (0, PWD_PREFIX) ) );
+    data_types::filename::const_ptr_t input_file
+        ( new data_container::filename ( target_file.insert (0, PWD_PREFIX) ) );
 
     infrastructure_types::Memory_Data_Source_Config::ptr_t mem_config
         ( new infrastructure::Memory_Data_Source_Config() );
@@ -78,8 +78,8 @@ helper_run_test ( infrastructure_types::Component::ptr_t target_ptr,
         ( new infrastructure::Data_Source<infrastructure::Memory_Data_Transfer>
           ( mem_trans ) );
 
-    infrastructure_types::Data_Object::ptr_t input_object
-        ( new infrastructure::Data_Object() );
+    infrastructure_types::data_object::ptr_t input_object
+        ( new infrastructure::data_object() );
     input_object->set_Data ( input_file );
     input_key->put ( input_object );
 
@@ -95,8 +95,8 @@ helper_run_test ( infrastructure_types::Component::ptr_t target_ptr,
 
     infrastructure_types::Data_Source_Base::const_ptr_t results =
         target_ptr->results();
-    infrastructure_types::Data_Object::const_ptr_t results_data_obj = results->get();
-    meta::Meta_Object::const_ptr_t meta_results = results_data_obj->getMeta();
+    infrastructure_types::data_object::const_ptr_t results_data_obj = results->get();
+    meta::meta_object::const_ptr_t meta_results = results_data_obj->get_meta();
 
     return meta_results;
 }

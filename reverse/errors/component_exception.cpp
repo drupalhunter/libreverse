@@ -1,4 +1,4 @@
-/*  Component_Exception.cpp
+/*  component_exception.cpp
 
    Copyright (C) 2008 Stephen Torri
 
@@ -31,7 +31,7 @@ namespace reverse {
         "Error occurred while storing value in data storage object.", // DATA_STORAGE_ERROR
         "Invalid index given.", // INVALID_INDEX
         "Invalid Component state given.", // INVALID_STATE
-        "Null pointer found.", // NULL_POINTER
+        "Null pointer found.", // null_pointer
     };
 
     component_exception::component_exception ( error_id message_id )

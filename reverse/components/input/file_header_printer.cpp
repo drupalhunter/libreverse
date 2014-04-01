@@ -24,8 +24,8 @@
 #include <iostream>
 #include "io/input/File_Readers/Reader_Factory.h"
 #include "io/input/File_Readers/File_Reader.h"
-#include "data_containers/Filename.h"
-#include "infrastructure/data_source/Data_Object.h"
+#include "data_containers/filename.h"
+#include "infrastructure/data_source/data_object.h"
 #include "infrastructure/Component_Data.h"
 #include "infrastructure/Component_State.h"
 #include <boost/format.hpp>
@@ -140,7 +140,7 @@ namespace libreverse { namespace component {
 
         infrastructure_types::Component_Data::ptr_t data_ptr = m_state_ptr->get_Data();
 
-        if ( ! data_ptr->is_Filename_Set() )
+        if ( ! data_ptr->is_filename_Set() )
             {
                 Trace::write_Trace
                     ( TraceArea::COMPONENTS,
@@ -178,8 +178,8 @@ namespace libreverse { namespace component {
 	/*       Execute Algorithm        */
 	/*--------------------------------*/
 
-        data_types::Filename::const_ptr_t file_ptr =
-            data_ptr->get_Input_Filename();
+        data_types::filename::const_ptr_t file_ptr =
+            data_ptr->get_Input_filename();
 
         io::File_Reader::ptr_t file_reader_ptr =
             ( io::Reader_Factory::Instance() ).create_File_Reader ( file_ptr->to_String() );

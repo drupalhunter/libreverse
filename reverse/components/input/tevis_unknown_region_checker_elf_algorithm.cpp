@@ -21,8 +21,8 @@
 
 #include "Tevis_Unknown_Region_Checker_ELF_Algorithm.h"
 
-#include "data_containers/Memory_Map.h"
-#include "meta/Meta_Object.h"
+#include "data_containers/memory_map.h"
+#include "meta/meta_object.h"
 #include "io/input/File_Readers/Reader_Factory.h"
 #include "io/input/File_Readers/Elf/Elf_Reader_32.h"
 #include "io/input/File_Readers/Elf/Elf_Header_32.h"
@@ -48,8 +48,8 @@ namespace libreverse { namespace component {
 
         elf_types::Elf_Header_32::ptr_t hdr_ptr = file_reader_ptr->get_Header();
 
-        // Grab reference to the Memory_Map associated with the file
-        data_types::Memory_Map::ptr_t mem_ptr = file_reader_ptr->get_Memory_Map ();
+        // Grab reference to the memory_map associated with the file
+        data_types::memory_map::ptr_t mem_ptr = file_reader_ptr->get_memory_map ();
 
         std::string meta_output = "";
 

@@ -36,7 +36,7 @@ using namespace libreverse::trace;
 
 namespace libreverse { namespace component {
 
-    meta::Meta_Object::ptr_t
+    meta::meta_object::ptr_t
     Code_Section_Detector_Java_Algorithm::run ( io_types::File_ID::const_ptr_t )
     {
 
@@ -52,14 +52,14 @@ namespace libreverse { namespace component {
 	 the Method Object. There we do not have a definitive address
 	 where the code starts and how long it is.
        */
-      meta::Meta_Object::ptr_t meta_ptr ( new meta::Meta_Object() );
+      meta::meta_object::ptr_t meta_ptr ( new meta::meta_object() );
 
       meta_ptr->add ( "code_section_address",
 		      "none",
-		      meta::Meta_Object::STRING );
+		      meta::meta_object::STRING );
       meta_ptr->add ( "code_section_size",
 		      "none",
-		      meta::Meta_Object::STRING );
+		      meta::meta_object::STRING );
 
 #ifdef LIBREVERSE_DEBUG
       Trace::write_Trace ( TraceArea::COMPONENTS,

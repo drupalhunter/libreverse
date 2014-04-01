@@ -19,30 +19,19 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#include "Formula_List.h"
+#include <reverse/trace.hpp>
+#include <reverse/infrastructure/formula_list.hpp>
 
-#ifdef LIBREVERSE_DEBUG
-#include "Trace.h"
-using namespace libreverse::api;
-using namespace libreverse::trace;
-#endif /* LIBREVERSE_DEBUG */
+namespace reverse {
+  namespace infrastructure {
 
-
-namespace libreverse { namespace infrastructure {
-
-	Formula_List::Formula_List()
+	formula_list::formula_list()
 		: input (""),
 		  analysis (""),
 		  output ("")
 	{
-
-#ifdef LIBREVERSE_DEBUG
-	  Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			       TraceLevel::DETAIL,
-			       "Entering Formula_List constructor" );
-#endif /* LIBREVERSE_DEBUG */
-
+	  trace::infrastructure_detail( "Entering Formula_List constructor" );
 	}
-
-} /* namespace infrastructure */
-} /* namespace libreverse */
+  
+  } /* namespace infrastructure */
+} /* namespace reverse */

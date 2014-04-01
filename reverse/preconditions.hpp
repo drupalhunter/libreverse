@@ -41,7 +41,7 @@ namespace reverse
       /*!
        * \brief Check that the pointer has been initialized. If not then an exception is thrown.
        * \param obj_ptr Pointer to be checked
-       * \exception Internal_Exception(NULL_POINTER)
+       * \exception Internal_Exception(null_pointer)
        */
       template <typename pointer_type>
       static inline void is_set ( boost::shared_ptr<pointer_type> obj_ptr )
@@ -64,7 +64,7 @@ namespace reverse
       /*!
        * \brief Check that the pointer has been initialized. If not then an exception is thrown.
        * \param obj_ptr Pointer to be checked
-       * \exception Internal_Exception(NULL_POINTER)
+       * \exception Internal_Exception(null_pointer)
        */
       template <typename pointer_type>
       static inline void is_set ( pointer_type* obj_ptr )

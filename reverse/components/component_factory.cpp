@@ -29,7 +29,7 @@
 #include "components/input/Code_Section_Detector.h"
 #include "components/input/Data_Section_Detector.h"
 #include "components/input/Entry_Point_Detector.h"
-#include "components/input/Memory_Map_Producer.h"
+#include "components/input/memory_map_Producer.h"
 #include "components/input/File_Header_Printer.h"
 #include "components/input/Tevis_Zero_Filled_Checker.h"
 #include "components/input/Tevis_Unknown_Region_Checker.h"
@@ -153,16 +153,16 @@ namespace libreverse { namespace infrastructure {
     }
 
     infrastructure_types::Component::ptr_t
-    Component_Factory::get_Memory_Map_Producer ( infrastructure_types::Component_State::ptr_t state_ptr )
+    Component_Factory::get_memory_map_Producer ( infrastructure_types::Component_State::ptr_t state_ptr )
     {
 
 #ifdef LIBREVERSE_DEBUG
       Trace::write_Trace ( TraceArea::COMPONENTS,
 			   TraceLevel::DETAIL,
-			   "Inside Component_Factory::get_Memory_Map_Producer" );
+			   "Inside Component_Factory::get_memory_map_Producer" );
 #endif /* LIBREVERSE_DEBUG */
 
-      return Create::shared_pointer<component::Memory_Map_Producer> ( state_ptr );
+      return Create::shared_pointer<component::memory_map_Producer> ( state_ptr );
     }
 
     infrastructure_types::Component::ptr_t

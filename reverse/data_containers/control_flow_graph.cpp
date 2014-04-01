@@ -24,7 +24,7 @@
 #include "errors/Internal_Exception.h"
 #include "data_containers/Basic_Block.h"
 #include "io/Preconditions.h"
-#include "errors/Component_Exception.h"
+#include "errors/component_exception.h"
 
 #include <sstream>
 #include <boost/format.hpp>
@@ -319,7 +319,7 @@ namespace libreverse { namespace data_container {
                                    % __LINE__ ) );
 #endif /* LIBREVERSE_DEBUG */
 
-                throw errors::Component_Exception ( errors::Component_Exception::INVALID_INDEX );
+                throw errors::component_exception ( errors::component_exception::INVALID_INDEX );
             }
 
 

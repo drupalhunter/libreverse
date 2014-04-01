@@ -1,4 +1,4 @@
-/*  Memory_Map_Producer.cpp
+/*  memory_map_Producer.cpp
 
    Copyright (C) 2008 Stephen Torri
 
@@ -19,15 +19,15 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#include "Memory_Map_Producer.h"
-#include "meta/Meta_Object.h"
+#include "memory_map_Producer.h"
+#include "meta/meta_object.h"
 #include <iostream>
 #include "io/input/File_Readers/Reader_Factory.h"
 #include "io/input/File_Readers/File_Reader.h"
 #include "errors/API_Exception.h"
-#include "data_containers/Filename.h"
-#include "data_containers/Memory_Map.h"
-#include "infrastructure/data_source/Data_Object.h"
+#include "data_containers/filename.h"
+#include "data_containers/memory_map.h"
+#include "infrastructure/data_source/data_object.h"
 #include "infrastructure/Component_Data.h"
 #include "infrastructure/Component_State.h"
 #include <boost/format.hpp>
@@ -38,61 +38,61 @@ using namespace libreverse::trace;
 
 namespace libreverse { namespace component {
 
-    const std::string Memory_Map_Producer::m_name = "Memory_Map_Producer";
+    const std::string memory_map_Producer::m_name = "memory_map_Producer";
 
-    Memory_Map_Producer::Memory_Map_Producer ()
+    memory_map_Producer::memory_map_Producer ()
         : m_state_ptr ( new infrastructure::Component_State (0) )
     {
         Trace::write_Trace
             ( TraceArea::COMPONENTS,
               TraceLevel::DETAIL,
-              boost::str ( boost::format ( "Inside Memory_Map_Producer constructor (id=%d)")
+              boost::str ( boost::format ( "Inside memory_map_Producer constructor (id=%d)")
                            % m_state_ptr->get_ID() ) );
     }
 
-    Memory_Map_Producer::Memory_Map_Producer ( infrastructure_types::Component_State::ptr_t state_ptr )
+    memory_map_Producer::memory_map_Producer ( infrastructure_types::Component_State::ptr_t state_ptr )
         : m_state_ptr ( state_ptr )
     {
         Trace::write_Trace
             ( TraceArea::COMPONENTS,
               TraceLevel::DETAIL,
-              boost::str ( boost::format ( "Inside Memory_Map_Producer constructor (id=%d)")
+              boost::str ( boost::format ( "Inside memory_map_Producer constructor (id=%d)")
                            % m_state_ptr->get_ID() ) );
     }
 
-    Memory_Map_Producer::Memory_Map_Producer ( Memory_Map_Producer const& rhs )
+    memory_map_Producer::memory_map_Producer ( memory_map_Producer const& rhs )
         : infrastructure::Component ( rhs ),
           infrastructure::Component_Actor ( rhs ),
-          boost::enable_shared_from_this<Memory_Map_Producer> ( rhs ),
+          boost::enable_shared_from_this<memory_map_Producer> ( rhs ),
           m_state_ptr ( new infrastructure::Component_State ( *rhs.m_state_ptr ) )
     {
         Trace::write_Trace
             ( TraceArea::COMPONENTS,
               TraceLevel::DETAIL,
-              boost::str ( boost::format ( "Inside Memory_Map_Producer copy constructor (id=%d)")
+              boost::str ( boost::format ( "Inside memory_map_Producer copy constructor (id=%d)")
                            % m_state_ptr->get_ID() ) );
     }
 
-    Memory_Map_Producer::~Memory_Map_Producer ()
+    memory_map_Producer::~memory_map_Producer ()
     {
         Trace::write_Trace
             ( TraceArea::COMPONENTS,
               TraceLevel::DETAIL,
-              boost::str ( boost::format ( "Inside Memory_Map_Producer destructor (id=%d)")
+              boost::str ( boost::format ( "Inside memory_map_Producer destructor (id=%d)")
                            % m_state_ptr->get_ID() ) );
     }
 
     void
-    Memory_Map_Producer::received_Input_Source_Data ( boost::uint32_t id )
+    memory_map_Producer::received_Input_Source_Data ( boost::uint32_t id )
     {
         Trace::write_Trace
             ( TraceArea::COMPONENTS,
               TraceLevel::DETAIL,
-              boost::str ( boost::format ( "Entering Memory_Map_Producer::received_Input_Source_Data (id=%d)")
+              boost::str ( boost::format ( "Entering memory_map_Producer::received_Input_Source_Data (id=%d)")
                            % m_state_ptr->get_ID() ) );
 
         std::cout <<
-            boost::format("Memory_Map_Producer(%d)::init")
+            boost::format("memory_map_Producer(%d)::init")
             % m_state_ptr->get_ID()
                   << std::endl;
 
@@ -101,18 +101,18 @@ namespace libreverse { namespace component {
         Trace::write_Trace
             ( TraceArea::COMPONENTS,
               TraceLevel::DETAIL,
-              boost::str ( boost::format ( "Exiting Memory_Map_Producer::received_Input_Source_Data (id=%d)")
+              boost::str ( boost::format ( "Exiting memory_map_Producer::received_Input_Source_Data (id=%d)")
                            % m_state_ptr->get_ID() ) );
 
     }
 
     void
-    Memory_Map_Producer::add_Input_Source ( boost::uint32_t id )
+    memory_map_Producer::add_Input_Source ( boost::uint32_t id )
     {
         Trace::write_Trace
             ( TraceArea::COMPONENTS,
               TraceLevel::DETAIL,
-              boost::str ( boost::format ( "Entering Memory_Map_Producer::add_Input_Source (id=%d)")
+              boost::str ( boost::format ( "Entering memory_map_Producer::add_Input_Source (id=%d)")
                            % m_state_ptr->get_ID() ) );
 
         m_state_ptr->add_Input_Source ( id );
@@ -120,34 +120,34 @@ namespace libreverse { namespace component {
         Trace::write_Trace
             ( TraceArea::COMPONENTS,
               TraceLevel::DETAIL,
-              boost::str ( boost::format ( "Exiting Memory_Map_Producer::add_Input_Source (id=%d)")
+              boost::str ( boost::format ( "Exiting memory_map_Producer::add_Input_Source (id=%d)")
                            % m_state_ptr->get_ID() ) );
     }
 
     std::string
-    Memory_Map_Producer::get_Name (void) const
+    memory_map_Producer::get_Name (void) const
     {
         Trace::write_Trace
             ( TraceArea::COMPONENTS,
               TraceLevel::DETAIL,
-              boost::str ( boost::format ( "Inside Memory_Map_Producer::get_Name (id=%d)")
+              boost::str ( boost::format ( "Inside memory_map_Producer::get_Name (id=%d)")
                            % m_state_ptr->get_ID() ) );
 
         return m_name;
     }
 
-    void Memory_Map_Producer::process ()
+    void memory_map_Producer::process ()
     {
         Trace::write_Trace
             ( TraceArea::COMPONENTS,
               TraceLevel::DETAIL,
-              boost::str ( boost::format ( "Entering Memory_Map_Producer::process (id=%d)")
+              boost::str ( boost::format ( "Entering memory_map_Producer::process (id=%d)")
                            % m_state_ptr->get_ID() ) );
 
         infrastructure_types::Component_Data::ptr_t data_ptr =
             m_state_ptr->get_Data();
 
-        if ( ! data_ptr->is_Filename_Set() )
+        if ( ! data_ptr->is_filename_Set() )
             {
                 Trace::write_Trace
                     ( TraceArea::COMPONENTS,
@@ -185,14 +185,14 @@ namespace libreverse { namespace component {
 	/*       Execute Algorithm        */
 	/*--------------------------------*/
 
-        data_types::Filename::const_ptr_t file_ptr =
-            data_ptr->get_Input_Filename();
+        data_types::filename::const_ptr_t file_ptr =
+            data_ptr->get_Input_filename();
 
         io::File_Reader::ptr_t file_reader_ptr =
             ( io::Reader_Factory::Instance() ).create_File_Reader ( file_ptr->to_String() );
 
-        data_types::Memory_Map::const_ptr_t map_ptr =
-            file_reader_ptr->get_Memory_Map ();
+        data_types::memory_map::const_ptr_t map_ptr =
+            file_reader_ptr->get_memory_map ();
 
         std::cout << map_ptr->to_String() << std::endl;
 
@@ -209,18 +209,18 @@ namespace libreverse { namespace component {
         Trace::write_Trace
             ( TraceArea::COMPONENTS,
               TraceLevel::DETAIL,
-              boost::str ( boost::format ( "Exiting Memory_Map_Producer::process (id=%d)")
+              boost::str ( boost::format ( "Exiting memory_map_Producer::process (id=%d)")
                            % m_state_ptr->get_ID() ) );
 
     }
 
     void
-    Memory_Map_Producer::run ( infrastructure_types::Component_Graph::Data_Map_t* m_input_data )
+    memory_map_Producer::run ( infrastructure_types::Component_Graph::Data_Map_t* m_input_data )
     {
         Trace::write_Trace
             ( TraceArea::COMPONENTS,
               TraceLevel::DETAIL,
-              boost::str ( boost::format ( "Entering Memory_Map_Producer::run (id=%d)")
+              boost::str ( boost::format ( "Entering memory_map_Producer::run (id=%d)")
                            % m_state_ptr->get_ID() ) );
 
         std::cout << std::endl
@@ -243,30 +243,30 @@ namespace libreverse { namespace component {
         Trace::write_Trace
             ( TraceArea::COMPONENTS,
               TraceLevel::DETAIL,
-              boost::str ( boost::format ( "Exiting Memory_Map_Producer::run (id=%d)")
+              boost::str ( boost::format ( "Exiting memory_map_Producer::run (id=%d)")
                            % m_state_ptr->get_ID() ) );
 
     }
 
     infrastructure_types::Data_Source_Base::ptr_t
-    Memory_Map_Producer::results (void)
+    memory_map_Producer::results (void)
     {
         Trace::write_Trace
             ( TraceArea::COMPONENTS,
               TraceLevel::DETAIL,
-              boost::str ( boost::format ( "Inside Memory_Map_Producer::results (id=%d)")
+              boost::str ( boost::format ( "Inside memory_map_Producer::results (id=%d)")
                            % m_state_ptr->get_ID() ) );
 
         return m_state_ptr->results();
     }
 
     void
-    Memory_Map_Producer::set_State ( boost::uint32_t mode )
+    memory_map_Producer::set_State ( boost::uint32_t mode )
     {
         Trace::write_Trace
             ( TraceArea::COMPONENTS,
               TraceLevel::DETAIL,
-              boost::str ( boost::format ( "Entering Memory_Map_Producer::set_State (id=%d)")
+              boost::str ( boost::format ( "Entering memory_map_Producer::set_State (id=%d)")
                            % m_state_ptr->get_ID() ) );
 
         m_state_ptr->switch_State ( mode );
@@ -274,54 +274,54 @@ namespace libreverse { namespace component {
         Trace::write_Trace
             ( TraceArea::COMPONENTS,
               TraceLevel::DETAIL,
-              boost::str ( boost::format ( "Exiting Memory_Map_Producer::set_State (id=%d)")
+              boost::str ( boost::format ( "Exiting memory_map_Producer::set_State (id=%d)")
                            % m_state_ptr->get_ID() ) );
 
     }
 
     boost::uint32_t
-    Memory_Map_Producer::get_ID (void) const
+    memory_map_Producer::get_ID (void) const
     {
         Trace::write_Trace
             ( TraceArea::COMPONENTS,
               TraceLevel::DETAIL,
-              boost::str ( boost::format ( "Inside Memory_Map_Producer::get_ID (id=%d)")
+              boost::str ( boost::format ( "Inside memory_map_Producer::get_ID (id=%d)")
                            % m_state_ptr->get_ID() ) );
 
         return m_state_ptr->get_ID();
     }
     
     infrastructure_types::Component_Data::Input_Token_t::const_iterator
-    Memory_Map_Producer::get_Source_List_Begin (void) const
+    memory_map_Producer::get_Source_List_Begin (void) const
     {
         Trace::write_Trace
             ( TraceArea::COMPONENTS,
               TraceLevel::DETAIL,
-              boost::str ( boost::format ( "Inside Memory_Map_Producer::get_Source_List_Begin (id=%d)")
+              boost::str ( boost::format ( "Inside memory_map_Producer::get_Source_List_Begin (id=%d)")
                            % m_state_ptr->get_ID() ) );
 
         return m_state_ptr->get_Source_List_Begin ();
     }
 
     infrastructure_types::Component_Data::Input_Token_t::const_iterator
-    Memory_Map_Producer::get_Source_List_End (void) const
+    memory_map_Producer::get_Source_List_End (void) const
     {
         Trace::write_Trace
             ( TraceArea::COMPONENTS,
               TraceLevel::DETAIL,
-              boost::str ( boost::format ( "Inside Memory_Map_Producer::get_Source_List_End (id=%d)")
+              boost::str ( boost::format ( "Inside memory_map_Producer::get_Source_List_End (id=%d)")
                            % m_state_ptr->get_ID() ) );
 
         return m_state_ptr->get_Source_List_End ();
     }
 
-    Memory_Map_Producer&
-    Memory_Map_Producer::operator= ( Memory_Map_Producer const& rhs )
+    memory_map_Producer&
+    memory_map_Producer::operator= ( memory_map_Producer const& rhs )
     {
         Trace::write_Trace
             ( TraceArea::COMPONENTS,
               TraceLevel::DETAIL,
-              boost::str ( boost::format ( "Entering Memory_Map_Producer::operator= (assignment) (id=%d)")
+              boost::str ( boost::format ( "Entering memory_map_Producer::operator= (assignment) (id=%d)")
                            % m_state_ptr->get_ID() ) );
 
         m_state_ptr.reset
@@ -330,7 +330,7 @@ namespace libreverse { namespace component {
         Trace::write_Trace
             ( TraceArea::COMPONENTS,
               TraceLevel::DETAIL,
-              boost::str ( boost::format ( "Entering Memory_Map_Producer::operator= (assignment) (id=%d)")
+              boost::str ( boost::format ( "Entering memory_map_Producer::operator= (assignment) (id=%d)")
                            % m_state_ptr->get_ID() ) );
 
         return *this;

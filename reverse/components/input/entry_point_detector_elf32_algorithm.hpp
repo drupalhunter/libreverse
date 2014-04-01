@@ -37,7 +37,7 @@ namespace libreverse {
 
 	virtual ~Entry_Point_Detector_Elf32_Algorithm(){}
 
-	virtual meta::Meta_Object::ptr_t run ( io_types::File_ID::const_ptr_t file_ptr );
+	virtual meta::meta_object::ptr_t run ( io_types::File_ID::const_ptr_t file_ptr );
       };
 
     } /* namespace component */

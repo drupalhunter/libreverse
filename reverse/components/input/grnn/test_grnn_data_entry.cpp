@@ -59,7 +59,7 @@ BOOST_AUTO_TEST_CASE(test_returns)
   GRNN_Data_Entry a_ref ( sigma, filename );
 
   BOOST_CHECK_EQUAL ( a_ref.get_Sigma(), sigma );
-  BOOST_CHECK_EQUAL ( a_ref.get_Filename(), filename );
+  BOOST_CHECK_EQUAL ( a_ref.get_filename(), filename );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -48,6 +48,12 @@ namespace reverse {
     reverse::~reverse ()
     {}
 
+  void reverse::init ( boost::shared_ptr < const infrastructure::configuration_data > config_data )
+  {
+    infrastructure::configurator& config_ref = infrastructure::configurator::instance();
+    config_ref.init ( config_data );
+  }
+
     boost::int32_t
     reverse::execute ( std::string target_file,
                        input_types::values input_type,

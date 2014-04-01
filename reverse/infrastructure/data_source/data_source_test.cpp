@@ -27,7 +27,7 @@
 #include "Database_Data_Transfer.h"
 #include "File_Data_Transfer.h"
 #include "Memory_Data_Transfer.h"
-#include "Data_Source_Factory.h"
+#include <reverse/infrastructure/data_source/data_source_factory.hpp>
 
 using namespace libreverse::infrastructure;
 

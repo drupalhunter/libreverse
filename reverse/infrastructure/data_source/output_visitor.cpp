@@ -25,7 +25,7 @@ namespace libreverse {
 namespace infrastructure {
 
   std::string
-  Output_Visitor::operator() ( Data_Object& ) const
+  Output_Visitor::operator() ( data_object& ) const
   {
     return "";
   }

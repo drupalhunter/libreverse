@@ -29,6 +29,7 @@
 #include <reverse/trace_level.hpp>
 
 #include <boost/cstdint.hpp>
+#include <boost/shared_ptr.hpp>
 
 #include <string>
 
@@ -38,6 +39,10 @@
  * \author Stephen Torri
  */
 namespace reverse {
+
+  namespace infrastructure {
+    class configuration_data;
+  }
 
     class reverse
     {
@@ -54,8 +59,13 @@ namespace reverse {
        */
       ~reverse();
 
+      /*! \brief Initialize the framework
+       * \param config_data Configuration data object used to initialize the framework.
+       */
+      void init ( boost::shared_ptr < const infrastructure::configuration_data > config_data );
+
       /*!
-       * \brief Initialize the Reverse objects
+       * \brief Execute the analysis on the selected file
        *
        * \param target_file Input binary file
        *

@@ -28,7 +28,7 @@
 #include "libreverse/components/input/grnn/GRNN_Data_Entry.h"
 #include "libreverse/components/input/grnn/Java_Training_Data_Parser.h"
 
-#include "libreverse/data_containers/Memory_Map.h"
+#include "libreverse/data_containers/memory_map.h"
 #include "libreverse/infrastructure/Component_Types.h"
 #include "libreverse/infrastructure/Configurator.h"
 #include "libreverse/io/IO_Types.h"

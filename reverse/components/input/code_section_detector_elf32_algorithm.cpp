@@ -60,10 +60,10 @@ namespace reverse {
 
 	meta_ptr->add ( "code_section_address",
 			code_section_address,
-			meta::Meta_Object::HEX );
+			meta::meta_object::HEX );
 	meta_ptr->add ( "code_section_size",
 			code_section_size,
-			meta::Meta_Object::HEX );
+			meta::meta_object::HEX );
 
 	trace::components_detail ( "Exiting Code_Section_Detector_Elf32_Algorithm::run" );
 

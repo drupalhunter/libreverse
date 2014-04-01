@@ -20,8 +20,8 @@
 */
 
 #include "Unpacker_X86_Algorithm.h"
-#include "data_containers/Memory_Map.h"
-#include "meta/Meta_Object.h"
+#include "data_containers/memory_map.h"
+#include "meta/meta_object.h"
 #include <boost/format.hpp>
 
 using namespace libreverse::meta;
@@ -41,51 +41,51 @@ namespace libreverse { namespace component {
           m_base_address ( 0 )
     {}
 
-    data_types::Memory_Map::const_ptr_t
-    Unpacker_X86_Algorithm::run ( meta::Meta_Object::const_ptr_t meta_ptr,
-                                  data_types::Memory_Map::const_ptr_t file_map_ptr )
+    data_types::memory_map::const_ptr_t
+    Unpacker_X86_Algorithm::run ( meta::meta_object::const_ptr_t meta_ptr,
+                                  data_types::memory_map::const_ptr_t file_map_ptr )
     {
         m_file_map = file_map_ptr;
 
         // Grab input meta information
         // - code offset
-        Meta_Object::Data_Pair_t value_pair = meta_ptr->get_Value ( "code_section_address" );
-        assert ( value_pair.second == Meta_Object::STRING );
+        meta_object::Data_Pair_t value_pair = meta_ptr->get_Value ( "code_section_address" );
+        assert ( value_pair.second == meta_object::STRING );
         std::string str_val = value_pair.first;
         m_code_offset = meta_ptr->convert_To_UInt32 ( str_val );
 
         // - code length
         value_pair = meta_ptr->get_Value ( "code_section_size" );
-        assert ( value_pair.second == Meta_Object::HEX );
+        assert ( value_pair.second == meta_object::HEX );
         str_val = value_pair.first;
         m_code_length = meta_ptr->convert_To_UInt32 ( str_val );
 
         // - data offset
         value_pair = meta_ptr->get_Value ( "data_section_address" );
-        assert ( value_pair.second == Meta_Object::HEX );
+        assert ( value_pair.second == meta_object::HEX );
         str_val = value_pair.first;
         m_data_offset = meta_ptr->convert_To_UInt32 ( str_val );
 
         // - data length
         value_pair = meta_ptr->get_Value ( "data_section_size" );
-        assert ( value_pair.second == Meta_Object::HEX );
+        assert ( value_pair.second == meta_object::HEX );
         str_val = value_pair.first;
         m_data_length = meta_ptr->convert_To_UInt32 ( str_val );
 
         // - get entry point
         value_pair = meta_ptr->get_Value ( "entry_point_address" );
-        assert ( value_pair.second == Meta_Object::HEX );
+        assert ( value_pair.second == meta_object::HEX );
         str_val = value_pair.first;
         m_entry_point = meta_ptr->convert_To_UInt32 ( str_val );
 
         // - get base point
         value_pair = meta_ptr->get_Value ( "base_address" );
-        assert ( value_pair.second == Meta_Object::HEX );
+        assert ( value_pair.second == meta_object::HEX );
         str_val = value_pair.first;
         m_base_address = meta_ptr->convert_To_UInt32 ( str_val );
 
         value_pair = meta_ptr->get_Value ( "arch_type" );
-        assert ( value_pair.second == Meta_Object::STRING );
+        assert ( value_pair.second == meta_object::STRING );
         std::string arch_str_val = value_pair.first;
 
         //cpu::CPU_Factory::ptr_t cpu_fact_ptr = cpu::CPU_Factory::get_Factory();
@@ -97,7 +97,7 @@ namespace libreverse { namespace component {
         // Execute the binary
         //sim_ptr->init ( file_map_ptr, entry_point + base_address );
 
-        return data_types::Memory_Map::ptr_t();
+        return data_types::memory_map::ptr_t();
     }
 
     void
@@ -134,15 +134,15 @@ namespace libreverse { namespace component {
     {
         if ( m_file_map.get() == 0 )
             {
-                throw errors::Component_Exception
-                    ( errors::Component_Exception::NULL_POINTER );
+                throw errors::component_exception
+                    ( errors::component_exception::null_pointer );
             }
 
         boost::uint8_t byte_counter = 0;
         boost::uint32_t* address = 0;
         boost::uint32_t index = 0;
         boost::uint16_t value = 0;
-        data_types::Memory_Map::const_iterator map_pos = m_file_map->begin();
+        data_types::memory_map::const_iterator map_pos = m_file_map->begin();
 
         this->create_Color_Map();
 

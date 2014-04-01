@@ -23,7 +23,7 @@
 #define TEVIS_ZERO_FILLED_CHECKER_WPEF_ALGORITHM_H
 
 #include "Tevis_Zero_Filled_Checker_Algorithm.h"
-#include "meta/Meta_Object.h"
+#include "meta/meta_object.h"
 
 namespace libreverse { namespace component {
 

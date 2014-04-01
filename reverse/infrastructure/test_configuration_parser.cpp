@@ -115,7 +115,7 @@ void test_parse_file_config ()
     BOOST_CHECK_EQUAL ( source_ptr->get_Type(),
                         Transfer_Types::FILE );
 
-    BOOST_CHECK_EQUAL ( source_ptr->get_Filename(),
+    BOOST_CHECK_EQUAL ( source_ptr->get_filename(),
                         "GummyBears_0.dat" );
 
     // Get Formula Directory

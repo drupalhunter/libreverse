@@ -1,4 +1,4 @@
-/*  Memory_Map.h
+/*  memory_map.h
 
     Copyright (C) 2008 Stephen Torri
 
@@ -114,9 +114,9 @@ namespace reverse {
       /**
        * \brief Copy constructor
        *
-       * \pre The input reference is a fully initialized Memory_Map
+       * \pre The input reference is a fully initialized memory_map
        *
-       * \post The output Memory_Map is a deep copy of the input
+       * \post The output memory_map is a deep copy of the input
        */
       explicit memory_map ( memory_map const& rhs );
 
@@ -128,18 +128,18 @@ namespace reverse {
        * This function handles copying the rhs reference even if the rhs
        * is a reference to this object.
        *
-       * \pre The input reference is a fully initialized Memory_Map
+       * \pre The input reference is a fully initialized memory_map
        *
-       * \post The output Memory_Map is a deep copy of the input
+       * \post The output memory_map is a deep copy of the input
        */
       memory_map& operator= ( memory_map const& rhs );
 
       /**
        * \brief assignment operator
        *
-       * \pre The input reference is a fully initialized Memory_Map
+       * \pre The input reference is a fully initialized memory_map
        *
-       * \post The output Memory_Map is a deep copy of the input
+       * \post The output memory_map is a deep copy of the input
        */
       void swap ( memory_map& rhs );
 

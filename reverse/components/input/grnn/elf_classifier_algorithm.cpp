@@ -69,7 +69,7 @@ namespace reverse {
 	  trace::classifier_data ( "Stored sigma: %1%", stored_sigma );
 
 	  // Get location of final training data
-	  std::string stored_filename = grnn_entry->get_Filename();
+	  std::string stored_filename = grnn_entry->get_filename();
 
 	  trace::classifier_data ( "Stored filename: %1%", stored_filename );
 

@@ -22,12 +22,12 @@
 #include <string>
 #include "Data_Source_T.h"
 #include <iostream>
-#include "data_containers/Filename.h"
+#include "data_containers/filename.h"
 #include "data_containers/Control_Flow_Graph.h"
-#include "data_containers/Memory_Map.h"
-#include "errors/Component_Exception.h"
+#include "data_containers/memory_map.h"
+#include "errors/component_exception.h"
 
-#include "meta/Meta_Object.h"
+#include "meta/meta_object.h"
 #include <boost/format.hpp>
 
 
@@ -41,7 +41,7 @@ namespace libreverse { namespace infrastructure {
 
     template <typename Transfer_Type>
     Data_Source<Transfer_Type>::Data_Source ( typename boost::shared_ptr<Transfer_Type> rhs )
-        : m_data_ptr ( new Data_Object() ),
+        : m_data_ptr ( new data_object() ),
           m_transfer_method ( new Transfer_Type ( *rhs ) )
     {
 
@@ -69,7 +69,7 @@ namespace libreverse { namespace infrastructure {
     Data_Source<Transfer_Type>::Data_Source ( Data_Source const& rhs )
         : Data_Source_Base ( rhs ),
           boost::enable_shared_from_this < Data_Source < Transfer_Type> > ( rhs ),
-          m_data_ptr ( new Data_Object ( *rhs.m_data_ptr ) )
+          m_data_ptr ( new data_object ( *rhs.m_data_ptr ) )
     {
 
 #ifdef LIBREVERSE_DEBUG
@@ -104,7 +104,7 @@ namespace libreverse { namespace infrastructure {
     }
 
     template < typename Transfer_Type>
-    void Data_Source<Transfer_Type>::put ( infrastructure_types::Data_Object::const_ptr_t data )
+    void Data_Source<Transfer_Type>::put ( infrastructure_types::data_object::const_ptr_t data )
     {
 
 #ifdef LIBREVERSE_DEBUG
@@ -127,8 +127,8 @@ namespace libreverse { namespace infrastructure {
 #endif /* LIBREVERSE_DEBUG */
 
                 
-                throw errors::Component_Exception
-                    ( errors::Component_Exception::NULL_POINTER );
+                throw errors::component_exception
+                    ( errors::component_exception::null_pointer );
             }
 
         // Get data from Data_Type and Put data into Transfer_Type
@@ -144,7 +144,7 @@ namespace libreverse { namespace infrastructure {
     }
 
     template < typename Transfer_Type>
-    infrastructure_types::Data_Object::const_ptr_t
+    infrastructure_types::data_object::const_ptr_t
     Data_Source<Transfer_Type>::get () const
     {
 
@@ -172,11 +172,11 @@ namespace libreverse { namespace infrastructure {
 
         std::stringstream output;
 
-        infrastructure_types::Data_Object::const_ptr_t data_ptr = this->get();
+        infrastructure_types::data_object::const_ptr_t data_ptr = this->get();
 
         if ( data_ptr.get() != 0 )
             {
-                meta::Meta_Object::const_ptr_t meta_ptr = data_ptr->getMeta();
+                meta::meta_object::const_ptr_t meta_ptr = data_ptr->get_meta();
 
                 output << "Data Source: " << std::endl
                        << "  - Data - " << std::endl

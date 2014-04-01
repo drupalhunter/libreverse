@@ -50,9 +50,9 @@ The original location of this file is
 **************************************************************************/
 
 #include "Database_Data_Transfer.h"
-#include "errors/Component_Exception.h"
+#include "errors/component_exception.h"
 #include "Database_Data_Source_Config.h"
-#include "Data_Object.h"
+#include "data_object.h"
 
 #include <boost/format.hpp>
 
@@ -66,7 +66,7 @@ namespace libreverse { namespace infrastructure {
 
     Database_Data_Transfer::Database_Data_Transfer ( infrastructure_types::Database_Data_Source_Config::ptr_t cfg )
         : m_config (cfg),
-          m_data ( new Data_Object() )
+          m_data ( new data_object() )
     {
 
 #ifdef LIBREVERSE_DEBUG
@@ -80,7 +80,7 @@ namespace libreverse { namespace infrastructure {
     Database_Data_Transfer::Database_Data_Transfer ( Database_Data_Transfer const& rhs )
         : Data_Transfer_Base ( rhs ),
           m_config ( new Database_Data_Source_Config ( *rhs.m_config ) ),
-          m_data ( new Data_Object( *rhs.m_data ) )
+          m_data ( new data_object( *rhs.m_data ) )
     {
 
 #ifdef LIBREVERSE_DEBUG
@@ -126,7 +126,7 @@ namespace libreverse { namespace infrastructure {
         // open database connection
     }
 
-    void Database_Data_Transfer::put ( infrastructure_types::Data_Object::const_ptr_t data_ptr )
+    void Database_Data_Transfer::put ( infrastructure_types::data_object::const_ptr_t data_ptr )
     {
 
 #ifdef LIBREVERSE_DEBUG
@@ -149,8 +149,8 @@ namespace libreverse { namespace infrastructure {
 #endif /* LIBREVERSE_DEBUG */
 
 
-                throw errors::Component_Exception
-                    ( errors::Component_Exception::NULL_POINTER );
+                throw errors::component_exception
+                    ( errors::component_exception::null_pointer );
             }
 
         // transform data into form for insertion into database
@@ -165,7 +165,7 @@ namespace libreverse { namespace infrastructure {
 
     }
 
-    infrastructure_types::Data_Object::const_ptr_t
+    infrastructure_types::data_object::const_ptr_t
     Database_Data_Transfer::get () const
     {
 

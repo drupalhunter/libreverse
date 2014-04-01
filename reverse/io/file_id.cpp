@@ -45,7 +45,7 @@ namespace reverse {
 
       trace::write_trace ( trace_area::io,
 			   trace_level::data,
-			   boost::str ( boost::format ( "Filename = %1%" ) % name ) );
+			   boost::str ( boost::format ( "filename = %1%" ) % name ) );
 #endif /* LIBREVERSE_DEBUG */
 
     }
@@ -61,7 +61,7 @@ namespace reverse {
 
       trace::write_trace ( trace_area::io,
 			   trace_level::data,
-			   boost::str ( boost::format ( "Filename = %1%" ) % rhs.m_full_name ) );
+			   boost::str ( boost::format ( "filename = %1%" ) % rhs.m_full_name ) );
 #endif /* LIBREVERSE_DEBUG */
 
     }
@@ -117,10 +117,10 @@ namespace reverse {
 			   "Before swap" );
       trace::write_trace ( trace_area::io,
 			   trace_level::data,
-			   boost::str ( boost::format ( "(LHS) Filename = %1%" ) % m_full_name ) );
+			   boost::str ( boost::format ( "(LHS) filename = %1%" ) % m_full_name ) );
       trace::write_trace ( trace_area::io,
 			   trace_level::data,
-			   boost::str ( boost::format ( "(RHS) Filename = %1%" ) % rhs.m_full_name ) );
+			   boost::str ( boost::format ( "(RHS) filename = %1%" ) % rhs.m_full_name ) );
 #endif /* LIBREVERSE_DEBUG */
 
 
@@ -133,10 +133,10 @@ namespace reverse {
 			   "After swap" );
       trace::write_trace ( trace_area::io,
 			   trace_level::data,
-			   boost::str ( boost::format ( "(LHS) Filename = %1%" ) % m_full_name ) );
+			   boost::str ( boost::format ( "(LHS) filename = %1%" ) % m_full_name ) );
       trace::write_trace ( trace_area::io,
 			   trace_level::data,
-			   boost::str ( boost::format ( "(RHS) Filename = %1%" ) % rhs.m_full_name ) );
+			   boost::str ( boost::format ( "(RHS) filename = %1%" ) % rhs.m_full_name ) );
 
       trace::write_trace ( trace_area::io,
 			   trace_level::detail,

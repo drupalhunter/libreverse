@@ -42,7 +42,7 @@ namespace libreverse
         {
             if ( ! cpu )
             {
-                throw errors::Internal_Exception ( errors::Internal_Exception::NULL_POINTER );
+                throw errors::Internal_Exception ( errors::Internal_Exception::null_pointer );
             }
 
             m_cpu = cpu;

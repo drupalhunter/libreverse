@@ -21,7 +21,7 @@
 
 #include <boost/test/unit_test.hpp>
 #include <boost/format.hpp>
-#include "Memory_Map.h"
+#include "memory_map.h"
 #include <fstream>
 #include "libreverse/Reverse.h"
 #include "libreverse/Trace.h"
@@ -33,7 +33,7 @@ using namespace libreverse;
 void test_seek_PASS_LOW_SEEK ()
 {
     boost::uint32_t size = 5;
-    data_container::Memory_Map a_ref ( size );
+    data_container::memory_map a_ref ( size );
 
     BOOST_CHECK_EQUAL ( a_ref.get_Present_Position_Value (),
                         static_cast<boost::uint32_t>(0) );
@@ -46,7 +46,7 @@ void test_seek_PASS_LOW_SEEK ()
 void test_seek_PASS_HIGH_SEEK ()
 {
     boost::uint32_t size = 5;
-    data_container::Memory_Map a_ref ( size );
+    data_container::memory_map a_ref ( size );
     BOOST_CHECK_EQUAL ( a_ref.get_Present_Position_Value (),
                         static_cast<boost::uint32_t>(0));
 
@@ -59,9 +59,9 @@ void test_seek_PASS_HIGH_SEEK ()
 void test_seek_FAIL_HIGH_SEEK ()
 {
     boost::uint32_t size = 5;
-    data_container::Memory_Map a_ref ( size );
+    data_container::memory_map a_ref ( size );
     BOOST_CHECK_EQUAL ( a_ref.index_Seek( static_cast<boost::uint32_t>(6) ),
-                        data_types::Memory_Map::OUT_OF_RANGE );
+                        data_types::memory_map::OUT_OF_RANGE );
 }
 
 void test_copy ()
@@ -73,8 +73,8 @@ void test_copy ()
     std::ifstream input ( "data_int.hex",
                           std::ios_base::in |
                           std::ios_base::binary );
-    data_types::Memory_Map::ptr_t src_ptr ( new data_container::Memory_Map ( input ) );
-	data_container::Memory_Map dest_ref ( src_ptr->size() );
+    data_types::memory_map::ptr_t src_ptr ( new data_container::memory_map ( input ) );
+	data_container::memory_map dest_ref ( src_ptr->size() );
 
 	dest_ref.copy ( src_ptr, src_ptr->size() );
     BOOST_CHECK ( dest_ref == *src_ptr );
@@ -89,7 +89,7 @@ void test_uint8_read ()
                           std::ios_base::in |
                           std::ios_base::binary );
 
-	data_container::Memory_Map src_ref ( input );
+	data_container::memory_map src_ref ( input );
 
     boost::uint8_t val;
 
@@ -113,7 +113,7 @@ void test_uint16_read ()
                           std::ios_base::in |
                           std::ios_base::binary );
 
-	data_container::Memory_Map src_ref ( input );
+	data_container::memory_map src_ref ( input );
 
     boost::uint16_t val;
 
@@ -130,7 +130,7 @@ void test_uint32_read ()
                           std::ios_base::in |
                           std::ios_base::binary );
 
-	data_container::Memory_Map src_ref ( input );
+	data_container::memory_map src_ref ( input );
 
     boost::uint32_t val;
 
@@ -145,7 +145,7 @@ void test_uint64_read ()
                           std::ios_base::in |
                           std::ios_base::binary );
 
-	data_container::Memory_Map src_ref ( input );
+	data_container::memory_map src_ref ( input );
 
     boost::uint64_t val;
 
@@ -156,7 +156,7 @@ void test_uint64_read ()
 void test_seek_ADDRESS_PASS_LOW ()
 {
     boost::uint32_t size = 5;
-    data_container::Memory_Map a_ref ( size, 0x400 );
+    data_container::memory_map a_ref ( size, 0x400 );
 
     BOOST_CHECK_EQUAL ( a_ref.get_Present_Position_Value (),
                         static_cast<boost::uint32_t>(0) );
@@ -170,7 +170,7 @@ void test_seek_ADDRESS_PASS_LOW ()
 void test_seek_ADDRESS_PASS_HIGH ()
 {
     boost::uint32_t size = 5;
-    data_container::Memory_Map a_ref ( size, 0x400 );
+    data_container::memory_map a_ref ( size, 0x400 );
 
     BOOST_CHECK_EQUAL ( a_ref.get_Present_Position_Value (),
                         static_cast<boost::uint32_t>(0) );
@@ -184,17 +184,17 @@ void test_seek_ADDRESS_PASS_HIGH ()
 void test_seek_ADDRESS_FAIL_LOW ()
 {
     boost::uint32_t size = 5;
-    data_container::Memory_Map a_ref ( size, 0x400 );
+    data_container::memory_map a_ref ( size, 0x400 );
     BOOST_CHECK_EQUAL ( a_ref.address_Seek(0x300),
-                        data_types::Memory_Map::OUT_OF_RANGE );
+                        data_types::memory_map::OUT_OF_RANGE );
 }
 
 void test_seek_ADDRESS_FAIL_HIGH ()
 {
     boost::uint32_t size = 5;
-    data_container::Memory_Map a_ref ( size, 0x400 );
+    data_container::memory_map a_ref ( size, 0x400 );
     BOOST_CHECK_EQUAL ( a_ref.address_Seek(0x500),
-                        data_types::Memory_Map::OUT_OF_RANGE );
+                        data_types::memory_map::OUT_OF_RANGE );
 }
 
 void test_subset ()
@@ -202,17 +202,17 @@ void test_subset ()
     std::ifstream input ( "data_int.hex",
                           std::ios_base::binary );
 
-    data_types::Memory_Map::ptr_t src_ref
-        ( new data_container::Memory_Map ( input ) );
+    data_types::memory_map::ptr_t src_ref
+        ( new data_container::memory_map ( input ) );
 
     std::cout << src_ref->to_String() << std::endl;
 
     src_ref->index_Seek ( static_cast<boost::uint8_t>(4) );
 
-    std::pair<data_types::Memory_Map::ptr_t,boost::int8_t> sub_ptr =
+    std::pair<data_types::memory_map::ptr_t,boost::int8_t> sub_ptr =
         src_ref->subset ( 4 );
 
-    BOOST_CHECK_EQUAL ( sub_ptr.second, data_types::Memory_Map::SUCCESS );
+    BOOST_CHECK_EQUAL ( sub_ptr.second, data_types::memory_map::SUCCESS );
 
     boost::uint16_t val;
 
@@ -233,7 +233,7 @@ init_unit_test_suite ( int, char** )
 {
     test_suite* test = BOOST_TEST_SUITE ("Memory Map suite");
 
-    // Allow Memory_Map to allocate our memory at any location
+    // Allow memory_map to allocate our memory at any location
     test->add ( BOOST_TEST_CASE ( &test_seek_PASS_LOW_SEEK ) );
     test->add ( BOOST_TEST_CASE ( &test_seek_PASS_HIGH_SEEK ) );
     test->add ( BOOST_TEST_CASE ( &test_seek_FAIL_HIGH_SEEK ) );

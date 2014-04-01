@@ -36,7 +36,7 @@ using namespace libreverse::trace;
 
 namespace libreverse { namespace component {
 
-    meta::Meta_Object::ptr_t
+    meta::meta_object::ptr_t
     Code_Section_Detector_WPEF64_Algorithm::run ( io_types::File_ID::const_ptr_t file_ptr )
     {
 
@@ -50,7 +50,7 @@ namespace libreverse { namespace component {
       wpef_types::Reader_64::ptr_t file_reader_ptr ( new wpef_module::Reader_64 ( file_ptr ) );
       file_reader_ptr->read_Headers();
 
-      meta::Meta_Object::ptr_t meta_ptr ( new meta::Meta_Object() );
+      meta::meta_object::ptr_t meta_ptr ( new meta::meta_object() );
 
       // Exception is thrown if a '.text' section is not found. We
       // will not catch it because we are expecting a section header
@@ -62,10 +62,10 @@ namespace libreverse { namespace component {
 
       meta_ptr->add ( "code_section_address",
 		      code_section_address,
-		      meta::Meta_Object::HEX );
+		      meta::meta_object::HEX );
       meta_ptr->add ( "code_section_size",
 		      code_section_size,
-		      meta::Meta_Object::HEX );
+		      meta::meta_object::HEX );
 
 #ifdef LIBREVERSE_DEBUG
       Trace::write_Trace ( TraceArea::COMPONENTS,

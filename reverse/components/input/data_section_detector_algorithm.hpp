@@ -23,7 +23,7 @@
 #define DATA_SECTION_DETECTOR_ALGORITHM_H
 
 #include "io/IO_Types.h"
-#include "meta/Meta_Object.h"
+#include "meta/meta_object.h"
 
 namespace libreverse {
 
@@ -36,7 +36,7 @@ namespace libreverse {
 
             virtual ~Data_Section_Detector_Algorithm(){}
 
-            virtual meta::Meta_Object::ptr_t run ( io_types::File_ID::const_ptr_t file_ptr ) = 0;
+            virtual meta::meta_object::ptr_t run ( io_types::File_ID::const_ptr_t file_ptr ) = 0;
         };
 
     } /* namespace component */

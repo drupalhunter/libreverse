@@ -71,7 +71,7 @@ namespace reverse {
 #ifdef LIBREVERSE_DEBUG
 	  Trace::write_Trace ( TraceArea::GRNN_DATA,
 			       TraceLevel::DETAIL,
-			       "Inside GRNN_Data_Entry::get_Filename" );
+			       "Inside GRNN_Data_Entry::get_filename" );
 #endif /* LIBREVERSE_DEBUG */
 
 

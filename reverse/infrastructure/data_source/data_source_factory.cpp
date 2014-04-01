@@ -49,7 +49,7 @@ This file was generated on Fri Sep 10 2004 at 21:33:48
 The original location of this file is 
 **************************************************************************/
 
-#include "Data_Source_Factory.h"
+#include <reverse/infrastructure/data_source/data_source_factory.hpp>
 #include "infrastructure/Configurator.h"
 #include "Memory_Data_Transfer.h"
 #include "Database_Data_Transfer.h"
@@ -57,7 +57,7 @@ The original location of this file is
 #include "File_Data_Transfer.h"
 #include "Database_Data_Source_Config.h"
 #include "errors/Data_Source_Exception.h"
-#include "errors/Component_Exception.h"
+#include "errors/component_exception.h"
 #include "infrastructure/data_source/File_Data_Source_Config.h"
 #include "infrastructure/data_source/Memory_Data_Source_Config.h"
 #include "infrastructure/data_source/Database_Data_Source_Config.h"
@@ -252,8 +252,8 @@ namespace libreverse { namespace infrastructure {
 #endif /* LIBREVERSE_DEBUG */
 
 
-                throw errors::Component_Exception
-                    ( errors::Component_Exception::NULL_POINTER );
+                throw errors::component_exception
+                    ( errors::component_exception::null_pointer );
             }
 
         m_src_config = source_config;

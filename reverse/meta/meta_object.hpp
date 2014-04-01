@@ -1,4 +1,4 @@
-/*  Meta_Object.h
+/*  meta_object.h
 
     Copyright (C) 2008 Stephen Torri
 

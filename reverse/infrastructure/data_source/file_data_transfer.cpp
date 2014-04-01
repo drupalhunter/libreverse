@@ -53,14 +53,14 @@ The original location of this file is
 #include <fstream>
 #include <iostream>
 #include <boost/format.hpp>
-#include "errors/Component_Exception.h"
-#include "Data_Object.h"
+#include "errors/component_exception.h"
+#include "data_object.h"
 
 namespace libreverse { namespace infrastructure {
 
     File_Data_Transfer::File_Data_Transfer ( infrastructure_types::File_Data_Source_Config::const_ptr_t config)
         : m_config (config),
-          m_data ( new Data_Object() )
+          m_data ( new data_object() )
     {}
 
     void File_Data_Transfer::close ()
@@ -73,7 +73,7 @@ namespace libreverse { namespace infrastructure {
         // open file
     }
 
-  void File_Data_Transfer::put ( infrastructure_types::Data_Object::const_ptr_t data_ptr )
+  void File_Data_Transfer::put ( infrastructure_types::data_object::const_ptr_t data_ptr )
     {
         if ( data_ptr.get() == 0 )
             {
@@ -82,12 +82,12 @@ namespace libreverse { namespace infrastructure {
                     % __LINE__
                           << std::endl;
 
-                throw errors::Component_Exception
-                    ( errors::Component_Exception::NULL_POINTER );
+                throw errors::component_exception
+                    ( errors::component_exception::null_pointer );
             }
 
         /*
-          std::ofstream output_file ( (m_config->get_Filename()).c_str() );
+          std::ofstream output_file ( (m_config->get_filename()).c_str() );
           boost::archive::binary_oarchive oa (output_file);
           oa << data.which();
 
@@ -96,13 +96,13 @@ namespace libreverse { namespace infrastructure {
         */
     }
 
-  infrastructure_types::Data_Object::const_ptr_t
+  infrastructure_types::data_object::const_ptr_t
   File_Data_Transfer::get () const
     {
         /*
-          Data_Object data;
+          data_object data;
 
-          std::ifstream input_file ( (m_config->get_Filename()).c_str() );
+          std::ifstream input_file ( (m_config->get_filename()).c_str() );
           boost::archive::binary_iarchive oa (input_file);
 
           boost::uint32_t index;

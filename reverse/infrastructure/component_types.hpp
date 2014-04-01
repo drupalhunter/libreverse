@@ -42,7 +42,7 @@ namespace reverse {
     class Component_State_Algorithm;
     class Configuration_Data;
     class Configurator;
-    class Data_Object;
+    class data_object;
     class Data_Source_Base;
     class Data_Source_Config_Base;
     class Data_Source_Factory;
@@ -296,16 +296,16 @@ namespace reverse {
       typedef boost::shared_ptr < infrastructure::Data_Source_Factory_Base > ptr_t;
     };
 
-    /*! \brief infrastructure::Data_Object typedefs */
-    class Data_Object
+    /*! \brief infrastructure::data_object typedefs */
+    class data_object
     {
     public:
 
       /*! \brief shared pointer type */
-      typedef boost::shared_ptr < infrastructure::Data_Object > ptr_t;
+      typedef boost::shared_ptr < infrastructure::data_object > ptr_t;
 
       /*! \brief constant shared pointer type */
-      typedef boost::shared_ptr < infrastructure::Data_Object const > const_ptr_t;
+      typedef boost::shared_ptr < infrastructure::data_object const > const_ptr_t;
     };
 
     /*! \brief infrastructure::Database_Data_Transfer typedefs */

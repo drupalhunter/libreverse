@@ -21,7 +21,7 @@
 
 #include <boost/test/unit_test.hpp>
 #include "Code_Section_Detector.h"
-#include "data_types/Filename.h"
+#include "data_types/filename.h"
 #include "infrastructure/data_source/Memory_Data_Source_Config.h"
 #include "infrastructure/data_source/Memory_Data_Transfer.h"
 #include "infrastructure/data_source/Data_Source_T.h"
@@ -37,7 +37,7 @@ using namespace libreverse::infrastructure;
 void test_default_constructor ()
 {
     Code_Section_Detector atd_ref;
-    Filename::ptr_t const file = atd_ref.get_Filename();
+    filename::ptr_t const file = atd_ref.get_filename();
     BOOST_CHECK_EQUAL ( file->to_String(), "" );
 
     BOOST_CHECK_EQUAL ( atd_ref.get_ID(), static_cast<boost::uint32_t>(0) );
@@ -46,7 +46,7 @@ void test_default_constructor ()
 void test_second_constructor ()
 {
     Code_Section_Detector atd_ref ( 20 );
-    Filename::ptr_t const file = atd_ref.get_Filename();
+    filename::ptr_t const file = atd_ref.get_filename();
     BOOST_CHECK_EQUAL ( file->to_String(), "" );
 
     BOOST_CHECK_EQUAL ( atd_ref.get_ID(), static_cast<boost::uint32_t>(20) );
@@ -56,18 +56,18 @@ void test_visit ()
 {
     Code_Section_Detector atd_ref ( 20 );
 
-    Filename::ptr_t input_file ( new Filename ( "arch_test1.exe" ) );
+    filename::ptr_t input_file ( new filename ( "arch_test1.exe" ) );
 
     atd_ref.visit ( input_file );
 
-    Filename::ptr_t const file = atd_ref.get_Filename();
+    filename::ptr_t const file = atd_ref.get_filename();
 
     BOOST_CHECK_EQUAL ( file->to_String(), "arch_test1.exe" );
 
     BOOST_CHECK_EQUAL ( atd_ref.get_ID(), static_cast<boost::uint32_t>(20) );
 }
 
-Meta_Object::ptr_t
+meta_object::ptr_t
 helper_run_test ( Component::ptr_t target_ptr,
                   std::string target_file )
 {
@@ -75,14 +75,14 @@ helper_run_test ( Component::ptr_t target_ptr,
     Graph_Base::Data_Map_t data_map_ref;
 
     // Add Data Source with filename added
-    Filename::ptr_t input_file ( new Filename ( target_file.insert (0, PWD_PREFIX) ) );
+    filename::ptr_t input_file ( new filename ( target_file.insert (0, PWD_PREFIX) ) );
 
     Memory_Data_Source_Config::ptr_t mem_config ( new Memory_Data_Source_Config() );
     Memory_Data_Transfer::ptr_t mem_trans ( new Memory_Data_Transfer ( mem_config ) );
     Data_Source<Memory_Data_Transfer>::ptr_t input_key
         ( new Data_Source<Memory_Data_Transfer>( mem_trans ) );
 
-    Data_Object::ptr_t input_object ( new Data_Object() );
+    data_object::ptr_t input_object ( new data_object() );
     input_object->setData ( input_file );
     input_key->put ( input_object );
 
@@ -97,8 +97,8 @@ helper_run_test ( Component::ptr_t target_ptr,
     target_ptr->run ( data_map_ref );
 
     Data_Source_Base::ptr_t results = target_ptr->results();
-    Data_Object::ptr_t results_data_obj = results->get();
-    Meta_Object::ptr_t meta_results = results_data_obj->getMeta();
+    data_object::ptr_t results_data_obj = results->get();
+    meta_object::ptr_t meta_results = results_data_obj->get_meta();
 
     return meta_results;
 }
@@ -107,7 +107,7 @@ void test_intel_winpe_process ()
 {
     Code_Section_Detector::ptr_t atd_ptr ( new Code_Section_Detector ( 20 ) );
 
-    Meta_Object::ptr_t meta_results =
+    meta_object::ptr_t meta_results =
         helper_run_test ( atd_ptr, "/test_targets/cokegift.exe" );
 
     std::string text = meta_results->get_Value ( "code_section_address" );
@@ -123,7 +123,7 @@ void test_intel_elf_process ()
 {
     Code_Section_Detector::ptr_t atd_ptr ( new Code_Section_Detector( 20 ) );
 
-    Meta_Object::ptr_t meta_results =
+    meta_object::ptr_t meta_results =
         helper_run_test ( atd_ptr, "/test_targets/echo" );
 
     std::string text = meta_results->get_Value ( "code_section" );

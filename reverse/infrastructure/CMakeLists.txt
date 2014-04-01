@@ -10,7 +10,6 @@ set ( INFRASTRUCTURE_SOURCES
 	component_state.cpp
 	component_working_state.cpp
 	configuration_data.cpp
-	configuration_parser.cpp
 	configuration_tag_names.cpp
 	configurator.cpp
 	formula_list.cpp
@@ -33,7 +32,6 @@ set ( INFRASTRUCTURE_HEADERS
 	component_working_state.hpp
 	component_graph.hpp
 	configuration_data.hpp
-	configuration_parser.hpp
 	configuration_tag_names.hpp
 	configurator.hpp
 	formula_list.hpp
@@ -46,7 +44,7 @@ set ( INFRASTRUCTURE_HEADERS
 	master_formula_tag_names.hpp
         xmlexpatparser.hpp )
 
-include_directories ( ${REVERSE_SOURCE_DIR} )
+include_directories ( ${REVERSE_SOURCE_DIR} ${JSON_SPIRIT_INCLUDE_DIR} )
 
 add_library ( ${PROJECT_NAME} ${INFRASTRUCTURE_SOURCES} ${INFRASTRUCTURE_HEADERS} )
 

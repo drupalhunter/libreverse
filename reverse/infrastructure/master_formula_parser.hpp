@@ -19,49 +19,45 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#ifndef MASTER_FORMULA_PARSER_H_
-#define MASTER_FORMULA_PARSER_H_
+#ifndef REVERSE_INFRASTRUCTURE_MASTER_FORMULA_PARSER_HPP_INCLUDED
+#define REVERSE_INFRASTRUCTURE_MASTER_FORMULA_PARSER_HPP_INCLUDED
 
-#include "Configurator.h"
-#include "Master_Formula_Tag_Names.h"
-#include <stack>
-#include "XMLExpatParser.h"
-#include "Component_Types.h"
+#include <reverse/infrastructure/configurator.hpp>
+#include <json_spirit/json_spirit.hpp>
 
-namespace libreverse { namespace infrastructure {
+#include <boost/shared_ptr.hpp>
 
-    class Master_Formula_Parser : public XMLExpatParser {
+namespace reverse {
+  namespace infrastructure {
+
+    class master_formula_parser {
     public:
 
-        explicit Master_Formula_Parser();
+      explicit master_formula_parser();
 
-        virtual ~Master_Formula_Parser(){}
+      virtual ~master_formula_parser(){}
 
-        infrastructure_types::Configurator::Formula_Map_ptr_t
-        get_Formula_Map ( std::string filename );
-
-        virtual void startElement ( const std::string& element_name,
-                                    const Attribute_Map_t& attributes );
-
-        virtual void charData ( const std::string& element_value );
-
-        virtual void endElement ( const std::string& element_name );
+      boost::shared_ptr < const infrastructure::configurator::formula_map_t >
+      get_formula_map ( std::string const& filename );
 
     private:
 
+      void read_formula_map ( json_spirit::Object const& obj );
+
+      void set_input_type ( std::string const& value );
+
+      void set_output_type ( std::string const& value );
+
         static const int MATCH;
 
-        infrastructure_types::Configurator::Formula_Map_ptr_t m_map;
-        Master_Formula_Tag_Names m_tag;
-        boost::uint32_t m_input_type;
-        boost::uint32_t m_output_type;
-        std::string m_input_formula_file;
-        std::string m_analysis_formula_file;
-        std::string m_output_formula_file;
-
-        std::stack<std::string> m_element_list;
+      boost::shared_ptr < infrastructure::configurator::formula_map_t > m_map;
+      boost::uint32_t m_input_type;
+      boost::uint32_t m_output_type;
+      std::string m_input_formula_file;
+      std::string m_analysis_formula_file;
+      std::string m_output_formula_file;
     };
-} /* namespace infrastructure */
-} /* namespace libreverse */
+  } /* namespace infrastructure */
+} /* namespace reverse */
 
-#endif /* MASTER_FORMULA_PARSER_H_ */
+#endif /* REVERSE_INFRASTRUCTURE_MASTER_FORMULA_PARSER_HPP_INCLUDED */

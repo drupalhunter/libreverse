@@ -7,7 +7,7 @@
 #include <fstream>
 
 #include "libreverse/data_containers/Data_Types.h"
-#include "libreverse/data_containers/Control_Flow_Graph_Sequence.h"
+#include "libreverse/data_containers/control_flow_graph_sequence.h"
 #include "libreverse/data_containers/visitor/Control_Flow_Graph_Graphviz_Visitor.h"
 #include "libreverse/components/input/instruction_decoders/Decoder_Types.h"
 #include "libreverse/components/input/instruction_decoders/Java_Assembly_Actions.h"
@@ -75,9 +75,9 @@ int main ( int argc, char** argv )
 
   decoder_types::Java_Actions::ptr_t actions_ptr ( new decoder::Java_Assembly_Actions() );
   decoder::Java_Decoder decoder_ref ( actions_ptr );
-  data_types::Control_Flow_Graph_Sequence::ptr_t cfg_ptr = decoder_ref.execute ( target );
+  data_types::control_flow_graph_sequence::ptr_t cfg_ptr = decoder_ref.execute ( target );
 
-  for ( data_types::Control_Flow_Graph_Sequence::Sequence_t::iterator pos = cfg_ptr->begin();
+  for ( data_types::control_flow_graph_sequence::Sequence_t::iterator pos = cfg_ptr->begin();
 	pos != cfg_ptr->end();
 	++pos )
     {

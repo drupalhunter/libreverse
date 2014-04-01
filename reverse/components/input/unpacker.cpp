@@ -22,13 +22,13 @@
 #include "Unpacker.h"
 #include "Unpacker_Algorithm.h"
 #include "Unpacker_Algorithm_Factory.h"
-#include "meta/Meta_Object.h"
+#include "meta/meta_object.h"
 #include <iostream>
 #include "io/input/File_Readers/Reader_Factory.h"
 #include "io/input/File_Readers/File_Reader.h"
-#include "data_containers/Filename.h"
-#include "data_containers/Memory_Map.h"
-#include "infrastructure/data_source/Data_Object.h"
+#include "data_containers/filename.h"
+#include "data_containers/memory_map.h"
+#include "infrastructure/data_source/data_object.h"
 #include "infrastructure/Component_Data.h"
 #include "infrastructure/Component_State.h"
 #include <boost/format.hpp>
@@ -163,22 +163,22 @@ namespace libreverse { namespace component {
 	/*       Execute Algorithm        */
 	/*--------------------------------*/
 
-        data_types::Memory_Map::const_ptr_t input_file_map_ptr =
-            data_ptr->get_Input_Memory_Map();
+        data_types::memory_map::const_ptr_t input_file_map_ptr =
+            data_ptr->get_Input_memory_map();
 
-        meta::Meta_Object::const_ptr_t meta_ptr =
+        meta::meta_object::const_ptr_t meta_ptr =
             data_ptr->get_Input_Meta_Data();
 
-        Meta_Object::Data_Pair_t arch_meta_value =
+        meta_object::Data_Pair_t arch_meta_value =
             meta_ptr->get_Value ( "arch_type" );
 
-        assert ( arch_meta_value.second == Meta_Object::STRING );
+        assert ( arch_meta_value.second == meta_object::STRING );
         std::string arch_str_val = arch_meta_value.first;
 
         boost::shared_ptr<Unpacker_Algorithm> algorithm_ptr =
             Unpacker_Algorithm_Factory::Instance().get_Algorithm ( arch_str_val );
 
-        data_types::Memory_Map::const_ptr_t output_file_map_ptr =
+        data_types::memory_map::const_ptr_t output_file_map_ptr =
             algorithm_ptr->run ( meta_ptr,
                                  input_file_map_ptr );
 
@@ -187,7 +187,7 @@ namespace libreverse { namespace component {
         /**
          * add input filename to output information
          */
-        data_ptr->set_Output_Data ( data_ptr->get_Input_Filename() );
+        data_ptr->set_Output_Data ( data_ptr->get_Input_filename() );
 
         Trace::write_Trace
             ( TraceArea::COMPONENTS,

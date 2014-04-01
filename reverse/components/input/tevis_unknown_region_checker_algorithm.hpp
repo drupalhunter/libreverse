@@ -24,7 +24,7 @@
 
 #include "infrastructure/Component.h"
 #include "data_containers/Data_Types.h"
-#include "meta/Meta_Object.h"
+#include "meta/meta_object.h"
 
 namespace libreverse {
 

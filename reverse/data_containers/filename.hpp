@@ -1,4 +1,4 @@
-/*  Filename.h
+/*  filename.h
 
    Copyright (C) 2008 Stephen Torri
 

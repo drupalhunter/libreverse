@@ -27,12 +27,12 @@
 #include "Mach_Reader_32.h"
 #include "Mach_Reader_64.h"
 #include <sstream>
-#include "data_containers/Memory_Map.h"
+#include "data_containers/memory_map.h"
 
 /*
 #include "io/File_ID.h"
 #include "io/File.h"
-#include "data_containers/Memory_Map.h"
+#include "data_containers/memory_map.h"
 #include <sstream>
 #include <list>
 */
@@ -56,7 +56,7 @@ namespace libreverse
             this->read_Fat_Header();
         }
 
-        Fat_Reader::Fat_Reader ( data_types::Memory_Map::ptr_t mem_ptr,
+        Fat_Reader::Fat_Reader ( data_types::memory_map::ptr_t mem_ptr,
                                  io_types::File_ID::ptr_t target_file )
                 : m_file ( new Mach_File ( mem_ptr, target_file ) ),
                 m_need_convert ( false ),
@@ -165,16 +165,16 @@ namespace libreverse
         }
 
 
-        data_types::Memory_Map::ptr_t
-        Fat_Reader::get_Memory_Map ( void )
+        data_types::memory_map::ptr_t
+        Fat_Reader::get_memory_map ( void )
         {
             Trace::write_Trace ( TraceArea::IO,
                                  TraceLevel::DETAIL,
-                                 "Inside Fat_Reader::get_Memory_Map" );
+                                 "Inside Fat_Reader::get_memory_map" );
 
             this->read_Headers();
 
-            return data_types::Memory_Map::ptr_t();
+            return data_types::memory_map::ptr_t();
         }
 
 
@@ -321,7 +321,7 @@ namespace libreverse
                     m_file->address_Seek ( ( *cpos )->get_Offset() );
 
                     // Create copy of memory
-                    data_types::Memory_Map::ptr_t mach_file_map_ptr ( new data_container::Memory_Map ( ( *cpos )->get_Header_Size(),
+                    data_types::memory_map::ptr_t mach_file_map_ptr ( new data_container::memory_map ( ( *cpos )->get_Header_Size(),
                             ( *cpos )->get_Offset() ) );
 
                     m_file->copy ( mach_file_map_ptr, ( *cpos )->get_Header_Size() );

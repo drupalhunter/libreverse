@@ -54,11 +54,11 @@ namespace libreverse
                  */
                 Mach_File ( io_types::File_ID::const_ptr_t filename );
 
-                /*! \brief Constructor which creates a Mach_File object from a given Memory_Map
+                /*! \brief Constructor which creates a Mach_File object from a given memory_map
                  *  \param file_img_ptr Memory Map associated with this Mach file
                  *  \param filename File name associated with this Mach file object
                  */
-                Mach_File ( data_types::Memory_Map::ptr_t file_img_ptr,
+                Mach_File ( data_types::memory_map::ptr_t file_img_ptr,
                             io_types::File_ID::const_ptr_t filename );
 
                 /*! \brief Initialize Mach_File object
@@ -91,13 +91,13 @@ namespace libreverse
                  */
                 void index_Seek ( boost::uint32_t offset );
 
-                /*! \brief Copy a section of bytes from the Mach file to a Memory_Map object from the present location.
-                 *  \param dest_ptr Destination Memory_Map object
+                /*! \brief Copy a section of bytes from the Mach file to a memory_map object from the present location.
+                 *  \param dest_ptr Destination memory_map object
                  *  \param length Size of read in bytes
                  *  \pre dest_ptr is not null
                  *  \pre length is not equal to zero
                  */
-                void copy ( data_types::Memory_Map::ptr_t dest_ptr,
+                void copy ( data_types::memory_map::ptr_t dest_ptr,
                             boost::uint32_t length );
 
                 /*! \brief Return the File_ID object associated with this Mach file

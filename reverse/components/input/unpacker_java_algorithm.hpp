@@ -23,15 +23,15 @@
 #define UNPACKER_JAVA_ALGORITHM_H
 
 #include "Unpacker_Algorithm.h"
-#include "meta/Meta_Object.h"
+#include "meta/meta_object.h"
 
 namespace libreverse { namespace component {
 
     class Unpacker_Java_Algorithm : public Unpacker_Algorithm {
     public:
 
-        virtual data_types::Memory_Map::const_ptr_t run ( meta::Meta_Object::const_ptr_t,
-                                                          data_types::Memory_Map::const_ptr_t );
+        virtual data_types::memory_map::const_ptr_t run ( meta::meta_object::const_ptr_t,
+                                                          data_types::memory_map::const_ptr_t );
 
         virtual void print_Color_Map (void);
 
@@ -64,7 +64,7 @@ namespace libreverse { namespace component {
         //------------------------------
         Color_Map_t m_color_map;
 
-        data_types::Memory_Map::const_ptr_t m_file_map;
+        data_types::memory_map::const_ptr_t m_file_map;
     };
 
 } /* namespace component */

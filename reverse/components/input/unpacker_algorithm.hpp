@@ -24,7 +24,7 @@
 
 #include "infrastructure/Component.h"
 #include "data_containers/Data_Types.h"
-#include "meta/Meta_Object.h"
+#include "meta/meta_object.h"
 
 namespace libreverse {
 
@@ -37,9 +37,9 @@ namespace libreverse {
 
             virtual ~Unpacker_Algorithm(){}
 
-            virtual data_types::Memory_Map::const_ptr_t
-            run ( meta::Meta_Object::const_ptr_t meta_ptr,
-                  data_types::Memory_Map::const_ptr_t file_map_ptr ) = 0;
+            virtual data_types::memory_map::const_ptr_t
+            run ( meta::meta_object::const_ptr_t meta_ptr,
+                  data_types::memory_map::const_ptr_t file_map_ptr ) = 0;
 
             virtual void print_Color_Map (void) = 0;
 

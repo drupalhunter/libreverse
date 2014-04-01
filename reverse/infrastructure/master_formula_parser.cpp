@@ -19,235 +19,153 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#include "Master_Formula_Parser.h"
-#include "errors/Parsing_Exception.h"
-#include "Reverse.h"
-#include "Formula_List.h"
+#include <reverse/reverse.hpp>
+#include <reverse/tracee.hpp>
+#include <reverse/errors/parsing_exception.hpp>
+#include <reverse/infrastructure/formula_list.hpp>
+#include <reverse/infrastructure/master_formula_parser.hpp>
+
 #include <boost/format.hpp>
 #include <boost/filesystem/operations.hpp>
+#include <boost/iostreams/device/mapped_file.hpp>
+
 #include <iostream>
 #include <fstream>
-#include "data_containers/Memory_Map.h"
 
-#ifdef LIBREVERSE_DEBUG
-#include "Trace.h"
-using namespace libreverse::api;
-using namespace libreverse::trace;
-#endif /* LIBREVERSE_DEBUG */
+namespace reverse {
+  namespace infrastructure {
 
-namespace libreverse { namespace infrastructure {
+    const int master_formula_parser::match = 0;
 
-    const int Master_Formula_Parser::MATCH = 0;
-
-    Master_Formula_Parser::Master_Formula_Parser()
-        : m_map ( new infrastructure_types::Configurator::Formula_Map_t() ),
+    master_formula_parser::master_formula_parser()
+        : m_map ( new infrastructure::configurator::formula_map_t() ),
           m_input_type (0),
           m_output_type (0),
           m_input_formula_file (""),
           m_analysis_formula_file (""),
           m_output_formula_file ("")
     {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::DETAIL,
-                             "Inside Master_Formula_Parser constructor" );
-#endif /* LIBREVERSE_DEBUG */
-
+      trace::infrastructure_detail ( "Inside Master_Formula_Parser constructor" );
     }
 
-    infrastructure_types::Configurator::Formula_Map_ptr_t
-    Master_Formula_Parser::get_Formula_Map ( std::string filename )
+    boost::shared_ptr < const infrastructure::configurator::formula_map_t >
+    master_formula_parser::get_formula_map ( std::string const& filename )
     {
+      trace::infrastructure_detail ( "Entering Master_Formula_Parser::get_Formula_Map" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::DETAIL,
-                             "Entering Master_Formula_Parser::get_Formula_Map" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        m_map.reset ( new infrastructure_types::Configurator::Formula_Map_t() );
+      m_map->clear();
         
-        std::cout << "Master_Formula_Parser::get_Formula_Map - reading "
-                  << filename << std::endl;
-
-        if ( ! boost::filesystem::exists ( filename ) )
-            {
-
-#ifdef LIBREVERSE_DEBUG
-                Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-				     TraceLevel::ERROR,
-				     boost::str ( boost::format("Exception throw in %s at line %d")
-						  % __FILE__
-						  % __LINE__ ) );
-#endif /* LIBREVERSE_DEBUG */
-
+      if ( ! boost::filesystem::exists ( filename ) )
+	{
+	  trace::infrastructure_error ( "Exception throw in %s at line %d",
+					__FILE__,
+					__LINE__ );
 		
-                throw errors::Parsing_Exception
-                    ( errors::Parsing_Exception::MISSING_FILE );
-            }
+	  throw errors::parsing_exception ( errors::parsing_exception::missing_file );
+	}
 
-        std::ifstream input ( filename.c_str() );
-        data_container::Memory_Map input_data ( input );
+      boost::iostreams::mapped_file_source input;
 
-        // Create parser
-        if ( ! this->createParser() )
-            {
+      // Create JSON parser
+      // 
+      // Master formula map has five entries
+      // - input type
+      // - output type
+      // - input formula map file name
+      // - analysis formula map file name
+      // - output formula map file name
+      //
+      // Parse array of JSON objects
+      //
+      // For each object in array
+      //   - grab file name
+      //   - parser file
+      //   - store in appropriate variable
+      json_spirit::Value top_value;
+      json_spirit::read_stream ( input, top_value );
 
-#ifdef LIBREVERSE_DEBUG
-                // Error creating
-                Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-				     TraceLevel::ERROR,
-				     "Formula_Parser::parse_Data - error creating parser" );
+      read_formula_map ( top_value.getObject() );
 
-                Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-				     TraceLevel::ERROR,
-				     boost::str ( boost::format("Exception throw in %s at line %d")
-						  % __FILE__
-						  % __LINE__ ) );
-#endif /* LIBREVERSE_DEBUG */
+      trace::infrastructure_detail ( "Exiting Master_Formula_Parser::get_Formula_Map" );
 
-
-                // Throw exception
-                throw errors::Parsing_Exception
-                    ( errors::Parsing_Exception::UNKNOWN_PARSING_ERROR );
-            }
-
-        // Parse file
-
-        if ( ! this->parse ( reinterpret_cast<const char*>(&(*input_data.begin())),
-                             input_data.size() ) )
-            {
-                std::cerr << boost::format("(EE) %s at line %d in %s")
-                    % getErrorString ( getErrorCode() )
-                    % getCurrentLineNumber()
-                    % filename
-                          << std::endl;
-
-                // Throw exception
-                throw errors::Parsing_Exception
-                    ( errors::Parsing_Exception::INVALID_FORMAT );
-            }
-                           
-        this->destroyParser();
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::DETAIL,
-                             "Exiting Master_Formula_Parser::get_Formula_Map" );
-#endif /* LIBREVERSE_DEBUG */
-
-        return m_map;
+      return boost::make_shared < infrastructure::configurator::formula_map_t > ( *m_map );
     }
 
     void
-    Master_Formula_Parser::startElement ( const std::string& element_name,
-                                          const Attribute_Map_t& )
+    void master_formula_parser::read_formula_map ( json_spirit::Object const& obj )
     {
+      trace::infrastructure_detail ( "Entering Master_Formula_Parser::read_formula_map" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::DETAIL,
-                             "Inside Master_Formula_Parser::startElement" );
-#endif /* LIBREVERSE_DEBUG */
+      for ( json_spirit::Object::const_iterator cpos = obj.begin();
+	    cpos != obj.end();
+	    ++cpos )
+	{
+	  const std::string& name = cpos->first;
+	  const json_spirit::Value& value = cpos->second;
 
-        m_element_list.push ( element_name );
+	  if ( name == "input_type" )
+	    {
+	      this->set_input_type ( value.getString() );
+	    }
+	  else if ( name == "output_type" )
+	    {
+	      this->set_output_type ( value.getString() );
+            }
+	  else if ( name == "input_formula" )
+            {
+                m_input_formula_file = value;
+            }
+	  else if ( name == "analysis_formula" )
+            {
+                m_analysis_formula_file = value;
+            }
+	  else if ( name == "output_formula" )
+            {
+                m_output_formula_file = value;
+            }
+	}
+
+      trace::infrastructure_detail ( "Exiting Master_Formula_Parser::charData" );
     }
 
-    void
-    Master_Formula_Parser::charData ( const std::string& element_value )
+      void master_formula_parser::set_input_type ( std::string const& value )
+      {
+	if ( value == "binary" )
+	  {
+	    m_input_type = input_types::binary;
+	  }
+	else 
+	  {
+	    throw errors::parsing_exception (errors::parsing_exception::unknown_type);
+	  }
+      }
+
+    void master_formula_parser::set_output_type ( std::string const& value )
     {
+      if ( value == "C++" )
+	{
+	  m_output_type = output_types::cplusplus;
+	}
+      else if ( value == "c" )
+	{
+	  m_output_type = output_types::c;
+	}
+      else if ( value == "java" )
+	{
+	  m_output_type = output_types::java;
+	}
+      else if ( value == "uml" )
+	{
+	  m_output_type = output_types::uml;
+	}
+      else
+	{
+	  trace::infrastructure_error ( "Exception throw in %s at line %d",
+					__FILE__,
+					__LINE__ );
 
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::DETAIL,
-                             "Entering Master_Formula_Parser::charData" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        std::string present_element = m_element_list.top();
-
-        if ( present_element.compare ( m_tag.TAG_INPUT ) == 0 )
-            {
-                if ( element_value.compare ( "binary" ) == 0 )
-                    {
-                        m_input_type = api::Input_Types::BINARY;
-                    }
-                else
-                    {
-
-
-#ifdef LIBREVERSE_DEBUG
-                        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-					     TraceLevel::ERROR,
-					     boost::str ( boost::format("Exception throw in %s at line %d")
-							  % __FILE__
-							  % __LINE__ ) );
-#endif /* LIBREVERSE_DEBUG */
-
-
-                        throw errors::Parsing_Exception ( errors::Parsing_Exception::UNKNOWN_TYPE );
-                    }
-            }
-        else if ( present_element.compare ( m_tag.TAG_OUTPUT ) == 0 )
-            {
-                if ( element_value.compare ( "C++" ) == MATCH )
-                    {
-                        m_output_type = api::Output_Types::CPLUSPLUS;
-                    }
-                else if ( element_value.compare ( "C" ) == MATCH )
-                    {
-                        m_output_type = api::Output_Types::C;
-                    }
-                else if ( element_value.compare ( "Java" ) == MATCH )
-                    {
-                        m_output_type = api::Output_Types::JAVA;
-                    }
-                else if ( element_value.compare ( "UML" ) == MATCH )
-                    {
-                        m_output_type = api::Output_Types::UML;
-                    }
-                else
-                    {
-
-
-#ifdef LIBREVERSE_DEBUG
-                        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-					     TraceLevel::ERROR,
-					     boost::str ( boost::format("Exception throw in %s at line %d")
-							  % __FILE__
-							  % __LINE__ ) );
-#endif /* LIBREVERSE_DEBUG */
-
-
-                        throw errors::Parsing_Exception
-                            (errors::Parsing_Exception::UNKNOWN_TYPE);
-                    }
-            }
-        else if ( present_element.compare ( m_tag.TAG_INPUT_FORMULA ) == 0 )
-            {
-                m_input_formula_file = element_value;
-            }
-        else if ( present_element.compare ( m_tag.TAG_ANALYSIS_FORMULA ) == 0 )
-            {
-                m_analysis_formula_file = element_value;
-            }
-        else if ( present_element.compare ( m_tag.TAG_OUTPUT_FORMULA ) == 0 )
-            {
-                m_output_formula_file = element_value;
-            }
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::DETAIL,
-                             "Exiting Master_Formula_Parser::charData" );
-#endif /* LIBREVERSE_DEBUG */
-
-
+	  throw errors::parsing_exception (errors::parsing_exception::unknown_type);
+	}
     }
 
     void

@@ -49,7 +49,7 @@ namespace libreverse
         }
 
 
-        Mach_Reader_64::Mach_Reader_64 ( data_types::Memory_Map::ptr_t mem_ptr,
+        Mach_Reader_64::Mach_Reader_64 ( data_types::memory_map::ptr_t mem_ptr,
                                          io_types::File_ID::const_ptr_t target_file )
                 : m_header ( new Mach_Header_64 () ),
                 m_file ( mem_ptr, target_file ),
@@ -109,14 +109,14 @@ namespace libreverse
         }
 
 
-        data_types::Memory_Map::ptr_t
-        Mach_Reader_64::get_Memory_Map ( void )
+        data_types::memory_map::ptr_t
+        Mach_Reader_64::get_memory_map ( void )
         {
             Trace::write_Trace ( TraceArea::IO,
                                  TraceLevel::DETAIL,
-                                 "Inside Mach_Reader_64::get_Memory_Map" );
+                                 "Inside Mach_Reader_64::get_memory_map" );
 
-            return data_types::Memory_Map::ptr_t();
+            return data_types::memory_map::ptr_t();
         }
 
 

@@ -1,4 +1,4 @@
-/*  Data_Object.cpp
+/*  data_object.cpp
 
    Copyright (C) 2008 Stephen Torri
 
@@ -19,393 +19,225 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#include "Data_Object.h"
-#include "errors/Component_Exception.h"
-#include "data_containers/Control_Flow_Graph_Sequence.h"
-#include "data_containers/Memory_Map.h"
-#include <sstream>
+#include <reverse/assert/assert.hpp>
+#include <reverse/trace.hpp>
+#include <reverse/infrastructure/data_source/data_object.hpp>
+#include <reverse/errors/component_exception.hpp>
+#include <reverse/data_containers/control_flow_graph_sequence.hpp>
+#include <reverse/data_containers/filename.hpp>
+#include <reverse/data_containers/memory_map.hpp>
+
 #include <boost/format.hpp>
 
-#include "Assert.h"
-using namespace libreverse::assert;
+#include <sstream>
 
+namespace reverse {
+  namespace infrastructure {
+    namespace data_source {
 
-#ifdef LIBREVERSE_DEBUG
-#include "Trace.h"
-using namespace libreverse::api;
-using namespace libreverse::trace;
-#endif /* LIBREVERSE_DEBUG */
-
-namespace libreverse { namespace infrastructure {
-
-    Data_Object::Data_Object ()
-        : m_meta ( new meta::Meta_Object() ),
+    data_object::data_object ()
+        : m_meta ( new meta::meta_object() ),
           m_filename(),
           m_graph(),
           m_map()
     {
+        trace::infrastructure_detail( "Entering data_object constructor" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Entering Data_Object constructor" );
-#endif /* LIBREVERSE_DEBUG */
+	reverse::assert::null_check ( m_meta.get(), "m_meta.get() should not be null" );
+        reverse::assert::bool_check ( m_filename.get() == 0, "m_filename.get() == 0" );
+        reverse::assert::bool_check ( m_graph.get() == 0, "m_graph.get() == 0" );
+        reverse::assert::bool_check ( m_map.get() == 0, "m_map.get() == 0" );
 
-
-        Assert::null_check ( m_meta.get(), "m_meta.get() should not be null" );
-        Assert::bool_check ( m_filename.get() == 0, "m_filename.get() == 0" );
-        Assert::bool_check ( m_graph.get() == 0, "m_graph.get() == 0" );
-        Assert::bool_check ( m_map.get() == 0, "m_map.get() == 0" );
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Exiting Data_Object constructor" );
-#endif /* LIBREVERSE_DEBUG */
-
+	trace::infrastructure_detail( "Exiting data_object constructor" );
     }
 
-    void
-    Data_Object::Data_Object ( const boost::shared_ptr < const Filename>& data )
+    data_object::data_object ( boost::shared_ptr < const data_containers::filename >& data )
     {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Entering Data_Object::Data_Object (Filename)" );
-#endif /* LIBREVERSE_DEBUG */
-
+      trace::infrastructure_detail("Entering data_object::data_object (filename)" );
 
         if ( data.get() == 0 )
             {
 
+	      trace::infrastructure_error( "Exception throw in %s at line %d",
+				__FILE__,
+                                __LINE__ );
 
-#ifdef LIBREVERSE_DEBUG
-                Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                                     TraceLevel::ERROR,
-                                     boost::str ( boost::format("Exception throw in %s at line %d")
-                                                  % __FILE__
-                                                  % __LINE__ ) );
-#endif /* LIBREVERSE_DEBUG */
-
-
-                throw errors::Component_Exception
-                    ( errors::Component_Exception::NULL_POINTER );
+              throw errors::component_exception ( errors::component_exception::null_pointer);
             }
 
         m_filename = data;
 
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::INFO,
-			     boost::str ( boost::format("Data_Object::Data_Object - Filename = %s (Ptr count = %d, Input Ptr count = %d)")
-					  % m_filename->to_String()
-					  % m_filename.use_count()
-					  % data.use_count() ) );
-
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Exiting Data_Object::Data_Object (Filename)" );
-#endif /* LIBREVERSE_DEBUG */
-
+	trace::infrastructure_detail( "Exiting data_object::data_object (filename)" );
     }
 
-    void
-    Data_Object::Data_Object ( boost::shared_ptr < const Control_Flow_Graph_Sequence>& data )
+    data_object::data_object ( boost::shared_ptr < const data_containers::control_flow_graph_sequence >& data )
     {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Entering Data_Object::Data_Object (Control_Flow_Graph_Sequence)" );
-#endif /* LIBREVERSE_DEBUG */
+	trace::infrastructure_detail( "Entering data_object::data_object (control_flow_graph_sequence)" );
 
         if ( data.get() == 0 )
             {
+		trace::infrastructure_error( "Exception throw in %s at line %d",
+                                   __FILE__,
+                                   __LINE__ );
 
-#ifdef LIBREVERSE_DEBUG
-                Trace::write_Trace
-                    ( TraceArea::INFRASTRUCTURE,
-                      TraceLevel::ERROR,
-                      boost::str ( boost::format("Exception throw in %s at line %d")
-                                   % __FILE__
-                                   % __LINE__ ) );
-#endif /* LIBREVERSE_DEBUG */
-
-
-                throw errors::Component_Exception ( errors::Component_Exception::NULL_POINTER );
+                throw errors::component_exception ( errors::component_exception::null_pointer );
             }
 
         m_graph = data;
 
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Exiting Data_Object::Data_Object (Control_Flow_Graph_Sequence)" );
-#endif /* LIBREVERSE_DEBUG */
-
+        trace::infrastructure_detail( "Exiting data_object::data_object (control_flow_graph_sequence)" );
     }
 
-    void
-    Data_Object::Data_Object ( boost::shared_ptr < const Memory_Map>& data )
+    data_object::data_object ( boost::shared_ptr < const data_containers::memory_map >& data )
     {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Entering Data_Object::Data_Object (Memory_Map)" );
-#endif /* LIBREVERSE_DEBUG */
-
+        trace::infrastructure_detail( "Entering data_object::data_object (memory_map)" );
 
         if ( data.get() == 0 )
             {
+	      trace::infrastructure_error ( "Exception throw in %s at line %d",
+                                            __FILE__,
+                                            __LINE__ );
 
-#ifdef LIBREVERSE_DEBUG
-                Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                                     TraceLevel::ERROR,
-                                     boost::str ( boost::format("Exception throw in %s at line %d")
-                                                  % __FILE__
-                                                  % __LINE__ ) );
-#endif /* LIBREVERSE_DEBUG */
-
-                throw errors::Component_Exception
-                    ( errors::Component_Exception::NULL_POINTER );
+	      throw errors::component_exception ( errors::component_exception::null_pointer );
             }
 
         m_map = data;
 
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Exiting Data_Object::Data_Object (Memory_Map)" );
-#endif /* LIBREVERSE_DEBUG */
-
+        trace::infrastructure_detail ( "Exiting data_object::data_object (memory_map)" );
     }
 
-
-    Data_Object::Data_Object ( Data_Object const& rhs )
-        : m_meta ( new meta::Meta_Object ( *rhs.m_meta ) )
+    data_object::data_object ( data_object const& rhs )
+        : m_meta ( new meta::meta_object ( *rhs.m_meta ) )
     {
         // Test equality? We say that they are true copies but are they
 
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Entering Data_Object copy constructor" );
-#endif /* LIBREVERSE_DEBUG */
-
+      trace::infrastructure_detail ( "Entering data_object copy constructor" );
 
         if ( rhs.m_filename.get() != 0 )
             {
-                m_filename.reset ( new data_containers::Filename ( *rhs.m_filename ) );
+                m_filename.reset ( new data_containers::filename ( *rhs.m_filename ) );
             }
         
         if ( rhs.m_graph.get() != 0 )
             {
-                m_graph.reset ( new data_containers::Control_Flow_Graph_Sequence ( *rhs.m_graph ) );
+                m_graph.reset ( new data_containers::control_flow_graph_sequence ( *rhs.m_graph ) );
             }
 
         if ( rhs.m_map.get() != 0 )
             {
-                m_map.reset ( new data_containers::Memory_Map ( *rhs.m_map ) );
+                m_map.reset ( new data_containers::memory_map ( *rhs.m_map ) );
             }
 
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Exiting Data_Object copy constructor" );
-#endif /* LIBREVERSE_DEBUG */
-
+      trace::infrastructure_detail( "Exiting data_object copy constructor" );
     }
 
 
     void
-    Data_Object::put_Meta ( boost::shared_ptr < const Meta_Object>& meta_ptr )
+    data_object::put_meta ( boost::shared_ptr < const meta::meta_object>& meta_ptr )
     {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Entering Data_Object::put_Meta" );
-#endif /* LIBREVERSE_DEBUG */
-
+      trace::infrastructure_detail ( "Entering data_object::put_meta" );
 
         if ( meta_ptr.get() == 0 )
             {
 
-
-#ifdef LIBREVERSE_DEBUG
-                Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                                     TraceLevel::ERROR,
-                                     boost::str ( boost::format("Exception throw in %s at line %d")
-                                                  % __FILE__
-                                                  % __LINE__ ) );
-#endif /* LIBREVERSE_DEBUG */
+	      trace::infrastructure_error<>( "Exception throw in %s at line %d",
+                                                  __FILE__,
+                                                  __LINE__ );
 
 
-                throw errors::Component_Exception
-                    ( errors::Component_Exception::NULL_POINTER );
+                throw errors::component_exception ( errors::component_exception::null_pointer );
             }
 
         m_meta = meta_ptr;
 
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Exiting Data_Object::put_Meta" );
-#endif /* LIBREVERSE_DEBUG */
-
+      trace::infrastructure_detail( "Exiting data_object::put_meta" );
     }
 
-    boost::shared_ptr < const Meta_Object>
-    Data_Object::getMeta() const
+    boost::shared_ptr < const meta::meta_object>
+    data_object::get_meta() const
     {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Inside Data_Object::get_Meta" );
-#endif /* LIBREVERSE_DEBUG */
-
-        return m_meta;
+      trace::infrastructure_detail( "Inside data_object::get_Meta" );
+      return m_meta;
     }
 
-    std::string
-    Data_Object::to_String ( void ) const
+
+    boost::shared_ptr < const data_containers::filename >
+    data_object::get_filename ( void ) const
     {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Entering Data_Object::to_String" );
-#endif /* LIBREVERSE_DEBUG */
-
-        std::stringstream output;
-
-        output << "--------------------------" << std::endl
-               << "      Data Object" << std::endl
-               << "--------------------------" << std::endl;
-
-        if ( m_filename )
-            {
-                output << boost::format ( "  Filename: %s" ) % m_filename->to_String() << std::endl;
-            }
-
-        if ( m_graph )
-            {
-                output << "  Graph: " << std::endl
-                       << m_graph->to_String() << std::endl;
-            }
-
-        if ( m_map )
-            {
-                output << m_map->to_String() << std::endl;
-            }
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Exiting Data_Object::to_String" );
-#endif /* LIBREVERSE_DEBUG */
-
-        return output.str();
-    }
-
-    boost::shared_ptr < const Filename>
-    Data_Object::get_Filename ( void ) const
-    {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Inside Data_Object::get_Filename" );
-#endif /* LIBREVERSE_DEBUG */
-
+	trace::infrastructure_detail( "Inside data_object::get_filename" );
         return m_filename;
     }
     
-    boost::shared_ptr < const Control_Flow_Graph_Sequence>
-    Data_Object::get_Control_Flow_Graph_Sequence (void) const
+    boost::shared_ptr < const data_containers::control_flow_graph_sequence >
+    data_object::get_control_flow_graph_sequence (void) const
     {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Inside Data_Object::get_Control_Flow_Graph_Sequence" );
-#endif /* LIBREVERSE_DEBUG */
-
+	trace::infrastructure_detail( "Inside data_object::get_control_flow_graph_sequence" );
         return m_graph;
     }
 
-    boost::shared_ptr < const Memory_Map>
-    Data_Object::get_Memory_Map () const
+    boost::shared_ptr < const data_containers::memory_map >
+    data_object::get_memory_map () const
     {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Inside Data_Object::get_Memory_Map" );
-#endif /* LIBREVERSE_DEBUG */
-
+	trace::infrastructure_detail( "Inside data_object::get_memory_map" );
         return m_map;
     }
 
-    Data_Object&
-    Data_Object::operator= ( Data_Object const& rhs )
+    data_object&
+    data_object::operator= ( data_object const& rhs )
     {
+	trace::infrastructure_detail( "Entering data_object::operator=" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Entering Data_Object::operator=" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        Data_Object temp ( rhs );
+	data_object temp ( rhs );
         swap ( temp );
 
+	trace::infrastructure_detail( "Exiting data_object::operator=" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Exiting Data_Object::operator=" );
-#endif /* LIBREVERSE_DEBUG */
-
-        return *this;
+	return *this;
     }
 
     void
-    Data_Object::swap ( Data_Object& rhs )
+    data_object::swap ( data_object& rhs )
     {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Entering Data_Object::swap" );
-#endif /* LIBREVERSE_DEBUG */
-
+	trace::infrastructure_detail ( "Entering data_object::swap" );
 
         m_meta.swap ( rhs.m_meta );
         m_filename.swap ( rhs.m_filename );
         m_graph.swap ( rhs.m_graph );
         m_map.swap ( rhs.m_map );
 
+	trace::infrastructure_detail ( "Exiting data_object::swap" );
+    }
+    
+    std::ostream& operator<< ( std::ostream& os, data_object const& rhs )
+    {
+	trace::infrastructure_detail( "Entering operator<<(data_object)" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Exiting Data_Object::swap" );
-#endif /* LIBREVERSE_DEBUG */
 
+        os << "--------------------------" << std::endl
+               << "      Data Object" << std::endl
+               << "--------------------------" << std::endl;
+
+        if ( rhs.get_filename() )
+            {
+                os << rhs.get_filename() << std::endl;
+            }
+
+        if ( rhs.get_control_flow_graph_sequence() )
+            {
+                os << rhs.get_control_flow_graph_sequence() << std::endl;
+            }
+
+        if ( rhs.get_memory_map() )
+            {
+                os << rhs.get_memory_map() << std::endl;
+            }
+
+
+	  trace::infrastructure_detail( "Exiting data_object::to_String" );
+
+        return os;
     }
 
-} /* namespace infrastructure */
-} /* namespace libreverse */
+    } // namespace data_source
+  } // namespace infrastructure
+} // namespace reverse

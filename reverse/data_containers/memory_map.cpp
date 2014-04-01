@@ -1,4 +1,4 @@
-/*  Memory_Map.cpp
+/*  memory_map.cpp
 
    Copyright (C) 2008 Stephen Torri
 
@@ -19,7 +19,7 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#include "Memory_Map.h"
+#include "memory_map.h"
 #include <sstream>
 #include <fstream>
 #include <boost/format.hpp>
@@ -38,7 +38,7 @@ using namespace libreverse::trace;
 namespace libreverse {
   namespace data_containers {
 
-    Memory_Map::Memory_Map ()
+    memory_map::memory_map ()
         : m_data (),
           m_present_pos ( 0 ),
           m_previous_pos ( 0 ),
@@ -48,12 +48,12 @@ namespace libreverse {
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
                              TraceLevel::DETAIL,
-                             "Inside Memory_Map constructor" );
+                             "Inside memory_map constructor" );
 #endif /* LIBREVERSE_DEBUG */
 
     }
 
-    Memory_Map::Memory_Map ( boost::uint32_t size,
+    memory_map::memory_map ( boost::uint32_t size,
                              boost::uint32_t base_address )
         : m_data ( size, 0 ),
           m_present_pos ( 0 ),
@@ -64,7 +64,7 @@ namespace libreverse {
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
                              TraceLevel::DETAIL,
-                             "Entering Memory_Map constructor (uint32,uint32)" );
+                             "Entering memory_map constructor (uint32,uint32)" );
 
         Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
                              TraceLevel::DATA,
@@ -83,12 +83,12 @@ namespace libreverse {
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
                              TraceLevel::DETAIL,
-                             "Exiting Memory_Map constructor (uint32,uint32)" );
+                             "Exiting memory_map constructor (uint32,uint32)" );
 #endif /* LIBREVERSE_DEBUG */
 
     }
 
-    Memory_Map::Memory_Map ( void* start,
+    memory_map::memory_map ( void* start,
 			     std::size_t size,
                              boost::uint32_t base_address )
         : m_present_pos ( 0 ),
@@ -99,7 +99,7 @@ namespace libreverse {
 #ifdef LIBREVERSE_DEBUG
          Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
                              TraceLevel::DETAIL,
-                             "Entering Memory_Map constructor (ifstream,uint32)" );
+                             "Entering memory_map constructor (ifstream,uint32)" );
 
          Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
                              TraceLevel::DATA,
@@ -144,13 +144,13 @@ namespace libreverse {
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
                              TraceLevel::DETAIL,
-                             "Exiting Memory_Map constructor (ifstream,uint32)" );
+                             "Exiting memory_map constructor (ifstream,uint32)" );
 #endif /* LIBREVERSE_DEBUG */
 
     }
 
-    Memory_Map::Memory_Map ( Memory_Map const& rhs )
-        : boost::enable_shared_from_this<Memory_Map>(rhs),
+    memory_map::memory_map ( memory_map const& rhs )
+        : boost::enable_shared_from_this<memory_map>(rhs),
           m_data ( rhs.m_data.size() ),
           m_present_pos ( rhs.m_present_pos ),
           m_previous_pos ( rhs.m_previous_pos )
@@ -159,7 +159,7 @@ namespace libreverse {
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
                              TraceLevel::DETAIL,
-                             "Entering Memory_Map copy constructor" );
+                             "Entering memory_map copy constructor" );
 #endif /* LIBREVERSE_DEBUG */
 
 
@@ -171,31 +171,31 @@ namespace libreverse {
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
                              TraceLevel::DETAIL,
-                             "Exiting Memory_Map copy constructor" );
+                             "Exiting memory_map copy constructor" );
 #endif /* LIBREVERSE_DEBUG */
 
     }  
 
-    Memory_Map::~Memory_Map ()
+    memory_map::~memory_map ()
     {
 
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
                              TraceLevel::DETAIL,
-                             "Memory_Map destructor called" );
+                             "memory_map destructor called" );
 #endif /* LIBREVERSE_DEBUG */
 
     }
 
     boost::int8_t
-    Memory_Map::read ( boost::uint8_t* dest_addr_ptr,
+    memory_map::read ( boost::uint8_t* dest_addr_ptr,
                        boost::uint32_t length )
     {
 
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
                              TraceLevel::DETAIL,
-                             "Entering Memory_Map::read" );
+                             "Entering memory_map::read" );
 #endif /* LIBREVERSE_DEBUG */
 
 
@@ -240,10 +240,10 @@ namespace libreverse {
 #endif /* LIBREVERSE_DEBUG */
 
 
-                return data_types::Memory_Map::INVALID_INDEX;
+                return data_types::memory_map::INVALID_INDEX;
             }
 
-        data_types::Memory_Map::Values_t::const_iterator pos = m_data.begin();
+        data_types::memory_map::Values_t::const_iterator pos = m_data.begin();
 
         std::copy ( pos + m_present_pos,
                     pos + m_present_pos + length,
@@ -256,49 +256,49 @@ namespace libreverse {
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
                              TraceLevel::DETAIL,
-                             "Exiting Memory_Map::read" );
+                             "Exiting memory_map::read" );
 #endif /* LIBREVERSE_DEBUG */
 
 
-        return data_types::Memory_Map::SUCCESS;
+        return data_types::memory_map::SUCCESS;
     }
 
-    data_types::Memory_Map::iterator
-    Memory_Map::begin()
+    data_types::memory_map::iterator
+    memory_map::begin()
     {
 
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
                              TraceLevel::DETAIL,
-                             "Inside Memory_Map::begin" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        return m_data.begin();
-    }
-
-    data_types::Memory_Map::const_iterator
-    Memory_Map::begin() const
-    {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-                             TraceLevel::DETAIL,
-                             "Inside Memory_Map::begin (const)" );
+                             "Inside memory_map::begin" );
 #endif /* LIBREVERSE_DEBUG */
 
 
         return m_data.begin();
     }
 
-    data_types::Memory_Map::const_iterator
-    Memory_Map::end() const
+    data_types::memory_map::const_iterator
+    memory_map::begin() const
     {
 
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
                              TraceLevel::DETAIL,
-                             "Inside Memory_Map::end (const)" );
+                             "Inside memory_map::begin (const)" );
+#endif /* LIBREVERSE_DEBUG */
+
+
+        return m_data.begin();
+    }
+
+    data_types::memory_map::const_iterator
+    memory_map::end() const
+    {
+
+#ifdef LIBREVERSE_DEBUG
+        Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
+                             TraceLevel::DETAIL,
+                             "Inside memory_map::end (const)" );
 #endif /* LIBREVERSE_DEBUG */
 
 
@@ -306,27 +306,27 @@ namespace libreverse {
     }
 
     boost::uint32_t 
-    Memory_Map::get_Present_Position_Value (void) const
+    memory_map::get_Present_Position_Value (void) const
     {
 
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
                              TraceLevel::DETAIL,
-                             "Inside Memory_Map::get_Present_Position_Value" );
+                             "Inside memory_map::get_Present_Position_Value" );
 #endif /* LIBREVERSE_DEBUG */
 
 
         return m_present_pos;
     }
 
-    data_types::Memory_Map::const_iterator
-    Memory_Map::get_Present_Position (void) const
+    data_types::memory_map::const_iterator
+    memory_map::get_Present_Position (void) const
     {
 
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
                              TraceLevel::DETAIL,
-                             "Inside Memory_Map::get_Present_Position" );
+                             "Inside memory_map::get_Present_Position" );
 #endif /* LIBREVERSE_DEBUG */
 
 
@@ -334,13 +334,13 @@ namespace libreverse {
     }
 
     boost::uint32_t
-    Memory_Map::get_Present_Position_Address (void) const
+    memory_map::get_Present_Position_Address (void) const
     {
 
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
                              TraceLevel::DETAIL,
-                             "Inside Memory_Map::get_Present_Position_Address" );
+                             "Inside memory_map::get_Present_Position_Address" );
 #endif /* LIBREVERSE_DEBUG */
 
 
@@ -350,13 +350,13 @@ namespace libreverse {
     }
 
   boost::uint32_t
-  Memory_Map::get_Position_Address ( data_types::Memory_Map::const_iterator pos ) const
+  memory_map::get_Position_Address ( data_types::memory_map::const_iterator pos ) const
   {
 
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
                              TraceLevel::DETAIL,
-                             "Inside Memory_Map::get_Position_Address" );
+                             "Inside memory_map::get_Position_Address" );
 #endif /* LIBREVERSE_DEBUG */
 
 
@@ -366,27 +366,27 @@ namespace libreverse {
   }
 
     boost::uint32_t 
-    Memory_Map::get_Previous_Position_Value (void) const
+    memory_map::get_Previous_Position_Value (void) const
     {
 
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
                              TraceLevel::DETAIL,
-                             "Inside Memory_Map::get_Previous_Position_Value" );
+                             "Inside memory_map::get_Previous_Position_Value" );
 #endif /* LIBREVERSE_DEBUG */
 
 
         return m_previous_pos;
     }
 
-    data_types::Memory_Map::const_iterator
-    Memory_Map::get_Previous_Position (void) const
+    data_types::memory_map::const_iterator
+    memory_map::get_Previous_Position (void) const
     {
 
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
                              TraceLevel::DETAIL,
-                             "Inside Memory_Map::get_Previous_Position" );
+                             "Inside memory_map::get_Previous_Position" );
 #endif /* LIBREVERSE_DEBUG */
 
 
@@ -394,13 +394,13 @@ namespace libreverse {
     }
 
     boost::uint32_t
-    Memory_Map::get_Previous_Position_Address (void) const
+    memory_map::get_Previous_Position_Address (void) const
     {
 
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
                              TraceLevel::DETAIL,
-                             "Inside Memory_Map::get_Previous_Position_Address" );
+                             "Inside memory_map::get_Previous_Position_Address" );
 #endif /* LIBREVERSE_DEBUG */
 
 
@@ -410,27 +410,27 @@ namespace libreverse {
     }
 
     boost::uint32_t
-    Memory_Map::size (void) const
+    memory_map::size (void) const
     {
 
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
                              TraceLevel::DETAIL,
-                             "Inside Memory_Map::size" );
+                             "Inside memory_map::size" );
 #endif /* LIBREVERSE_DEBUG */
 
         return m_data.size();
     }
 
     boost::int8_t
-    Memory_Map::copy ( boost::shared_ptr < const Memory_Map> src_ptr,
+    memory_map::copy ( boost::shared_ptr < const memory_map> src_ptr,
                        boost::uint32_t length )
     {
 
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
                              TraceLevel::DETAIL,
-                             "Entering Memory_Map::copy" );
+                             "Entering memory_map::copy" );
 
         Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
                              TraceLevel::DATA,
@@ -458,7 +458,7 @@ namespace libreverse {
 #endif /* LIBREVERSE_DEBUG */
 
 
-                return data_types::Memory_Map::OUT_OF_RANGE;
+                return data_types::memory_map::OUT_OF_RANGE;
             }
 
         std::copy ( src_ptr->get_Present_Position(),
@@ -469,28 +469,28 @@ namespace libreverse {
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
                              TraceLevel::DETAIL,
-                             "Exiting Memory_Map::copy" );
+                             "Exiting memory_map::copy" );
 #endif /* LIBREVERSE_DEBUG */
 
 
-        return data_types::Memory_Map::SUCCESS;
+        return data_types::memory_map::SUCCESS;
     }
 
-    std::pair<data_types::Memory_Map::ptr_t, boost::int8_t>
-    Memory_Map::subset ( boost::uint32_t length )
+    std::pair<data_types::memory_map::ptr_t, boost::int8_t>
+    memory_map::subset ( boost::uint32_t length )
     {
 
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
                              TraceLevel::DETAIL,
-                             "Entering Memory_Map::subset" );
+                             "Entering memory_map::subset" );
 #endif /* LIBREVERSE_DEBUG */
 
 
         assert ( length != 0 );
 
-        data_types::Memory_Map::ptr_t result_ptr
-            ( new Memory_Map ( length,
+        data_types::memory_map::ptr_t result_ptr
+            ( new memory_map ( length,
                                this->get_Present_Position_Address() ) );
         
         /*
@@ -503,7 +503,7 @@ namespace libreverse {
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
                              TraceLevel::DETAIL,
-                             "Exiting Memory_Map::subset" );
+                             "Exiting memory_map::subset" );
 #endif /* LIBREVERSE_DEBUG */
 
 
@@ -511,13 +511,13 @@ namespace libreverse {
     }
 
     std::string
-    Memory_Map::to_String (void) const
+    memory_map::to_String (void) const
     {
 
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
                              TraceLevel::DETAIL,
-                             "Entering Memory_Map::to_String" );
+                             "Entering memory_map::to_String" );
 #endif /* LIBREVERSE_DEBUG */
 
 
@@ -606,7 +606,7 @@ namespace libreverse {
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
                              TraceLevel::DETAIL,
-                             "Exiting Memory_Map::to_String" );
+                             "Exiting memory_map::to_String" );
 #endif /* LIBREVERSE_DEBUG */
 
 
@@ -614,13 +614,13 @@ namespace libreverse {
     }
 
     bool
-    Memory_Map::operator== ( Memory_Map& rhs_ref ) const
+    memory_map::operator== ( memory_map& rhs_ref ) const
     {
 
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
                              TraceLevel::DETAIL,
-                             "Inside Memory_Map::operator== (equality)" );
+                             "Inside memory_map::operator== (equality)" );
 #endif /* LIBREVERSE_DEBUG */
 
 
@@ -628,13 +628,13 @@ namespace libreverse {
     }
 
     boost::int8_t
-    Memory_Map::address_Seek ( boost::uint32_t address )
+    memory_map::address_Seek ( boost::uint32_t address )
     {
 
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
                              TraceLevel::DETAIL,
-                             "Entering Memory_Map::address_Seek" );
+                             "Entering memory_map::address_Seek" );
 #endif /* LIBREVERSE_DEBUG */
 
 
@@ -654,7 +654,7 @@ namespace libreverse {
 #endif /* LIBREVERSE_DEBUG */
 	      
 
-                return data_types::Memory_Map::OUT_OF_RANGE;
+                return data_types::memory_map::OUT_OF_RANGE;
             }
 
         m_previous_pos = m_present_pos;
@@ -664,45 +664,45 @@ namespace libreverse {
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
                              TraceLevel::DETAIL,
-                             "Exiting Memory_Map::address_Seek" );
+                             "Exiting memory_map::address_Seek" );
 #endif /* LIBREVERSE_DEBUG */
 
 
-        return data_types::Memory_Map::SUCCESS;
+        return data_types::memory_map::SUCCESS;
     }
 
-    Memory_Map&
-    Memory_Map::operator= ( Memory_Map const& rhs )
+    memory_map&
+    memory_map::operator= ( memory_map const& rhs )
     {
 
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
                              TraceLevel::DETAIL,
-                             "Entering Memory_Map::operator= (assignment)" );
+                             "Entering memory_map::operator= (assignment)" );
 #endif /* LIBREVERSE_DEBUG */
 
 
-        Memory_Map temp ( rhs );
+        memory_map temp ( rhs );
         swap ( temp );
 
 
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
                              TraceLevel::DETAIL,
-                             "Exiting Memory_Map::operator= (assignment)" );
+                             "Exiting memory_map::operator= (assignment)" );
 #endif /* LIBREVERSE_DEBUG */
 
         return *this;
     }
 
     void
-    Memory_Map::swap ( Memory_Map& rhs )
+    memory_map::swap ( memory_map& rhs )
     {
 
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
                              TraceLevel::DETAIL,
-                             "Entering Memory_Map::swap" );
+                             "Entering memory_map::swap" );
 #endif /* LIBREVERSE_DEBUG */
 
 
@@ -712,7 +712,7 @@ namespace libreverse {
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
                              TraceLevel::DETAIL,
-                             "Exiting Memory_Map::swap" );
+                             "Exiting memory_map::swap" );
 #endif /* LIBREVERSE_DEBUG */
 
     }

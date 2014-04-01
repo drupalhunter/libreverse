@@ -21,8 +21,8 @@
 
 #include "Tevis_Unknown_Region_Checker_WPEF_Algorithm.h"
 
-#include "data_containers/Memory_Map.h"
-#include "meta/Meta_Object.h"
+#include "data_containers/memory_map.h"
+#include "meta/meta_object.h"
 #include "io/input/File_Readers/Reader_Factory.h"
 #include "io/input/File_Readers/Windows_PE/Header_32.h"
 #include "io/input/File_Readers/Windows_PE/Reader_32.h"
@@ -46,12 +46,12 @@ namespace libreverse { namespace component {
         wpef_types::Reader_32::ptr_t file_reader_ptr = boost::dynamic_pointer_cast< wpef_module::Reader_32 >
 	  ( ( io::Reader_Factory::Instance() ).create_File_Reader ( filename ) );
 
-        file_reader_ptr->get_Memory_Map();
+        file_reader_ptr->get_memory_map();
 
         wpef_types::Header_32::ptr_t hdr_ptr = file_reader_ptr->get_Header();
 
-        // Grab reference to the Memory_Map associated with the file
-        data_types::Memory_Map::ptr_t mem_ptr = file_reader_ptr->get_Memory_Map ();
+        // Grab reference to the memory_map associated with the file
+        data_types::memory_map::ptr_t mem_ptr = file_reader_ptr->get_memory_map ();
 
         // Get the base address
         wpef_types::PE_Header_32::const_ptr_t pe_hdr = hdr_ptr->get_PE_Header();

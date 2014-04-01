@@ -23,12 +23,12 @@
 
 #include "components/input/grnn/Classifier_Algorithm.h"
 #include "components/input/grnn/Compiler_Classifier_Algorithm_Factory.h"
-#include "meta/Meta_Object.h"
+#include "meta/meta_object.h"
 #include "io/input/File_Readers/Reader_Factory.h"
 #include "io/input/File_Readers/File_Reader.h"
-#include "data_containers/Filename.h"
-#include "data_containers/Memory_Map.h"
-#include "infrastructure/data_source/Data_Object.h"
+#include "data_containers/filename.h"
+#include "data_containers/memory_map.h"
+#include "infrastructure/data_source/data_object.h"
 #include "infrastructure/Component_Data.h"
 #include "infrastructure/Component_State.h"
 #include "errors/Internal_Exception.h"
@@ -179,7 +179,7 @@ namespace libreverse { namespace component {
 
         infrastructure_types::Component_Data::ptr_t data_ptr = m_state_ptr->get_Data();
 
-        if ( ! data_ptr->is_Filename_Set() )
+        if ( ! data_ptr->is_filename_Set() )
             {
 
 #ifdef LIBREVERSE_DEBUG
@@ -208,11 +208,11 @@ namespace libreverse { namespace component {
 	/*---------------------------------*/
 	/*          Get File Type          */
 	/*---------------------------------*/
-        meta::Meta_Object::const_ptr_t input_meta_ptr = data_ptr->get_Input_Meta_Data();
+        meta::meta_object::const_ptr_t input_meta_ptr = data_ptr->get_Input_Meta_Data();
 
-	meta::Meta_Object::Data_Pair_t file_type_meta_value = input_meta_ptr->get_Value ( "file_type" );
+	meta::meta_object::Data_Pair_t file_type_meta_value = input_meta_ptr->get_Value ( "file_type" );
 
-        assert ( file_type_meta_value.second == meta::Meta_Object::STRING );
+        assert ( file_type_meta_value.second == meta::meta_object::STRING );
 
         std::string file_type = file_type_meta_value.first;
 
@@ -228,10 +228,10 @@ namespace libreverse { namespace component {
 	/*--------------------------------*/
 
 	// Get file type from Meta information
-        data_types::Filename::const_ptr_t file_ptr = data_ptr->get_Input_Filename();
+        data_types::filename::const_ptr_t file_ptr = data_ptr->get_Input_filename();
 
 	// Call process ( file_ptr->str() )
-	meta::Meta_Object::ptr_t meta_ptr = classifier_algorithm_ptr->execute ( file_ptr->to_String() );
+	meta::meta_object::ptr_t meta_ptr = classifier_algorithm_ptr->execute ( file_ptr->to_String() );
 
 	// Save result in Meta information for the output data source
         data_ptr->set_Output_Meta_Data ( meta_ptr );

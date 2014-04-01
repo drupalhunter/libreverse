@@ -36,7 +36,7 @@ using namespace libreverse::trace;
 
 namespace libreverse { namespace component {
 
-    meta::Meta_Object::ptr_t
+    meta::meta_object::ptr_t
     Entry_Point_Detector_Java_Algorithm::run ( io_types::File_ID::const_ptr_t )
     {
 
@@ -52,11 +52,11 @@ namespace libreverse { namespace component {
 	 the Method Object. There we do not have a definitive address
 	 where the data starts and how long it is.
        */
-      meta::Meta_Object::ptr_t meta_ptr ( new meta::Meta_Object() );
+      meta::meta_object::ptr_t meta_ptr ( new meta::meta_object() );
 
       meta_ptr->add ( "entry_point_address",
 		      "0",
-		      meta::Meta_Object::HEX );
+		      meta::meta_object::HEX );
 
 #ifdef LIBREVERSE_DEBUG
       Trace::write_Trace ( TraceArea::COMPONENTS,

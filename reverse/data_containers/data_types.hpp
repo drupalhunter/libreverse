@@ -33,11 +33,11 @@ namespace libreverse {
   namespace data_container {
     class Basic_Block;
     class Control_Flow_Graph;
-    class Control_Flow_Graph_Sequence;
-    class Filename;
+    class control_flow_graph_sequence;
+    class filename;
     class Java_Assembly_Instruction;
     class Instruction;
-    class Memory_Map;
+    class memory_map;
   }
 
   namespace data_types {
@@ -71,15 +71,15 @@ namespace libreverse {
     };
 
     /*! \brief Data type used to describe the input file to be processed. */
-    class Filename
+    class filename
     {
     public:
 
       /*! \brief Shared pointer type */
-      typedef boost::shared_ptr<data_container::Filename> ptr_t;
+      typedef boost::shared_ptr<data_container::filename> ptr_t;
 
       /*! \brief Shared constant pointer type */
-      typedef boost::shared_ptr<data_container::Filename const> const_ptr_t;
+      typedef boost::shared_ptr<data_container::filename const> const_ptr_t;
     };
 
     /*! \brief Data type used to describe how program control goes
@@ -157,22 +157,22 @@ namespace libreverse {
 
     };
 
-    class Control_Flow_Graph_Sequence
+    class control_flow_graph_sequence
     {
     public:
 
 
       /*! \brief Shared pointer type */
-      typedef boost::shared_ptr<data_container::Control_Flow_Graph_Sequence> ptr_t;
+      typedef boost::shared_ptr<data_container::control_flow_graph_sequence> ptr_t;
 
       /*! \brief Shared constant pointer type */
-      typedef boost::shared_ptr<data_container::Control_Flow_Graph_Sequence const> const_ptr_t;
+      typedef boost::shared_ptr<data_container::control_flow_graph_sequence const> const_ptr_t;
 	
       typedef std::vector<data_types::Control_Flow_Graph::ptr_t> Sequence_t;
 
     };
 
-    class Memory_Map
+    class memory_map
     {
     public:
 
@@ -182,10 +182,10 @@ namespace libreverse {
 
 
       /*! \brief Shared pointer type */
-      typedef boost::shared_ptr<data_container::Memory_Map> ptr_t;
+      typedef boost::shared_ptr<data_container::memory_map> ptr_t;
       
       /*! \brief Shared constant pointer type */
-      typedef boost::shared_ptr<data_container::Memory_Map const> const_ptr_t;
+      typedef boost::shared_ptr<data_container::memory_map const> const_ptr_t;
 
       // !\brief This type represents a byte
       typedef boost::uint8_t data_t;

@@ -29,7 +29,7 @@
 #include <boost/format.hpp>
 #include <sstream>
 #include <fstream>
-#include "data_containers/Memory_Map.h"
+#include "data_containers/memory_map.h"
 
 #ifdef LIBREVERSE_DEBUG
 #include "Trace.h"
@@ -114,7 +114,7 @@ namespace libreverse { namespace infrastructure {
             }
         else if (name.compare("memory_map_producer") == MATCH )
             {
-                obj_ptr = Component_Factory::Instance().get_Memory_Map_Producer ( state_ptr );
+                obj_ptr = Component_Factory::Instance().get_memory_map_Producer ( state_ptr );
             }
         else if (name.compare("file_header_printer") == MATCH )
             {
@@ -214,7 +214,7 @@ namespace libreverse { namespace infrastructure {
         m_file = full_path.str();
 
         std::ifstream input ( m_file.c_str() );
-        data_container::Memory_Map input_data ( input );
+        data_container::memory_map input_data ( input );
 
 
 #ifdef LIBREVERSE_DEBUG

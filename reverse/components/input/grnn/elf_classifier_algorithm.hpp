@@ -24,7 +24,7 @@
 
 #include "Classifier_Algorithm.h"
 #include <string>
-#include "meta/Meta_Object.h"
+#include "meta/meta_object.h"
 
 namespace reverse {
   namespace components {

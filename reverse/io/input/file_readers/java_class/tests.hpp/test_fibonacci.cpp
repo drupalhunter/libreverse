@@ -28,7 +28,7 @@
 #include "libreverse/io/input/File_Readers/Java_Class/Code_Attribute.h"
 #include "test_base.h"
 #include "libreverse/io/File_ID.h"
-#include "libreverse/data_containers/Memory_Map.h"
+#include "libreverse/data_containers/memory_map.h"
 #include <iostream>
 #include "libreverse/include/config.h"
 

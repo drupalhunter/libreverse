@@ -1,4 +1,4 @@
-/*  Component_Exception.h
+/*  component_exception.h
 
    Copyright (C) 2008 Stephen Torri
 

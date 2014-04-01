@@ -59,14 +59,18 @@ namespace reverse {
       typedef std::map < std::pair<boost::uint32_t, boost::uint32_t>, infrastructure::formula_list >
       formula_map_t;
 
-      static configurator& instance ( std::string file =
-				      "/etc/libreverse/config.xml" )
+      static configurator& instance ()
       {
-	static configurator fact_ref ( file );
+	static configurator fact_ref;
 	return fact_ref;
       }
 
       virtual ~configurator();
+
+      /*! \brief Initialize the configurator from the given config object.
+       * \param config_obj Input configuration data object used to initialize the framework.
+       */
+      void init ( boost::shared_ptr < const infrastructure::configuration_data > config_obj );
 
       /**
        * all data source factories will call this when they
@@ -87,14 +91,14 @@ namespace reverse {
 
     private:
 
-      configurator ( std::string file );
+      configurator (){}
 
       configurator ( const configurator& );
       
       configurator& operator= ( const configurator& );
       
       // system wide configuration
-      static boost::shared_ptr < infrastructure::configuration_data > m_config;
+      static boost::shared_ptr < const infrastructure::configuration_data > m_config;
 
       boost::shared_ptr < formula_map_t > m_formulas;
 

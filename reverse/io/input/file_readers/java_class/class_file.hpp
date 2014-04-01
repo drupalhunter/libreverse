@@ -31,7 +31,7 @@
 namespace reverse { 
   namespace data_container {
 
-    class Memory_Map;
+    class memory_map;
 
   } // namespace data_container
 } // namespace reverse
@@ -111,7 +111,7 @@ namespace reverse {
              */
 	    Class_File ( boost::shared_ptr< const reverse::io::File_ID >& filename );
 	  
-	    Class_File ( boost::shared_ptr < reverse::data_container::Memory_Map>& file_img_ptr,
+	    Class_File ( boost::shared_ptr < reverse::data_container::memory_map>& file_img_ptr,
 			 boost::shared_ptr< const reverse::io::File_ID >& filename );
 
 	    bool init (void);

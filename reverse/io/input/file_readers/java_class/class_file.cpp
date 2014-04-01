@@ -102,7 +102,7 @@ namespace libreverse { namespace java_module {
 
         Trace::write_Trace ( TraceArea::IO,
                              TraceLevel::DATA,
-                             boost::str ( boost::format ( "Filename: %1%" ) % filename ) );
+                             boost::str ( boost::format ( "filename: %1%" ) % filename ) );
 
         Trace::write_Trace ( TraceArea::IO,
                              TraceLevel::DETAIL,
@@ -111,7 +111,7 @@ namespace libreverse { namespace java_module {
 
     }
 
-    Class_File::Class_File ( data_types::Memory_Map::ptr_t file_img_ptr,
+    Class_File::Class_File ( data_types::memory_map::ptr_t file_img_ptr,
                              io_types::File_ID::const_ptr_t filename )
         : m_file ( file_img_ptr, filename )
     {
@@ -119,15 +119,15 @@ namespace libreverse { namespace java_module {
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::IO,
                              TraceLevel::DETAIL,
-                             "Entering Class_File (Memory_Map,string) constructor" );
+                             "Entering Class_File (memory_map,string) constructor" );
 
         Trace::write_Trace ( TraceArea::IO,
                              TraceLevel::DATA,
-                             boost::str ( boost::format ( "Filename: %1%" ) % filename ) );
+                             boost::str ( boost::format ( "filename: %1%" ) % filename ) );
 
         Trace::write_Trace ( TraceArea::IO,
                              TraceLevel::DETAIL,
-                             "Exiting Class_File (Memory_Map,string) constructor" );
+                             "Exiting Class_File (memory_map,string) constructor" );
 #endif /* LIBREVERSE_DEBUG */
 
     }

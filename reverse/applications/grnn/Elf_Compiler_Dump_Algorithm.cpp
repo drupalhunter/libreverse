@@ -191,7 +191,7 @@ namespace libreverse {
     
       reader64_obj.read_Headers();
 
-      libreverse::data_types::Memory_Map::ptr_t memory_ptr = reader64_obj.get_Memory_Map();
+      libreverse::data_types::memory_map::ptr_t memory_ptr = reader64_obj.get_memory_map();
       libreverse::elf_types::Elf_Header_64::ptr_t hdr_ptr = reader64_obj.get_Header();
       libreverse::elf_types::Elf_File_Header_64::const_ptr_t file_hdr_ptr = hdr_ptr->get_File_Header();
 

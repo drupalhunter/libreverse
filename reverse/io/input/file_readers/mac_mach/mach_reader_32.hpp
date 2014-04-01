@@ -56,10 +56,10 @@ namespace reverse {
 
             /*!
              * \brief Constructor
-             * \param Memory_Map pointer associated with Mach file
+             * \param memory_map pointer associated with Mach file
              * \param target_file The file to be used for decompiling
              */
-            Mach_Reader_32 ( data_types::Memory_Map::ptr_t mem_ptr,
+            Mach_Reader_32 ( data_types::memory_map::ptr_t mem_ptr,
                              io_types::File_ID::const_ptr_t target_file );
 
             /*!
@@ -79,10 +79,10 @@ namespace reverse {
             virtual void read_Headers ( void );
 
             /*!
-             * \brief Return Memory_Map associated with this reader
-             * \return Memory_Map pointer
+             * \brief Return memory_map associated with this reader
+             * \return memory_map pointer
              */
-            virtual data_types::Memory_Map::ptr_t get_Memory_Map ( void );
+            virtual data_types::memory_map::ptr_t get_memory_map ( void );
 
             /*!
              * \brief Print out the entire file contents

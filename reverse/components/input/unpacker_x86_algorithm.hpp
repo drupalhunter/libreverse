@@ -23,7 +23,7 @@
 #define UNPACKER_X86_ALGORITHM_H
 
 #include "Unpacker_Algorithm.h"
-#include "meta/Meta_Object.h"
+#include "meta/meta_object.h"
 
 namespace libreverse { namespace component {
 
@@ -56,8 +56,8 @@ namespace libreverse { namespace component {
        *
        * \return Uncompressed binary image
        */
-      virtual data_types::Memory_Map::const_ptr_t run ( meta::Meta_Object::const_ptr_t meta_ptr,
-							data_types::Memory_Map::const_ptr_t file_map_ptr );
+      virtual data_types::memory_map::const_ptr_t run ( meta::meta_object::const_ptr_t meta_ptr,
+							data_types::memory_map::const_ptr_t file_map_ptr );
 
       /*!
        * \brief Print input image to standard out
@@ -118,7 +118,7 @@ namespace libreverse { namespace component {
       Color_Map_t m_color_map;
 
       /*! \brief Pointer to the input binary image */
-        data_types::Memory_Map::const_ptr_t m_file_map;
+        data_types::memory_map::const_ptr_t m_file_map;
 
       /*! \brief Index where the code starts */
       boost::uint32_t m_code_offset;

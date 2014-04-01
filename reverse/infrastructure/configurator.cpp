@@ -22,7 +22,6 @@
 #include <reverse/errors/configuration_exception.hpp>
 #include <reverse/errors/reverse_exception.hpp>
 #include <reverse/infrastructure/configurator.hpp>
-#include <reverse/infrastructure/configuration_parser.hpp>
 #include <reverse/infrastructure/configuration_data.hpp>
 #include <reverse/infrastructure/formula_list.hpp>
 #include <reverse/infrastructure/formula_parser.hpp>
@@ -39,23 +38,12 @@
 namespace reverse {
   namespace infrastructure {
 
-    boost::shared_ptr < infrastructure::configuration_data > configurator::m_config =
+    boost::shared_ptr < const infrastructure::configuration_data > configurator::m_config =
       boost::make_shared < infrastructure::configuration_data > ();
 
-    configurator::configurator ( std::string file )
+    void configurator::init ( boost::shared_ptr < const infrastructure::configuration_data > config_obj )
     {
-      trace::infrastructure_detail ( "Entering configurator Constructor" );
-
-      try
-	{
-	  configuration_parser reader ( file );
-
-	  m_config = reader.parse_data();
-	}
-      catch ( errors::reverse_exception& )
-	{
-	  trace::infrastructure_detail ( "Unable to find the default setup files for the system.\nStarting the library using the default settings" );
-	}
+      m_config = config_obj;
     }
 
     void configurator::register_Factory ( boost::shared_ptr < infrastructure::data_source_factory_base > fact_ptr )

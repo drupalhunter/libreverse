@@ -22,8 +22,8 @@
 #include "Memory_Data_Transfer.h"
 #include <iostream>
 #include <boost/format.hpp>
-#include "errors/Component_Exception.h"
-#include "Data_Object.h"
+#include "errors/component_exception.h"
+#include "data_object.h"
 #include "Memory_Data_Source_Config.h"
 
 #include "Assert.h"
@@ -57,7 +57,7 @@ namespace libreverse { namespace infrastructure {
 
         if ( rhs.m_data.get() != 0 )
             {
-                m_data.reset ( new Data_Object ( *rhs.m_data ) );
+                m_data.reset ( new data_object ( *rhs.m_data ) );
             }
 
 
@@ -80,7 +80,7 @@ namespace libreverse { namespace infrastructure {
 
     }
 
-    infrastructure_types::Data_Object::const_ptr_t
+    infrastructure_types::data_object::const_ptr_t
     Memory_Data_Transfer::get () const
     {
 
@@ -141,7 +141,7 @@ namespace libreverse { namespace infrastructure {
     }
 
     void
-    Memory_Data_Transfer::put ( infrastructure_types::Data_Object::const_ptr_t data_ptr )
+    Memory_Data_Transfer::put ( infrastructure_types::data_object::const_ptr_t data_ptr )
     {
         if ( data_ptr.get() == 0 )
             {
@@ -150,8 +150,8 @@ namespace libreverse { namespace infrastructure {
                     % __LINE__
                           << std::endl;
 
-                throw errors::Component_Exception
-                    ( errors::Component_Exception::NULL_POINTER );
+                throw errors::component_exception
+                    ( errors::component_exception::null_pointer );
             }
 
         m_data = data_ptr;

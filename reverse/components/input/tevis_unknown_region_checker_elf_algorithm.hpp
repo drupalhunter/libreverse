@@ -23,7 +23,7 @@
 #define TEVIS_UNKNOWN_REGION_CHECKER_ELF_ALGORITHM_H
 
 #include "Tevis_Unknown_Region_Checker_Algorithm.h"
-#include "meta/Meta_Object.h"
+#include "meta/meta_object.h"
 
 namespace libreverse { namespace component {
 

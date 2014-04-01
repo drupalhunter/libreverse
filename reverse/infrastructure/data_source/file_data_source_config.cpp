@@ -51,7 +51,7 @@ The original location of this file is
 
 #include "File_Data_Source_Config.h"
 #include "Reverse.h"
-#include "Data_Object.h"
+#include "data_object.h"
 #include <boost/format.hpp>
 
 #ifdef LIBREVERSE_DEBUG
@@ -103,13 +103,13 @@ namespace libreverse { namespace infrastructure {
     }
 
     std::string
-    File_Data_Source_Config::get_Filename () const
+    File_Data_Source_Config::get_filename () const
     {
 
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
                              TraceLevel::DETAIL,
-                             "Entering File_Data_Source_Config get_Filename" );
+                             "Entering File_Data_Source_Config get_filename" );
 #endif /* LIBREVERSE_DEBUG */
 
         std::string name = boost::str ( boost::format ( "%s_%d.dat" )

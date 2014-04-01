@@ -22,13 +22,13 @@
 #include "Tevis_Unknown_Region_Checker.h"
 #include "Tevis_Unknown_Region_Checker_Algorithm.h"
 #include "Tevis_Unknown_Region_Checker_Algorithm_Factory.h"
-#include "meta/Meta_Object.h"
+#include "meta/meta_object.h"
 #include <iostream>
 #include "io/input/File_Readers/Reader_Factory.h"
 #include "io/input/File_Readers/File_Reader.h"
-#include "data_containers/Filename.h"
-#include "data_containers/Memory_Map.h"
-#include "infrastructure/data_source/Data_Object.h"
+#include "data_containers/filename.h"
+#include "data_containers/memory_map.h"
+#include "infrastructure/data_source/data_object.h"
 #include "infrastructure/Component_Data.h"
 #include "infrastructure/Component_State.h"
 #include <boost/format.hpp>
@@ -154,11 +154,11 @@ namespace libreverse { namespace component {
 	/*---------------------------------*/
 	/*          Get File Type          */
 	/*---------------------------------*/
-        meta::Meta_Object::const_ptr_t input_meta_ptr = data_ptr->get_Input_Meta_Data();
+        meta::meta_object::const_ptr_t input_meta_ptr = data_ptr->get_Input_Meta_Data();
 
-        Meta_Object::Data_Pair_t arch_meta_value = input_meta_ptr->get_Value ( "file_type" );
+        meta_object::Data_Pair_t arch_meta_value = input_meta_ptr->get_Value ( "file_type" );
 
-        assert ( arch_meta_value.second == Meta_Object::STRING );
+        assert ( arch_meta_value.second == meta_object::STRING );
 
         std::string arch_str_val = arch_meta_value.first;
 
@@ -171,17 +171,17 @@ namespace libreverse { namespace component {
 	/*--------------------------------*/
 	/*       Execute Algorithm        */
 	/*--------------------------------*/
-        std::string meta_output = algorithm_ptr->run ( data_ptr->get_Input_Filename()->to_String() );
+        std::string meta_output = algorithm_ptr->run ( data_ptr->get_Input_filename()->to_String() );
 
-        meta::Meta_Object::ptr_t output_meta_ptr ( new meta::Meta_Object() );
+        meta::meta_object::ptr_t output_meta_ptr ( new meta::meta_object() );
 
         output_meta_ptr->add ( "suspicious_zero_regions",
                                meta_output,
-                               meta::Meta_Object::STRING );
+                               meta::meta_object::STRING );
 
         data_ptr->set_Output_Meta_Data ( output_meta_ptr );
 
-        data_ptr->set_Output_Data ( data_ptr->get_Input_Filename() );
+        data_ptr->set_Output_Data ( data_ptr->get_Input_filename() );
 
         Trace::write_Trace
             ( TraceArea::COMPONENTS,

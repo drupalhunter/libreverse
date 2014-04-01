@@ -47,7 +47,7 @@
 
 #include "io/File_ID.h"
 #include "io/File.h"
-#include "data_containers/Memory_Map.h"
+#include "data_containers/memory_map.h"
 
 #include <sstream>
 #include <list>
@@ -207,14 +207,14 @@ namespace reverse {
     	return "java:bytecode";
     }
 
-    data_types::Memory_Map::ptr_t
-    Reader::get_Memory_Map ( void )
+    data_types::memory_map::ptr_t
+    Reader::get_memory_map ( void )
     {
 
 #ifdef LIBREVERSE_DEBUG
         Trace::write_Trace ( TraceArea::IO,
                              TraceLevel::DETAIL,
-                             "Inside Reader::get_Memory_Map" );
+                             "Inside Reader::get_memory_map" );
 #endif /* LIBREVERSE_DEBUG */
 
 

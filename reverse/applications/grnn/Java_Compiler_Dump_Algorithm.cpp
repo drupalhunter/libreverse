@@ -26,7 +26,7 @@
 #include "libreverse/io/input/File_Readers/Java_Class/Reader.h"
 #include "libreverse/io/input/File_Readers/Java_Class/Class_Header.h"
 #include "libreverse/io/input/File_Readers/Java_Class/Constant_Pool_Info.h"
-#include "libreverse/data_containers/Memory_Map.h"
+#include "libreverse/data_containers/memory_map.h"
 
 #include <boost/format.hpp>
 #include <sstream>
@@ -65,7 +65,7 @@ namespace libreverse {
 	    
 	  r_obj.read_Class_Header();
 
-	  libreverse::data_types::Memory_Map::ptr_t mem_ptr = r_obj.get_Memory_Map();
+	  libreverse::data_types::memory_map::ptr_t mem_ptr = r_obj.get_memory_map();
 
 	  output << boost::format("  <%1%>") % classifier::Java_Input_Tag_Names::TAG_FILE << std::endl;
 

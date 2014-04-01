@@ -1,4 +1,4 @@
-/*  Data_Object.h
+/*  data_object.h
 
     Copyright (C) 2008 Stephen Torri
 
@@ -41,17 +41,17 @@ namespace reverse {
 
       explicit data_object ();
 
-      explicit data_object ( const boost::shared_ptr < const data_containers::filename>& data );
+      explicit data_object ( boost::shared_ptr < const data_containers::filename>& data );
 
-      explicit data_object ( const boost::shared_ptr < const data_containers::control_flow_graph_sequence>& data );
+      explicit data_object ( boost::shared_ptr < const data_containers::control_flow_graph_sequence>& data );
 
-      explicit data_object ( const boost::shared_ptr < const data_containers::memory_map>& data );
+      explicit data_object ( boost::shared_ptr < const data_containers::memory_map>& data );
 
       explicit data_object ( data_object const& rhs );
 
       ~data_object(){}
             
-      meta::meta_object::const_ptr_t getmeta() const;
+      meta::meta_object::const_ptr_t get_meta() const;
 
       void set_data ( boost::shared_ptr < const data_containers::filename >& data );
 
@@ -67,8 +67,6 @@ namespace reverse {
 
       boost::shared_ptr < const data_containers::memory_map> get_memory_map () const;
 
-      std::string to_string (void) const;
-
       data_object& operator= ( data_object const& rhs );
             
       void swap ( data_object& rhs );
@@ -80,6 +78,8 @@ namespace reverse {
       boost::shared_ptr < const data_containers::control_flow_graph_sequence> m_graph;
       boost::shared_ptr < const data_containers::memory_map> m_map;
     };
+    
+    std::ostream& operator<< ( std::ostream& os, data_object const& rhs );
 
     } // namespace data_source
   } // namespace infrastructure

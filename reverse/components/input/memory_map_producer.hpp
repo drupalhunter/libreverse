@@ -1,4 +1,4 @@
-/*  Memory_Map_Producer.h
+/*  memory_map_Producer.h
 
    Copyright (C) 2008 Stephen Torri
 
@@ -28,21 +28,21 @@
 
 namespace libreverse { namespace component {
 
-    class Memory_Map_Producer : public infrastructure::Component,
+    class memory_map_Producer : public infrastructure::Component,
 			   public infrastructure::Component_Actor,
-			   public boost::enable_shared_from_this<Memory_Map_Producer>
+			   public boost::enable_shared_from_this<memory_map_Producer>
         {
         public:
 
-            explicit Memory_Map_Producer ();
+            explicit memory_map_Producer ();
 
-            explicit Memory_Map_Producer ( infrastructure_types::Component_State::ptr_t state_ptr );
+            explicit memory_map_Producer ( infrastructure_types::Component_State::ptr_t state_ptr );
 
-            Memory_Map_Producer ( Memory_Map_Producer const& rhs );
+            memory_map_Producer ( memory_map_Producer const& rhs );
 
-            virtual ~Memory_Map_Producer();
+            virtual ~memory_map_Producer();
 
-            Memory_Map_Producer& operator= ( Memory_Map_Producer const& rhs );
+            memory_map_Producer& operator= ( memory_map_Producer const& rhs );
 
             //------------------------------
             // Component required functions

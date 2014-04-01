@@ -1,4 +1,4 @@
-/*  Control_Flow_Graph_Sequence.h
+/*  control_flow_graph_sequence.h
 
    Copyright (C) 2008 Stephen Torri
 
@@ -58,13 +58,12 @@ namespace reverse {
 
       void swap ( control_flow_graph_sequence& rhs );
 
-      std::string to_string ( void ) const;
-
     private:
 
       std::vector < boost::shared_ptr<control_flow_graph> > m_graph_list;
-
     };
+    
+    std::ostream& operator<< ( std::ostream& os, control_flow_graph_sequence const& rhs );
 
   } // namespace data_containers
 } // namespace reverse

@@ -66,7 +66,7 @@ namespace libreverse
                 : m_file ( filename )
         {}
 
-        Mach_File::Mach_File ( data_types::Memory_Map::ptr_t file_img_ptr,
+        Mach_File::Mach_File ( data_types::memory_map::ptr_t file_img_ptr,
                                io_types::File_ID::const_ptr_t filename )
                 : m_file ( file_img_ptr, filename )
         {}
@@ -733,7 +733,7 @@ namespace libreverse
                                  "Entering Mach_File::index_Seek" );
 
             // - Init source to where data will be read.
-            data_types::Memory_Map::ptr_t src_map_ptr = m_file.get_Map_Ptr();
+            data_types::memory_map::ptr_t src_map_ptr = m_file.get_Map_Ptr();
 
             src_map_ptr->index_Seek ( offset );
 
@@ -750,9 +750,9 @@ namespace libreverse
                                  "Entering Mach_File::address_Seek" );
 
             // - Init source to where data will be read.
-            data_types::Memory_Map::ptr_t src_map_ptr = m_file.get_Map_Ptr();
+            data_types::memory_map::ptr_t src_map_ptr = m_file.get_Map_Ptr();
 
-            if ( src_map_ptr->address_Seek ( address ) != data_types::Memory_Map::SUCCESS )
+            if ( src_map_ptr->address_Seek ( address ) != data_types::memory_map::SUCCESS )
             {
                 return api::Results::INVALID_INDEX;
             }
@@ -765,7 +765,7 @@ namespace libreverse
         }
 
         void
-        Mach_File::copy ( data_types::Memory_Map::ptr_t dest_ptr,
+        Mach_File::copy ( data_types::memory_map::ptr_t dest_ptr,
                           boost::uint32_t length )
         {
             Trace::write_Trace ( TraceArea::IO,
@@ -775,7 +775,7 @@ namespace libreverse
             io::Preconditions::is_set ( dest_ptr );
             io::Preconditions::not_equal ( length, static_cast<boost::uint32_t>(0) );
 
-            data_types::Memory_Map::ptr_t src_map_ptr = m_file.get_Map_Ptr();
+            data_types::memory_map::ptr_t src_map_ptr = m_file.get_Map_Ptr();
 
             dest_ptr->copy ( src_map_ptr, length );
 
@@ -801,7 +801,7 @@ namespace libreverse
                                  TraceLevel::DETAIL,
                                  "Inside Mach_File::get_Present_Position_Value" );
 
-            data_types::Memory_Map::ptr_t src_map_ptr = m_file.get_Map_Ptr();
+            data_types::memory_map::ptr_t src_map_ptr = m_file.get_Map_Ptr();
 
             return src_map_ptr->get_Present_Position_Value ();
         }

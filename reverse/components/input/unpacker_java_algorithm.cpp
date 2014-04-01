@@ -20,16 +20,16 @@
 */
 
 #include "Unpacker_Java_Algorithm.h"
-#include "data_containers/Memory_Map.h"
-#include "meta/Meta_Object.h"
+#include "data_containers/memory_map.h"
+#include "meta/meta_object.h"
 
 namespace libreverse { namespace component {
 
-    data_types::Memory_Map::const_ptr_t
-    Unpacker_Java_Algorithm::run ( meta::Meta_Object::const_ptr_t,
-                                   data_types::Memory_Map::const_ptr_t )
+    data_types::memory_map::const_ptr_t
+    Unpacker_Java_Algorithm::run ( meta::meta_object::const_ptr_t,
+                                   data_types::memory_map::const_ptr_t )
     {
-        return data_types::Memory_Map::ptr_t();
+        return data_types::memory_map::ptr_t();
     }
 
     void

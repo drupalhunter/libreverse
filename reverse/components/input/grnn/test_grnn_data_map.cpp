@@ -89,7 +89,7 @@ BOOST_AUTO_TEST_CASE(test_get_entry)
 
   classifier_types::GRNN_Data_Entry::const_ptr_t retrieved_obj = a_ref.get_Entry ( key );
   BOOST_CHECK_EQUAL ( entry_ptr->get_Sigma(), retrieved_obj->get_Sigma() );
-  BOOST_CHECK_EQUAL ( entry_ptr->get_Filename(), retrieved_obj->get_Filename() );
+  BOOST_CHECK_EQUAL ( entry_ptr->get_filename(), retrieved_obj->get_filename() );
 }
 
 BOOST_AUTO_TEST_CASE(test_null_object)

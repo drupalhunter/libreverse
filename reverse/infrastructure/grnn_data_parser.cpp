@@ -26,7 +26,7 @@
 #include "infrastructure/Component_State.h"
 #include "components/Component_Factory.h"
 #include "errors/Parsing_Exception.h"
-#include "data_containers/Memory_Map.h"
+#include "data_containers/memory_map.h"
 #include "components/input/grnn/GRNN_Data_Entry.h"
 #include "components/input/grnn/GRNN_Data_Map.h"
 #include "components/input/grnn/GRNN_Data_Types.h"
@@ -75,7 +75,7 @@ namespace libreverse { namespace infrastructure {
         // Parse file and generate graph
 
         std::ifstream input ( filename.c_str() );
-        data_container::Memory_Map input_data ( input );
+        data_container::memory_map input_data ( input );
 
 
 #ifdef LIBREVERSE_DEBUG

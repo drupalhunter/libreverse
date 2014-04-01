@@ -20,13 +20,13 @@
 */
 
 #include "Null_Component.h"
-#include "meta/Meta_Object.h"
+#include "meta/meta_object.h"
 #include <iostream>
 #include "io/input/File_Readers/Reader_Factory.h"
-#include "infrastructure/data_source/Data_Object.h"
+#include "infrastructure/data_source/data_object.h"
 #include "infrastructure/Component_Data.h"
 #include "infrastructure/Component_State.h"
-#include "data_containers/Filename.h"
+#include "data_containers/filename.h"
 #include <boost/format.hpp>
 
 #include "errors/Internal_Exception.h"
@@ -124,7 +124,7 @@ namespace reverse { namespace component {
 
         infrastructure_types::Component_Data::ptr_t data_ptr = m_state_ptr->get_Data();
 
-        data_types::Filename::const_ptr_t file_ptr ( new data_container::Filename ( name ) );
+        data_types::filename::const_ptr_t file_ptr ( new data_container::filename ( name ) );
 
         data_ptr->set_Output_Data ( file_ptr );
 

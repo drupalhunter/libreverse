@@ -33,7 +33,7 @@ namespace infrastructure {
   {
   public:
 
-    std::string operator() ( Data_Object& value ) const;
+    std::string operator() ( data_object& value ) const;
 
   };
 

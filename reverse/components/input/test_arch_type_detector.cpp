@@ -21,7 +21,7 @@
 
 #include <boost/test/unit_test.hpp>
 #include "Arch_Type_Detector.h"
-#include "libreverse/data_containers/Filename.h"
+#include "libreverse/data_containers/filename.h"
 #include "libreverse/infrastructure/data_source/Memory_Data_Source_Config.h"
 #include "libreverse/infrastructure/data_source/Memory_Data_Transfer.h"
 #include "libreverse/infrastructure/data_source/Data_Source_T.h"
@@ -61,7 +61,7 @@ void test_second_constructor ()
     BOOST_CHECK_EQUAL ( atd_ref.get_ID(), static_cast<boost::uint32_t>(20) );
 }
 
-meta::Meta_Object::const_ptr_t
+meta::meta_object::const_ptr_t
 helper_run_test ( infrastructure_types::Component::ptr_t target_ptr,
                   std::string target_file )
 {
@@ -70,8 +70,8 @@ helper_run_test ( infrastructure_types::Component::ptr_t target_ptr,
     infrastructure_types::Component_Graph::Data_Map_t data_map_ref;
 
     // Add Data Source with filename added
-    data_types::Filename::const_ptr_t input_file
-        ( new data_container::Filename
+    data_types::filename::const_ptr_t input_file
+        ( new data_container::filename
           ( target_file.insert ( 0, PWD_PREFIX ) ) );
 
     infrastructure_types::Memory_Data_Source_Config::ptr_t
@@ -85,8 +85,8 @@ helper_run_test ( infrastructure_types::Component::ptr_t target_ptr,
         input_key ( new infrastructure::Data_Source<infrastructure::Memory_Data_Transfer>
                     ( mem_trans ) );
 
-    infrastructure_types::Data_Object::ptr_t
-        input_object ( new infrastructure::Data_Object() );
+    infrastructure_types::data_object::ptr_t
+        input_object ( new infrastructure::data_object() );
 
     input_object->set_Data ( input_file );
     input_key->put ( input_object );
@@ -103,11 +103,11 @@ helper_run_test ( infrastructure_types::Component::ptr_t target_ptr,
 
     infrastructure_types::Data_Source_Base::const_ptr_t results =
         target_ptr->results();
-    infrastructure_types::Data_Object::const_ptr_t
+    infrastructure_types::data_object::const_ptr_t
         results_data_obj = results->get();
 
-    meta::Meta_Object::const_ptr_t meta_results =
-        results_data_obj->getMeta();
+    meta::meta_object::const_ptr_t meta_results =
+        results_data_obj->get_meta();
 
     return meta_results;
 }
@@ -128,13 +128,13 @@ void test_intel_winpe_process ()
     boost::shared_ptr<component::Arch_Type_Detector> atd_ptr
         ( new component::Arch_Type_Detector ( state_ptr ) );
 
-    meta::Meta_Object::const_ptr_t meta_results =
+    meta::meta_object::const_ptr_t meta_results =
         helper_run_test ( atd_ptr, "/test_targets/cokegift.exe" );
 
-    Meta_Object::Data_Pair_t arch_meta_value =
+    meta_object::Data_Pair_t arch_meta_value =
         meta_results->get_Value ( "arch_type" );
 
-    assert ( arch_meta_value.second == Meta_Object::STRING );
+    assert ( arch_meta_value.second == meta_object::STRING );
     std::string arch_str_val = arch_meta_value.first;
 
     BOOST_CHECK_EQUAL ( arch_str_val, "intel:i386" );
@@ -158,13 +158,13 @@ void test_intel_elf_process ()
     boost::shared_ptr<component::Arch_Type_Detector> atd_ptr
         ( new component::Arch_Type_Detector( state_ptr ) );
 
-    meta::Meta_Object::const_ptr_t meta_results =
+    meta::meta_object::const_ptr_t meta_results =
         helper_run_test ( atd_ptr, "/test_targets/echo" );
 
-    Meta_Object::Data_Pair_t arch_meta_value =
+    meta_object::Data_Pair_t arch_meta_value =
         meta_results->get_Value ( "arch_type" );
 
-    assert ( arch_meta_value.second == Meta_Object::STRING );
+    assert ( arch_meta_value.second == meta_object::STRING );
     std::string arch_str_val = arch_meta_value.first;
 
     BOOST_CHECK_EQUAL ( arch_str_val, "intel:i386" );
@@ -234,8 +234,8 @@ void test_wrong_sources ()
     infrastructure_types::Data_Source<infrastructure::Memory_Data_Transfer>::ptr_t input_key
         ( new infrastructure::Data_Source<infrastructure::Memory_Data_Transfer>( mem_trans ) );
 
-    infrastructure_types::Data_Object::ptr_t input_object
-        ( new infrastructure::Data_Object() );
+    infrastructure_types::data_object::ptr_t input_object
+        ( new infrastructure::data_object() );
 
     input_object->set_Data ( input_cfg );
 

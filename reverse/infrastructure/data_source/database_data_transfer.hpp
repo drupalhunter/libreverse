@@ -48,7 +48,7 @@ namespace libreverse { namespace infrastructure {
         /**
          *
          */
-        virtual infrastructure_types::Data_Object::const_ptr_t get () const;
+        virtual infrastructure_types::data_object::const_ptr_t get () const;
 
         /**
          *
@@ -59,7 +59,7 @@ namespace libreverse { namespace infrastructure {
          *
          * @param data
          */
-        virtual void put ( infrastructure_types::Data_Object::const_ptr_t data );
+        virtual void put ( infrastructure_types::data_object::const_ptr_t data );
 
         Database_Data_Transfer& operator= ( Database_Data_Transfer const& rhs );
         
@@ -72,7 +72,7 @@ namespace libreverse { namespace infrastructure {
          */
         infrastructure_types::Database_Data_Source_Config::ptr_t m_config;
 
-        infrastructure_types::Data_Object::const_ptr_t m_data;
+        infrastructure_types::data_object::const_ptr_t m_data;
     };
 
 } /* namespace infrastructure */

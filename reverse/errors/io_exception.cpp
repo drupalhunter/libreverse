@@ -32,7 +32,7 @@ namespace reverse {
         "Invalid path name given for file.", // INVALID_PATH_NAME
         "Invalid pointer given. The pointer is referring to an address out of the range of the data structure.", // OUT_OF_RANGE
         "Invalid index given.", // INVALID_INDEX
-        "Shared pointer passed with unitialized contents", // NULL_POINTER
+        "Shared pointer passed with unitialized contents", // null_pointer
 	"Bad input received from input file", // BAD_INPUT
     };
 

@@ -1,4 +1,4 @@
-/*  Meta_Object.cpp
+/*  meta_object.cpp
 
    Copyright (C) 2008 Stephen Torri
 

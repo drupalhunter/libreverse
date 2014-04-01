@@ -109,7 +109,7 @@ namespace reverse {
 	    /*! \brief Support the Elf 32-bit file format. */
 	    bool m_supported;
 
-	    /*! \brief Filename of target. */
+	    /*! \brief filename of target. */
 	    boost::shared_ptr < const io::file_id > m_filename;
 	    
 	    boost::shared_ptr < data_containers::memory_map > m_string_table_ptr;

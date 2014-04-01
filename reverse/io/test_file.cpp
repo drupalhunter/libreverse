@@ -22,7 +22,7 @@
 #include <boost/test/unit_test.hpp>
 #include "File.h"
 #include "File_ID.h"
-#include "libreverse/data_containers/Memory_Map.h"
+#include "libreverse/data_containers/memory_map.h"
 #include "libreverse/include/config.h"
 #include "libreverse/errors/IO_Exception.h"
 
@@ -45,21 +45,21 @@ void test_file_id_constructor()
     BOOST_CHECK_THROW ( io::File null_file_ref ( null_file_ptr ),
                         libreverse::errors::IO_Exception );
 
-    // File (Memory_Map,File_ID) - test #1 - null map and file
-    data_types::Memory_Map::ptr_t null_map_ptr;
+    // File (memory_map,File_ID) - test #1 - null map and file
+    data_types::memory_map::ptr_t null_map_ptr;
     BOOST_CHECK_THROW ( io::File null_file_ref1 ( null_map_ptr, null_file_ptr ),
                         libreverse::errors::IO_Exception );
 
-    // File (Memory_Map,File_ID) - test #2 - null map
+    // File (memory_map,File_ID) - test #2 - null map
     BOOST_CHECK_THROW ( io::File null_file_ref2 ( null_map_ptr, id_ptr ),
                         libreverse::errors::IO_Exception );
 
-    // File (Memory_Map,File_ID) - test #3 - null file
-    data_types::Memory_Map::ptr_t map_ptr ( new data_container::Memory_Map(1) );
+    // File (memory_map,File_ID) - test #3 - null file
+    data_types::memory_map::ptr_t map_ptr ( new data_container::memory_map(1) );
     BOOST_CHECK_THROW ( io::File null_file_ref3 ( map_ptr, null_file_ptr ),
                         libreverse::errors::IO_Exception );
 
-    // File (Memory_Map,File_ID) - test #4 - good map and file pointer
+    // File (memory_map,File_ID) - test #4 - good map and file pointer
     io::File good_ref ( map_ptr, id_ptr );
 }
 
@@ -128,7 +128,7 @@ void test_get_map_ptr ()
 
     io::File good_file_ref ( name_set_ptr );
 
-    data_types::Memory_Map::ptr_t result_ptr = good_file_ref.get_Map_Ptr();
+    data_types::memory_map::ptr_t result_ptr = good_file_ref.get_Map_Ptr();
     BOOST_CHECK ( result_ptr.get() == 0 );
 
     good_file_ref.init();
