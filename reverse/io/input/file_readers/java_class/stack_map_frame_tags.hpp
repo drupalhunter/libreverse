@@ -25,7 +25,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/cstdint.hpp>
 
-namespace libreverse { namespace java_module {
+namespace reverse { namespace java_module {
 
     class Stack_Map_Frame_Tags {
 
@@ -46,6 +46,6 @@ namespace libreverse { namespace java_module {
     };
 
 } /* namespace java_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* STACK_MAP_FRAME_TAGS_H */

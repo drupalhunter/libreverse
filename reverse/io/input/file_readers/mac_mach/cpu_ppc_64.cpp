@@ -21,7 +21,7 @@
 
 #include "CPU_PPC_64.h"
 
-namespace libreverse
+namespace reverse
 {
     namespace mach_module
     {

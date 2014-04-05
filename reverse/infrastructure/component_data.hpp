@@ -46,12 +46,10 @@ namespace reverse {
   }
 
   namespace infrastructure {
-
+    
     namespace data_source {
-      
       class data_object;
-      
-    } // namespace data_source
+    }
 
     class component_data
     {
@@ -118,8 +116,6 @@ namespace reverse {
 
       bool find ( boost::uint32_t id );
 
-      boost::shared_ptr < infrastructure::data_source::data_source_base> get_data_source (void) const;
-
       void set_output_data ( boost::shared_ptr<const data_containers::filename> file_ptr );
 
       void set_output_data ( boost::shared_ptr<const data_containers::control_flow_graph_sequence> graph_ptr );
@@ -161,8 +157,6 @@ namespace reverse {
       boost::uint32_t m_id;
 
       component_data::input_token_t m_source_list;
-
-      boost::shared_ptr < infrastructure::data_source::data_object > m_data_obj_ptr;
 
       boost::shared_ptr < const meta::meta_object > m_meta_ptr;
       boost::shared_ptr < const data_containers::filename > m_filename_ptr;

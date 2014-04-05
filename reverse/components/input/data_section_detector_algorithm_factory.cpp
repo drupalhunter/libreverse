@@ -33,7 +33,7 @@
 
 #include <string>
 
-namespace libreverse { namespace component {
+namespace reverse { namespace component {
 
     Data_Section_Detector_Algorithm::ptr_t
     Data_Section_Detector_Algorithm_Factory::get_Algorithm ( std::string file_type )
@@ -65,5 +65,5 @@ namespace libreverse { namespace component {
     }
 
 } /* namespace component */
-} /* namespace libreverse */
+} /* namespace reverse */
 

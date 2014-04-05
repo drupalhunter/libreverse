@@ -21,7 +21,7 @@
 
 #include "Twolevel_Hint.h"
 
-namespace libreverse { namespace mach_module {
+namespace reverse { namespace mach_module {
 
   Twolevel_Hint::Twolevel_Hint ()
     : m_isubimage ( 0 ),
@@ -29,4 +29,4 @@ namespace libreverse { namespace mach_module {
   {}
 
 } /* namespace mach_module */
-} /* namespace libreverse */
+} /* namespace reverse */

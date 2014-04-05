@@ -19,8 +19,10 @@
     <http://www.gnu.org/licenses/>.
 */
 
-#ifndef REVERSE_ERRORS_COMPONENT_FACTORY_HPP_INCLUDED
-#define REVERSE_ERRORS_COMPONENT_FACTORY_HPP_INCLUDED
+#ifndef REVERSE_COMPONENTS_COMPONENT_FACTORY_HPP_INCLUDED
+#define REVERSE_COMPONENTS_COMPONENT_FACTORY_HPP_INCLUDED
+
+#include <json_spirit/json_spirit.h>
 
 #include <boost/shared_ptr.hpp>
 
@@ -28,10 +30,15 @@
 
 
 namespace reverse {
+  
   namespace infrastructure {
-
+    
     class component;
     class component_state;
+
+  }
+  
+  namespace components {
 
     class component_factory {
     public:
@@ -78,7 +85,8 @@ namespace reverse {
        * \return return a component pointer to the new meta writer
        */
       boost::shared_ptr < infrastructure::component >
-      get_meta_writer ( boost::shared_ptr < infrastructure::component_state > state_ptr );
+      get_meta_writer ( boost::shared_ptr < infrastructure::component_state > state_ptr,
+	json_spirit::Object const& obj );
 
       /**
        * \brief create a new unpacker component
@@ -210,7 +218,7 @@ namespace reverse {
       
     };
 
-  } // namespace infrastructure
+  } // namespace components
 } // namespace reverse
 
-#endif // #ifndef REVERSE_ERRORS_COMPONENT_FACTORY_HPP_INCLUDED
+#endif // #ifndef REVERSE_COMPONENTS_COMPONENT_FACTORY_HPP_INCLUDED

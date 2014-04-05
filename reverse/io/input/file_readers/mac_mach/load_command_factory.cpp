@@ -53,10 +53,10 @@
 #include "io/Preconditions.h"
 #include "io/Byte_Converter.h"
 
-using namespace libreverse::trace;
-using namespace libreverse::api;
+using namespace reverse::trace;
+using namespace reverse::api;
 
-namespace libreverse
+namespace reverse
 {
     namespace mach_module
     {
@@ -273,5 +273,5 @@ namespace libreverse
             }
         }
     } /* namespace mach_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 

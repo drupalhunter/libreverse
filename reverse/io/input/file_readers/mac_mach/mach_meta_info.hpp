@@ -24,7 +24,7 @@
 #include <boost/cstdint.hpp>
 #include <string>
 
-namespace libreverse {
+namespace reverse {
   namespace mach_module {
 
   class Mach_Meta_Info {
@@ -35,6 +35,6 @@ namespace libreverse {
   };
 
 } /* namespace mach_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* _MACH_META_INFO_H */

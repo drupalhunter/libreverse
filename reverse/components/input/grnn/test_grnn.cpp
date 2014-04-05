@@ -34,12 +34,12 @@
 #include "Java_Training_Data.h"
 #include "GRNN.h"
 
-#include "libreverse/Reverse.h"
-#include "libreverse/Trace.h"
+#include "reverse/Reverse.h"
+#include "reverse/Trace.h"
 #include <iostream>
 
-using namespace libreverse::trace;
-using namespace libreverse;
+using namespace reverse::trace;
+using namespace reverse;
 
 BOOST_AUTO_TEST_SUITE(grnn)
 

@@ -42,11 +42,11 @@
 
 #ifdef LIBREVERSE_DEBUG
 #include "Trace.h"
-using namespace libreverse::api;
-using namespace libreverse::trace;
+using namespace reverse::api;
+using namespace reverse::trace;
 #endif /* LIBREVERSE_DEBUG */
 
-namespace libreverse { namespace infrastructure {
+namespace reverse { namespace infrastructure {
 
     infrastructure_types::Component::ptr_t
     Component_Factory::get_File_Type_Detector ( infrastructure_types::Component_State::ptr_t state_ptr )
@@ -88,7 +88,8 @@ namespace libreverse { namespace infrastructure {
     }
 
     infrastructure_types::Component::ptr_t
-    Component_Factory::get_Meta_Writer ( infrastructure_types::Component_State::ptr_t state_ptr )
+    Component_Factory::get_Meta_Writer ( infrastructure_types::Component_State::ptr_t state_ptr,
+	json_spirit::Object const& obj )
     {
 
 #ifdef LIBREVERSE_DEBUG
@@ -97,7 +98,8 @@ namespace libreverse { namespace infrastructure {
 			   "Inside Component_Factory::get_Meta_Writer" );
 #endif /* LIBREVERSE_DEBUG */
 
-      return Create::shared_pointer<component::Meta_Writer> ( state_ptr );
+      const std::string& filename = obj.find("filename")->second.getString();
+      return Create::shared_pointer<component::Meta_Writer> ( state_ptr, filename );
     }
 
     infrastructure_types::Component::ptr_t
@@ -219,4 +221,4 @@ namespace libreverse { namespace infrastructure {
 
 
 } /* namespace infrastructure */
-} /* namespace libreverse */
+} /* namespace reverse */

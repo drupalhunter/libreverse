@@ -31,11 +31,11 @@
 
 #ifdef LIBREVERSE_DEBUG
 #include "Trace.h"
-using namespace libreverse::api;
-using namespace libreverse::trace;
+using namespace reverse::api;
+using namespace reverse::trace;
 #endif /* LIBREVERSE_DEBUG */
 
-namespace libreverse { namespace component {
+namespace reverse { namespace component {
 
     meta::meta_object::ptr_t
     Entry_Point_Detector_Elf32_Algorithm::run ( io_types::File_ID::const_ptr_t file_ptr )
@@ -79,5 +79,5 @@ namespace libreverse { namespace component {
     }
 
 } /* namespace component */
-} /* namespace libreverse */
+} /* namespace reverse */
 

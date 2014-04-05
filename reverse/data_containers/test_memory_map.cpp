@@ -23,12 +23,12 @@
 #include <boost/format.hpp>
 #include "memory_map.h"
 #include <fstream>
-#include "libreverse/Reverse.h"
-#include "libreverse/Trace.h"
+#include "reverse/Reverse.h"
+#include "reverse/Trace.h"
 
 using namespace boost::unit_test;
 using namespace boost::unit_test_framework;
-using namespace libreverse;
+using namespace reverse;
 
 void test_seek_PASS_LOW_SEEK ()
 {

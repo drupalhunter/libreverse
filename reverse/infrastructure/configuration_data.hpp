@@ -64,11 +64,7 @@ namespace reverse {
       configuration_data ();
       
       virtual ~configuration_data(){}
-      
-      boost::shared_ptr < infrastructure::data_source::data_source_config_base > get_transfer_config();
-      
-      void set_transfer_config ( boost::shared_ptr < infrastructure::data_source::data_source_config_base > obj );
-      
+                
       void set_formula_directory ( std::string const& obj );
       
       std::string get_formula_directory (void) const;
@@ -88,9 +84,6 @@ namespace reverse {
       void dump (void) const;
       
     private:
-      
-        // Method for passing data
-      boost::shared_ptr < infrastructure::data_source::data_source_config_base > m_data;
 
       // Where to look for the individual formula files (e.g. input, analysis)
       std::string m_formula_directory;

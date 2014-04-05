@@ -25,7 +25,7 @@
 #include "Load_Command.h"
 #include "Mach_Types.h"
 
-namespace libreverse
+namespace reverse
 {
     namespace mach_module
     {
@@ -75,7 +75,7 @@ namespace libreverse
         };
 
     } /* namespace mach_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 
 #endif /* DYLIB_COMMAND_H */

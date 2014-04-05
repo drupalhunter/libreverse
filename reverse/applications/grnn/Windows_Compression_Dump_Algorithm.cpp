@@ -20,25 +20,25 @@
 */
 #include "Windows_Compression_Dump_Algorithm.h"
 
-#include "libreverse/data_containers/Data_Types.h"
-#include "libreverse/io/IO_Types.h"
-#include "libreverse/io/File_ID.h"
-#include "libreverse/io/input/File_Readers/Windows_PE/PE_File.h"
-#include "libreverse/io/input/File_Readers/Windows_PE/DOS_Header.h"
-#include "libreverse/io/input/File_Readers/Windows_PE/Coff_Header.h"
-#include "libreverse/io/input/File_Readers/Windows_PE/Header_32.h"
-#include "libreverse/io/input/File_Readers/Windows_PE/PE_Optional_Header_32.h"
-#include "libreverse/io/input/File_Readers/Windows_PE/PE_Header_32.h"
-#include "libreverse/io/input/File_Readers/Windows_PE/Header_64.h"
-#include "libreverse/io/input/File_Readers/Windows_PE/PE_Optional_Header_64.h"
-#include "libreverse/io/input/File_Readers/Windows_PE/PE_Header_64.h"
-#include "libreverse/components/input/grnn/Windows_Training_Data_Parser.h"
+#include "reverse/data_containers/Data_Types.h"
+#include "reverse/io/IO_Types.h"
+#include "reverse/io/File_ID.h"
+#include "reverse/io/input/File_Readers/Windows_PE/PE_File.h"
+#include "reverse/io/input/File_Readers/Windows_PE/DOS_Header.h"
+#include "reverse/io/input/File_Readers/Windows_PE/Coff_Header.h"
+#include "reverse/io/input/File_Readers/Windows_PE/Header_32.h"
+#include "reverse/io/input/File_Readers/Windows_PE/PE_Optional_Header_32.h"
+#include "reverse/io/input/File_Readers/Windows_PE/PE_Header_32.h"
+#include "reverse/io/input/File_Readers/Windows_PE/Header_64.h"
+#include "reverse/io/input/File_Readers/Windows_PE/PE_Optional_Header_64.h"
+#include "reverse/io/input/File_Readers/Windows_PE/PE_Header_64.h"
+#include "reverse/components/input/grnn/Windows_Training_Data_Parser.h"
 
 #include <sstream>
 #include <iostream>
 #include <boost/format.hpp>
 
-namespace libreverse {
+namespace reverse {
   namespace optimizer {
 
     std::string
@@ -53,9 +53,9 @@ namespace libreverse {
 
       try
 	{
-	  libreverse::io_types::File_ID::ptr_t file_obj ( new libreverse::io::File_ID ( filename ) );
+	  reverse::io_types::File_ID::ptr_t file_obj ( new reverse::io::File_ID ( filename ) );
 	    
-	  libreverse::wpef_module::Reader_32 reader32_obj ( file_obj );
+	  reverse::wpef_module::Reader_32 reader32_obj ( file_obj );
 
 	  if ( reader32_obj.support_File_Type() )
 	    {
@@ -63,7 +63,7 @@ namespace libreverse {
 	    }
 	  else
 	    {
-	      libreverse::wpef_module::Reader_64 reader64_obj ( file_obj );
+	      reverse::wpef_module::Reader_64 reader64_obj ( file_obj );
 
 	      if ( reader64_obj.support_File_Type() )
 		{
@@ -91,7 +91,7 @@ namespace libreverse {
 
     std::string
     Windows_Compression_Dump_Algorithm::process_File ( boost::uint32_t compression_id, 
-						   libreverse::wpef_module::Reader_32& reader32_obj )
+						   reverse::wpef_module::Reader_32& reader32_obj )
     {
       Trace::write_Trace ( TraceArea::GRNN_OPTIMIZER,
 			   TraceLevel::DETAIL,
@@ -101,7 +101,7 @@ namespace libreverse {
 
       reader32_obj.read_Headers();
 
-      libreverse::wpef_types::PE_File::ptr_t file_ptr = reader32_obj.get_File();
+      reverse::wpef_types::PE_File::ptr_t file_ptr = reader32_obj.get_File();
 
       output << boost::format ( "  <%1%>" )
 	% classifier::Windows_Input_Tag_Names::TAG_FILE << std::endl;
@@ -116,11 +116,11 @@ namespace libreverse {
 	% file_ptr->get_File_Size()
 	% classifier::Windows_Input_Tag_Names::TAG_FILE_SIZE << std::endl;
 
-      libreverse::wpef_types::Header_32::ptr_t hdr_ptr = reader32_obj.get_Header();
+      reverse::wpef_types::Header_32::ptr_t hdr_ptr = reader32_obj.get_Header();
 
       // get stats
       //   - DOS (1 items)
-      libreverse::wpef_types::DOS_Header::ptr_t dos_ptr = hdr_ptr->get_DOS_Header();
+      reverse::wpef_types::DOS_Header::ptr_t dos_ptr = hdr_ptr->get_DOS_Header();
 
       //     - file address of new exe header (e_lfanew)
       output << boost::format ( "    <%1%>%2%</%3%>" ) 
@@ -129,10 +129,10 @@ namespace libreverse {
 	% classifier::Windows_Input_Tag_Names::TAG_EXE_HEADER_ADDRESS << std::endl;
 
       //   - PE (23 items)
-      libreverse::wpef_types::PE_Header_32::const_ptr_t pe_hdr_ptr = hdr_ptr->get_PE_Header();
+      reverse::wpef_types::PE_Header_32::const_ptr_t pe_hdr_ptr = hdr_ptr->get_PE_Header();
 
       //     - COFF header
-      libreverse::wpef_types::COFF_Header::ptr_t coff_hdr_ptr = pe_hdr_ptr->get_COFF_Header();
+      reverse::wpef_types::COFF_Header::ptr_t coff_hdr_ptr = pe_hdr_ptr->get_COFF_Header();
 
       output << boost::format ( "    <%1%>%2%</%3%>" )
 	% classifier::Windows_Input_Tag_Names::TAG_COFF_SECTION_COUNT
@@ -141,7 +141,7 @@ namespace libreverse {
 	     << std::endl;
 
       //     - Optional header (15)
-      libreverse::wpef_types::PE_Optional_Header_32::ptr_t pe_opt_hdr_ptr = pe_hdr_ptr->get_Optional_Header();
+      reverse::wpef_types::PE_Optional_Header_32::ptr_t pe_opt_hdr_ptr = pe_hdr_ptr->get_Optional_Header();
 
       /*
       //       - m_major_linker_version
@@ -188,7 +188,7 @@ namespace libreverse {
 
     std::string
     Windows_Compression_Dump_Algorithm::process_File ( boost::uint32_t compression_id, 
-						   libreverse::wpef_module::Reader_64& reader64_obj )
+						   reverse::wpef_module::Reader_64& reader64_obj )
     {
       Trace::write_Trace ( TraceArea::GRNN_OPTIMIZER,
 			   TraceLevel::DETAIL,
@@ -198,7 +198,7 @@ namespace libreverse {
     
       reader64_obj.read_Headers();
 
-      libreverse::wpef_types::PE_File::ptr_t file_ptr = reader64_obj.get_File();
+      reverse::wpef_types::PE_File::ptr_t file_ptr = reader64_obj.get_File();
 
       output << boost::format ( "  <%1%>" )
 	% classifier::Windows_Input_Tag_Names::TAG_FILE
@@ -215,11 +215,11 @@ namespace libreverse {
 	% classifier::Windows_Input_Tag_Names::TAG_FILE_SIZE << std::endl;
 
 
-      libreverse::wpef_types::Header_64::ptr_t hdr_ptr = reader64_obj.get_Header();
+      reverse::wpef_types::Header_64::ptr_t hdr_ptr = reader64_obj.get_Header();
 
       // get stats
       //   - DOS (2 items)
-      libreverse::wpef_types::DOS_Header::ptr_t dos_ptr = hdr_ptr->get_DOS_Header();
+      reverse::wpef_types::DOS_Header::ptr_t dos_ptr = hdr_ptr->get_DOS_Header();
 
       //     - file address of new exe header (e_lfanew)
       output << boost::format ( "    <%1%>%2%</%3%>" ) 
@@ -228,10 +228,10 @@ namespace libreverse {
 	% classifier::Windows_Input_Tag_Names::TAG_EXE_HEADER_ADDRESS << std::endl;
 
       //   - PE (23 items)
-      libreverse::wpef_types::PE_Header_64::const_ptr_t pe_hdr_ptr = hdr_ptr->get_PE_Header();
+      reverse::wpef_types::PE_Header_64::const_ptr_t pe_hdr_ptr = hdr_ptr->get_PE_Header();
 
       //     - entire C
-      libreverse::wpef_types::COFF_Header::ptr_t coff_hdr_ptr = pe_hdr_ptr->get_COFF_Header();
+      reverse::wpef_types::COFF_Header::ptr_t coff_hdr_ptr = pe_hdr_ptr->get_COFF_Header();
 
       output << boost::format ( "    <%1%>%2%</%3%>" )
 	% classifier::Windows_Input_Tag_Names::TAG_COFF_SECTION_COUNT
@@ -240,7 +240,7 @@ namespace libreverse {
 	     << std::endl;
 
       //     - Optional header (15)
-      libreverse::wpef_types::PE_Optional_Header_64::ptr_t pe_opt_hdr_ptr = pe_hdr_ptr->get_Optional_Header();
+      reverse::wpef_types::PE_Optional_Header_64::ptr_t pe_opt_hdr_ptr = pe_hdr_ptr->get_Optional_Header();
 
       //       - m_major_linker_version
       //       - m_minor_linker_version
@@ -317,4 +317,4 @@ namespace libreverse {
     }
 
   } /* namespace optimizer */
-} /* namespace libreverse */
+} /* namespace reverse */

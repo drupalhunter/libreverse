@@ -25,7 +25,7 @@
 #include "Tevis_Zero_Filled_Checker_Algorithm.h"
 #include "meta/meta_object.h"
 
-namespace libreverse { namespace component {
+namespace reverse { namespace component {
 
     class Tevis_Zero_Filled_Checker_ELF_Algorithm : public Tevis_Zero_Filled_Checker_Algorithm {
     public:
@@ -35,6 +35,6 @@ namespace libreverse { namespace component {
     };
 
 } /* namespace component */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* UNPACKAGE_ELF_ALGORITHM_H */

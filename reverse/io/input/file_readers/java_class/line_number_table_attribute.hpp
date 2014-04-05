@@ -34,7 +34,7 @@
    1999
 */
 
-namespace libreverse { namespace java_module {
+namespace reverse { namespace java_module {
 
     /*!
      * \class Line_Number_Table_Attribute
@@ -87,6 +87,6 @@ namespace libreverse { namespace java_module {
   };
 
 } /* namespace java_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* JAVA_LINE_NUMBER_TABLE_ATTRIBUTE_H_ */

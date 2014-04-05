@@ -30,7 +30,7 @@
 #include <sstream>
 #include <boost/format.hpp>
 
-namespace libreverse { namespace java_module {
+namespace reverse { namespace java_module {
 
   Same_Locals_One_Stack_Item_Frame_Extended::Same_Locals_One_Stack_Item_Frame_Extended ( boost::uint8_t tag )
       : m_tag ( tag )
@@ -129,4 +129,4 @@ namespace libreverse { namespace java_module {
     }
 
 } /* namespace java_module */
-} /* namespace libreverse */
+} /* namespace reverse */

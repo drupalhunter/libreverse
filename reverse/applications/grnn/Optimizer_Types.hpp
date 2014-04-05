@@ -28,7 +28,7 @@
 #include <map>
 #include <vector>
 
-namespace libreverse {
+namespace reverse {
 
   namespace optimizer
   {
@@ -113,6 +113,6 @@ namespace libreverse {
     };
 
   } /* namespace optimizer_types */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* OPTIMIZER_TYPES_H */

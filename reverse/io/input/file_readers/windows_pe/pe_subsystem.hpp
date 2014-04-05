@@ -31,7 +31,7 @@
 #include <boost/cstdint.hpp>
 #include <string>
 
-namespace libreverse { namespace wpef_module {
+namespace reverse { namespace wpef_module {
 
     class PE_Subsystem {
     public:
@@ -74,6 +74,6 @@ namespace libreverse { namespace wpef_module {
     };
 
 } /* namespace wpef_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* PE_SUBSYSTEM_H */

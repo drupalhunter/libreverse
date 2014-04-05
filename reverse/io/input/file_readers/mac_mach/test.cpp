@@ -23,7 +23,7 @@
 
 int main (int, char**)
 {
-	libreverse::mach_module::Mach_Data<32> a;
+	reverse::mach_module::Mach_Data<32> a;
 
 	return 0;
 }

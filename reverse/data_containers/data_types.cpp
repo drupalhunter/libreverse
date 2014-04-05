@@ -21,12 +21,12 @@
 
 #include "Data_Types.h"
 
-namespace libreverse { namespace data_types {
+namespace reverse { namespace data_types {
 
     boost::int8_t const memory_map::SUCCESS = 0;
     boost::int8_t const memory_map::INVALID_INDEX = -1;
     boost::int8_t const memory_map::OUT_OF_RANGE = -2;
 
 } /* namespace data_types */
-} /* namespace libreverse */
+} /* namespace reverse */
 

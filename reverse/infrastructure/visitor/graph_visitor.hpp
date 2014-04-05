@@ -23,7 +23,6 @@
 #define REVERSE_INFRASTRUCTURE_VISITOR_GRAPH_VISITOR_HPP_INCLUDED
 
 #include <reverse/infrastructure/component_graph.hpp>
-#include <reverse/infrastructure/component_types.hpp>
 
 namespace reverse { 
   namespace infrastructure {

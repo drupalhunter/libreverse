@@ -34,7 +34,7 @@
    1999
 */
 
-namespace libreverse { namespace java_module {
+namespace reverse { namespace java_module {
 
     /*!
      * \class Exceptions_Attribute
@@ -88,6 +88,6 @@ namespace libreverse { namespace java_module {
     };
 
 } /* namespace java_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* JAVA_EXCEPTION_ATTRIBUTE_H_ */

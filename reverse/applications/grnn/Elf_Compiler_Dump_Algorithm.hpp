@@ -22,10 +22,10 @@
 #define ELF_COMPILER_DUMP_ALGORITHM_H
 
 #include "Compiler_Dump_Algorithm.h"
-#include "libreverse/io/input/File_Readers/Elf/Elf_Reader_32.h"
-#include "libreverse/io/input/File_Readers/Elf/Elf_Reader_64.h"
+#include "reverse/io/input/File_Readers/Elf/Elf_Reader_32.h"
+#include "reverse/io/input/File_Readers/Elf/Elf_Reader_64.h"
 
-namespace libreverse {
+namespace reverse {
   namespace optimizer {
 
     class Elf_Compiler_Dump_Algorithm : public Compiler_Dump_Algorithm {
@@ -41,13 +41,13 @@ namespace libreverse {
 
     private:
 
-      std::string process_File ( boost::uint32_t compiler_id, libreverse::elf_module::Elf_Reader_32& reader32_obj );
+      std::string process_File ( boost::uint32_t compiler_id, reverse::elf_module::Elf_Reader_32& reader32_obj );
 
-      std::string process_File ( boost::uint32_t compiler_id, libreverse::elf_module::Elf_Reader_64& reader64_obj );
+      std::string process_File ( boost::uint32_t compiler_id, reverse::elf_module::Elf_Reader_64& reader64_obj );
 
     };
 
   } /* namespace optimizer */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* ELF_COMPILER_DUMP_ALGORITHM_H */

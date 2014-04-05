@@ -21,7 +21,7 @@
 
 #include "PE_Subsystem.h"
 
-namespace libreverse { namespace wpef_module {
+namespace reverse { namespace wpef_module {
 
     const boost::uint8_t PE_Subsystem::IMAGE_SUBSYSTEM_UNKNOWN = 0;
     const boost::uint8_t PE_Subsystem::IMAGE_SUBSYSTEM_NATIVE = 1;
@@ -101,5 +101,5 @@ namespace libreverse { namespace wpef_module {
     }
 
 } /* namespace wpef_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 

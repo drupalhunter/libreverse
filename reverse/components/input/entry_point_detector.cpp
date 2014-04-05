@@ -39,12 +39,12 @@
 
 #ifdef LIBREVERSE_DEBUG
 #include "Trace.h"
-using namespace libreverse::api;
-using namespace libreverse::trace;
+using namespace reverse::api;
+using namespace reverse::trace;
 #endif /* LIBREVERSE_DEBUG */
 
 
-namespace libreverse { namespace component {
+namespace reverse { namespace component {
 
     const std::string Entry_Point_Detector::m_name = "Entry_Point_Detector";
 
@@ -397,4 +397,4 @@ namespace libreverse { namespace component {
 
     }
 } /* namespace component */
-} /* namespace libreverse */
+} /* namespace reverse */

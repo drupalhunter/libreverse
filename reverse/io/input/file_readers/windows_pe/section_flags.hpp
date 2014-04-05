@@ -31,7 +31,7 @@
 #include <boost/cstdint.hpp>
 #include <string>
 
-namespace libreverse { namespace wpef_module {
+namespace reverse { namespace wpef_module {
 
   class Section_Flags {
   public:
@@ -232,6 +232,6 @@ namespace libreverse { namespace wpef_module {
   };
 
 } /* namespace wpef_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* SECTION_FLAGS_H_ */

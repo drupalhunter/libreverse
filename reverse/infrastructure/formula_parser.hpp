@@ -22,56 +22,41 @@
 #ifndef REVERSE_INFRASTRUCTURE_FORMULA_PARSER_HPP_INCLUDED
 #define REVERSE_INFRASTRUCTURE_FORMULA_PARSER_HPP_INCLUDED
 
-#include <reverse/infrastructure/formula_tag_names.hpp>
+#include <json_spirit/json_spirit.h>
 
 #include <boost/shared_ptr.hpp>
 #include <boost/cstdint.hpp>
-
-#include <vector>
-#include <stack>
-
-#include "expatpp.h"
+#include <boost/graph/graph_concepts.hpp>
 
 
 namespace reverse {
   namespace infrastructure {
 
-    class formula_parser : public expatpp {
+   class component;
+   class component_graph;
+    
+    class formula_parser {
     public:
 
         formula_parser();
 
         virtual ~formula_parser(){}
 
-        infrastructure_types::Component_Graph::ptr_t get_Graph ( std::string filename,
-                                                                 std::string directory );
-
-        virtual void startElement ( const std::string& element_name,
-                                    const Attribute_Map_t& attributes );
-
-        virtual void charData ( const std::string& element_value );
-
-        virtual void endElement ( const std::string& element_name );
+	boost::shared_ptr < infrastructure::component_graph > get_graph ( std::string filename,
+									  std::string directory );
 
     private:
 
-        static const int MATCH;
+        void read_components ( json_spirit::Object const& obj );
 
-        infrastructure_types::Component::ptr_t get_Component ( boost::uint32_t id,
-                                                               std::string name );
+	boost::shared_ptr < infrastructure::component > get_component ( json_spirit::Object::const_iterator cpos );
 
-        void construct_Component ();
+	boost::shared_ptr < infrastructure::component_graph > m_graph;
+	
+	int m_id;
+	std::string m_name;
+	std::string m_file;
 
-        void print_Component_List (void) const;
-
-      boost::shared_ptr < infrastructure_types::component_graph > m_graph;
-      formula_tag_names m_tag;
-      std::vector<int> m_predecessor_list;
-      int m_id;
-      std::string m_name;
-      std::string m_file;
-
-      std::stack<std::string> m_element_list;
     };
 
   } /* namespace infrastructure */

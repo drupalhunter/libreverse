@@ -40,7 +40,7 @@
 #include <map>
 #include <string>
 
-namespace libreverse
+namespace reverse
 {
   namespace mach_module
   {

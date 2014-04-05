@@ -33,7 +33,7 @@
    1999
 */
 
-namespace libreverse { namespace java_module {
+namespace reverse { namespace java_module {
 
     /*!
      * \class Local_Variable
@@ -81,6 +81,6 @@ namespace libreverse { namespace java_module {
     };
 
 } /* namespace java_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* JAVA_LOCAL_VARIABLE_H_ */

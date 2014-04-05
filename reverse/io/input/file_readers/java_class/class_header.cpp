@@ -38,12 +38,12 @@
 
 #ifdef LIBREVERSE_DEBUG
 #include "Trace.h"
-using namespace libreverse::api;
-using namespace libreverse::trace;
+using namespace reverse::api;
+using namespace reverse::trace;
 #endif /* LIBREVERSE_DEBUG */
 
 
-namespace libreverse { namespace java_module {
+namespace reverse { namespace java_module {
 
     boost::uint32_t const Class_Header::CLASS_MAGIC_SIGNATURE = 0xCAFEBABE;
 
@@ -742,4 +742,4 @@ namespace libreverse { namespace java_module {
     }
 
 } /* namespace java_module */
-} /* namespace libreverse */
+} /* namespace reverse */

@@ -31,7 +31,7 @@ namespace reverse {
         "Input value was not an acceptable value for this function.\nDouble check the calling function to confirm the parameter value.", // INVALID_VALUE
         "Input pointer is not initialized. Double check where the call is make to this function to ensure the pointer is initialized.", // null_pointer
         "Unable to allocate memory for the required object. This may be a indicator of a memory leak or non-enough system memory to process the input file.", // BAD_ALLOC
-        "Unsupported feature was requested. Contact the developers of libreverse if you feel that this feature should be supported", // UNSUPPORTED_FEATURE
+        "Unsupported feature was requested. Contact the developers of reverse if you feel that this feature should be supported", // UNSUPPORTED_FEATURE
         "Unable to perform I/O operation", // IO_ERROR
         "Invalid index given. It is outside the bounds of the range of the list.", // INVALID_INDEX
         "Invalid data set found. A value in the problem data set is not within the range of 0.0 to 1.0", // INVALID_DATA_SET

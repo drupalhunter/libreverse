@@ -34,11 +34,11 @@
 
 #ifdef LIBREVERSE_DEBUG
 #include "Trace.h"
-using namespace libreverse::api;
-using namespace libreverse::trace;
+using namespace reverse::api;
+using namespace reverse::trace;
 #endif /* LIBREVERSE_DEBUG */
 
-namespace libreverse { namespace java_module {
+namespace reverse { namespace java_module {
 
     Line_Number_Table_Attribute::Line_Number_Table_Attribute ( boost::uint16_t index )
         : m_name_index ( index ),
@@ -150,4 +150,4 @@ namespace libreverse { namespace java_module {
     }
 
 } /* namespace java_module */
-} /* namespace libreverse */
+} /* namespace reverse */

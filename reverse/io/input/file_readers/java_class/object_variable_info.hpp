@@ -25,7 +25,7 @@
 #include "Verification_Type_Info.h"
 #include <boost/enable_shared_from_this.hpp>
 
-namespace libreverse { namespace java_module {
+namespace reverse { namespace java_module {
 
     class Object_Variable_Info
       : public Verification_Type_Info,
@@ -55,6 +55,6 @@ namespace libreverse { namespace java_module {
     };
     
   } /* namespace java_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* JAVA_OBJECT_VARIABLE_INFO_H_ */

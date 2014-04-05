@@ -50,4 +50,4 @@ namespace reverse {
   }
 
   } /* namespace errors */
-} /* namespace libreverse */
+} /* namespace reverse */

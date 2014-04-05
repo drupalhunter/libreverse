@@ -22,7 +22,7 @@
 #include "CPU_X86_32.h"
 #include "errors/IO_Exception.h"
 
-namespace libreverse
+namespace reverse
 {
     namespace mach_module
     {
@@ -61,4 +61,4 @@ namespace libreverse
         }
 
     } /* namespace mach_module */
-} /* namespace libreverse */
+} /* namespace reverse */

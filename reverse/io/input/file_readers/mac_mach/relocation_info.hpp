@@ -24,7 +24,7 @@
 
 #include <boost/cstdint.hpp>
 
-namespace libreverse { namespace mach_module {
+namespace reverse { namespace mach_module {
 
   class Relocation_Info {
   public:
@@ -151,7 +151,7 @@ namespace libreverse { namespace mach_module {
   };
 
 } /* namespace mach_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 
 #endif /* RELOCATION_INFO_H */

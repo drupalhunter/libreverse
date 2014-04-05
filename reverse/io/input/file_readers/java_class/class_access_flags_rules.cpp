@@ -23,12 +23,12 @@
 #include "Class_Access_Flags.h"
 
 #ifdef LIBREVERSE_DEBUG
-#include "libreverse/Trace.h"
-using namespace libreverse::api;
-using namespace libreverse::trace;
+#include "reverse/Trace.h"
+using namespace reverse::api;
+using namespace reverse::trace;
 #endif /* LIBREVERSE_DEBUG */
 
-namespace libreverse { namespace java_module {
+namespace reverse { namespace java_module {
 
     bool
     Class_Access_Flags_Rules::validate_Flags ( boost::uint16_t value )
@@ -428,4 +428,4 @@ namespace libreverse { namespace java_module {
         return result;
     }
 } /* namespace java_module */
-} /* namespace libreverse */
+} /* namespace reverse */

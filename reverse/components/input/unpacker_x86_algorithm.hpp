@@ -25,7 +25,7 @@
 #include "Unpacker_Algorithm.h"
 #include "meta/meta_object.h"
 
-namespace libreverse { namespace component {
+namespace reverse { namespace component {
 
     /*!
      * \brief Implements the Unpacking algorithm for x86 binaries
@@ -140,6 +140,6 @@ namespace libreverse { namespace component {
     };
 
 } /* namespace component */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* UNPACKAGE_X86_ALGORITHM_H */

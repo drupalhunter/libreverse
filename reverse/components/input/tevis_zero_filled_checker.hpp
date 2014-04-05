@@ -27,7 +27,7 @@
 #include <boost/enable_shared_from_this.hpp>
 #include "Tevis_Zero_Filled_Checker_Algorithm.h"
 
-namespace libreverse { namespace component {
+namespace reverse { namespace component {
 
     class Tevis_Zero_Filled_Checker : public infrastructure::Component,
                                       public infrastructure::Component_Actor,
@@ -82,6 +82,6 @@ namespace libreverse { namespace component {
     };
 
 } /* namespace component */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* TEVIS_ZERO_FILLED_CHECKER_H */

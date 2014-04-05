@@ -24,7 +24,7 @@
 
 #include "Tevis_Unknown_Region_Checker_Algorithm.h"
 
-namespace libreverse { namespace component {
+namespace reverse { namespace component {
 
     class Tevis_Unknown_Region_Checker_Algorithm_Factory {
     public:
@@ -49,6 +49,6 @@ namespace libreverse { namespace component {
     };
 
 } /* namespace component */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* UNPACKAGE_ALGORITHM_FACTORY_H */

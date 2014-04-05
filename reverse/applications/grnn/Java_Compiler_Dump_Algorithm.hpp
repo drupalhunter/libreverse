@@ -23,9 +23,9 @@
 
 #include "Compiler_Dump_Algorithm.h"
 
-#include "libreverse/io/input/File_Readers/Java_Class/Java_Types.h"
+#include "reverse/io/input/File_Readers/Java_Class/Java_Types.h"
 
-namespace libreverse {
+namespace reverse {
   namespace optimizer {
 
     class Java_Compiler_Dump_Algorithm : public Compiler_Dump_Algorithm {
@@ -42,8 +42,8 @@ namespace libreverse {
     private:
 
       void collect_Constant_Pool_Stats ( std::vector<float>& stats,
-					 libreverse::java_types::Class_Header::Constant_Pool_Info_Map_t::const_iterator pool_start,
-					 libreverse::java_types::Class_Header::Constant_Pool_Info_Map_t::const_iterator pool_end );
+					 reverse::java_types::Class_Header::Constant_Pool_Info_Map_t::const_iterator pool_start,
+					 reverse::java_types::Class_Header::Constant_Pool_Info_Map_t::const_iterator pool_end );
 
       void print_Constant_Pool_Stats ( std::stringstream& output,
 				       std::vector<float>& stats,
@@ -51,6 +51,6 @@ namespace libreverse {
     };
 
   } /* namespace optimizer */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* JAVA_COMPILER_DUMP_ALGORITHM_H */

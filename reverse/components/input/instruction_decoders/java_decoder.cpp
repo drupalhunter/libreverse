@@ -1680,11 +1680,11 @@ namespace reverse {
 	  // set the opcode_index to address of the next instruction
 	  opcode_index = ( read_head - code_ptr->get_code_begin() + 1);
 
-#ifdef libreverse_debug
+#ifdef reverse_debug
 	  trace::write_trace ( trace_area::instruction_decoder,
 			       trace_level::detail,
 			       "exiting java_decode::parse_single_opcodes" );
-#endif /* libreverse_debug */
+#endif /* reverse_debug */
 	}
 
 	void
@@ -1693,7 +1693,7 @@ namespace reverse {
 							    boost::shared_ptr < const data_container::basic_block > current_bb_ptr )
 	{
 
-#ifdef libreverse_debug
+#ifdef reverse_debug
 	  trace::write_trace ( trace_area::instruction_decoder,
 			       trace_level::detail,
 			       "entering java_decode::parse_16bit_single_branch_opcodes" );
@@ -1701,7 +1701,7 @@ namespace reverse {
 	  trace::write_trace ( trace_area::instruction_decoder,
 			       trace_level::data,
 			       boost::str ( boost::format ( "opcode index: %1%" ) % opcode_index ) );
-#endif /* libreverse_debug */
+#endif /* reverse_debug */
 
 
 	  boost::uint8_t instruction = code_ptr->get_code ( opcode_index );
@@ -1713,11 +1713,11 @@ namespace reverse {
 	  boost::int16_t dest_index = this->read_16bit_value ( read_head, code_ptr->get_code_end() )
 	    + opcode_index;
 
-#ifdef libreverse_debug
+#ifdef reverse_debug
 	  trace::write_trace ( trace_area::instruction_decoder,
 			       trace_level::data,
 			       boost::str ( boost::format ( "dest index: %1%" ) % dest_index ) );
-#endif /* libreverse_debug */
+#endif /* reverse_debug */
     
 	  // if true index is not in processed and todo list then add true index to todo list
 	  basic_block_list_t::iterator processed_result = std::find ( m_processed_list.begin(),
@@ -1739,7 +1739,7 @@ namespace reverse {
 								     data_container::instruction::java_assembly );
 
 
-#ifdef libreverse_debug
+#ifdef reverse_debug
 	      trace::write_trace ( trace_area::instruction_decoder,
 				   trace_level::data,
 				   "cfg before add" );
@@ -1748,13 +1748,13 @@ namespace reverse {
 				   trace_level::data,
 				   boost::str ( boost::format ( "%1%" ) % m_current_graph->to_string() ) );
 
-#endif /* libreverse_debug */
+#endif /* reverse_debug */
 
 
 	      m_current_graph->add_basic_block ( dest_bb_ptr );
 
 
-#ifdef libreverse_debug
+#ifdef reverse_debug
 	      trace::write_trace ( trace_area::instruction_decoder,
 				   trace_level::data,
 				   "cfg after add" );
@@ -1763,7 +1763,7 @@ namespace reverse {
 				   trace_level::data,
 				   boost::str ( boost::format ( "%1%" ) % m_current_graph->to_string() ) );
 
-#endif /* libreverse_debug */
+#endif /* reverse_debug */
 
 	    }
 

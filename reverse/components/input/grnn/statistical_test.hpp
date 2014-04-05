@@ -25,7 +25,7 @@
 #include "Statistical.h"
 #include "Classifier_Types.h"
 
-namespace libreverse
+namespace reverse
 {
   namespace classifier
   {
@@ -56,6 +56,6 @@ namespace libreverse
     };
   
   } /* namespace classifier */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* STATISTICAL_TEST_H */

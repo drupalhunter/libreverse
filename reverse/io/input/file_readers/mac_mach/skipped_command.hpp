@@ -25,7 +25,7 @@
 #include "Load_Command.h"
 #include <string>
 
-namespace libreverse { namespace mach_module {
+namespace reverse { namespace mach_module {
 
   class Skipped_Command : public Load_Command {
   public:
@@ -47,7 +47,7 @@ namespace libreverse { namespace mach_module {
   };
 
 } /* namespace mach_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 
 #endif /* SKIPPED_COMMAND_H */

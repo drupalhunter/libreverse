@@ -22,12 +22,12 @@
 #include "Method_Access_Flags.h"
 
 #ifdef LIBREVERSE_DEBUG
-#include "libreverse/Trace.h"
-using namespace libreverse::api;
-using namespace libreverse::trace;
+#include "reverse/Trace.h"
+using namespace reverse::api;
+using namespace reverse::trace;
 #endif /* LIBREVERSE_DEBUG */
 
-namespace libreverse { namespace java_module {
+namespace reverse { namespace java_module {
 
     boost::uint16_t const Method_Access_Flags::ACC_PUBLIC        = 0x0001;
     boost::uint16_t const Method_Access_Flags::ACC_PRIVATE       = 0x0002;
@@ -55,4 +55,4 @@ namespace libreverse { namespace java_module {
     }
 
 } /* namespace java_module */
-} /* namespace libreverse */
+} /* namespace reverse */

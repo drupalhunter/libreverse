@@ -2,14 +2,14 @@
 
    copyright (c) 2008 stephen torri
 
-   this file is part of libreverse.
+   this file is part of reverse.
 
-   libreverse is free software; you can redistribute it and/or modify
+   reverse is free software; you can redistribute it and/or modify
    it under the terms of the gnu general public license as published
    by the free software foundation; either version 3, or (at your
    option) any later version.
 
-   libreverse is distributed in the hope that it will be useful, but
+   reverse is distributed in the hope that it will be useful, but
    without any warranty; without even the implied warranty of
    merchantability or fitness for a particular purpose.  see the gnu
    general public license for more details.
@@ -25,7 +25,6 @@
 #include <reverse/errors/api_exception.hpp>
 #include <reverse/errors/internal_exception.hpp>
 #include <reverse/infrastructure/component_graph.hpp>
-#include <reverse/infrastructure/data_source/data_source_base.hpp>
 #include <reverse/infrastructure/visitor/graph_visitor.hpp>
 #include <reverse/infrastructure/visitor/graphviz_visitor.hpp>
 #include <reverse/infrastructure/component.hpp>
@@ -52,7 +51,7 @@ namespace reverse {
 
     reverse_impl::return_type_t
     reverse_impl::execute_input_section ( boost::shared_ptr < infrastructure::component_graph::map_t > m_graph,
-                                          boost::shared_ptr < const infrastructure::data_source::data_source_base > init_data_ptr,
+                                          boost::shared_ptr < const infrastructure::component_data > init_data_ptr,
                                           boost::shared_ptr < infrastructure::component > init_comp_ptr )
     {
       trace::api_detail ( "entering reverse_impl::execute_input_section" );
@@ -285,9 +284,9 @@ namespace reverse {
         output_file.close();
     }
 
-  boost::shared_ptr < const infrastructure::data_source::data_source_base >
+  boost::shared_ptr < const infrastructure::component_data >
   reverse_impl::process_graph ( boost::shared_ptr < const infrastructure::component_graph > graph_ptr,
-				boost::shared_ptr < const infrastructure::data_source::data_source_base > val ) const
+				boost::shared_ptr < const infrastructure::component_data > val ) const
     {
       trace::api_detail ( "entering reverse_impl::process_graph" );
 
@@ -325,9 +324,9 @@ namespace reverse {
 
 	trace::api_detail ( "exiting reverse_impl::process_graph" );
 
-	boost::shared_ptr < const infrastructure::data_source::data_source_base > output_data_source_ptr = result.first;
+	boost::shared_ptr < const infrastructure::component_data > output_data_ptr = result.first;
 
-	return output_data_source_ptr;
+	return output_data_ptr;
     }
 
-} /* namespace libreverse */
+} /* namespace reverse */

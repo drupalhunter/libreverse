@@ -21,7 +21,7 @@
 
 #include "Nlist.h"
 
-namespace libreverse { namespace mach_module {
+namespace reverse { namespace mach_module {
 
   Nlist::Nlist ()
     : m_strx ( 0 ),
@@ -32,4 +32,4 @@ namespace libreverse { namespace mach_module {
   {}
 
 } /* namespace mach_module */
-} /* namespace libreverse */
+} /* namespace reverse */

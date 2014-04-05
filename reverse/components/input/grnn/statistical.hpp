@@ -24,7 +24,7 @@
 
 #include "Training_Set.h"
 
-namespace libreverse
+namespace reverse
 {
 
   namespace classifier
@@ -734,6 +734,6 @@ namespace libreverse
       };
   
   } /* namespace classifier */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* STATISTICAL_H */

@@ -24,7 +24,7 @@
 
 #include <boost/cstdint.hpp>
 
-namespace libreverse { namespace java_module {
+namespace reverse { namespace java_module {
 
     class Method_Access_Flags {
     public:
@@ -44,6 +44,6 @@ namespace libreverse { namespace java_module {
     };
 
 } /* namespace java_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* METHOD_ACCESS_FLAGS_H_ */

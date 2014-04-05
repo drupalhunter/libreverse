@@ -26,7 +26,7 @@
 #include <string>
 
 /* Values, comments and names taken from mach/machine.h */
-namespace libreverse
+namespace reverse
 {
     namespace mach_module
     {
@@ -313,7 +313,7 @@ namespace libreverse
         };
 
     } /* namespace mach_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 
 #endif /* CPU_SUBTYPE_32BIT_H */

@@ -21,7 +21,7 @@
 
 #include "Verification_Type_Tags.h"
 
-namespace libreverse { namespace java_module {
+namespace reverse { namespace java_module {
 
   boost::uint8_t const Verification_Type_Tags::TOP = 0;
   boost::uint8_t const Verification_Type_Tags::INTEGER = 1;
@@ -35,4 +35,4 @@ namespace libreverse { namespace java_module {
 
 
 } /* namespace java_module */
-} /* namespace libreverse */
+} /* namespace reverse */

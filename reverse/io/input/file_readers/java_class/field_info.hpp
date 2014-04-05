@@ -33,7 +33,7 @@
    1999
 */
 
-namespace libreverse { namespace java_module {
+namespace reverse { namespace java_module {
 
     /*!
      * \class Field_Info
@@ -107,6 +107,6 @@ namespace libreverse { namespace java_module {
   };
 
 } /* namespace java_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* JAVA_FIELD_INFO_H_ */

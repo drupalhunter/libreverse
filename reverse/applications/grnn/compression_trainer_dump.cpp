@@ -11,8 +11,8 @@
 #include <sstream>
 
 #ifdef LIBREVERSE_DEBUG
-#include <libreverse/Reverse.h>
-#include <libreverse/Trace.h>
+#include <reverse/Reverse.h>
+#include <reverse/Trace.h>
 #endif
 
 #include "Compression_Dump_Algorithm.h"
@@ -20,11 +20,11 @@
 #include "Optimizer_Types.h"
 
 #ifdef LIBREVERSE_DEBUG
-using namespace libreverse::trace;
+using namespace reverse::trace;
 #endif /* LIBREVERSE_DEBUG */
 
-using namespace libreverse::classifier;
-using namespace libreverse::optimizer;
+using namespace reverse::classifier;
+using namespace reverse::optimizer;
 
 void help ( boost::program_options::options_description& desc )
 {
@@ -124,8 +124,8 @@ int main (int ac, char** av)
     }
 
 #ifdef LIBREVERSE_DEBUG
-  Trace_State::Instance().set_Trace_Level ( libreverse::api::TraceLevel::DATA );
-  Trace_State::Instance().set_Trace_Area_Mask ( libreverse::api::TraceArea::IO );
+  Trace_State::Instance().set_Trace_Level ( reverse::api::TraceLevel::DATA );
+  Trace_State::Instance().set_Trace_Area_Mask ( reverse::api::TraceArea::IO );
   Trace_State::Instance().open_Trace_File ();
 #endif
 
@@ -148,7 +148,7 @@ int main (int ac, char** av)
   try
     {
       // Get the algorithm for this file type
-      libreverse::optimizer_types::Compression_Dump_Algorithm::ptr_t alg_ptr =
+      reverse::optimizer_types::Compression_Dump_Algorithm::ptr_t alg_ptr =
 	( Compression_Dump_Algorithm_Factory::Instance() ).get_Algorithm ( source_value );
 
       // Get list of target files found recursively from all directories below starting directory.
@@ -175,7 +175,7 @@ int main (int ac, char** av)
     }
   catch ( std::exception& )
     {
-      std::cout << "Unsupported file type. Contact libreverse developers if you believe they should support the target file type" << std::endl;
+      std::cout << "Unsupported file type. Contact reverse developers if you believe they should support the target file type" << std::endl;
     }
 
   return 0;

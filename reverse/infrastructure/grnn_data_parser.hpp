@@ -22,50 +22,34 @@
 #ifndef REVERSE_INFRASTRUCTURE_GRNN_DATA_PARSER_HPP_INCLUDED
 #define REVERSE_INFRASTRUCTURE_GRNN_DATA_PARSER_HPP_INCLUDED
 
-#include <reverse/infrastructure/grnn_data_tag_names.hpp>
-
 #include <boost/shared_ptr.hpp>
-#include <boost/cstdint.hpp>
 
-#include <expatpp.h>
+namespace reverse {
+  
+	namespace components {
+	  namespace input {
+	    namespace grnn {
+	      class grnn_data_map;
+	    } // namespace grnn
+	  } // namespace input
+	} // namespace components
+  
+        namespace infrastructure {
 
-#include <vector>
-#include <stack>
+                class grnn_data_parser {
+                        public:
 
+                                grnn_data_parser();
 
+                                virtual ~grnn_data_parser() {}
 
-namespace libreverse { namespace infrastructure {
+                                boost::shared_ptr < components::input::grnn::grnn_data_map > get_data_map ( std::string filename );
 
-    class GRNN_Data_Parser : public expatpp {
-    public:
+                        private:
 
-        grnn_data_parser();
-
-      virtual ~grnn_data_parser(){}
-      
-      boost::shared_ptr < components::input::grnn::grnn_data_map > get_data_map ( std::string filename );
-
-      virtual void startElement ( const std::string& element_name,
-				  const Attribute_Map_t& attributes );
-
-      virtual void charData ( const std::string& element_value );
-      
-      virtual void endElement ( const std::string& element_name );
-
-    private:
-
-      static const int MATCH;
-      
-      boost::shared_ptr < components::input::grnn::grnn_data_map > m_data_map;
-      grnn_data_tag_names m_tag;
-
-      std::string m_type;
-      double m_sigma;
-      std::string m_file;
-      
-        std::stack<std::string> m_element_list;
-    };
-  } /* namespace infrastructure */
+                                boost::shared_ptr < components::input::grnn::grnn_data_map > m_data_map;
+                };
+        } /* namespace infrastructure */
 } /* namespace reverse */
 
 #endif /* REVERSE_INFRASTRUCTURE_GRNN_DATA_PARSER_HPP_INCLUDED */

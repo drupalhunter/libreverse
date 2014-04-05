@@ -28,7 +28,7 @@
 // Values found in this site were found at http://wiki.tcl.tk/12149
 // one 1/2/2007.
 
-namespace libreverse { namespace wpef_module {
+namespace reverse { namespace wpef_module {
 
     class PE_Resource_Integer_Types {
     public:
@@ -53,7 +53,7 @@ namespace libreverse { namespace wpef_module {
     };
 
 } /* namespace wpef_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* PE_RESOURCE_INTEGER_TYPES */
 

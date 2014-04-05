@@ -32,7 +32,7 @@
 #include "CPU_PPC_64.h"
 #include "io/Preconditions.h"
 
-namespace libreverse
+namespace reverse
 {
     namespace mach_module
     {
@@ -321,6 +321,6 @@ namespace libreverse
         };
 
     } /* namespace mach_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* MACH_FILE_H_ */

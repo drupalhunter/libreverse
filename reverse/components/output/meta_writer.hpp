@@ -28,6 +28,7 @@
 #include <reverse/infrastructure/component_graph.hpp>
 
 #include <boost/enable_shared_from_this.hpp>
+#include <boost/filesystem.hpp>
 
 namespace reverse {
 
@@ -53,7 +54,8 @@ namespace reverse {
 
       explicit meta_writer ();
 
-      explicit meta_writer ( boost::shared_ptr < infrastructure::component_state > state_ptr );
+      explicit meta_writer ( boost::shared_ptr < infrastructure::component_state > state_ptr,
+	std::string const& filename );
 
       meta_writer ( meta_writer const& rhs );
 
@@ -96,6 +98,8 @@ namespace reverse {
     private:
 
       boost::shared_ptr < infrastructure::component_state > m_state_ptr;
+      
+      boost::filesystem::path m_filename;
     };
 
   } // namespace component

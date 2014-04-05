@@ -33,7 +33,7 @@
    1999
 */
 
-namespace libreverse { namespace java_module {
+namespace reverse { namespace java_module {
 
     /*!
      * \class Same_Frame_Extended
@@ -76,6 +76,6 @@ namespace libreverse { namespace java_module {
     };
 
 } /* namespace java_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* JAVA_SAME_FRAME_EXTENDED_H_ */

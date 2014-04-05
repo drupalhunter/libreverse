@@ -6,21 +6,21 @@
 #include <iostream>
 #include <fstream>
 
-#include "libreverse/data_containers/Data_Types.h"
-#include "libreverse/data_containers/control_flow_graph_sequence.h"
-#include "libreverse/data_containers/visitor/Control_Flow_Graph_Graphviz_Visitor.h"
-#include "libreverse/components/input/instruction_decoders/Decoder_Types.h"
-#include "libreverse/components/input/instruction_decoders/Java_Assembly_Actions.h"
-#include "libreverse/components/input/instruction_decoders/Java_Decoder.h"
+#include "reverse/data_containers/Data_Types.h"
+#include "reverse/data_containers/control_flow_graph_sequence.h"
+#include "reverse/data_containers/visitor/Control_Flow_Graph_Graphviz_Visitor.h"
+#include "reverse/components/input/instruction_decoders/Decoder_Types.h"
+#include "reverse/components/input/instruction_decoders/Java_Assembly_Actions.h"
+#include "reverse/components/input/instruction_decoders/Java_Decoder.h"
 
 #ifdef LIBREVERSE_DEBUG
-#include <libreverse/Reverse.h>
-#include <libreverse/Trace.h>
-using namespace libreverse::api;
-using namespace libreverse::trace;
+#include <reverse/Reverse.h>
+#include <reverse/Trace.h>
+using namespace reverse::api;
+using namespace reverse::trace;
 #endif
 
-using namespace libreverse;
+using namespace reverse;
 
 void help ( boost::program_options::options_description& desc )
 {

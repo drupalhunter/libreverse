@@ -36,7 +36,7 @@
 #include <string>
 #include "errors/IO_Exception.h"
 
-namespace libreverse
+namespace reverse
 {
     namespace mach_module
     {

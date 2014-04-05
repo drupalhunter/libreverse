@@ -80,6 +80,6 @@ namespace reverse {
     };
 
   } /* namespace infrastructure */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* REVERSE_INFRASTRUCTURE_COMPONENT_STATE_ALGORITHM_HPP_INCLUDED */

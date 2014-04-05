@@ -27,7 +27,7 @@
 #include "io/Byte_Converter.h"
 #include "CPU_Type.h"
 
-namespace libreverse
+namespace reverse
 {
     namespace mach_module
     {
@@ -153,4 +153,4 @@ namespace libreverse
         }
 
     } /* namespace mach_module */
-} /* namespace libreverse */
+} /* namespace reverse */

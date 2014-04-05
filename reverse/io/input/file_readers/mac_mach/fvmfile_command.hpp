@@ -25,7 +25,7 @@
 #include "Load_Command.h"
 #include "Mach_Types.h"
 
-namespace libreverse
+namespace reverse
 {
     namespace mach_module
     {

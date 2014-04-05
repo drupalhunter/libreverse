@@ -29,10 +29,10 @@
 
 #include <boost/format.hpp>
 
-using namespace libreverse::api;
-using namespace libreverse::trace;
+using namespace reverse::api;
+using namespace reverse::trace;
 
-namespace libreverse { namespace component {
+namespace reverse { namespace component {
 
     std::string
     Tevis_Zero_Filled_Checker_ELF_Algorithm::run ( std::string filename )
@@ -135,5 +135,5 @@ namespace libreverse { namespace component {
     }
 
 } /* namespace component */
-} /* namespace libreverse */
+} /* namespace reverse */
 

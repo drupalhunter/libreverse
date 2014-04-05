@@ -25,7 +25,7 @@
 #include <list>
 #include <string>
 
-namespace libreverse
+namespace reverse
 {
   namespace optimizer
   {
@@ -42,6 +42,6 @@ namespace libreverse
     };
 
   } /* namespace optimizer */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* OPTIMIZER_ALGORITHM_H */

@@ -552,7 +552,7 @@ do_header
 (<sstream>) s
 /F-gs-font 7 7 SF
 5 469 M
-(namespace libreverse { namespace java_module {) s
+(namespace reverse { namespace java_module {) s
 5 453 M
 (    ) s
 /Courier-Bold 7 7 SUF
@@ -831,7 +831,7 @@ do_header
 (} ) s
 /Courier-Oblique 7 7 SUF
 13.4 101 M
-(/* namespace libreverse */) s
+(/* namespace reverse */) s
 /F-gs-font 7 7 SF
 _R
 S
@@ -878,7 +878,7 @@ do_header
 ("Class_Access_Flags.h") s
 /F-gs-font 7 7 SF
 5 477 M
-(namespace libreverse { namespace java_module {) s
+(namespace reverse { namespace java_module {) s
 5 461 M
 (    ) s
 /Courier-Bold 7 7 SUF
@@ -1397,7 +1397,7 @@ do_header
 (} ) s
 /Courier-Oblique 7 7 SUF
 410.4 125 M
-(/* namespace libreverse */) s
+(/* namespace reverse */) s
 /F-gs-font 7 7 SF
 _R
 S

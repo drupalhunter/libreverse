@@ -31,7 +31,7 @@
 
 #include <boost/cstdint.hpp>
 
-namespace libreverse { namespace java_module {
+namespace reverse { namespace java_module {
 
     class Field_Access_Flags_Rules {
     public:
@@ -49,6 +49,6 @@ namespace libreverse { namespace java_module {
     };
 
 } /* namespace java_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* FIELD_ACCESS_FLAGS_RULES_H_ */

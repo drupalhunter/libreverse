@@ -24,9 +24,9 @@
 #include "meta/meta_object.h"
 #include <boost/format.hpp>
 
-using namespace libreverse::meta;
+using namespace reverse::meta;
 
-namespace libreverse { namespace component {
+namespace reverse { namespace component {
 
     const std::string Unpacker_X86_Algorithm::RED_STRING = "\033[1;31m";
     const std::string Unpacker_X86_Algorithm::GREEN_STRING = "\033[1;32m";
@@ -231,5 +231,5 @@ namespace libreverse { namespace component {
 
 
 } /* namespace component */
-} /* namespace libreverse */
+} /* namespace reverse */
 

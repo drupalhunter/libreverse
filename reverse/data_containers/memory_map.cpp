@@ -27,15 +27,15 @@
 #include "Assert.h"
 
 
-using namespace libreverse::assert;
+using namespace reverse::assert;
 
 #ifdef LIBREVERSE_DEBUG
 #include "Trace.h"
-using namespace libreverse::api;
-using namespace libreverse::trace;
+using namespace reverse::api;
+using namespace reverse::trace;
 #endif /* LIBREVERSE_DEBUG */
 
-namespace libreverse {
+namespace reverse {
   namespace data_containers {
 
     memory_map::memory_map ()
@@ -718,5 +718,5 @@ namespace libreverse {
     }
 
   } /* Namespace data_containers */
-} /* namespace libreverse */
+} /* namespace reverse */
 

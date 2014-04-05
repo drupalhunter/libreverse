@@ -26,7 +26,7 @@
 #include "infrastructure/Component_Actor.h"
 #include <boost/enable_shared_from_this.hpp>
 
-namespace libreverse { namespace component {
+namespace reverse { namespace component {
 
     class File_Type_Detector : public infrastructure::Component,
                                public infrastructure::Component_Actor,
@@ -81,6 +81,6 @@ namespace libreverse { namespace component {
         infrastructure_types::Component_State::ptr_t m_state_ptr;
     };
 } /* namespace component */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* FILE_TYPE_DECTECTOR_H */

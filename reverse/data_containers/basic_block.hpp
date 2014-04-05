@@ -42,7 +42,7 @@ namespace reverse {
 
       void add_line ( boost::shared_ptr<instruction> input_line );
 
-      void add_comment ( std::string comment );
+      void add_comment ( std::string const& comment );
 
       std::vector< boost::shared_ptr < instruction > >::iterator begin();
 
@@ -51,8 +51,6 @@ namespace reverse {
       std::vector< boost::shared_ptr < instruction > >::const_iterator begin() const;
 
       std::vector< boost::shared_ptr < instruction > >::const_iterator end() const;
-
-      std::string to_string (void) const;
 
     private:
 
@@ -64,6 +62,8 @@ namespace reverse {
     
       std::vector<std::string> m_comments;
     };
+    
+    std::ostream& operator<< ( std::ostream& os, basic_block const& rhs );
 
   }  // namespace data_containers
 } // namespace reverse

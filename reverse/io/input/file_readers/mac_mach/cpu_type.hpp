@@ -25,7 +25,7 @@
 #include <boost/cstdint.hpp>
 #include <string>
 
-namespace libreverse
+namespace reverse
 {
     namespace mach_module
     {
@@ -73,7 +73,7 @@ namespace libreverse
         };
 
     } /* namespace mach_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 
 #endif /* CPU_Type::CPU_TYPE_32BIT_H */

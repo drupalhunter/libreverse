@@ -81,15 +81,15 @@
 
 
 
-using namespace libreverse::io;
+using namespace reverse::io;
 
 #ifdef LIBREVERSE_DEBUG
 #include "Trace.h"
-using namespace libreverse::api;
-using namespace libreverse::trace;
+using namespace reverse::api;
+using namespace reverse::trace;
 #endif /* LIBREVERSE_DEBUG */
 
-namespace libreverse { namespace java_module {
+namespace reverse { namespace java_module {
 
     Class_File::Class_File ( io_types::File_ID::const_ptr_t filename)
         : m_file ( filename )
@@ -2775,4 +2775,4 @@ namespace libreverse { namespace java_module {
     }
 
 } /* namespace java_module */
-} /* namespace libreverse */
+} /* namespace reverse */

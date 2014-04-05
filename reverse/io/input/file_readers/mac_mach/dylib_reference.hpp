@@ -24,7 +24,7 @@
 
 #include "Load_Command.h"
 
-namespace libreverse { namespace mach_module {
+namespace reverse { namespace mach_module {
 
   class Dylib_Reference {
   public:
@@ -43,7 +43,7 @@ namespace libreverse { namespace mach_module {
   };
 
 } /* namespace mach_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 
 #endif /* DYLIB_REFERENCE_H */

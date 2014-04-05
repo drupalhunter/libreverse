@@ -32,7 +32,7 @@
 
 #include <boost/format.hpp>
 
-#include <iostream>
+#include <ofstream>
 
 namespace reverse {
   namespace component {
@@ -40,13 +40,16 @@ namespace reverse {
     const std::string meta_writer::m_name = "meta_writer";
 
     meta_writer::meta_writer ()
-      : m_state_ptr ( new infrastructure::component_state (0) )
+      : m_state_ptr ( new infrastructure::component_state (0) ),
+	m_filename ( "" )
     {
       trace::components_data( "inside meta_writer constructor (id=%d)", m_state_ptr->get_id() );
     }
 
-    meta_writer::meta_writer ( boost::shared_ptr < infrastructure::component_state > state_ptr )
-        : m_state_ptr ( state_ptr )
+    meta_writer::meta_writer ( boost::shared_ptr < infrastructure::component_state > state_ptr,
+      std::string const& filename )
+        : m_state_ptr ( state_ptr ),
+        m_filename( filename )
     {
       trace::components_data( "inside meta_writer constructor (id=%d)", m_state_ptr->get_id() );
     }
@@ -55,7 +58,8 @@ namespace reverse {
       : infrastructure::component ( rhs ),
 	infrastructure::component_actor ( rhs ),
 	boost::enable_shared_from_this<meta_writer> ( rhs ),
-	m_state_ptr ( new infrastructure::component_state ( *rhs.m_state_ptr ) )
+	m_state_ptr ( new infrastructure::component_state ( *rhs.m_state_ptr ) ),
+	m_filename ( rhs.m_filename )
     {
       trace::components_data ( "inside meta_writer copy constructor (id=%d)", m_state_ptr->get_id() );
     }
@@ -106,8 +110,10 @@ namespace reverse {
 	boost::shared_ptr < infrastructure::component_data > data_ptr = m_state_ptr->get_data();
 	boost::shared_ptr < const meta::meta_object > meta_ptr = data_ptr->get_input_meta_data();
 
-        std::cout << meta_ptr->to_string() << std::endl;
-
+	std::ofstream output ( m_filename.c_str() );
+        output << meta_ptr->to_string() << std::endl;
+	output.close();
+	
         /**
          * pass on input information
          */
@@ -132,23 +138,9 @@ namespace reverse {
     meta_writer::run ( infrastructure::component_graph::data_map_t* m_input_data )
     {
       trace::components_data ( "entering meta_writer::run (id=%d)",  m_state_ptr->get_id() );
-
-        std::cout << std::endl
-                  << "--------------------------------" << std::endl
-                  << boost::format ( "%s(%d) - run" )
-            % m_name
-            % m_state_ptr->get_id() << std::endl
-                  << "--------------------------------" << std::endl;
-
+     
         m_state_ptr->run ( this->shared_from_this(),
                            m_input_data );        
-
-        std::cout << "--------------------------------" << std::endl
-                  << boost::format ( "%s(%d) - done" )
-            % m_name
-            % m_state_ptr->get_id() << std::endl
-                  << "--------------------------------" << std::endl
-                  << std::endl;
 
 	trace::components_data( "exiting meta_writer::run (id=%d)", m_state_ptr->get_id() );
     }

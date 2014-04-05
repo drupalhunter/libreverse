@@ -24,7 +24,7 @@
 
 #include <string>
 
-namespace libreverse { namespace data_container {
+namespace reverse { namespace data_container {
 
   class X86_Assembly_Instruction {
   public:
@@ -45,7 +45,7 @@ namespace libreverse { namespace data_container {
   };
 
 }  /* namespace data_container */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 
 #endif /* X86_ASSEMBLY_INSTRUCTION_H */

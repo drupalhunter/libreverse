@@ -22,7 +22,7 @@
 #ifndef LOAD_COMMAND_CONSTANTS_H
 #define LOAD_COMMAND_CONSTANTS_H
 
-namespace libreverse
+namespace reverse
 {
     namespace mach_module
     {
@@ -65,7 +65,7 @@ namespace libreverse
         };
 
     } /*! \brief namespace mach_module */
-} /*! \brief namespace libreverse */
+} /*! \brief namespace reverse */
 
 
 #endif /*! \brief LOAD_COMMAND_CONSTANTS_H */

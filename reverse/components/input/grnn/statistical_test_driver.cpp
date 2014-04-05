@@ -5,7 +5,7 @@
 
 using boost::unit_test_framework::test_suite;
 using boost::unit_test_framework::test_case;
-using namespace libreverse::classifier;
+using namespace reverse::classifier;
 
 class statistical_test_suite : public test_suite
 {

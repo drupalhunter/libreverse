@@ -135,19 +135,12 @@ namespace reverse {
         m_present_state_ptr->run ( child_ptr, data_ptr );
     }
 
-      boost::shared_ptr < infrastructure::data_source::data_source_base >
+      boost::shared_ptr < infrastructure::component_data >
     component_state::results ( void ) const
     {
-      trace::infrastructure_detail ( "Entering Component_State::results" );
+      trace::infrastructure_detail ( "Inside Component_State::results" );
 
-      // At this point the Component_State_Algorithm has done its work.
-      // The resutling data has been stored in the Component_Data. So
-      // all we have to do is return the pointer.
-      boost::shared_ptr < infrastructure::data_source::data_source_base > resulting_data_ptr = m_data_ptr->get_data_source();
-
-      trace::infrastructure_detail ( "Exiting Component_State::results" );
-
-      return resulting_data_ptr;
+      return m_data_ptr;
     }
 
     void

@@ -21,17 +21,17 @@
 
 #include <boost/test/unit_test.hpp>
 #include "Null_Component.h"
-#include "libreverse/data_containers/filename.h"
-#include "libreverse/infrastructure/data_source/Memory_Data_Source_Config.h"
-#include "libreverse/infrastructure/data_source/Memory_Data_Transfer.h"
-#include "libreverse/infrastructure/data_source/Data_Source_T.h"
+#include "reverse/data_containers/filename.h"
+#include "reverse/infrastructure/data_source/Memory_Data_Source_Config.h"
+#include "reverse/infrastructure/data_source/Memory_Data_Transfer.h"
+#include "reverse/infrastructure/data_source/Data_Source_T.h"
 #include <fstream>
-#include "libreverse/errors/API_Exception.h"
-#include "libreverse/include/config.h"
+#include "reverse/errors/API_Exception.h"
+#include "reverse/include/config.h"
 
 using namespace boost::unit_test;
 using namespace boost::unit_test_framework;
-using namespace libreverse;
+using namespace reverse;
 
 void test_default_constructor ()
 {

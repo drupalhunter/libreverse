@@ -21,7 +21,7 @@
 
 #include "Dylib_Module.h"
 
-namespace libreverse { namespace mach_module {
+namespace reverse { namespace mach_module {
 
   Dylib_Module::Dylib_Module ()
     : m_module_name ( 0 ),
@@ -40,4 +40,4 @@ namespace libreverse { namespace mach_module {
   {}
 
 } /* namespace mach_module */
-} /* namespace libreverse */
+} /* namespace reverse */

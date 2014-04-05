@@ -22,7 +22,7 @@
 #ifndef MACH_HEADER_FLAGS_H
 #define MACH_HEADER_FLAGS_H
 
-namespace libreverse { namespace mach_module {
+namespace reverse { namespace mach_module {
 
   class Mach_Header_Flags {
   public:
@@ -47,7 +47,7 @@ namespace libreverse { namespace mach_module {
   };
 
 } /* namespace mach_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 
 #endif /* MACH_HEADER_FLAGS_H */

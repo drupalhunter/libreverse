@@ -23,7 +23,6 @@
 #include <reverse/errors/configuration_exception.hpp>
 #include <reverse/errors/component_exception.hpp>
 #include <reverse/infrastructure/configuration_data.hpp>
-#include <reverse/infrastructure/data_source/memory_data_source_config.hpp>
 
 #include <boost/format.hpp>
 
@@ -33,38 +32,8 @@ namespace reverse {
   namespace infrastructure {
 
     configuration_data::configuration_data()
-      : m_data ( new infrastructure::data_source::memory_data_source_config() )
     {
       trace::infrastructure_detail ( "Inside Configuration_Data Constructor" );
-    }
-
-    boost::shared_ptr<infrastructure::data_source::data_source_config_base>
-    configuration_data::get_transfer_config()
-    {
-      trace::infrastructure_detail ( "Inside Configuration_Data::get_Transfer_Config" );
-
-      return m_data;
-    }
-
-    void
-    configuration_data::set_transfer_config ( boost::shared_ptr < infrastructure::data_source::data_source_config_base > obj_ptr )
-    {
-      trace::infrastructure_detail ( "Entering Configuration_Data::set_Transfer_Config" );
-
-      if ( obj_ptr.get() == 0 )
-	{
-	  trace::infrastructure_error ( "Exception throw in %s at line %d",
-					__FILE__,
-				        __LINE__ );
-
-	  throw errors::component_exception ( errors::component_exception::null_pointer );
-	}
-      else
-	{
-	  m_data = obj_ptr;
-	}
-
-      trace::infrastructure_detail ( "Exiting Configuration_Data::set_Transfer_Config" );
     }
 
     void

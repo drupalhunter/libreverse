@@ -27,7 +27,7 @@
 #include <sstream>
 #include <boost/format.hpp>
 
-namespace libreverse
+namespace reverse
 {
     namespace wpef_module
     {
@@ -71,5 +71,5 @@ namespace libreverse
             return m_text;
         }
     } /* namespace wpef_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 

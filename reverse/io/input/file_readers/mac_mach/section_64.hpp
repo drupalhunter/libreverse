@@ -25,7 +25,7 @@
 #include "Load_Command.h"
 #include <string>
 
-namespace libreverse { namespace mach_module {
+namespace reverse { namespace mach_module {
 
   class Section_64 : public Load_Command {
   public:
@@ -57,7 +57,7 @@ namespace libreverse { namespace mach_module {
   };
 
 } /* namespace mach_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 
 #endif /* SECTION_COMMAND_64_H */

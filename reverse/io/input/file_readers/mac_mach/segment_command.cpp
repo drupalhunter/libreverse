@@ -25,7 +25,7 @@
 #include <sstream>
 #include <boost/format.hpp>
 
-namespace libreverse
+namespace reverse
 {
     namespace mach_module
     {
@@ -160,4 +160,4 @@ namespace libreverse
             m_sections.push_back ( obj );
         }
     } /* namespace mach_module */
-} /* namespace libreverse */
+} /* namespace reverse */

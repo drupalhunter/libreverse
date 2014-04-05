@@ -20,27 +20,27 @@
 */
 #include "Java_Compiler_Dump_Algorithm.h"
 
-#include "libreverse/components/input/grnn/Java_Training_Data_Parser.h"
-#include "libreverse/io/IO_Types.h"
-#include "libreverse/io/File_ID.h"
-#include "libreverse/io/input/File_Readers/Java_Class/Reader.h"
-#include "libreverse/io/input/File_Readers/Java_Class/Class_Header.h"
-#include "libreverse/io/input/File_Readers/Java_Class/Constant_Pool_Info.h"
-#include "libreverse/data_containers/memory_map.h"
+#include "reverse/components/input/grnn/Java_Training_Data_Parser.h"
+#include "reverse/io/IO_Types.h"
+#include "reverse/io/File_ID.h"
+#include "reverse/io/input/File_Readers/Java_Class/Reader.h"
+#include "reverse/io/input/File_Readers/Java_Class/Class_Header.h"
+#include "reverse/io/input/File_Readers/Java_Class/Constant_Pool_Info.h"
+#include "reverse/data_containers/memory_map.h"
 
 #include <boost/format.hpp>
 #include <sstream>
 #include <iostream>
 
-#include <libreverse/Reverse.h>
+#include <reverse/Reverse.h>
 
 #ifdef LIBREVERSE_DEBUG
-#include <libreverse/Trace.h>
-using namespace libreverse::trace;
-using namespace libreverse::api;
+#include <reverse/Trace.h>
+using namespace reverse::trace;
+using namespace reverse::api;
 #endif /* LIBREVERSE_DEBUG */
 
-namespace libreverse {
+namespace reverse {
   namespace optimizer {
 
     std::string
@@ -59,13 +59,13 @@ namespace libreverse {
 
       try
 	{
-	  libreverse::io_types::File_ID::ptr_t file_obj ( new libreverse::io::File_ID ( filename ) );
+	  reverse::io_types::File_ID::ptr_t file_obj ( new reverse::io::File_ID ( filename ) );
 	    
-	  libreverse::java_module::Reader r_obj ( file_obj );
+	  reverse::java_module::Reader r_obj ( file_obj );
 	    
 	  r_obj.read_Class_Header();
 
-	  libreverse::data_types::memory_map::ptr_t mem_ptr = r_obj.get_memory_map();
+	  reverse::data_types::memory_map::ptr_t mem_ptr = r_obj.get_memory_map();
 
 	  output << boost::format("  <%1%>") % classifier::Java_Input_Tag_Names::TAG_FILE << std::endl;
 
@@ -80,7 +80,7 @@ namespace libreverse {
 	    % classifier::Java_Input_Tag_Names::TAG_FILESIZE << std::endl;
 
 	  //   Get class header
-	  libreverse::java_types::Class_Header::ptr_t hdr_ptr = r_obj.get_Header();
+	  reverse::java_types::Class_Header::ptr_t hdr_ptr = r_obj.get_Header();
 
 	  //   Grab data
 	  std::vector<float> stats(12,0);
@@ -151,8 +151,8 @@ namespace libreverse {
     void
     Java_Compiler_Dump_Algorithm::collect_Constant_Pool_Stats
     ( std::vector<float>& stats,
-      libreverse::java_types::Class_Header::Constant_Pool_Info_Map_t::const_iterator pool_start,
-      libreverse::java_types::Class_Header::Constant_Pool_Info_Map_t::const_iterator pool_end )
+      reverse::java_types::Class_Header::Constant_Pool_Info_Map_t::const_iterator pool_start,
+      reverse::java_types::Class_Header::Constant_Pool_Info_Map_t::const_iterator pool_end )
     {
 
 #ifdef LIBREVERSE_DEBUG
@@ -162,7 +162,7 @@ namespace libreverse {
 #endif /* LIBREVERSE_DEBUG */
 
 
-      for ( libreverse::java_types::Class_Header::Constant_Pool_Info_Map_t::const_iterator pos = pool_start;
+      for ( reverse::java_types::Class_Header::Constant_Pool_Info_Map_t::const_iterator pos = pool_start;
 	    pos != pool_end;
 	    ++pos )
 	{
@@ -257,4 +257,4 @@ namespace libreverse {
     }
 
   } /* namespace optimizer */
-} /* namespace libreverse */
+} /* namespace reverse */

@@ -42,15 +42,15 @@
 #include "Reverse.h"
 #include "errors/Internal_Exception.h"
 
-using namespace libreverse::alloc;
-using namespace libreverse::api;
+using namespace reverse::alloc;
+using namespace reverse::api;
 
 #ifdef LIBREVERSE_DEBUG
-using namespace libreverse::trace;
+using namespace reverse::trace;
 #include "Trace.h"
 #endif /* LIBREVERSE_DEBUG */
 
-namespace libreverse {
+namespace reverse {
 
   namespace classifier
   {
@@ -104,4 +104,4 @@ namespace libreverse {
     bool
     Training_Data<Data_Type>::empty ( void ) const
   } /* namespace classifier */
-} /* namespace libreverse */
+} /* namespace reverse */

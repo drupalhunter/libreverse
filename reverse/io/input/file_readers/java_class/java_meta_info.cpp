@@ -21,10 +21,10 @@
 
 #include "Java_Meta_Info.h"
 
-namespace libreverse {
+namespace reverse {
   namespace java_module {
 
     const std::string Java_Meta_Info::FILE_TYPE = "java_class";
 
 } /* namespace java_module */
-} /* namespace libreverse */
+} /* namespace reverse */

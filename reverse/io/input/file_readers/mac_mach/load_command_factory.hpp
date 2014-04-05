@@ -24,7 +24,7 @@
 
 #include "Mach_File.h"
 
-namespace libreverse
+namespace reverse
 {
     namespace mach_module
     {
@@ -55,7 +55,7 @@ namespace libreverse
         };
 
     } /* namespace mach_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 
 #endif /* LOAD_COMMAND_FACTORY_H */

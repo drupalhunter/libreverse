@@ -20,22 +20,22 @@
 */
 #include "Elf_Compiler_Dump_Algorithm.h"
 
-#include "libreverse/data_containers/Data_Types.h"
-#include "libreverse/io/IO_Types.h"
-#include "libreverse/io/File_ID.h"
+#include "reverse/data_containers/Data_Types.h"
+#include "reverse/io/IO_Types.h"
+#include "reverse/io/File_ID.h"
 
-#include "libreverse/io/input/File_Readers/Elf/Elf_File.h"
-#include "libreverse/io/input/File_Readers/Elf/Elf_Header_32.h"
-#include "libreverse/io/input/File_Readers/Elf/Elf_Header_64.h"
-#include "libreverse/components/input/grnn/Elf_Input_Tag_Names.h"
-#include "libreverse/io/input/File_Readers/Elf/Elf_Reader_32.h"
-#include "libreverse/io/input/File_Readers/Elf/Elf_Reader_64.h"
+#include "reverse/io/input/File_Readers/Elf/Elf_File.h"
+#include "reverse/io/input/File_Readers/Elf/Elf_Header_32.h"
+#include "reverse/io/input/File_Readers/Elf/Elf_Header_64.h"
+#include "reverse/components/input/grnn/Elf_Input_Tag_Names.h"
+#include "reverse/io/input/File_Readers/Elf/Elf_Reader_32.h"
+#include "reverse/io/input/File_Readers/Elf/Elf_Reader_64.h"
 
 #include <sstream>
 #include <iostream>
 #include <boost/format.hpp>
 
-namespace libreverse {
+namespace reverse {
   namespace optimizer {
 
     std::string
@@ -53,9 +53,9 @@ namespace libreverse {
 
       try
 	{
-	  libreverse::io_types::File_ID::ptr_t file_obj ( new libreverse::io::File_ID ( filename ) );
+	  reverse::io_types::File_ID::ptr_t file_obj ( new reverse::io::File_ID ( filename ) );
 	    
-	  libreverse::elf_module::Elf_Reader_32 reader32_obj ( file_obj );
+	  reverse::elf_module::Elf_Reader_32 reader32_obj ( file_obj );
 
 	  if ( reader32_obj.support_File_Type() )
 	    {
@@ -63,7 +63,7 @@ namespace libreverse {
 	    }
 	  else
 	    {
-	      libreverse::elf_module::Elf_Reader_64 reader64_obj ( file_obj );
+	      reverse::elf_module::Elf_Reader_64 reader64_obj ( file_obj );
 
 	      if ( reader64_obj.support_File_Type() )
 		{
@@ -99,7 +99,7 @@ namespace libreverse {
 
     std::string
     Elf_Compiler_Dump_Algorithm::process_File ( boost::uint32_t compiler_id, 
-					       libreverse::elf_module::Elf_Reader_32& reader32_obj )
+					       reverse::elf_module::Elf_Reader_32& reader32_obj )
     {
 
 #ifdef LIBREVERSE_DEBUG
@@ -113,9 +113,9 @@ namespace libreverse {
 
       reader32_obj.read_Headers();
 
-      libreverse::elf_types::Elf_File::const_ptr_t file_ptr = reader32_obj.get_File();
-      libreverse::elf_types::Elf_Header_32::ptr_t hdr_ptr = reader32_obj.get_Header();
-      libreverse::elf_types::Elf_File_Header_32::const_ptr_t file_hdr_ptr = hdr_ptr->get_File_Header();
+      reverse::elf_types::Elf_File::const_ptr_t file_ptr = reader32_obj.get_File();
+      reverse::elf_types::Elf_Header_32::ptr_t hdr_ptr = reader32_obj.get_Header();
+      reverse::elf_types::Elf_File_Header_32::const_ptr_t file_hdr_ptr = hdr_ptr->get_File_Header();
 
       output << boost::format ( "  <%1%>" )
 	% classifier::Elf_Input_Tag_Names::TAG_FILE << std::endl;
@@ -177,7 +177,7 @@ namespace libreverse {
 
     std::string
     Elf_Compiler_Dump_Algorithm::process_File ( boost::uint32_t compiler_id, 
-					       libreverse::elf_module::Elf_Reader_64& reader64_obj )
+					       reverse::elf_module::Elf_Reader_64& reader64_obj )
     {
 
 #ifdef LIBREVERSE_DEBUG
@@ -191,9 +191,9 @@ namespace libreverse {
     
       reader64_obj.read_Headers();
 
-      libreverse::data_types::memory_map::ptr_t memory_ptr = reader64_obj.get_memory_map();
-      libreverse::elf_types::Elf_Header_64::ptr_t hdr_ptr = reader64_obj.get_Header();
-      libreverse::elf_types::Elf_File_Header_64::const_ptr_t file_hdr_ptr = hdr_ptr->get_File_Header();
+      reverse::data_types::memory_map::ptr_t memory_ptr = reader64_obj.get_memory_map();
+      reverse::elf_types::Elf_Header_64::ptr_t hdr_ptr = reader64_obj.get_Header();
+      reverse::elf_types::Elf_File_Header_64::const_ptr_t file_hdr_ptr = hdr_ptr->get_File_Header();
 
       output << boost::format ( "  <%1%>" )
 	% classifier::Elf_Input_Tag_Names::TAG_FILE << std::endl;
@@ -296,4 +296,4 @@ namespace libreverse {
     }
 
   } /* namespace optimizer */
-} /* namespace libreverse */
+} /* namespace reverse */

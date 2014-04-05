@@ -25,7 +25,7 @@
 #include "Load_Command.h"
 #include <vector>
 
-namespace libreverse { namespace mach_module {
+namespace reverse { namespace mach_module {
 
   class Symtab_Command : public Load_Command {
   public:
@@ -51,7 +51,7 @@ namespace libreverse { namespace mach_module {
   };
 
 } /* namespace mach_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 
 #endif /* DYLIB_COMMAND_H */

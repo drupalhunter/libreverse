@@ -99,6 +99,6 @@ namespace reverse {
 
     } // namespace input
   } // namespace components
-} // namespace libreverse
+} // namespace reverse
 
 #endif // ifndef REVERSE_COMPONENT_INPUT_ARCH_TYPE_DECTECTOR_HPP_INCLUDED

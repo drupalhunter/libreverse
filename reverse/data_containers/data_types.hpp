@@ -28,7 +28,7 @@
 #include <vector>
 #include <map>
 
-namespace libreverse {
+namespace reverse {
 
   namespace data_container {
     class Basic_Block;

@@ -23,18 +23,18 @@
 
 #include "Optimizer_Types.h"
 
-#include "libreverse/components/input/grnn/GRNN_Data_Types.h"
+#include "reverse/components/input/grnn/GRNN_Data_Types.h"
 
 #include <string>
 
 #ifdef LIBREVERSE_DEBUG
-#include <libreverse/Reverse.h>
-#include <libreverse/Trace.h>
-using namespace libreverse::trace;
-using namespace libreverse::api;
+#include <reverse/Reverse.h>
+#include <reverse/Trace.h>
+using namespace reverse::trace;
+using namespace reverse::api;
 #endif
 
-namespace libreverse {
+namespace reverse {
   namespace optimizer {
 
     class Optimizer_Algorithm_Factory {
@@ -69,7 +69,7 @@ namespace libreverse {
     };
 
   } /* namespace optimizer */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #include "Optimizer_Algorithm_Factory.cpp"
 

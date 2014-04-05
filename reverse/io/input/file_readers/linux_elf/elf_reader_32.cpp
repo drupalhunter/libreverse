@@ -289,11 +289,11 @@ namespace reverse {
 // 	    m_elf_data->get_text_string ( &output );
 
 
-// #ifdef libreverse_debug
+// #ifdef reverse_debug
 // 	    trace::write_trace ( tracearea::io,
 // 				 tracelevel::detail,
 // 				 "exiting elf_reader_32::get_text_string" );
-// #endif /* libreverse_debug */
+// #endif /* reverse_debug */
 
 
 	    return output;

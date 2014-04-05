@@ -21,7 +21,7 @@
 
 #include "PE_Resource_Integer_Types.h"
 
-namespace libreverse { namespace wpef_module {
+namespace reverse { namespace wpef_module {
 
     const boost::uint8_t PE_Resource_Integer_Types::RT_CURSOR = 0x1;
     const boost::uint8_t PE_Resource_Integer_Types::RT_BITMAP = 0x2;
@@ -121,4 +121,4 @@ namespace libreverse { namespace wpef_module {
     }
 
 } /* namespace wpef_module */
-} /* namespace libreverse */
+} /* namespace reverse */

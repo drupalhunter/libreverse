@@ -33,7 +33,7 @@
 #ifndef CPU_THREAD_STATE_H
 #define CPU_THREAD_STATE_H
 
-namespace libreverse
+namespace reverse
 {
     namespace mach_module
     {

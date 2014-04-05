@@ -95,7 +95,7 @@ namespace reverse {
 } // namespace reverse
 
 // TODO: Make file readers serializable
-// BOOST_IS_ABSTRACT(libreverse::io::File_Reader)
+// BOOST_IS_ABSTRACT(reverse::io::File_Reader)
 
 #endif // REVERSE_IO_INPUT_FILE_READERS_FILE_READERS_HPP_INCLUDED 
 

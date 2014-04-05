@@ -26,7 +26,7 @@
 
 #include "io/IO_Types.h"
 
-namespace libreverse {
+namespace reverse {
 
     namespace component {
 
@@ -41,6 +41,6 @@ namespace libreverse {
       };
 
     } /* namespace component */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* ENTRY_POINT_DETECTOR_WPEF64_ALGORITHM_H */

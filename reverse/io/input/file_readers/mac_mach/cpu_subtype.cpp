@@ -26,10 +26,10 @@
 #include "errors/Internal_Exception.h"
 #include <boost/format.hpp>
 
-using namespace libreverse::api;
-using namespace libreverse::trace;
+using namespace reverse::api;
+using namespace reverse::trace;
 
-namespace libreverse
+namespace reverse
 {
     namespace mach_module
     {
@@ -582,4 +582,4 @@ namespace libreverse
                 }
 
     } /* namespace mach_module */
-} /* namespace libreverse */
+} /* namespace reverse */

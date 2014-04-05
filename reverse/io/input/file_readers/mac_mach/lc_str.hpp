@@ -25,7 +25,7 @@
 #include <boost/cstdint.hpp>
 #include <string>
 
-namespace libreverse { namespace mach_module {
+namespace reverse { namespace mach_module {
 
   class LC_Str {
   public:
@@ -64,7 +64,7 @@ namespace libreverse { namespace mach_module {
   };
 
 } /* namespace mach_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 
 #endif /* LC_STR_H */

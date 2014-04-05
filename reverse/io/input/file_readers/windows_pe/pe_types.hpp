@@ -28,7 +28,7 @@
 #include <map>
 #include <string>
 
-namespace libreverse {
+namespace reverse {
 
   namespace wpef_module {
 
@@ -285,6 +285,6 @@ namespace libreverse {
 
   } /* namespaces wpef_types */
 
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* PE_TYPES_H */

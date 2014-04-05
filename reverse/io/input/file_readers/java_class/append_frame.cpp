@@ -31,11 +31,11 @@
 
 #ifdef LIBREVERSE_DEBUG
 #include "Trace.h"
-using namespace libreverse::api;
-using namespace libreverse::trace;
+using namespace reverse::api;
+using namespace reverse::trace;
 #endif /* LIBREVERSE_DEBUG */
 
-namespace libreverse { namespace java_module {
+namespace reverse { namespace java_module {
 
     Append_Frame::Append_Frame ( boost::uint8_t tag )
         : m_tag ( tag ),
@@ -156,4 +156,4 @@ namespace libreverse { namespace java_module {
 
 
 } /* namespace java_module */
-} /* namespace libreverse */
+} /* namespace reverse */

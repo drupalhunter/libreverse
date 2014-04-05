@@ -27,7 +27,7 @@
 #include <boost/enable_shared_from_this.hpp>
 #include "Unpacker_Algorithm.h"
 
-namespace libreverse {
+namespace reverse {
 
     namespace component {
 
@@ -83,6 +83,6 @@ namespace libreverse {
             infrastructure_types::Component_State::ptr_t m_state_ptr;
         };
     } /* namespace component */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* UNPACKER_H */

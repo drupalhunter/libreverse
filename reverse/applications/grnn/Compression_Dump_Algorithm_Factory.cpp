@@ -21,17 +21,17 @@
 #include "Compression_Dump_Algorithm_Factory.h"
 #include "Windows_Compression_Dump_Algorithm.h"
 
-#include "libreverse/errors/Internal_Exception.h"
+#include "reverse/errors/Internal_Exception.h"
 
 #include <boost/format.hpp>
 
 #ifdef LIBREVERSE_DEBUG
-#include "libreverse/Trace.h"
-using namespace libreverse::api;
-using namespace libreverse::trace;
+#include "reverse/Trace.h"
+using namespace reverse::api;
+using namespace reverse::trace;
 #endif /* LIBREVERSE_DEBUG */
 
-namespace libreverse {
+namespace reverse {
   namespace optimizer {
 
     Compression_Dump_Algorithm_Factory&
@@ -72,6 +72,6 @@ namespace libreverse {
     }
 
   } /* namespace optimizer */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 

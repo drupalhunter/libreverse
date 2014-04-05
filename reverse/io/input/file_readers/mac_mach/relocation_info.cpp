@@ -21,7 +21,7 @@
 
 #include "Relocation_Info.h"
 
-namespace libreverse { namespace mach_module {
+namespace reverse { namespace mach_module {
 
   Relocation_Info::Relocation_Info()
     : m_r_address ( 0 ),
@@ -34,4 +34,4 @@ namespace libreverse { namespace mach_module {
 
 
 } /* namespace mach_module */
-} /* namespace libreverse */
+} /* namespace reverse */

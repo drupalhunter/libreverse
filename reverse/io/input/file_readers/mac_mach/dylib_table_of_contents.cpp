@@ -21,7 +21,7 @@
 
 #include "Dylib_Table_Of_Contents.h"
 
-namespace libreverse { namespace mach_module {
+namespace reverse { namespace mach_module {
 
   Dylib_Table_Of_Contents::Dylib_Table_Of_Contents ()
     : m_symbol_index ( 0 ),
@@ -29,4 +29,4 @@ namespace libreverse { namespace mach_module {
   {}
 
 } /* namespace mach_module */
-} /* namespace libreverse */
+} /* namespace reverse */

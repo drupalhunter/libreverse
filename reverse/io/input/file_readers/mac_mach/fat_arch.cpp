@@ -29,10 +29,10 @@
 #include "CPU_Type.h"
 #include "CPU_SubType.h"
 
-using namespace libreverse::api;
-using namespace libreverse::trace;
+using namespace reverse::api;
+using namespace reverse::trace;
 
-namespace libreverse
+namespace reverse
 {
     namespace mach_module
     {
@@ -126,4 +126,4 @@ namespace libreverse
             return result;
         }
     } /* namespace mach_module */
-} /* namespace libreverse */
+} /* namespace reverse */

@@ -98,7 +98,7 @@ namespace reverse {
 	    }
 	  else
 	    {
-	      libreverse::elf_module::elf_reader_64 const reader64_obj ( file_obj );
+	      reverse::elf_module::elf_reader_64 const reader64_obj ( file_obj );
 	      
 	      if ( reader64_obj.support_file_type() )
 		{
@@ -256,7 +256,7 @@ namespace reverse {
 
       }
 
-      meta::meta_object::ptr_t process_file ( libreverse::elf_module::elf_reader_64 const& reader64_obj ) const;
+      meta::meta_object::ptr_t process_file ( reverse::elf_module::elf_reader_64 const& reader64_obj ) const;
 	
       target_reader.read_class_header();
 

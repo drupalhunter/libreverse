@@ -22,10 +22,10 @@
 #ifndef JAVA_ASSEMBLY_ACTIONS_H
 #define JAVA_ASSEMBLY_ACTIONS_H
 
-#include "libreverse/data_containers/Data_Types.h"
+#include "reverse/data_containers/Data_Types.h"
 #include "Java_Actions.h"
 
-namespace libreverse { namespace decoder {
+namespace reverse { namespace decoder {
 
     class Java_Assembly_Actions : public Java_Actions {
     public:
@@ -359,6 +359,6 @@ namespace libreverse { namespace decoder {
     };
 
   } /* namespace decoder */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* JAVA_ASSEMBLY_ACTIONS_H */

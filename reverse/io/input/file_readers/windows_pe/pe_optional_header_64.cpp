@@ -32,10 +32,10 @@
 #include <iomanip>
 
 
-using namespace libreverse::api;
-using namespace libreverse::trace;
+using namespace reverse::api;
+using namespace reverse::trace;
 
-namespace libreverse
+namespace reverse
 {
     namespace wpef_module
     {
@@ -793,4 +793,4 @@ namespace libreverse
         }
 
     } /* namespace wpef_module */
-} /* namespace libreverse */
+} /* namespace reverse */

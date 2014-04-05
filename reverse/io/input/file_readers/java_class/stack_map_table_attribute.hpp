@@ -35,7 +35,7 @@
    1999
 */
 
-namespace libreverse { namespace java_module {
+namespace reverse { namespace java_module {
 
     /*!
      * \class Stack_Map_Table_Attribute
@@ -90,6 +90,6 @@ namespace libreverse { namespace java_module {
     };
 
 } /* namespace java_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* JAVA_STACK_MAP_TABLE_ATTRIBUTE_H_ */

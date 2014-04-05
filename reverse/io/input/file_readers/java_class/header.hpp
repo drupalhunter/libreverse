@@ -29,7 +29,7 @@
 #include <vector>
 #include "Java_Types.h"
 
-namespace libreverse { namespace java_module {
+namespace reverse { namespace java_module {
 
     /*!
      * \class Header
@@ -76,6 +76,6 @@ namespace libreverse { namespace java_module {
     };
 
 } /* namespace java_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* JAVA_FILE_HEADER_H_ */

@@ -27,7 +27,7 @@
 #include "Mach_Types.h"
 #include "Mach_File.h"
 
-namespace libreverse
+namespace reverse
 {
     namespace mach_module
     {
@@ -141,6 +141,6 @@ namespace libreverse
         };
 
     } /* namespace mach_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* Mach_Reader_64_32_H_ */

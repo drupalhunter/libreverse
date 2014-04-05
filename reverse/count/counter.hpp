@@ -26,7 +26,7 @@
 #include <sys/time.h>
 #include <boost/cstdint.hpp>
 
-namespace libreverse
+namespace reverse
 {
   namespace count
   {
@@ -126,6 +126,6 @@ namespace libreverse
     };
 
   } /* namespace count */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* COUNTER_H_ */

@@ -24,7 +24,7 @@
 
 #include "Load_Command.h"
 
-namespace libreverse
+namespace reverse
 {
     namespace mach_module
     {
@@ -53,7 +53,7 @@ namespace libreverse
         };
 
     } /* namespace mach_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 
 #endif /* TWOLEVEL_HINTS_COMMAND_H */

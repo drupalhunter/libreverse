@@ -6,7 +6,7 @@ set ( OUTPUT_COMPONENTS_SOURCES
 set ( OUTPUT_COMPONENTS_HEADERS
   meta_writer.hpp )
 
-include_directories ( ${REVERSE_SOURCE_DIR} )
+include_directories ( ${REVERSE_SOURCE_DIR} ${JSON_SPIRIT_INCLUDE_DIR} )
 
 add_library ( output_components_static STATIC ${OUTPUT_COMPONENTS_SOURCES} ${OUTPUT_COMPONENTS_HEADERS} )
 add_library ( output_components SHARED ${OUTPUT_COMPONENTS_SOURCES} ${OUTPUT_COMPONENTS_HEADERS} )

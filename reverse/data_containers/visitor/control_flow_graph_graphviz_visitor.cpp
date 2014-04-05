@@ -30,11 +30,11 @@
 
 #ifdef LIBREVERSE_DEBUG
 #include "Trace.h"
-using namespace libreverse::api;
-using namespace libreverse::trace;
+using namespace reverse::api;
+using namespace reverse::trace;
 #endif /* LIBREVERSE_DEBUG */
 
-namespace libreverse { namespace visitor {
+namespace reverse { namespace visitor {
 
     void
     Control_Flow_Graph_Graphviz_Visitor::visit ( data_container::Control_Flow_Graph const& graph_ref,
@@ -146,4 +146,4 @@ namespace libreverse { namespace visitor {
 
 
 } /* namespace visitor */
-} /* namespace libreverse */
+} /* namespace reverse */

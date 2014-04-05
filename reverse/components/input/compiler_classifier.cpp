@@ -35,16 +35,16 @@
 
 #include <boost/format.hpp>
 
-using namespace libreverse::classifier;
-using namespace libreverse::meta;
+using namespace reverse::classifier;
+using namespace reverse::meta;
 
 #ifdef LIBREVERSE_DEBUG
 #include "Trace.h"
-using namespace libreverse::api;
-using namespace libreverse::trace;
+using namespace reverse::api;
+using namespace reverse::trace;
 #endif /* LIBREVERSE_DEBUG */
 
-namespace libreverse { namespace component {
+namespace reverse { namespace component {
 
     const std::string Compiler_Classifier::m_name = "Compiler_Classifier";
 
@@ -378,4 +378,4 @@ namespace libreverse { namespace component {
     }
 
 } /* namespace component */
-} /* namespace libreverse */
+} /* namespace reverse */

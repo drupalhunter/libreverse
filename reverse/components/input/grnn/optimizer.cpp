@@ -28,14 +28,14 @@
 #include <iostream>
 #include <boost/format.hpp>
 
-using namespace libreverse::alloc;
+using namespace reverse::alloc;
 
 #ifdef LIBREVERSE_DEBUG
 #include "Trace.h"
-using namespace libreverse::trace;
+using namespace reverse::trace;
 #endif /* LIBREVERSE_DEBUG */
 
-namespace libreverse
+namespace reverse
 {
   namespace classifier
   {
@@ -85,4 +85,4 @@ namespace libreverse
     Optimizer<Classifier_Type, Data_Type>::replace_Worst ()
 
   } /* namespace classifier */
-} /* namespace libreverse */
+} /* namespace reverse */

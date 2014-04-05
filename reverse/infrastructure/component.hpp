@@ -29,24 +29,16 @@
 
 namespace reverse {
   namespace infrastructure {
-    namespace data_source {
-      class data_source_base;
-    }
-  } // namespace infrastructure
-} // namespace reverse
-
-namespace reverse {
-  namespace infrastructure {
 
     class component
     {
     public:
-      static boost::uint32_t const source_id = 0 ;
+      static boost::uint32_t const source_id = 0;
       static boost::uint32_t const working_mode = 1;
       static boost::uint32_t const source_mode = 0;
 
       virtual ~component() {}
-
+      
       /**
        * \brief upsream component is providing input
        *
@@ -74,7 +66,7 @@ namespace reverse {
 
       virtual void run ( infrastructure::component_graph::data_map_t* m_input_data ) = 0;
 
-      virtual boost::shared_ptr<infrastructure::data_source::data_source_base> results ( void ) = 0;
+      virtual boost::shared_ptr<infrastructure::component_data> results ( void ) = 0;
 
       virtual void set_state ( boost::uint32_t mode ) = 0;
 

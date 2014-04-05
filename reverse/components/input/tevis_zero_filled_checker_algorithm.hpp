@@ -24,7 +24,7 @@
 
 #include "infrastructure/Component.h"
 
-namespace libreverse { namespace component {
+namespace reverse { namespace component {
 
     class Tevis_Zero_Filled_Checker_Algorithm {
     public:
@@ -39,6 +39,6 @@ namespace libreverse { namespace component {
     };
 
 } /* namespace component */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* TEVIS_ZERO_FILLED_CHECKER_ALGORITHM_H */

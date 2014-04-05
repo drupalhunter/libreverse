@@ -26,7 +26,7 @@
 #include "infrastructure/Component_Actor.h"
 #include <boost/enable_shared_from_this.hpp>
 
-namespace libreverse { namespace component {
+namespace reverse { namespace component {
 
     class memory_map_Producer : public infrastructure::Component,
 			   public infrastructure::Component_Actor,
@@ -80,6 +80,6 @@ namespace libreverse { namespace component {
             infrastructure_types::Component_State::ptr_t m_state_ptr;
         };
     } /* namespace component */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* MEMORY_MAP_PRODUCER_H */

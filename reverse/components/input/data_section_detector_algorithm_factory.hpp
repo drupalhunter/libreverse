@@ -24,7 +24,7 @@
 
 #include "Data_Section_Detector_Algorithm.h"
 
-namespace libreverse { namespace component {
+namespace reverse { namespace component {
 
     class Data_Section_Detector_Algorithm_Factory {
     public:
@@ -52,6 +52,6 @@ namespace libreverse { namespace component {
     };
 
 } /* namespace component */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* DATA_SECTION_DETECTOR_ALGORITHM_FACTORY_H */

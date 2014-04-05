@@ -23,7 +23,7 @@
 #include "data_containers/memory_map.h"
 #include "meta/meta_object.h"
 
-namespace libreverse { namespace component {
+namespace reverse { namespace component {
 
     data_types::memory_map::const_ptr_t
     Unpacker_Java_Algorithm::run ( meta::meta_object::const_ptr_t,
@@ -50,5 +50,5 @@ namespace libreverse { namespace component {
 
 
 } /* namespace component */
-} /* namespace libreverse */
+} /* namespace reverse */
 

@@ -33,7 +33,7 @@
 #include "GRNN_Data_Entry.h"
 #include "GRNN_Data_Map.h"
 
-using namespace libreverse;
+using namespace reverse;
 
 BOOST_AUTO_TEST_SUITE(grnn)
 

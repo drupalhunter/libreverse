@@ -104,7 +104,7 @@ namespace reverse
 
     } // namespace input
   } // namespace components
-} // namespace libreverse
+} // namespace reverse
 
 
 #endif /* REVERSE_COMPONENTS_INPUT_CODE_SECTION_DECTECTOR_HPP_INCLUDED */

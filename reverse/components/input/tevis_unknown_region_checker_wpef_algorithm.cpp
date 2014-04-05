@@ -30,10 +30,10 @@
 #include "io/input/File_Readers/Windows_PE/PE_Section_Header.h"
 #include "Trace.h"
 
-using namespace libreverse::api;
-using namespace libreverse::trace;
+using namespace reverse::api;
+using namespace reverse::trace;
 
-namespace libreverse { namespace component {
+namespace reverse { namespace component {
 
     std::string
     Tevis_Unknown_Region_Checker_WPEF_Algorithm::run ( std::string filename )
@@ -95,5 +95,5 @@ namespace libreverse { namespace component {
     }
 
 } /* namespace component */
-} /* namespace libreverse */
+} /* namespace reverse */
 

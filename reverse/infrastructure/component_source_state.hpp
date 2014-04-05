@@ -76,6 +76,6 @@ namespace reverse {
     };
 
 } /* namespace infrastructure */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* REVERSE_INFRASTRUCTURE_COMPONENT_SOURCE_STATE_HPP_INCLUDED */

@@ -23,11 +23,11 @@
 
 #include "Optimizer_Types.h"
 
-#include "libreverse/components/input/grnn/GRNN_Data_Types.h"
+#include "reverse/components/input/grnn/GRNN_Data_Types.h"
 
 #include <string>
 
-namespace libreverse {
+namespace reverse {
   namespace optimizer {
 
     class Compiler_Dump_Algorithm_Factory {
@@ -50,7 +50,7 @@ namespace libreverse {
     };
 
   } /* namespace optimizer */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* COMPILER_DUMP_ALGORITHM_FACTORY_H */
 

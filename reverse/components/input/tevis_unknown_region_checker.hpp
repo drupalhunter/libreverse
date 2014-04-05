@@ -28,7 +28,7 @@
 
 #include <boost/enable_shared_from_this.hpp>
 
-namespace libreverse { namespace component {
+namespace reverse { namespace component {
 
     class Tevis_Unknown_Region_Checker : public infrastructure::Component,
                                          public infrastructure::Component_Actor,
@@ -83,6 +83,6 @@ namespace libreverse { namespace component {
     };
 
 } /* namespace component */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* TEVIS_UNKNOWN_REGION_CHECKER_H */

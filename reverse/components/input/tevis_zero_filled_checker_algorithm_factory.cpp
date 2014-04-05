@@ -26,10 +26,10 @@
 #include <string>
 #include "Trace.h"
 
-using namespace libreverse::api;
-using namespace libreverse::trace;
+using namespace reverse::api;
+using namespace reverse::trace;
 
-namespace libreverse { namespace component {
+namespace reverse { namespace component {
 
     Tevis_Zero_Filled_Checker_Algorithm::ptr_t
     Tevis_Zero_Filled_Checker_Algorithm_Factory::get_Algorithm ( std::string name )
@@ -66,5 +66,5 @@ namespace libreverse { namespace component {
     }
 
 } /* namespace component */
-} /* namespace libreverse */
+} /* namespace reverse */
 

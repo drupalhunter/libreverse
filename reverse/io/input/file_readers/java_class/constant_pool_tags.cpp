@@ -22,13 +22,13 @@
 #include "Constant_Pool_Tags.h"
 
 #ifdef LIBREVERSE_DEBUG
-#include "libreverse/Trace.h"
-using namespace libreverse::api;
-using namespace libreverse::trace;
+#include "reverse/Trace.h"
+using namespace reverse::api;
+using namespace reverse::trace;
 #endif /* LIBREVERSE_DEBUG */
 
 
-namespace libreverse { namespace java_module {
+namespace reverse { namespace java_module {
 
     const boost::uint16_t Constant_Pool_Tags::UTF8 = 0x1;
     const boost::uint16_t Constant_Pool_Tags::RESERVED = 0x2;
@@ -74,4 +74,4 @@ namespace libreverse { namespace java_module {
     }
 
 } /* namespace java_module */
-} /* namespace libreverse */
+} /* namespace reverse */

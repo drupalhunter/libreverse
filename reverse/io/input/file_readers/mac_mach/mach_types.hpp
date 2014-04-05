@@ -27,7 +27,7 @@
 #include <map>
 #include <boost/cstdint.hpp>
 
-namespace libreverse
+namespace reverse
 {
 
     namespace mach_module
@@ -295,7 +295,7 @@ namespace libreverse
         };
     }
 
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* MACH_TYPES_H_ */
 

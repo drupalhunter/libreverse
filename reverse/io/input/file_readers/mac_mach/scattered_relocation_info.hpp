@@ -24,7 +24,7 @@
 
 #include <boost/cstdint.hpp>
 
-namespace libreverse
+namespace reverse
 {
     namespace mach_module
     {
@@ -86,7 +86,7 @@ namespace libreverse
 
     } /* namespace mach_module */
 
-} /* namespace libreverse */
+} /* namespace reverse */
 
 
 #endif /* SCATTERED_RELOCATION_INFO_H */

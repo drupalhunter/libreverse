@@ -32,11 +32,11 @@
 #include <string>
 #include "io/input/File_Readers/Base_Header.hpp"
 
-namespace libreverse { namespace wpef_module {
+namespace reverse { namespace wpef_module {
 
     template <boost::uint32_t size> class PE_File;
 
-    class PE_Resource_Entry : public libreverse::header::Base_Header {
+    class PE_Resource_Entry : public reverse::header::Base_Header {
     public:
 
         friend class PE_File<32>;
@@ -75,6 +75,6 @@ namespace libreverse { namespace wpef_module {
         boost::uint32_t m_offset_to_data;
 	};
 } /* namespace wpef_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* PE_RESOURCE_ENTRY_H_ */

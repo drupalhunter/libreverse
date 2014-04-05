@@ -25,7 +25,7 @@
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/convenience.hpp>
 
-namespace libreverse {
+namespace reverse {
   namespace optimizer {
 
     class Compiler_Dump_Algorithm {
@@ -42,7 +42,7 @@ namespace libreverse {
     };
 
   } /* namespace optimizer */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* COMPILER_DUMP_ALGORITHM_H */
 

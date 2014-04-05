@@ -1,4 +1,4 @@
-/*  Formula_Parser.cpp
+/*  formula_parser.cpp
 
    Copyright (C) 2008 Stephen Torri
 
@@ -19,458 +19,150 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#include "Formula_Parser.h"
-#include <iostream>
-#include "infrastructure/Component.h"
-#include "infrastructure/Component_Graph.h"
-#include "infrastructure/Component_State.h"
-#include "components/Component_Factory.h"
-#include "errors/Parsing_Exception.h"
+#include <reverse/trace.hpp>
+#include <reverse/infrastructure/formula_parser.hpp>
+#include <reverse/infrastructure/component.hpp>
+#include <reverse/infrastructure/component_graph.hpp>
+#include <reverse/infrastructure/component_state.hpp>
+#include <reverse/components/component_factory.hpp>
+#include <reverse/errors/parsing_exception.hpp>
+#include <reverse/data_containers/memory_map.hpp>
+
+#include <json_spirit/reader.h>
+
+#include <boost/filesystem.hpp>
 #include <boost/format.hpp>
+#include <boost/iostreams/device/mapped_file.hpp>
+#include <boost/make_shared.hpp>
+
 #include <sstream>
 #include <fstream>
-#include "data_containers/memory_map.h"
-
-#ifdef LIBREVERSE_DEBUG
-#include "Trace.h"
-using namespace libreverse::api;
-using namespace libreverse::trace;
-#endif /* LIBREVERSE_DEBUG */
-
-namespace libreverse { namespace infrastructure {
-
-    const int Formula_Parser::MATCH = 0;
-
-    Formula_Parser::Formula_Parser ()
-        : m_id ( 0 ),
-          m_name ( "" ),
-          m_file ( "" )
-    {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::DETAIL,
-                             "Inside Formula_Parser constructor" );
-#endif /* LIBREVERSE_DEBUG */
-
-    }
-
-    infrastructure_types::Component::ptr_t
-    Formula_Parser::get_Component ( boost::uint32_t id,
-                                    std::string name )
-    {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::DETAIL,
-                             "Entering Formula_Parser::get_Component" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        boost::shared_ptr<Component> obj_ptr;
-
-        // Add Component_State object
-        infrastructure_types::Component_State::ptr_t state_ptr ( new Component_State ( id ) );
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::DETAIL,
-                             boost::str ( boost::format ( "  Creating component: %s" ) % name ) );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        if (name.compare("file_type") == MATCH )
-            {
-                obj_ptr = Component_Factory::Instance().get_File_Type_Detector ( state_ptr );
-            }
-        else if (name.compare("arch_type") == MATCH )
-            {
-                obj_ptr = Component_Factory::Instance().get_Arch_Type_Detector ( state_ptr );
-            }
-        else if (name.compare("meta_writer") == MATCH )
-            {
-                obj_ptr = Component_Factory::Instance().get_Meta_Writer ( state_ptr );
-            }
-        else if (name.compare("unpacker") == MATCH  )
-            {
-                obj_ptr = Component_Factory::Instance().get_Unpacker ( state_ptr );
-            }
-        else if (name.compare("code_section") == MATCH  )
-            {
-                obj_ptr = Component_Factory::Instance().get_Code_Section ( state_ptr );
-            }
-        else if (name.compare("data_section") == MATCH  )
-            {
-                obj_ptr = Component_Factory::Instance().get_Data_Section ( state_ptr );
-            }
-        else if (name.compare("entry_point") == MATCH  )
-            {
-                obj_ptr = Component_Factory::Instance().get_Entry_Point ( state_ptr );
-            }
-        else if (name.compare("null") == MATCH )
-            {
-                obj_ptr = Component_Factory::Instance().get_Null_Component ( state_ptr );
-            }
-        else if (name.compare("memory_map_producer") == MATCH )
-            {
-                obj_ptr = Component_Factory::Instance().get_memory_map_Producer ( state_ptr );
-            }
-        else if (name.compare("file_header_printer") == MATCH )
-            {
-                obj_ptr = Component_Factory::Instance().get_File_Header_Printer ( state_ptr );
-            }
-        else if (name.compare("tevis_zero_filled_checker") == MATCH )
-            {
-                obj_ptr = Component_Factory::Instance().get_Tevis_Zero_Filled_Checker ( state_ptr );
-            }
-        else if (name.compare("tevis_unknown_region_checker") == MATCH )
-            {
-                obj_ptr = Component_Factory::Instance().get_Tevis_Unknown_Region_Checker ( state_ptr );
-            }
-        else if (name.compare("compiler_classifier") == MATCH )
-            {
-                obj_ptr = Component_Factory::Instance().get_Compiler_Classifier ( state_ptr );
-            }
 
-        if ( ! obj_ptr )
-            {
-
-#ifdef LIBREVERSE_DEBUG
-                Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-				     TraceLevel::ERROR,
-				     boost::str ( boost::format ( "Unknown component, %s, requested in formula.\nDouble check formula file." )
-						  % name ) );
 
-                Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-				     TraceLevel::ERROR,
-				     boost::str ( boost::format("Exception throw in %s at line %d")
-						  % __FILE__
-						  % __LINE__ ) );
-#endif /* LIBREVERSE_DEBUG */
-
-                throw errors::Parsing_Exception
-                    (errors::Parsing_Exception::UNKNOWN_COMPONENT);
-            }
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::DETAIL,
-                             "Exiting Formula_Parser::get_Component" );
-#endif /* LIBREVERSE_DEBUG */
-
-        return obj_ptr;
-    }
-
-    void
-    Formula_Parser::construct_Component ()
-    {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::DETAIL,
-                             "Entering Formula_Parser::construct_Component" );
-#endif /* LIBREVERSE_DEBUG */
-
-        boost::shared_ptr<Component> obj_ptr = this->get_Component ( m_id, m_name);
-
-        for ( std::vector<int>::iterator pos = m_predecessor_list.begin();
-              pos != m_predecessor_list.end();
-              ++pos )
-            {
-                obj_ptr->add_Input_Source (*pos);
-            }
-
-        m_graph->add_Component ( obj_ptr );
-        m_predecessor_list.clear();
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::DETAIL,
-                             "Exiting Formula_Parser::construct_Component" );
-#endif /* LIBREVERSE_DEBUG */
+namespace reverse {
+        namespace infrastructure {
+
+                formula_parser::formula_parser ()
+                        : m_id ( 0 ),
+                          m_name ( "" ),
+                          m_file ( "" )
+                {
+                        trace::infrastructure_detail ( "Inside formula_parser constructor" );
+                }
+
+                boost::shared_ptr < infrastructure::component > formula_parser::get_component ( json_spirit::Object::const_iterator cpos )
+                {
+                        trace::infrastructure_detail ( "Entering formula_parser::get_component" );
+
+                        const std::string& name = cpos->first;
+                        const json_spirit::Value& value = cpos->second;
+                        const json_spirit::Object& component_obj = value.getObject();
+                        const int id = component_obj.find ( "id" )->second.getInt();
+
+                        // Add Component_State object
+                        boost::shared_ptr < infrastructure::component_state > state_ptr ( new component_state ( id ) );
+
+                        trace::infrastructure_data ( "Creating component: %s", name );
+
+                        if ( name == "file_type" ) {
+                                        return components::component_factory::instance().get_file_type_detector ( state_ptr );
+                                }
+                        else if ( name == "arch_type" ) {
+                                        return components::component_factory::instance().get_arch_type_detector ( state_ptr );
+                                }
+                        else if ( name == "meta_writer" ) {
+                                        return components::component_factory::instance().get_meta_writer ( state_ptr, component_obj );
+                                }
+                        else if ( name == "unpacker" ) {
+                                        return components::component_factory::instance().get_unpacker ( state_ptr );
+                                }
+                        else if ( name == "code_section" ) {
+                                        return components::component_factory::instance().get_code_section ( state_ptr );
+                                }
+                        else if ( name == "data_section" ) {
+                                        return components::component_factory::instance().get_data_section ( state_ptr );
+                                }
+                        else if ( name == "entry_point" ) {
+                                        return components::component_factory::instance().get_entry_point ( state_ptr );
+                                }
+                        else if ( name == "null" ) {
+                                        return components::component_factory::instance().get_null_component ( state_ptr );
+                                }
+                        else if ( name == "memory_map_producer" ) {
+                                        return components::component_factory::instance().get_memory_map_producer ( state_ptr );
+                                }
+                        else if ( name == "file_header_printer" ) {
+                                        return components::component_factory::instance().get_file_header_printer ( state_ptr );
+                                }
+                        else if ( name == "tevis_zero_filled_checker" ) {
+                                        return components::component_factory::instance().get_tevis_zero_filled_checker ( state_ptr );
+                                }
+                        else if ( name == "tevis_unknown_region_checker" ) {
+                                        return components::component_factory::instance().get_tevis_unknown_region_checker ( state_ptr );
+                                }
+                        else if ( name == "compiler_classifier" ) {
+                                        return components::component_factory::instance().get_compiler_classifier ( state_ptr );
+                                }
+                        else {
+                                        trace::infrastructure_error<> ( "Unknown component, %s, requested in formula.\nDouble check formula file.", name );
+                                        trace::infrastructure_error<> ( "Exception throw in %s at line %d", __FILE__, __LINE__ );
+                                        throw errors::parsing_exception ( errors::parsing_exception::unknown_component );
+                                }
+
+                        trace::infrastructure_detail ( "Exiting formula_parser::get_component" );
+                }
+
+                void formula_parser::read_components ( json_spirit::Object const& obj )
+                {
+                        trace::infrastructure_detail ( "Entering formula_parser::read_components" );
+
+                        for ( json_spirit::Object::const_iterator cpos = obj.begin();
+                                        cpos != obj.end();
+                                        ++cpos ) {
+
+                                        boost::shared_ptr<infrastructure::component > obj_ptr = this->get_component ( cpos );
+
+                                        const json_spirit::Value& value = cpos->second;
+                                        const json_spirit::Object& component_obj = value.getObject();
+                                        const json_spirit::Array& predecessor_list = component_obj.find ( "parent_id" )->second.getArray();
+
+                                        for ( unsigned int index = 0;
+                                                        index < predecessor_list.size();
+                                                        ++index ) {
+                                                        unsigned int parent_id = predecessor_list[index].getInt();
+                                                        obj_ptr->add_input_source ( parent_id );
+                                                }
+
+                                        m_graph->add_component ( obj_ptr );
+                                }
+
+                        trace::infrastructure_detail ( "Exiting formula_parser::read_components" );
+                }
 
-    }
+                boost::shared_ptr < infrastructure::component_graph >
+                formula_parser::get_graph ( std::string filename,
+                                            std::string directory )
+                {
+                        trace::infrastructure_detail ( "Entering formula_parser::get_Graph" );
 
-    boost::shared_ptr<Component_Graph>
-    Formula_Parser::get_Graph ( std::string filename,
-                                std::string directory )
-    {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::DETAIL,
-                             "Entering Formula_Parser::get_Graph" );
-#endif /* LIBREVERSE_DEBUG */
+                        m_graph = boost::make_shared < infrastructure::component_graph > ();
 
-        m_graph.reset ( new Component_Graph() );
-
-        // Parse file and generate graph
-
-        std::stringstream full_path;
-        full_path << directory << "/" << filename;
-        m_file = full_path.str();
+                        // Parse file and generate graph
+                        boost::filesystem::path full_path ( directory );
+                        full_path /= filename;
 
-        std::ifstream input ( m_file.c_str() );
-        data_container::memory_map input_data ( input );
-
+                        std::ifstream input ( full_path.c_str() );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::INFO,
-                             boost::str ( boost::format ( "Parsing %s" ) % m_file ) );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        // Create parser
-        if ( ! this->createParser() )
-            {
-                // Error creating
-                std::cerr << "(EE) Formula_Parser::parse_Data - error creating parser"
-                          << std::endl;
-
-                // Throw exception
-                throw errors::Parsing_Exception
-                    ( errors::Parsing_Exception::UNKNOWN_PARSING_ERROR );
-            }
-
-        // Parse file
-
-        if ( ! this->parse ( reinterpret_cast<const char*>(&(*input_data.begin())),
-                             input_data.size() ) )
-            {
-
-#ifdef LIBREVERSE_DEBUG
-                Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-				     TraceLevel::ERROR,
-				     boost::str ( boost::format("%s at line %d in %s")
-						  % getErrorString ( getErrorCode() )
-						  % getCurrentLineNumber()
-						  % m_file ) );
-
-                Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-				     TraceLevel::ERROR,
-				     boost::str ( boost::format("Exception throw in %s at line %d")
-						  % __FILE__
-						  % __LINE__ ) );
-#endif /* LIBREVERSE_DEBUG */
-
-
-                // Throw exception
-                throw errors::Parsing_Exception
-                    ( errors::Parsing_Exception::INVALID_FORMAT );
-            }
-                           
-        this->destroyParser();
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::DETAIL,
-                             "Exiting Formula_Parser::get_Graph" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        // return graph
-        return m_graph;
-    }
-
-    void
-    Formula_Parser::startElement ( const std::string& element_name,
-                                   const Attribute_Map_t& attributes )
-    {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::DETAIL,
-                             "Entering Formula_Parser::startElement" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        m_element_list.push ( element_name );
-
-        if ( element_name.compare ( m_tag.TAG_NODE_REF ) == 0 )
-            {
-                
-                Attribute_Map_t::const_iterator cpos = attributes.find ( m_tag.ATTRIBUTE_IDREF );
-
-                if ( cpos == attributes.end() )
-                    {
-
-#ifdef LIBREVERSE_DEBUG
-                        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-					     TraceLevel::ERROR,
-					     "Formula_Parser::handle_Elements - missing idref atrribute in <node_ref> element." );
-
-                        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-					     TraceLevel::ERROR,
-					     boost::str ( boost::format("Exception throw in %s at line %d")
-							  % __FILE__
-							  % __LINE__ ) );
-#endif /* LIBREVERSE_DEBUG */
-
+                        json_spirit::Value top_value;
+                        json_spirit::read ( input, top_value );
 
-                        throw errors::Parsing_Exception
-                            (errors::Parsing_Exception::INVALID_FORMAT);
-                    }
+                        read_components ( top_value.getObject() );
 
-                int ref_num = 0;
-                std::stringstream int_string;
-                int_string << (*cpos).second;
-                int_string >> ref_num;
+                        trace::infrastructure_detail ( "Exiting formula_parser::get_Graph" );
 
-                m_predecessor_list.push_back ( ref_num );
-            }
-        else if ( element_name.compare ( m_tag.TAG_NAME ) == 0 )
-            {
-                Attribute_Map_t::const_iterator cpos = attributes.find ( m_tag.ATTRIBUTE_ID );
+                        // return graph
+                        return m_graph;
+                }
 
-                if ( cpos == attributes.end() )
-                    {
-
-#ifdef LIBREVERSE_DEBUG
-                        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-					     TraceLevel::ERROR,
-					     "Formula_Parser::handle_Elements - missing id atrribute in <node> element");
-
-                        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-					     TraceLevel::ERROR,
-					     boost::str ( boost::format("Exception throw in %s at line %d")
-							  % __FILE__
-							  % __LINE__ ) );
-#endif /* LIBREVERSE_DEBUG */
-
-
-                        throw errors::Parsing_Exception
-                            (errors::Parsing_Exception::INVALID_FORMAT);
-                    }
-
-                m_id = 0;
-                std::stringstream int_string;
-                int_string << (*cpos).second;
-                int_string >> m_id;
-
-                // Check id has a value greater than 0
-                if ( ! ( m_id > 0 ) )
-                    {
-
-#ifdef LIBREVERSE_DEBUG
-		      Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-					   TraceLevel::ERROR,
-					   "Formula_Parser::handle_Elements - Valid id atrribute for <name> element must be greater than zero." );
-
-		      Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-					   TraceLevel::ERROR,
-					   boost::str ( boost::format ( "Id attribute should start at 1 for the first node. Node id found was %d") % m_id ) );
-
-		      Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-					   TraceLevel::ERROR,
-					   boost::str ( boost::format("Exception throw in %s at line %d")
-							% __FILE__
-							% __LINE__ ) );
-#endif /* LIBREVERSE_DEBUG */
-
-
-                        throw errors::Parsing_Exception
-                            (errors::Parsing_Exception::INVALID_FORMAT);
-                    }
-            }
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::DETAIL,
-                             "Exiting Formula_Parser::startElement" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-    }
-
-    void Formula_Parser::charData ( const std::string& element_value )
-    {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::DETAIL,
-                             "Entering Formula_Parser::charData" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        std::string present_element = m_element_list.top();
-
-        if ( present_element.compare ( m_tag.TAG_NAME ) == 0 )
-            {
-                m_name = element_value;
-            }
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::DETAIL,
-                             "Exiting Formula_Parser::charData" );
-#endif /* LIBREVERSE_DEBUG */
-
-    }
-
-    void
-    Formula_Parser::endElement ( const std::string& element_name )
-    {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::DETAIL,
-                             "Entering Formula_Parser::endElement" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        if ( element_name.compare ( m_tag.TAG_NODE ) == 0 )
-            {
-                this->construct_Component ();
-            }
-
-        m_element_list.pop();
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::DETAIL,
-                             "Exiting Formula_Parser::endElement" );
-#endif /* LIBREVERSE_DEBUG */
-
-    }
-
-    void
-    Formula_Parser::print_Component_List (void) const
-    {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::DETAIL,
-                             "Entering Formula_Parser::print_Component_List" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        std::cout << "file_type:    Determine the file type of the input file" << std::endl
-                  << "arch_type:    Determine the target CPU of the input file" << std::endl
-                  << "meta_writer:  Output all the meta information found" << std::endl
-                  << "unpacker:     Uncompress a compressed input file" << std::endl
-                  << "code_section: Produce the address and size of code section" << std::endl
-                  << "data_section: Produce the address and size of data section" << std::endl
-                  << "entry_point:  Produce the address of the entry point" << std::endl
-                  << "null:         Does nothing (useful for testing formulas)" << std::endl
-                  << "memory_map_producer: Read the input file into a Memory Map" << std::endl
-                  << "file_header_printer: Print out the file header information to the console"
-                  << std::endl;
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-			     TraceLevel::DETAIL,
-                             "Exiting Formula_Parser::print_Component_List" );
-#endif /* LIBREVERSE_DEBUG */
-
-    }
-
-} /* namespace infrastructure */
-} /* namespace libreverse */
+        } /* namespace infrastructure */
+} /* namespace reverse */

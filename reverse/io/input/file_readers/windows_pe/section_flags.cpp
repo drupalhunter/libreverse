@@ -22,7 +22,7 @@
 #include "Section_Flags.h"
 #include <sstream>
 
-namespace libreverse { namespace wpef_module {
+namespace reverse { namespace wpef_module {
 
     const boost::uint32_t Section_Flags::IMAGE_RESERVED_ZERO              = 0x00000000 ;
     const boost::uint32_t Section_Flags::IMAGE_RESERVED_ONE               = 0x00000001 ;
@@ -489,4 +489,4 @@ namespace libreverse { namespace wpef_module {
     }
 
 } /* namespace wpef_module */
-} /* namespace libreverse */
+} /* namespace reverse */

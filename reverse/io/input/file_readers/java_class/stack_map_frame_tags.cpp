@@ -21,7 +21,7 @@
 
 #include "Stack_Map_Frame_Tags.h"
 
-namespace libreverse { namespace java_module {
+namespace reverse { namespace java_module {
 
     boost::uint8_t const Stack_Map_Frame_Tags::SAME_LOWER_LIMIT = 0;
     boost::uint8_t const Stack_Map_Frame_Tags::SAME_UPPER_LIMIT = 63;
@@ -36,5 +36,5 @@ namespace libreverse { namespace java_module {
     boost::uint8_t const Stack_Map_Frame_Tags::FULL_FRAME = 255;
 
 } /* namespace java_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 

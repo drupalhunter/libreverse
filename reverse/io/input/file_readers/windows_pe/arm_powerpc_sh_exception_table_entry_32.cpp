@@ -111,7 +111,7 @@ namespace reverse {
 				 "Entering ARM_POWERPC_SH_Exception_Table_Entry::convert" );
 	    /* There is no need to convert a ARM binary exception table
 	       entry since both the ARM (target) and Intel (host running
-	       libreverse) are both little endian */
+	       reverse) are both little endian */
 	  }
 
   	} // namespace windows_pe

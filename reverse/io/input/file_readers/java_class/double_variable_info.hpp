@@ -25,7 +25,7 @@
 #include "Verification_Type_Info.h"
 #include <string>
 
-namespace libreverse { namespace java_module {
+namespace reverse { namespace java_module {
 
     class Double_Variable_Info : public Verification_Type_Info {
     public:
@@ -49,6 +49,6 @@ namespace libreverse { namespace java_module {
     };
     
   } /* namespace java_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* JAVA_DOUBLE_VARIABLE_INFO_H_ */

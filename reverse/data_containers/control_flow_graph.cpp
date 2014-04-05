@@ -32,11 +32,11 @@
 
 #ifdef LIBREVERSE_DEBUG
 #include "Trace.h"
-using namespace libreverse::api;
-using namespace libreverse::trace;
+using namespace reverse::api;
+using namespace reverse::trace;
 #endif /* LIBREVERSE_DEBUG */
 
-namespace libreverse { namespace data_container {
+namespace reverse { namespace data_container {
 
     Control_Flow_Graph::Control_Flow_Graph ( std::string name )
       : m_name ( name )
@@ -364,4 +364,4 @@ namespace libreverse { namespace data_container {
     }
 
 }  /* namespace data_types */
-} /* namespace libreverse */
+} /* namespace reverse */

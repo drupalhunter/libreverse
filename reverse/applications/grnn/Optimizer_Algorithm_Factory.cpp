@@ -23,10 +23,10 @@
 #include "Optimizer_Algorithm_Factory.h"
 #include "Windows_Optimizer_Algorithm.h"
 
-#include "libreverse/errors/Internal_Exception.h"
+#include "reverse/errors/Internal_Exception.h"
 #include <boost/format.hpp>
 
-namespace libreverse {
+namespace reverse {
   namespace optimizer {
 
     template <template <typename Data_Type> class Classifier_Type> 
@@ -111,6 +111,6 @@ namespace libreverse {
     }
 
   } /* namespace optimizer */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 

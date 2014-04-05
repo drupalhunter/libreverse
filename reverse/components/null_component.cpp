@@ -33,8 +33,8 @@
 
 #ifdef LIBREVERSE_DEBUG
 #include "Trace.h"
-using namespace libreverse::api;
-using namespace libreverse::trace;
+using namespace reverse::api;
+using namespace reverse::trace;
 #endif /* LIBREVERSE_DEBUG */
 
 namespace reverse { namespace component {
@@ -259,7 +259,7 @@ namespace reverse { namespace component {
 
     }
 
-    infrastructure_types::Data_Source_Base::ptr_t
+    boost::shared_ptr < infrastructure::component_data >
     Null_Component::results (void)
     {
 

@@ -22,19 +22,19 @@
 #ifndef JAVA_TEST_BASE
 #define JAVA_TEST_BASE
 
-#include "libreverse/io/input/File_Readers/Java_Class/Constant_Pool_Info.h"
-#include "libreverse/io/input/File_Readers/Java_Class/Constant_Class_Info.h"
-#include "libreverse/io/input/File_Readers/Java_Class/Constant_Fieldref_Info.h"
-#include "libreverse/io/input/File_Readers/Java_Class/Constant_Methodref_Info.h"
-#include "libreverse/io/input/File_Readers/Java_Class/Constant_Name_And_Type_Info.h"
-#include "libreverse/io/input/File_Readers/Java_Class/Constant_Pool_Tags.h"
-#include "libreverse/io/input/File_Readers/Java_Class/Constant_String_Info.h"
-#include "libreverse/io/input/File_Readers/Java_Class/Constant_Utf8_Info.h"
-#include "libreverse/io/input/File_Readers/Java_Class/Java_Types.h"
-#include "libreverse/io/input/File_Readers/Java_Class/Line_Number_Table_Attribute.h"
+#include "reverse/io/input/File_Readers/Java_Class/Constant_Pool_Info.h"
+#include "reverse/io/input/File_Readers/Java_Class/Constant_Class_Info.h"
+#include "reverse/io/input/File_Readers/Java_Class/Constant_Fieldref_Info.h"
+#include "reverse/io/input/File_Readers/Java_Class/Constant_Methodref_Info.h"
+#include "reverse/io/input/File_Readers/Java_Class/Constant_Name_And_Type_Info.h"
+#include "reverse/io/input/File_Readers/Java_Class/Constant_Pool_Tags.h"
+#include "reverse/io/input/File_Readers/Java_Class/Constant_String_Info.h"
+#include "reverse/io/input/File_Readers/Java_Class/Constant_Utf8_Info.h"
+#include "reverse/io/input/File_Readers/Java_Class/Java_Types.h"
+#include "reverse/io/input/File_Readers/Java_Class/Line_Number_Table_Attribute.h"
 
-using namespace libreverse;
-using namespace libreverse::java_module;
+using namespace reverse;
+using namespace reverse::java_module;
 
 class Test_Base {
 public:

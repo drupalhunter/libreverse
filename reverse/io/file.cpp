@@ -399,4 +399,4 @@ namespace reverse {
       return input_string;
     }
   } /* Namespace io */
-} /* namespace libreverse */
+} /* namespace reverse */

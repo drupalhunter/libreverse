@@ -21,7 +21,7 @@
 
 #include "Attribute_Tags.h"
 
-namespace libreverse { namespace java_module {
+namespace reverse { namespace java_module {
 
     const std::string Attribute_Tags::SOURCE_FILE = "SourceFile";
     const std::string Attribute_Tags::CONSTANT_VALUE = "ConstantValue";
@@ -38,4 +38,4 @@ namespace libreverse { namespace java_module {
     const std::string Attribute_Tags::UNKNOWN = "Unknown";
 
 } /* namespace java_module */
-} /* namespace libreverse */
+} /* namespace reverse */

@@ -24,7 +24,7 @@
 
 #include <boost/cstdint.hpp>
 
-namespace libreverse { namespace mach_module {
+namespace reverse { namespace mach_module {
 
   class Dylib_Module {
   public:
@@ -83,7 +83,7 @@ namespace libreverse { namespace mach_module {
   };
 
 } /* namespace mach_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 
 #endif /* DYLIB_MODULE_H */

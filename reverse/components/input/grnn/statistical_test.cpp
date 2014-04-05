@@ -29,14 +29,14 @@
 #ifdef LIBREVERSE_DEBUG
 #include <Reverse.h>
 #include <Trace.h>
-using namespace libreverse::trace;
+using namespace reverse::trace;
 #endif /* LIBREVERSE_DEBUG */
 
 
 using boost::unit_test_framework::test_suite;
 using boost::unit_test_framework::test_case;
 
-namespace libreverse
+namespace reverse
 {
   namespace classifier
   {
@@ -779,4 +779,4 @@ namespace libreverse
     }
 
   } /* namespace classifier */
-} /* namespace libreverse */
+} /* namespace reverse */

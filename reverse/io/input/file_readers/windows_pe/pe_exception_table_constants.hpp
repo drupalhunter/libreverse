@@ -30,7 +30,7 @@
 
 #include <boost/cstdint.hpp>
 
-namespace libreverse { namespace wpef_module {
+namespace reverse { namespace wpef_module {
 
     class PE_Exception_Table_Constants {
     public:
@@ -44,6 +44,6 @@ namespace libreverse { namespace wpef_module {
     };
 
 } /* namespace wpef_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* WPEF_EXCEPTION_TABLE_CONSTANTS_H_ */

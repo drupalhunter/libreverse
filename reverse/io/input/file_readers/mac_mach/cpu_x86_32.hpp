@@ -28,7 +28,7 @@ using namespace std;
 #include <boost/cstdint.hpp>
 using namespace boost;
 
-namespace libreverse
+namespace reverse
 {
     namespace mach_module
     {
@@ -72,6 +72,6 @@ namespace libreverse
         };
 
     } /* namespace mach_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif

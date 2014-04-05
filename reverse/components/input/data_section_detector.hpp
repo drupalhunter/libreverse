@@ -26,7 +26,7 @@
 #include "infrastructure/Component_Actor.h"
 #include <boost/enable_shared_from_this.hpp>
 
-namespace libreverse { namespace component {
+namespace reverse { namespace component {
 
     class Data_Section_Detector : public infrastructure::Component,
                                   public infrastructure::Component_Actor,
@@ -83,6 +83,6 @@ namespace libreverse { namespace component {
             
     };
 } /* namespace component */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* DATA_SECTION_DECTECTOR_H */

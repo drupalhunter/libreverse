@@ -28,7 +28,7 @@
 #include <map>
 #include <vector>
 
-namespace libreverse {
+namespace reverse {
 
   namespace decoder
   {
@@ -66,6 +66,6 @@ namespace libreverse {
     };
 
   } /* namespace decoder_types */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* DECODER_TYPES_H */

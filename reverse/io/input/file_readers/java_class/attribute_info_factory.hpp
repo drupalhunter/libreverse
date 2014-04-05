@@ -26,7 +26,7 @@
 #include <string>
 #include "Java_Types.h"
 
-namespace libreverse { namespace java_module {
+namespace reverse { namespace java_module {
 
     /*!
      * \class Attribute_Info_Factory
@@ -45,6 +45,6 @@ namespace libreverse { namespace java_module {
     };
 
 } /* namespace java_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* ATTRIBUTE_INFO_FACTORY_H_ */

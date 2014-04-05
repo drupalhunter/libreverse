@@ -24,7 +24,7 @@
 #include <sstream>
 #include <boost/format.hpp>
 
-namespace libreverse
+namespace reverse
 {
     namespace mach_module
     {
@@ -85,4 +85,4 @@ namespace libreverse
             return output.str();
         }
     } /* namespace mach_module */
-} /* namespace libreverse */
+} /* namespace reverse */

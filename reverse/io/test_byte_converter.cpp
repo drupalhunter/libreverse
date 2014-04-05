@@ -21,11 +21,11 @@
 
 #include <boost/test/unit_test.hpp>
 #include "Byte_Converter.h"
-#include "libreverse/include/config.h"
+#include "reverse/include/config.h"
 
 using namespace boost::unit_test;
 using namespace boost::unit_test_framework;
-using namespace libreverse::io;
+using namespace reverse::io;
 
 void test_16bit()
 {

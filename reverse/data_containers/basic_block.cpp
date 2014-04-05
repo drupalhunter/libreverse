@@ -1,4 +1,4 @@
-/*  Basic_Block.cpp
+/*  basic_block.cpp
 
     Copyright (C) 2008 Stephen Torri
 
@@ -19,110 +19,99 @@
     <http://www.gnu.org/licenses/>.
 */
 
-#include "Basic_Block.h"
-#include "Instruction.h"
+#include <reverse/data_containers/basic_block.hpp>
+#include <reverse/data_containers/instruction.hpp>
+#include <reverse/errors/internal_exception.hpp>
+#include <reverse/preconditions.hpp>
+#include <reverse/trace.hpp>
 
-#include <sstream>
 #include <boost/format.hpp>
 
-#include "errors/Internal_Exception.h"
-#include "io/Preconditions.h"
+namespace reverse {
+    namespace data_containers {
 
-#ifdef LIBREVERSE_DEBUG
-#include "Trace.h"
-using namespace libreverse::api;
-using namespace libreverse::trace;
-#endif /* LIBREVERSE_DEBUG */
+        basic_block::basic_block ( boost::uint32_t id,
+                                   boost::uint32_t type )
+            : m_id ( id ),
+              m_type ( type )
+        {}
 
-namespace libreverse { namespace data_container {
+        boost::uint32_t
+        basic_block::get_id () const
+        {
+            return m_id;
+        }
 
-    Basic_Block::Basic_Block ( boost::uint32_t id,
-			       boost::uint32_t type )
-      : m_id ( id ),
-	m_type ( type )
-    {}
+        void
+        basic_block::add_line ( boost::shared_ptr<instruction> input_line )
+        {
+            reverse::preconditions::is_set ( input_line );
+            reverse::preconditions::equals ( input_line->get_type(), m_type );
 
-    boost::uint32_t
-    Basic_Block::get_ID () const
-    {
-      return m_id;
-    }
+            m_instructions.push_back ( input_line );
+        }
 
-    void
-    Basic_Block::add_Line ( data_types::Instruction::ptr_t input_line )
-    {
-      io::Preconditions::is_set ( input_line );
-      io::Preconditions::equals ( input_line->get_Type(), m_type );
+        void
+        basic_block::add_Comment ( std::string const& comment )
+        {
+            reverse::preconditions::not_empty ( comment );
 
-      m_instructions.push_back ( input_line );
-    }
+            m_comments.push_back ( comment );
+        }
 
-    void
-    Basic_Block::add_Comment ( std::string comment )
-    {
-      io::Preconditions::not_empty ( comment );
-
-      m_comments.push_back ( comment );
-    }
-
-    data_types::Basic_Block::DataList_t::iterator
-    Basic_Block::begin()
-    {
-      return m_instructions.begin();
-    }
+        std::vector< boost::shared_ptr < instruction > >::iterator
+        basic_block::begin()
+        {
+            return m_instructions.begin();
+        }
 
 
-    data_types::Basic_Block::DataList_t::iterator
-    Basic_Block::end()
-    {
-      return m_instructions.end();
-    }
+        std::vector< boost::shared_ptr < instruction > >::iterator
+        basic_block::end()
+        {
+            return m_instructions.end();
+        }
 
-    data_types::Basic_Block::DataList_t::const_iterator
-    Basic_Block::begin() const
-    {
-      return m_instructions.begin();
-    }
+        std::vector< boost::shared_ptr < instruction > >::const_iterator
+        basic_block::begin() const
+        {
+            return m_instructions.begin();
+        }
 
 
-    data_types::Basic_Block::DataList_t::const_iterator
-    Basic_Block::end() const
-    {
-      return m_instructions.end();
-    }
+        std::vector< boost::shared_ptr < instruction > >::const_iterator
+        basic_block::end() const
+        {
+            return m_instructions.end();
+        }
 
-    std::string
-    Basic_Block::to_String (void) const
-    {
-      std::stringstream output;
+        std::ostream& operator<< ( std::ostream& os, basic_block const& rhs )
+        {
+            os << "-----------------" << std::endl
+               << boost::format ( "Basic Block (%1%)" ) % m_id << std::endl
+               << "-----------------" << std::endl << std::endl
+               << "  Comments" << std::endl
+               << "  --------" << std::endl;
 
-      output << "-----------------" << std::endl
-	     << boost::format ( "Basic Block (%1%)" ) % m_id << std::endl
-	     << "-----------------" << std::endl << std::endl
-	     << "  Comments" << std::endl
-	     << "  --------" << std::endl;
+            for ( std::vector<std::string>::const_iterator cpos = m_comments.begin();
+                    cpos != m_comments.end();
+                    ++cpos ) {
+                os << boost::format ( "  %1%" ) % ( *cpos ) << std::endl;
+            }
 
-      for ( std::vector<std::string>::const_iterator cpos = m_comments.begin();
-	    cpos != m_comments.end();
-	    ++cpos )
-	{
-	  output << boost::format ( "  %1%" ) % (*cpos) << std::endl;
-	}
+            os << "  --------" << std::endl
+               << "    Code" << std::endl
+               << "  --------" << std::endl;
 
-      output << "  --------" << std::endl
-	     << "    Code" << std::endl
-	     << "  --------" << std::endl;
+            for ( data_types::basic_block::DataList_t::const_iterator cpos = m_instructions.begin();
+                    cpos != m_instructions.end();
+                    ++cpos ) {
+                os << boost::format ( "  %1%" ) % ( *cpos )->to_String() << std::endl;
+            }
 
-      for ( data_types::Basic_Block::DataList_t::const_iterator cpos = m_instructions.begin();
-	    cpos != m_instructions.end();
-	    ++cpos )
-	{
-	  output << boost::format ("  %1%" ) % (*cpos)->to_String() << std::endl;
-	}
+            return os;
+        }
 
-      return output.str();
-    }
-
-  }  /* namespace data_types */
-} /* namespace libreverse */
+    }  /* namespace data_containers */
+} /* namespace reverse */
 

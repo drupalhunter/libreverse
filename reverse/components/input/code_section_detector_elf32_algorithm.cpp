@@ -72,5 +72,5 @@ namespace reverse {
 
     } // namespace input
   } /* namespace components */
-} /* namespace libreverse */
+} /* namespace reverse */
 

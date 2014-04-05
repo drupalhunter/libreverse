@@ -33,7 +33,7 @@
    1999
 */
 
-namespace libreverse { namespace java_module {
+namespace reverse { namespace java_module {
 
     /*!
      * \class Same_Locals_One_Stack_Item_Frame_Extended
@@ -78,6 +78,6 @@ namespace libreverse { namespace java_module {
     };
 
 } /* namespace java_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* JAVA_SAME_LOCALS_ONE_STACK_ITEM_FRAME_EXTENDED_H_ */

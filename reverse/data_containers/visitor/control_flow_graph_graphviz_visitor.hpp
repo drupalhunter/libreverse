@@ -25,7 +25,7 @@
 #include <sstream>
 #include "data_containers/Control_Flow_Graph.h"
 
-namespace libreverse { namespace visitor {
+namespace reverse { namespace visitor {
 
     class Control_Flow_Graph_Graphviz_Visitor
     {
@@ -41,6 +41,6 @@ namespace libreverse { namespace visitor {
     };
 
 } /* namespace visitor */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* CONTROL_FLOW_GRAPH_GRAPHVIZ_VISITOR_H_ */

@@ -34,7 +34,7 @@
 #include <vector>
 #include <map>
 
-namespace libreverse { namespace elf_module {
+namespace reverse { namespace elf_module {
 
     /*!
      * \class Elf_Header_64
@@ -154,6 +154,6 @@ namespace libreverse { namespace elf_module {
     };
 
   } /* namespace elf_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* ELF_HEADER_64_H */

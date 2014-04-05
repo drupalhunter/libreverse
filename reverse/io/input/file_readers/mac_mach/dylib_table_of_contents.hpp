@@ -24,7 +24,7 @@
 
 #include <boost/cstdint.hpp>
 
-namespace libreverse
+namespace reverse
 {
     namespace mach_module
     {
@@ -51,7 +51,7 @@ namespace libreverse
         };
 
     } /* namespace mach_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 
 #endif /* DYLIB_TABLE_OF_CONTENTS_H */

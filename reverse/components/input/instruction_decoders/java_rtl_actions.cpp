@@ -22,23 +22,23 @@
 #include "Java_Assembly_Actions.h"
 #include "Java_Opcodes.h"
 
-#include "libreverse/io/Preconditions.h"
-#include "libreverse/data_containers/Basic_Block.h"
-#include "libreverse/data_containers/Control_Flow_Graph.h"
-#include "libreverse/data_containers/Java_Assembly_Instruction.h"
+#include "reverse/io/Preconditions.h"
+#include "reverse/data_containers/Basic_Block.h"
+#include "reverse/data_containers/Control_Flow_Graph.h"
+#include "reverse/data_containers/Java_Assembly_Instruction.h"
 
 #include <boost/format.hpp>
 #include <sstream>
 
 #ifdef LIBREVERSE_DEBUG
-#include "libreverse/Trace.h"
-using namespace libreverse::api;
-using namespace libreverse::trace;
+#include "reverse/Trace.h"
+using namespace reverse::api;
+using namespace reverse::trace;
 #endif /* LIBREVERSE_DEBUG */
 
-using namespace libreverse::data_container;
+using namespace reverse::data_container;
 
-namespace libreverse { namespace decoder {
+namespace reverse { namespace decoder {
 
     Java_Assembly_Actions::Java_Assembly_Actions ()
     {
@@ -1691,4 +1691,4 @@ namespace libreverse { namespace decoder {
     }
 
   } /* namespace decoder */
-} /* namespace libreverse */
+} /* namespace reverse */

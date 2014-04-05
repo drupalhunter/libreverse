@@ -54,6 +54,6 @@ namespace reverse {
 
     } // namespace input
   } /* namespace components */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif // ifndef REVERSE_COMPONENTS_INPUT_CODE_SECTION_DETECTOR_ALGORITHM_FACTORY_HPP_INCLUDED

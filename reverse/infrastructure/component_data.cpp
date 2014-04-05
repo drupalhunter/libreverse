@@ -28,9 +28,6 @@
 #include <reverse/errors/component_exception.hpp>
 #include <reverse/infrastructure/component_data.hpp>
 #include <reverse/infrastructure/component_actor.hpp>
-#include <reverse/infrastructure/data_source/data_source_factory.hpp>
-#include <reverse/infrastructure/data_source/data_object.hpp>
-#include <reverse/infrastructure/data_source/data_source_base.hpp>
 #include <reverse/meta/meta_object.hpp>
 #include <reverse/trace.hpp>
 
@@ -42,7 +39,6 @@ namespace reverse {
 
     component_data::component_data ( boost::uint32_t id )
         : m_id ( id ),
-	  m_data_obj_ptr ( new data_source::data_object () ),
           m_meta_ptr ( new meta::meta_object() ),
           m_filename_ptr (),
           m_graph_ptr (),
@@ -53,7 +49,6 @@ namespace reverse {
 
     component_data::component_data ( component_data const& rhs )
         : m_id ( rhs.m_id ),
-          m_data_obj_ptr ( new data_source::data_object ( *rhs.m_data_obj_ptr ) ),
           m_meta_ptr ( new meta::meta_object ( *rhs.m_meta_ptr ) )
     {
       trace::infrastructure_detail ( "Entering component_data copy constructor" );
@@ -175,23 +170,23 @@ namespace reverse {
 
 	  infrastructure::component_graph::result_data_t data_pos = cpos->second;
 
-	  boost::shared_ptr < const infrastructure::data_source::data_source_base > input_data_ptr = data_pos.first;
+	  boost::shared_ptr < const infrastructure::component_data > input_data_ptr = data_pos.first;
 
 	  assert::null_check ( input_data_ptr.get(), "input_data_ptr.get())" );
                 
 #ifdef LIBREVERSE_DEBUG
 	  trace::infrastructure_data ( input_data_ptr->to_string().c_str() );
 #endif
-                
-	  // Get input data from data source
-	  boost::shared_ptr < const infrastructure::data_source::data_object > d_obj_ptr = input_data_ptr->get();
 
-	  m_filename_ptr = d_obj_ptr->get_filename();
-	  m_graph_ptr = d_obj_ptr->get_control_flow_graph_sequence();
-	  m_map_ptr = d_obj_ptr->get_memory_map();
+#warning TODO Confirm behavior - expect only one filename?
+	  m_filename_ptr = input_data_ptr->get_input_filename();
+#warning TODO Confirm behavior - multiple components may perform various transformations that may require appending control flow graph to this sequence
+	  m_graph_ptr = input_data_ptr->get_input_control_flow_graph_sequence();
+#warning TODO Confirm behavior - what do we want to do if we have 1+ memory maps for input?
+	  m_map_ptr = input_data_ptr->get_input_memory_map();
 
 	  // Copy meta information
-	  meta::meta_object::const_ptr_t m_obj_ptr = d_obj_ptr->getmeta();
+	  meta::meta_object::const_ptr_t m_obj_ptr = input_data_ptr->get_input_meta_data();
 
 	  input_meta_ptr->append ( m_obj_ptr );
 	}
@@ -219,30 +214,12 @@ namespace reverse {
       return result;
     }
 
-    boost::shared_ptr < infrastructure::data_source::data_source_base >
-    component_data::get_data_source (void) const
-    {
-      trace::infrastructure_detail ( "Entering component_data::get_Data_Source" );
-
-      boost::shared_ptr < infrastructure::data_source::data_source_factory > fact_ptr = infrastructure::data_source::data_source_factory::instance();
-
-      boost::shared_ptr < infrastructure::data_source::data_source_base > data_source_ptr = fact_ptr->get_data_source ( m_id );
-
-#ifdef LIBREVERSE_DEBUG
-	trace::infrastructure_data ( data_source_ptr->to_String() );
-#endif /* LIBREVERSE_DEBUG */
-
-	trace::infrastructure_detail ( "Exiting component_data::get_Data_Source" );
-
-        return data_source_ptr;
-    }
-
     void
     component_data::set_output_data ( boost::shared_ptr < const data_containers::filename > file_ptr )
     {
       trace::infrastructure_detail ( "Entering component_data::component_data (filename)" );
       
-      m_data_obj_ptr->set_data ( file_ptr );
+      m_filename_ptr = file_ptr;
 
       trace::infrastructure_detail ( "Exiting component_data::component_data (filename)" );
     }
@@ -252,7 +229,7 @@ namespace reverse {
     {
       trace::infrastructure_detail ( "Entering component_data::set_Output_Data (control_flow_graph_sequence)" );
 
-      m_data_obj_ptr->set_data ( graph_ptr );
+      m_graph_ptr = graph_ptr;
 
       trace::infrastructure_detail ( "Exiting component_data::set_Output_Data (control_flow_graph_sequence)" );
     }
@@ -262,7 +239,7 @@ namespace reverse {
     {
       trace::infrastructure_detail ( "Entering component_data::set_Output_Data (memory_map)" );
 
-      m_data_obj_ptr->set_data ( map_ptr );
+      m_map_ptr = map_ptr;
 
       trace::infrastructure_detail ( "Exiting component_data::set_Output_Data (memory_map)" );
     }
@@ -349,7 +326,6 @@ namespace reverse {
       boost::shared_ptr < meta::meta_object > input_meta_ptr = boost::make_shared < meta::meta_object > ( *m_meta_ptr );      
       input_meta_ptr->append ( meta_ptr );
       m_meta_ptr = input_meta_ptr;
-      m_data_obj_ptr->put_meta ( m_meta_ptr );
 
       trace::infrastructure_detail ( "Exiting component_data::set_Output_Data" );
     }
@@ -403,7 +379,6 @@ namespace reverse {
       std::swap ( m_id, rhs.m_id );
       std::swap ( m_source_list, rhs.m_source_list );
 
-      m_data_obj_ptr.swap ( rhs.m_data_obj_ptr );
       m_meta_ptr.swap ( rhs.m_meta_ptr );
       m_filename_ptr.swap ( rhs.m_filename_ptr );
       m_graph_ptr.swap ( rhs.m_graph_ptr );
@@ -437,12 +412,7 @@ namespace reverse {
 	    % cpos->first
 	    % found << std::endl;
 	}
-      
-      if ( m_data_obj_ptr )
-	{
-	  output << m_data_obj_ptr << std::endl;
-	}
-      
+           
       if ( m_meta_ptr )
 	{
 	  output << m_meta_ptr->to_string() << std::endl;
@@ -455,7 +425,7 @@ namespace reverse {
       
       if ( m_graph_ptr )
 	{
-	  output << m_graph_ptr->to_string() << std::endl;
+	  output << m_graph_ptr << std::endl;
 	}
       
       if ( m_map_ptr )
@@ -469,5 +439,5 @@ namespace reverse {
     }
 
   } /* namespace infrastructure */
-} /* namespace libreverse */
+} /* namespace reverse */
 

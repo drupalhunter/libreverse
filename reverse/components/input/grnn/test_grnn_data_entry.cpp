@@ -31,7 +31,7 @@
 
 #include "GRNN_Data_Entry.h"
 
-using namespace libreverse::classifier;
+using namespace reverse::classifier;
 
 BOOST_AUTO_TEST_SUITE(grnn)
 

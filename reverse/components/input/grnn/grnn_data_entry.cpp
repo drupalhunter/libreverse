@@ -24,7 +24,7 @@
 
 #ifdef LIBREVERSE_DEBUG
 #include <reverse/trace.hpp>
-using namespace libreverse::trace;
+using namespace reverse::trace;
 #endif /* LIBREVERSE_DEBUG */
 
 namespace reverse {

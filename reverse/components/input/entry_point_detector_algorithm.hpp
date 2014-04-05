@@ -25,7 +25,7 @@
 #include "io/IO_Types.h"
 #include "meta/meta_object.h"
 
-namespace libreverse {
+namespace reverse {
 
     namespace component {
 
@@ -40,6 +40,6 @@ namespace libreverse {
         };
 
     } /* namespace component */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* ENTRY_POINT_DETECTOR_ALGORITHM_H */

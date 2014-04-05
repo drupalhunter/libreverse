@@ -33,10 +33,10 @@
 #include <boost/format.hpp>
 #include "Trace.h"
 
-using namespace libreverse::api;
-using namespace libreverse::trace;
+using namespace reverse::api;
+using namespace reverse::trace;
 
-namespace libreverse { namespace component {
+namespace reverse { namespace component {
 
     const std::string memory_map_Producer::m_name = "memory_map_Producer";
 
@@ -336,4 +336,4 @@ namespace libreverse { namespace component {
         return *this;
     }
 } /* namespace component */
-} /* namespace libreverse */
+} /* namespace reverse */

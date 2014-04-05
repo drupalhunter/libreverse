@@ -33,12 +33,12 @@
 
 #ifdef LIBREVERSE_DEBUG
 #include "Trace.h"
-using namespace libreverse::api;
-using namespace libreverse::trace;
+using namespace reverse::api;
+using namespace reverse::trace;
 #endif /* LIBREVERSE_DEBUG */
 
 
-namespace libreverse { namespace java_module {
+namespace reverse { namespace java_module {
 
     Deprecated_Attribute::Deprecated_Attribute ( boost::uint16_t index )
         : m_name_index ( index ),
@@ -136,4 +136,4 @@ namespace libreverse { namespace java_module {
         return m_attribute_name;
     }
 } /* namespace java_module */
-} /* namespace libreverse */
+} /* namespace reverse */

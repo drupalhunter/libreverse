@@ -5,7 +5,7 @@
 #include <sys/mman.h>
 #include <boost/cstdint.hpp>
 
-namespace libreverse { namespace data_types {
+namespace reverse { namespace data_types {
 
     template <typename DataType>
     class Memory_Allocator : public __gnu_cxx::malloc_allocator < DataType >
@@ -77,6 +77,6 @@ namespace libreverse { namespace data_types {
         boost::int32_t m_flags;
     };
 } /* Namespace data_types */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* MEMORY_ALLOCATOR_H */

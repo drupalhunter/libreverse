@@ -26,7 +26,7 @@
 #include "Training_Set.h"
 #include <vector>
 
-namespace libreverse {
+namespace reverse {
   namespace classifier {
 
     template <template <typename Data_Type> class Classifier_Type, typename Data_Type>
@@ -469,6 +469,6 @@ namespace libreverse {
     };
 
   } /* namespace classifier */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* OPTIMIZER_H */

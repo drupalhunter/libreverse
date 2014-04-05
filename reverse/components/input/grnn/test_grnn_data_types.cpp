@@ -31,7 +31,7 @@
 
 #include "GRNN_Data_Types.h"
 
-using namespace libreverse;
+using namespace reverse;
 
 BOOST_AUTO_TEST_SUITE(grnn)
 

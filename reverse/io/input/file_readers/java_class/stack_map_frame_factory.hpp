@@ -26,7 +26,7 @@
 #include <boost/cstdint.hpp>
 #include "Java_Types.h"
 
-namespace libreverse { namespace java_module {
+namespace reverse { namespace java_module {
 
     /*!
      * \class Stack_Map_Frame_Factory
@@ -40,6 +40,6 @@ namespace libreverse { namespace java_module {
     };
 
 } /* namespace java_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* STACK_MAP_FRAME_FACTORY_H_ */

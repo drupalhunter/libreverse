@@ -20,12 +20,12 @@
 */
 
 #include "CPU_State_T.h"
-#include "libreverse/errors/IO_Exception.h"
+#include "reverse/errors/IO_Exception.h"
 #include <boost/format.hpp>
 #include <sstream>
-#include "libreverse/io/Byte_Converter.h"
+#include "reverse/io/Byte_Converter.h"
 
-namespace libreverse
+namespace reverse
 {
     namespace mach_module
     {

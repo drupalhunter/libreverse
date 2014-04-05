@@ -27,7 +27,7 @@
 #include <string>
 
 namespace reverse {
-  namespace data_container {
+  namespace data_containers {
 
     class instruction {
     public:
@@ -41,10 +41,9 @@ namespace reverse {
 
       virtual boost::uint32_t get_type ( void ) const = 0;
 
-      virtual std::string to_string ( void ) const = 0;
     };
 
-  }  /* namespace data_container */
+  }  /* namespace data_containers */
 } /* namespace reverse */
 
 

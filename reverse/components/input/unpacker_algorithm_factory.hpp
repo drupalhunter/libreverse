@@ -24,7 +24,7 @@
 
 #include "Unpacker_Algorithm.h"
 
-namespace libreverse { namespace component {
+namespace reverse { namespace component {
 
     class Unpacker_Algorithm_Factory {
     public:
@@ -52,6 +52,6 @@ namespace libreverse { namespace component {
     };
 
 } /* namespace component */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* UNPACKAGE_ALGORITHM_FACTORY_H */

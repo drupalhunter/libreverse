@@ -148,6 +148,6 @@ namespace reverse {
         };
 
     } /* namespace mach_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* MACH_READER_32_H_ */

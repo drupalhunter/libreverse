@@ -22,10 +22,10 @@
 #define WINDOWS_COMPRESSION_DUMP_ALGORITHM_H
 
 #include "Compression_Dump_Algorithm.h"
-#include "libreverse/io/input/File_Readers/Windows_PE/Reader_32.h"
-#include "libreverse/io/input/File_Readers/Windows_PE/Reader_64.h"
+#include "reverse/io/input/File_Readers/Windows_PE/Reader_32.h"
+#include "reverse/io/input/File_Readers/Windows_PE/Reader_64.h"
 
-namespace libreverse {
+namespace reverse {
   namespace optimizer {
 
     class Windows_Compression_Dump_Algorithm : public Compression_Dump_Algorithm {
@@ -41,13 +41,13 @@ namespace libreverse {
 
     private:
 
-      std::string process_File ( boost::uint32_t compression_id, libreverse::wpef_module::Reader_32& reader32_obj );
+      std::string process_File ( boost::uint32_t compression_id, reverse::wpef_module::Reader_32& reader32_obj );
 
-      std::string process_File ( boost::uint32_t compression_id, libreverse::wpef_module::Reader_64& reader64_obj );
+      std::string process_File ( boost::uint32_t compression_id, reverse::wpef_module::Reader_64& reader64_obj );
 
     };
 
   } /* namespace optimizer */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* WINDOWS_COMPRESSION_DUMP_ALGORITHM_H */

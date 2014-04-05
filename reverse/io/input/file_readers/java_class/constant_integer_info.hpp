@@ -32,7 +32,7 @@
    1999
 */
 
-namespace libreverse { namespace java_module {
+namespace reverse { namespace java_module {
 
     /*!
      * \class Constant_Integer_Info
@@ -82,6 +82,6 @@ namespace libreverse { namespace java_module {
   };
 
 } /* namespace java_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* JAVA_CONSTANT_INTEGER_INFO_H_ */

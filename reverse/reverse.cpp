@@ -28,12 +28,10 @@
 #include <reverse/data_containers/filename.hpp>
 #include <reverse/errors/parsing_exception.hpp>
 #include <reverse/errors/reverse_exception.hpp>
+#include <reverse/infrastructure/component_data.hpp>
 #include <reverse/infrastructure/component_state.hpp>
 #include <reverse/infrastructure/configurator.hpp>
-#include <reverse/infrastructure/data_source/data_source_factory.hpp>
-#include <reverse/infrastructure/data_source/file_data_source_config.hpp>
-#include <reverse/infrastructure/data_source/memory_data_transfer.hpp>
-#include <reverse/infrastructure/data_source/memory_data_source_config.hpp>
+#include <reverse/io/input/file_readers/reader_factory.hpp>
 #include <reverse/trace.hpp>
 
 #include <boost/filesystem/operations.hpp>
@@ -85,6 +83,7 @@ namespace reverse {
                 return result;
             }
 
+#warning Refactor - Consolidate Conditional Expression
         if ( ! ( this->valid_types ( input_types::binary,
                                      input_types::binary,
                                      input_type ) ) )
@@ -93,6 +92,7 @@ namespace reverse {
                 return result;
             }
 
+#warning Refactor - Consolidate Conditional Expression
         if ( ! ( this->valid_types ( output_types::cplusplus,
                                      output_types::uml,
                                      output_type ) ) )
@@ -113,23 +113,25 @@ namespace reverse {
                                                                      ( infrastructure::component::source_id );
 
 	  boost::shared_ptr < infrastructure::component > comp_ptr =
-	    infrastructure::component_factory::instance().get_null_component ( state_ptr );
+	    components::component_factory::instance().get_null_component ( state_ptr );
 
             //------------------------------
             // Prepare Initial Data Source
             //------------------------------
-
-            // The first component will receive its data via a file. The rest
-            // of the components will receive it by memory for now. So we
-            // create the input data source (file type)
-
-	    boost::shared_ptr < const infrastructure::data_source::file_data_source_config > file_config =
-	      boost::make_shared < const infrastructure::data_source::file_data_source_config > ( target_file );
-
-	    boost::shared_ptr < infrastructure::data_source::data_source_factory > fact_ptr = infrastructure::data_source::data_source_factory::instance();
-	    fact_ptr->init ( file_config );
-
-	    boost::shared_ptr < const infrastructure::data_source::data_source_base > input_data_source_ptr = fact_ptr->get_data_source ( 0 );
+	    
+	    io::input::file_readers::reader_factory& fact_ref = io::input::file_readers::reader_factory::instance();
+	    
+	    // Find the right file reader for the input file
+	    boost::shared_ptr < io::file_reader > reader_ptr = fact_ref.create_file_reader(target_file);
+	    
+	    // Get memory map from reader
+	    boost::shared_ptr < data_containers::memory_map > input_file_memory_ptr = reader_ptr->get_memory_map();
+	    
+	    // Put memory map into component data object
+	    boost::shared_ptr < infrastructure::component_data > input_component_data_ptr =
+	      boost::make_shared< infrastructure::component_data>(0);
+	    input_component_data_ptr->set_output_data(input_file_memory_ptr);
+	       
 
             // Create component graph from suggested configuration files
             //  Configuration files are in three parts
@@ -147,7 +149,7 @@ namespace reverse {
             // Output: Change return type to give back a pair < Data_Source_Base, Component>
             // which contains the output data and the last component
             reverse_impl::return_type_t input_results_ptr =
-                m_executor.execute_input_section ( m_graph, input_data_source_ptr, comp_ptr );
+                m_executor.execute_input_section ( m_graph, input_component_data_ptr, comp_ptr );
 
 
             // FUTURE: We could take the meta information from the

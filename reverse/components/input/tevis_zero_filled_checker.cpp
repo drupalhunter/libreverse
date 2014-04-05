@@ -34,11 +34,11 @@
 #include <boost/format.hpp>
 #include "Trace.h"
 
-using namespace libreverse::api;
-using namespace libreverse::trace;
-using namespace libreverse::meta;
+using namespace reverse::api;
+using namespace reverse::trace;
+using namespace reverse::meta;
 
-namespace libreverse { namespace component {
+namespace reverse { namespace component {
 
     const std::string Tevis_Zero_Filled_Checker::m_name = "Tevis_Zero_Filled_Checker";
 
@@ -306,4 +306,4 @@ namespace libreverse { namespace component {
     }
 
 } /* namespace component */
-} /* namespace libreverse */
+} /* namespace reverse */

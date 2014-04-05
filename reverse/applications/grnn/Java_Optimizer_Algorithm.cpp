@@ -21,32 +21,32 @@
 
 #include "Java_Optimizer_Algorithm.h"
 
-#include "libreverse/components/input/grnn/IO.h"
-#include "libreverse/components/input/grnn/Candidate_Solution.h"
-#include "libreverse/components/input/grnn/Optimizer.h"
-#include "libreverse/components/input/grnn/GRNN_Data_Map.h"
-#include "libreverse/components/input/grnn/GRNN_Data_Entry.h"
-#include "libreverse/components/input/grnn/Java_Training_Data_Parser.h"
+#include "reverse/components/input/grnn/IO.h"
+#include "reverse/components/input/grnn/Candidate_Solution.h"
+#include "reverse/components/input/grnn/Optimizer.h"
+#include "reverse/components/input/grnn/GRNN_Data_Map.h"
+#include "reverse/components/input/grnn/GRNN_Data_Entry.h"
+#include "reverse/components/input/grnn/Java_Training_Data_Parser.h"
 
-#include "libreverse/data_containers/memory_map.h"
-#include "libreverse/infrastructure/Component_Types.h"
-#include "libreverse/infrastructure/Configurator.h"
-#include "libreverse/io/IO_Types.h"
-#include "libreverse/io/File_ID.h"
-#include "libreverse/io/input/File_Readers/Java_Class/Reader.h"
-#include "libreverse/io/input/File_Readers/Java_Class/Class_Header.h"
+#include "reverse/data_containers/memory_map.h"
+#include "reverse/infrastructure/Component_Types.h"
+#include "reverse/infrastructure/Configurator.h"
+#include "reverse/io/IO_Types.h"
+#include "reverse/io/File_ID.h"
+#include "reverse/io/input/File_Readers/Java_Class/Reader.h"
+#include "reverse/io/input/File_Readers/Java_Class/Class_Header.h"
 
 #include <boost/format.hpp>
 #include <iostream>
 
-using namespace libreverse::classifier;
+using namespace reverse::classifier;
 
 #ifdef LIBREVERSE_DEBUG
-using namespace libreverse::trace;
-#include "libreverse/Trace.h"
+using namespace reverse::trace;
+#include "reverse/Trace.h"
 #endif /* LIBREVERSE_DEBUG */
 
-namespace libreverse
+namespace reverse
 {
   namespace optimizer
   {
@@ -124,4 +124,4 @@ namespace libreverse
     }
 
   } /* namespace optimizer */
-} /* namespace libreverse */
+} /* namespace reverse */

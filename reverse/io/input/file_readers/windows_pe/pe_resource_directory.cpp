@@ -31,7 +31,7 @@
 #include <boost/format.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 
-namespace libreverse
+namespace reverse
 {
     namespace wpef_module
     {
@@ -187,5 +187,5 @@ namespace libreverse
         }
 
     } /* namespace wpef_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 

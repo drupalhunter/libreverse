@@ -21,9 +21,9 @@
 
 #include "Load_Command.h"
 
-namespace libreverse { namespace mach_module {
+namespace reverse { namespace mach_module {
 
   const boost::uint8_t Load_Command::MAX_NAME_SIZE = 16;
 
 } /* namespace mach_module */
-} /* namespace libreverse */
+} /* namespace reverse */

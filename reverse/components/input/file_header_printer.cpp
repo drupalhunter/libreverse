@@ -32,10 +32,10 @@
 #include "errors/API_Exception.h"
 #include "Trace.h"
 
-using namespace libreverse::api;
-using namespace libreverse::trace;
+using namespace reverse::api;
+using namespace reverse::trace;
 
-namespace libreverse { namespace component {
+namespace reverse { namespace component {
 
     const std::string File_Header_Printer::m_name = "File_Header_Printer";
 
@@ -336,4 +336,4 @@ namespace libreverse { namespace component {
 
     }
 } /* namespace component */
-} /* namespace libreverse */
+} /* namespace reverse */

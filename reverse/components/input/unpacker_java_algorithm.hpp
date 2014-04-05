@@ -25,7 +25,7 @@
 #include "Unpacker_Algorithm.h"
 #include "meta/meta_object.h"
 
-namespace libreverse { namespace component {
+namespace reverse { namespace component {
 
     class Unpacker_Java_Algorithm : public Unpacker_Algorithm {
     public:
@@ -68,6 +68,6 @@ namespace libreverse { namespace component {
     };
 
 } /* namespace component */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* UNPACKAGE_JAVA_ALGORITHM_H */

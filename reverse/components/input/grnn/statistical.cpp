@@ -30,7 +30,7 @@
 #include "Trace.h"
 #endif /* LIBREVERSE_DEBUG */
 
-namespace libreverse
+namespace reverse
 {
   namespace classifier
   {
@@ -89,4 +89,4 @@ namespace libreverse
     Statistical<Data_Type>::get_Mean_Distance_Squared ( void ) const
 
   } /* namespace classifier */
-} /* namespace libreverse */
+} /* namespace reverse */

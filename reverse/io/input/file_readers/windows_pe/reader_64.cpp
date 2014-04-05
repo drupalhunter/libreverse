@@ -67,9 +67,9 @@
 #include <sstream>
 #include <list>
 
-using namespace libreverse::io;
+using namespace reverse::io;
 
-namespace libreverse { namespace wpef_module {
+namespace reverse { namespace wpef_module {
 
     Reader_64::Reader_64 ( io_types::File_ID::const_ptr_t target_file )
       : m_file ( new PE_File ( target_file ) ),
@@ -1338,7 +1338,7 @@ namespace libreverse { namespace wpef_module {
 
 	    Trace::write_Trace ( TraceArea::IO,
 				 TraceLevel::ERROR,
-				 "Contact the developers of libreverse if you feel that this type should be supported.");
+				 "Contact the developers of reverse if you feel that this type should be supported.");
 
 	    throw errors::Internal_Exception
 	      (errors::Internal_Exception::UNSUPPORTED_FEATURE);
@@ -1347,4 +1347,4 @@ namespace libreverse { namespace wpef_module {
 	}
     }
   } /* namespace wpef_module */
-} /* namespace libreverse */
+} /* namespace reverse */

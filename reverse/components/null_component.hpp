@@ -76,7 +76,7 @@ namespace reverse {
 
       virtual void run ( infrastructure::component_graph::data_map_t* m_input_data );
 
-      virtual boost::shared_ptr < infrastructure::data_source::data_source_base > results (void);
+      virtual boost::shared_ptr < infrastructure::component_data > results (void);
 
       virtual void set_state ( boost::uint32_t mode );
 

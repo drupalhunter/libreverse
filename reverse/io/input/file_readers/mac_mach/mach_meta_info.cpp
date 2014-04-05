@@ -21,10 +21,10 @@
 
 #include "Mach_Meta_Info.h"
 
-namespace libreverse {
+namespace reverse {
   namespace mach_module {
 
     const std::string Mach_Meta_Info::FILE_TYPE = "mach-o";
 
 } /* namespace mach_module */
-} /* namespace libreverse */
+} /* namespace reverse */

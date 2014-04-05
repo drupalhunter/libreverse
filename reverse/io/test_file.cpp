@@ -22,14 +22,14 @@
 #include <boost/test/unit_test.hpp>
 #include "File.h"
 #include "File_ID.h"
-#include "libreverse/data_containers/memory_map.h"
-#include "libreverse/include/config.h"
-#include "libreverse/errors/IO_Exception.h"
+#include "reverse/data_containers/memory_map.h"
+#include "reverse/include/config.h"
+#include "reverse/errors/IO_Exception.h"
 
 using namespace boost::unit_test;
 using namespace boost::unit_test_framework;
-using namespace libreverse;
-using namespace libreverse::data_types;
+using namespace reverse;
+using namespace reverse::data_types;
 
 void test_file_id_constructor()
 {
@@ -43,21 +43,21 @@ void test_file_id_constructor()
     io_types::File_ID::ptr_t null_file_ptr;
 
     BOOST_CHECK_THROW ( io::File null_file_ref ( null_file_ptr ),
-                        libreverse::errors::IO_Exception );
+                        reverse::errors::IO_Exception );
 
     // File (memory_map,File_ID) - test #1 - null map and file
     data_types::memory_map::ptr_t null_map_ptr;
     BOOST_CHECK_THROW ( io::File null_file_ref1 ( null_map_ptr, null_file_ptr ),
-                        libreverse::errors::IO_Exception );
+                        reverse::errors::IO_Exception );
 
     // File (memory_map,File_ID) - test #2 - null map
     BOOST_CHECK_THROW ( io::File null_file_ref2 ( null_map_ptr, id_ptr ),
-                        libreverse::errors::IO_Exception );
+                        reverse::errors::IO_Exception );
 
     // File (memory_map,File_ID) - test #3 - null file
     data_types::memory_map::ptr_t map_ptr ( new data_container::memory_map(1) );
     BOOST_CHECK_THROW ( io::File null_file_ref3 ( map_ptr, null_file_ptr ),
-                        libreverse::errors::IO_Exception );
+                        reverse::errors::IO_Exception );
 
     // File (memory_map,File_ID) - test #4 - good map and file pointer
     io::File good_ref ( map_ptr, id_ptr );
@@ -104,7 +104,7 @@ void test_begin()
 
     io::File good_file_ref ( name_set_ptr );
 
-    BOOST_CHECK_THROW ( good_file_ref.begin(), libreverse::errors::IO_Exception );
+    BOOST_CHECK_THROW ( good_file_ref.begin(), reverse::errors::IO_Exception );
 
     BOOST_CHECK_EQUAL ( good_file_ref.init(), true );
 }
@@ -116,7 +116,7 @@ void test_end()
 
     io::File good_file_ref ( name_set_ptr );
 
-    BOOST_CHECK_THROW ( good_file_ref.end(), libreverse::errors::IO_Exception );
+    BOOST_CHECK_THROW ( good_file_ref.end(), reverse::errors::IO_Exception );
 
     BOOST_CHECK_EQUAL ( good_file_ref.init(), true );
 }
@@ -144,7 +144,7 @@ void test_size ()
 
     io::File good_file_ref ( name_set_ptr );
 
-    BOOST_CHECK_THROW ( good_file_ref.size(), libreverse::errors::IO_Exception );
+    BOOST_CHECK_THROW ( good_file_ref.size(), reverse::errors::IO_Exception );
 
     good_file_ref.init();
 

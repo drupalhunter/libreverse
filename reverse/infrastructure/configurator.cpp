@@ -27,7 +27,6 @@
 #include <reverse/infrastructure/formula_parser.hpp>
 #include <reverse/infrastructure/grnn_data_parser.hpp>
 #include <reverse/infrastructure/master_formula_parser.hpp>
-#include <reverse/infrastructure/data_source/data_source_factory_base.hpp>
 
 #include <boost/format.hpp>
 #include <boost/make_shared.hpp>
@@ -44,19 +43,6 @@ namespace reverse {
     void configurator::init ( boost::shared_ptr < const infrastructure::configuration_data > config_obj )
     {
       m_config = config_obj;
-    }
-
-    void configurator::register_Factory ( boost::shared_ptr < infrastructure::data_source_factory_base > fact_ptr )
-    {
-      trace::infrastructure_detail ( "Entering configurator::register_Factory" );
-
-      boost::shared_ptr < infrastructure::data_source_config_base > transfer_data =
-	m_config->get_transfer_config();
-
-      // Pass this information to the factory
-      fact_ptr->init( transfer_data );
-
-      trace::infrastructure_detail ( "Exiting configurator::register_Factory" );
     }
 
     boost::shared_ptr < infrastructure::component_graph::map_t >
@@ -81,7 +67,7 @@ namespace reverse {
         // Once we have the master formula file we need the entry
         // for the files we need. This is based on the input_type
         // and output_type given in the Reverse class.
-      infrastructure::configurator::formula_map_t::iterator pos = m_formulas->find ( std::make_pair ( input_type, output_type ) );
+      infrastructure::configurator::formula_map_t::const_iterator pos = m_formulas->find ( std::make_pair ( input_type, output_type ) );
 
       if ( pos == m_formulas->end() )
 	{
@@ -94,7 +80,7 @@ namespace reverse {
 					__FILE__,
 					__LINE__ );
 
-	  throw errors::configuration_exception ( errors::configuration_exception::unsupported_map );
+	  throw errors::configuration_exception ( errors::configuration_exception::UNSUPPORTED_MAP );
 	}
 
         formula_list files = (*pos).second;

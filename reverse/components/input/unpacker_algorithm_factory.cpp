@@ -25,7 +25,7 @@
 #include "errors/CPU_Exception.h"
 #include <string>
 
-namespace libreverse { namespace component {
+namespace reverse { namespace component {
 
     Unpacker_Algorithm::ptr_t
     Unpacker_Algorithm_Factory::get_Algorithm ( std::string name )
@@ -46,5 +46,5 @@ namespace libreverse { namespace component {
     }
 
 } /* namespace component */
-} /* namespace libreverse */
+} /* namespace reverse */
 

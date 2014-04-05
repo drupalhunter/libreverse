@@ -26,10 +26,10 @@
 
 #include <string>
 
-#include "libreverse/components/input/grnn/Classifier_Types.h"
-#include "libreverse/components/input/grnn/Java_Training_Data.h"
+#include "reverse/components/input/grnn/Classifier_Types.h"
+#include "reverse/components/input/grnn/Java_Training_Data.h"
 
-namespace libreverse
+namespace reverse
 {
   namespace optimizer
   {
@@ -53,7 +53,7 @@ namespace libreverse
     };
 
   } /* namespace optimizer */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #include "Java_Optimizer_Algorithm.cpp"
 

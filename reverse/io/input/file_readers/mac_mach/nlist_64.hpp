@@ -24,7 +24,7 @@
 
 #include <boost/cstdint.hpp>
 
-namespace libreverse { namespace mach_module {
+namespace reverse { namespace mach_module {
 
   class Nlist_64 {
   public:
@@ -116,7 +116,7 @@ namespace libreverse { namespace mach_module {
   };
 
 } /* namespace mach_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 
 #endif /* DYLIB_COMMAND_64_H */

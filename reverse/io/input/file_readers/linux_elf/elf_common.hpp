@@ -20,7 +20,7 @@
 */
 
 /*
-  Utilized the header from readelf for libreverse. Original License is below.
+  Utilized the header from readelf for reverse. Original License is below.
 
   ELF support for BFD.
   Copyright 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000,

@@ -21,7 +21,7 @@
 
 #include "Dylib_Reference.h"
 
-namespace libreverse { namespace mach_module {
+namespace reverse { namespace mach_module {
 
   Dylib_Reference::Dylib_Reference ()
     : m_isym ( 0 ),
@@ -29,4 +29,4 @@ namespace libreverse { namespace mach_module {
   {}
 
 } /* namespace mach_module */
-} /* namespace libreverse */
+} /* namespace reverse */

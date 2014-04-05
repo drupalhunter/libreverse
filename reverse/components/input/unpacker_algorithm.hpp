@@ -26,7 +26,7 @@
 #include "data_containers/Data_Types.h"
 #include "meta/meta_object.h"
 
-namespace libreverse {
+namespace reverse {
 
     namespace component {
 
@@ -49,6 +49,6 @@ namespace libreverse {
         };
 
     } /* namespace component */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* UNPACKAGE_ALGORITHM_H */

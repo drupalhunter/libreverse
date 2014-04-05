@@ -30,12 +30,12 @@
 
 #ifdef LIBREVERSE_DEBUG
 #include "Trace.h"
-using namespace libreverse::api;
-using namespace libreverse::trace;
+using namespace reverse::api;
+using namespace reverse::trace;
 #endif /* LIBREVERSE_DEBUG */
 
 
-namespace libreverse { namespace java_module {
+namespace reverse { namespace java_module {
 
     Constant_Class_Info::Constant_Class_Info()
         : m_tag ( Constant_Pool_Tags::CLASS ),
@@ -131,4 +131,4 @@ namespace libreverse { namespace java_module {
         return m_name_index;
     }
 } /* namespace java_module */
-} /* namespace libreverse */
+} /* namespace reverse */

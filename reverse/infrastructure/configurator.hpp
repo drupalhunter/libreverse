@@ -39,11 +39,6 @@ namespace reverse {
   } // namespace components
 
   namespace infrastructure {
-    namespace data_source {
-
-      class data_source_factory_base;
-
-    } // namespace data_source
 
     class configuration_data;
 
@@ -72,17 +67,6 @@ namespace reverse {
        */
       void init ( boost::shared_ptr < const infrastructure::configuration_data > config_obj );
 
-      /**
-       * all data source factories will call this when they
-       * are first initialized. the information given to them
-       * tell them how to transfer data along with any transfer
-       * specific information.
-       *
-       * @param fact_ptr pointer to the data_source_factory call the
-       * configurator
-       */
-      void register_factory ( boost::shared_ptr < infrastructure::data_source::data_source_factory_base >& fact_ptr);
-
       boost::shared_ptr < infrastructure::component_graph::map_t >
       get_graph ( boost::uint32_t input_id,
 		  boost::uint32_t output_id );
@@ -100,7 +84,7 @@ namespace reverse {
       // system wide configuration
       static boost::shared_ptr < const infrastructure::configuration_data > m_config;
 
-      boost::shared_ptr < formula_map_t > m_formulas;
+      boost::shared_ptr < const formula_map_t > m_formulas;
 
       // grnn information
       boost::shared_ptr < components::input::grnn::grnn_data_map > m_grnn_data_map;

@@ -24,7 +24,7 @@
 
 #include "Verification_Type_Info.h"
 
-namespace libreverse { namespace java_module {
+namespace reverse { namespace java_module {
 
     class Uninitialized_This_Variable_Info
         : public Verification_Type_Info
@@ -50,6 +50,6 @@ namespace libreverse { namespace java_module {
     };
     
 } /* namespace java_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* JAVA_UNITIALIZED_THIS_VARIABLE_INFO_H_ */

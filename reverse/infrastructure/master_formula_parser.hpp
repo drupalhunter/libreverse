@@ -23,7 +23,7 @@
 #define REVERSE_INFRASTRUCTURE_MASTER_FORMULA_PARSER_HPP_INCLUDED
 
 #include <reverse/infrastructure/configurator.hpp>
-#include <json_spirit/json_spirit.hpp>
+#include <json_spirit/json_spirit.h>
 
 #include <boost/shared_ptr.hpp>
 
@@ -47,8 +47,6 @@ namespace reverse {
       void set_input_type ( std::string const& value );
 
       void set_output_type ( std::string const& value );
-
-        static const int MATCH;
 
       boost::shared_ptr < infrastructure::configurator::formula_map_t > m_map;
       boost::uint32_t m_input_type;

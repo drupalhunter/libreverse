@@ -25,7 +25,7 @@
 #include "Load_Command.h"
 #include <vector>
 
-namespace libreverse
+namespace reverse
 {
     namespace mach_module
     {
@@ -97,7 +97,7 @@ namespace libreverse
         };
 
     } /* namespace mach_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 
 #endif /* ROUTINES_COMMAND_H */

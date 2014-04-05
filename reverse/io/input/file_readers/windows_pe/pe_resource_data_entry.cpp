@@ -29,9 +29,9 @@
 #include <sstream>
 #include <boost/format.hpp>
 
-using namespace libreverse::io;
+using namespace reverse::io;
 
-namespace libreverse
+namespace reverse
 {
     namespace wpef_module
     {
@@ -92,5 +92,5 @@ namespace libreverse
             return String_Converter::convert_From_UTF16_String ( uchar_vector );
         }
     } /* namespace wpef_module */
-} /* namespace libreverse */
+} /* namespace reverse */
 

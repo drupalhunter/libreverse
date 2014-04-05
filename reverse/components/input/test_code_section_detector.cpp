@@ -29,10 +29,10 @@
 
 using namespace boost::unit_test;
 using namespace boost::unit_test_framework;
-using namespace libreverse::data_types;
-using namespace libreverse::component;
-using namespace libreverse::meta;
-using namespace libreverse::infrastructure;
+using namespace reverse::data_types;
+using namespace reverse::component;
+using namespace reverse::meta;
+using namespace reverse::infrastructure;
 
 void test_default_constructor ()
 {

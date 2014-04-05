@@ -26,16 +26,16 @@
 
 #include <string>
 
-#include "libreverse/components/input/grnn/Classifier_Types.h"
-#include "libreverse/components/input/grnn/Elf_Training_Data.h"
+#include "reverse/components/input/grnn/Classifier_Types.h"
+#include "reverse/components/input/grnn/Elf_Training_Data.h"
 
 
 #ifdef LIBREVERSE_DEBUG
-using namespace libreverse::trace;
-#include "libreverse/Trace.h"
+using namespace reverse::trace;
+#include "reverse/Trace.h"
 #endif /* LIBREVERSE_DEBUG */
 
-namespace libreverse
+namespace reverse
 {
   namespace optimizer
   {
@@ -59,7 +59,7 @@ namespace libreverse
     };
 
   } /* namespace optimizer */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #include "Elf_Optimizer_Algorithm.cpp"
 

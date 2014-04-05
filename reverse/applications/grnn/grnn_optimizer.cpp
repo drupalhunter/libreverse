@@ -7,25 +7,25 @@
 #include "Optimizer_Algorithm_Factory.h"
 #include "Optimizer_Types.h"
 
-#include "libreverse/components/input/grnn/GRNN.h"
-#include "libreverse/components/input/grnn/GRNN_Data_Types.h"
-#include "libreverse/components/input/grnn/IO.h"
-#include "libreverse/components/input/grnn/Candidate_Solution.h"
-#include "libreverse/components/input/grnn/Optimizer.h"
+#include "reverse/components/input/grnn/GRNN.h"
+#include "reverse/components/input/grnn/GRNN_Data_Types.h"
+#include "reverse/components/input/grnn/IO.h"
+#include "reverse/components/input/grnn/Candidate_Solution.h"
+#include "reverse/components/input/grnn/Optimizer.h"
 
 #ifdef LIBREVERSE_DEBUG
-#include <libreverse/Reverse.h>
-#include <libreverse/Trace.h>
+#include <reverse/Reverse.h>
+#include <reverse/Trace.h>
 #endif
 
 #include <iostream>
 
 #ifdef LIBREVERSE_DEBUG
-using namespace libreverse::trace;
+using namespace reverse::trace;
 #endif /* LIBREVERSE_DEBUG */
 
-using namespace libreverse::classifier;
-using namespace libreverse::optimizer;
+using namespace reverse::classifier;
+using namespace reverse::optimizer;
 
 void
 find_Data_Files ( const boost::filesystem::path& dirpath, std::list<std::string>& output_files )
@@ -163,7 +163,7 @@ int main ( int argc, char** argv )
       srand ( time ( NULL ) );
 
       // Get the algorithm for this file type
-      libreverse::optimizer_types::Optimizer_Algorithm::ptr_t alg_ptr =
+      reverse::optimizer_types::Optimizer_Algorithm::ptr_t alg_ptr =
 	( Optimizer_Algorithm_Factory::Instance() ).get_Algorithm<GRNN> ( source_value );
 
       // Process files

@@ -26,7 +26,7 @@
 #include "infrastructure/Component_Actor.h"
 #include <boost/enable_shared_from_this.hpp>
 
-namespace libreverse {
+namespace reverse {
 
     namespace component {
 
@@ -82,6 +82,6 @@ namespace libreverse {
             infrastructure_types::Component_State::ptr_t m_state_ptr;
         };
     } /* namespace component */
-} /* namespace libreverse */
+} /* namespace reverse */
 
 #endif /* COMPILER_CLASSIFIER_H */

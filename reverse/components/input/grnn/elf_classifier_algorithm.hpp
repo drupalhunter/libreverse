@@ -42,9 +42,9 @@ namespace reverse {
 
 	  std::string get_compiler_name ( double value );
 
-	  meta::meta_object::ptr_t process_file ( libreverse::elf_module::elf_reader_32 const& reader32_obj ) const;
+	  meta::meta_object::ptr_t process_file ( reverse::elf_module::elf_reader_32 const& reader32_obj ) const;
 
-	  meta::meta_object::ptr_t process_file ( libreverse::elf_module::elf_reader_64 const& reader64_obj ) const;
+	  meta::meta_object::ptr_t process_file ( reverse::elf_module::elf_reader_64 const& reader64_obj ) const;
 
 	  enum values {
 	    gcc_4_1 = 0,

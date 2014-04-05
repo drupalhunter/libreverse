@@ -20,19 +20,19 @@
 */
 
 #include <boost/test/unit_test.hpp>
-#include "libreverse/io/input/File_Readers/Java_Class/Reader.h"
-#include "libreverse/io/input/File_Readers/Java_Class/Class_Header.h"
-#include "libreverse/io/input/File_Readers/Java_Class/Method_Info.h"
-#include "libreverse/io/input/File_Readers/Java_Class/Attribute_Info.h"
-#include "libreverse/io/input/File_Readers/Java_Class/Attribute_Tags.h"
-#include "libreverse/io/input/File_Readers/Java_Class/Code_Attribute.h"
+#include "reverse/io/input/File_Readers/Java_Class/Reader.h"
+#include "reverse/io/input/File_Readers/Java_Class/Class_Header.h"
+#include "reverse/io/input/File_Readers/Java_Class/Method_Info.h"
+#include "reverse/io/input/File_Readers/Java_Class/Attribute_Info.h"
+#include "reverse/io/input/File_Readers/Java_Class/Attribute_Tags.h"
+#include "reverse/io/input/File_Readers/Java_Class/Code_Attribute.h"
 #include "test_base.h"
-#include "libreverse/io/File_ID.h"
-#include "libreverse/data_containers/memory_map.h"
+#include "reverse/io/File_ID.h"
+#include "reverse/data_containers/memory_map.h"
 #include <iostream>
-#include "libreverse/include/config.h"
+#include "reverse/include/config.h"
 
-using namespace libreverse::java_module;
+using namespace reverse::java_module;
 using namespace boost::unit_test;
 using namespace boost::unit_test_framework;
 
@@ -335,7 +335,7 @@ void check_Method_Info_One ( java_types::Method_Info::ptr_t method_ptr )
 
 void test_class_header_read ()
 {
-    io_types::File_ID::ptr_t m_file ( new libreverse::io::File_ID ( PWD_PREFIX
+    io_types::File_ID::ptr_t m_file ( new reverse::io::File_ID ( PWD_PREFIX
                                                                     "/test_targets/Fibonacci.class" ) );
 
     Reader m_reader ( m_file, true, true );

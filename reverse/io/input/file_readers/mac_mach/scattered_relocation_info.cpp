@@ -21,7 +21,7 @@
 
 #include "Scattered_Relocation_Info.h"
 
-namespace libreverse { namespace mach_module {
+namespace reverse { namespace mach_module {
 
   Scattered_Relocation_Info::Scattered_Relocation_Info()
     : m_r_scattered ( false ),
@@ -34,4 +34,4 @@ namespace libreverse { namespace mach_module {
 
 
 } /* namespace mach_module */
-} /* namespace libreverse */
+} /* namespace reverse */

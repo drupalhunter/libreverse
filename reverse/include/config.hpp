@@ -1,5 +1,5 @@
-/* libreverse/include/config.h.  Generated from config.h.in by configure.  */
-/* libreverse/include/config.h.in.  Generated from configure.ac by autoheader.  */
+/* reverse/include/config.h.  Generated from config.h.in by configure.  */
+/* reverse/include/config.h.in.  Generated from configure.ac by autoheader.  */
 
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #define HAVE_DLFCN_H 1
@@ -32,19 +32,19 @@
 #define HAVE_UNISTD_H 1
 
 /* Name of package */
-#define PACKAGE "libreverse"
+#define PACKAGE "reverse"
 
 /* Define to the address where bug reports for this package should be sent. */
 #define PACKAGE_BUGREPORT ""
 
 /* Define to the full name of this package. */
-#define PACKAGE_NAME "libreverse"
+#define PACKAGE_NAME "reverse"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "libreverse 0.7"
+#define PACKAGE_STRING "reverse 0.7"
 
 /* Define to the one symbol short name of this package. */
-#define PACKAGE_TARNAME "libreverse"
+#define PACKAGE_TARNAME "reverse"
 
 /* Define to the version of this package. */
 #define PACKAGE_VERSION "0.7"
