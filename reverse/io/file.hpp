@@ -216,9 +216,9 @@ namespace reverse {
 
       }
 
-      reverse::data_containers::memory_map::const_iterator begin ( void ) const;
+      reverse::data_containers::memory_map::values_t::const_iterator begin ( void ) const;
 
-      reverse::data_containers::memory_map::const_iterator end ( void ) const;
+      reverse::data_containers::memory_map::values_t::const_iterator end ( void ) const;
 
       boost::shared_ptr < reverse::data_containers::memory_map> get_map_ptr ( void ) const;
 

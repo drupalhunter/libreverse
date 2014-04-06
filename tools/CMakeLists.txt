@@ -7,10 +7,10 @@ set ( REVERSE_SOURCES
 include_directories ( ${CMAKE_SOURCE_DIR} ${Boost_INCLUDE_DIRS} )
 
 add_executable ( reverse ${REVERSE_SOURCES} reverse ${ADDITIONAL_LIBS} )
-target_link_libraries ( reverse libreverse )
+target_link_libraries ( reverse libreverse ${Boost_LIBRARIES} )
 
 add_executable ( elfdump elfdump.cpp ${ADDITIONAL_LIBS} )
-target_link_libraries ( elfdump libreverse reverse_io reverse_io_elf meta reverse_errors  ${Boost_LIBRARIES} )
+target_link_libraries ( elfdump libreverse ${Boost_LIBRARIES} )
 
 #pedump_SOURCES = pedump.cpp
 #pedump_CPPFLAGS = -I$(XTRA_INCLUDE)/usr/local/include

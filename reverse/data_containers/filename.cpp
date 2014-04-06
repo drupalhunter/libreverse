@@ -19,98 +19,54 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#include "filename.h"
+#include <reverse/data_containers/filename.hpp>
+#include <reverse/trace.hpp>
 
-#ifdef LIBREVERSE_DEBUG
-#include "Trace.h"
-using namespace reverse::api;
-using namespace reverse::trace;
-#endif /* LIBREVERSE_DEBUG */
+namespace reverse {
+    namespace data_containers {
 
-namespace reverse { namespace data_container {
+        filename::filename ( std::string data )
+            : m_data ( data )
+        {
+            trace::data_containers_detail ( "Inside filename constructor" );
+        }
 
-    filename::filename (std::string data)
-        : m_data ( data )
-    {
+        filename::filename ( filename const& rhs )
+            : m_data ( rhs.m_data )
+        {
+            trace::data_containers_detail ( "Inside filename copy constructor" );
+        }
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-                             TraceLevel::DETAIL,
-                             "Inside filename constructor" );
-#endif /* LIBREVERSE_DEBUG */
+        filename&
+        filename::operator= ( filename const& rhs )
+        {
+            trace::data_containers_detail ( "Entering filename::operator= (assignment)" );
 
-    }
+            filename temp ( rhs );
+            swap ( temp );
 
-    filename::filename ( filename const& rhs )
-        : m_data ( rhs.m_data )
-    {
+            trace::data_containers_detail ( "Exiting filename::operator= (assignment)" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-                             TraceLevel::DETAIL,
-                             "Inside filename copy constructor" );
-#endif /* LIBREVERSE_DEBUG */
+            return *this;
+        }
 
-    }
+        void
+        filename::swap ( filename& rhs )
+        {
+            trace::data_containers_detail ( "Entering filename::swap" );
 
-    filename&
-    filename::operator= ( filename const& rhs )
-    {
+            std::swap ( m_data, rhs.m_data );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-                             TraceLevel::DETAIL,
-                             "Entering filename::operator= (assignment)" );
-#endif /* LIBREVERSE_DEBUG */
+            trace::data_containers_detail ( "Exiting filename::swap" );
+        }
 
+        std::string
+        filename::data () const
+        {
+            trace::data_containers_detail ( "Inside filename::data" );
 
-        filename temp ( rhs );
-        swap ( temp );
+            return m_data;
+        }
 
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-                             TraceLevel::DETAIL,
-                             "Exiting filename::operator= (assignment)" );
-#endif /* LIBREVERSE_DEBUG */
-
-        return *this;
-    }
-
-    void
-    filename::swap ( filename& rhs )
-    {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-                             TraceLevel::DETAIL,
-                             "Entering filename::swap" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        std::swap ( m_data, rhs.m_data );
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-                             TraceLevel::DETAIL,
-                             "Exiting filename::swap" );
-#endif /* LIBREVERSE_DEBUG */
-
-    }
-
-    std::string
-    filename::data () const
-    {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-                             TraceLevel::DETAIL,
-                             "Inside filename::data" );
-#endif /* LIBREVERSE_DEBUG */
-
-        return m_data;
-    }
-
-}  /* namespace data_types */
+    }  /* namespace data_containers */
 } /* namespace reverse */

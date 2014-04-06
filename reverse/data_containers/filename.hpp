@@ -28,39 +28,38 @@
 #include <string>
 
 namespace reverse {
-  namespace data_containers {
+    namespace data_containers {
 
-    class filename
-    {
-    public:
+        class filename {
+            public:
 
-        explicit filename ( std::string data );
+                explicit filename ( std::string data );
 
-        explicit filename ( filename const& rhs );
+                explicit filename ( filename const& rhs );
 
-        virtual ~filename (){}
+                virtual ~filename () {}
 
-        std::string data () const;
+                std::string data () const;
 
-        filename& operator= ( filename const& rhs );
+                filename& operator= ( filename const& rhs );
 
-        void swap ( filename& rhs );
+                void swap ( filename& rhs );
 
-    private:
+            private:
 
-        /**
-         * Fields
-         */
-        std::string m_data;
-    };
+                /**
+                 * Fields
+                 */
+                std::string m_data;
+        };
 
-    std::ostream& operator<< ( std::ostream& os, boost::shared_ptr < const filename> & rhs )
-    {
-      os << boost::format ( "  filename: %s" ) % rhs->data();
-      return os;
-    }
+        std::ostream& operator<< ( std::ostream& os, boost::shared_ptr < const filename>& rhs )
+        {
+            os << boost::format ( "  filename: %s" ) % rhs->data();
+            return os;
+        }
 
-  } // namespace data_containers
+    } // namespace data_containers
 } // namespace reverse
 
 #endif // #ifndef REVERSE_DATA_CONTAINERS_FILENAME_HPP_INCLUDED

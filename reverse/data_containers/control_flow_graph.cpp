@@ -1,4 +1,4 @@
-/*  Control_Flow_Graph.cpp
+/*  control_flow_graph.cpp
 
    Copyright (C) 2008 Stephen Torri
 
@@ -19,349 +19,210 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#include "Control_Flow_Graph.h"
+#include <reverse/data_containers/control_flow_graph.hpp>
+#include <reverse/errors/component_exception.hpp>
+#include <reverse/errors/internal_exception.hpp>
+#include <reverse/data_containers/basic_block.hpp>
+#include <reverse/preconditions.hpp>
+#include <reverse/trace.hpp>
 
-#include "errors/Internal_Exception.h"
-#include "data_containers/Basic_Block.h"
-#include "io/Preconditions.h"
-#include "errors/component_exception.h"
-
-#include <sstream>
 #include <boost/format.hpp>
 #include <boost/graph/topological_sort.hpp>
 
-#ifdef LIBREVERSE_DEBUG
-#include "Trace.h"
-using namespace reverse::api;
-using namespace reverse::trace;
-#endif /* LIBREVERSE_DEBUG */
+namespace reverse {
+    namespace data_containers {
 
-namespace reverse { namespace data_container {
+        control_flow_graph::control_flow_graph ( std::string name )
+            : m_name ( name )
+        {
+            trace::data_containers_detail ( "Entering control_flow_graph constructor" );
 
-    Control_Flow_Graph::Control_Flow_Graph ( std::string name )
-      : m_name ( name )
-    {
+            m_basic_block_map = get ( boost::vertex_name, m_graph );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-                             TraceLevel::DETAIL,
-                             "Entering Control_Flow_Graph constructor" );
-#endif /* LIBREVERSE_DEBUG */
+            trace::data_containers_detail ( "Exiting control_flow_graph constructor" );
+        }
 
+        control_flow_graph::control_flow_graph ( control_flow_graph const& rhs )
+            : m_graph ( rhs.m_graph )
+        {
+            trace::data_containers_detail ( "Inside control_flow_graph copy constructor" );
+        }
 
-	m_basic_block_map = get ( boost::vertex_name, m_graph );
+        void
+        control_flow_graph::add_basic_block ( boost::shared_ptr<basic_block>& input_block_ptr )
+        {
+            trace::data_containers_detail ( "Entering control_flow_graph::add_Basic_Block" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-                             TraceLevel::DETAIL,
-                             "Exiting Control_Flow_Graph constructor" );
-#endif /* LIBREVERSE_DEBUG */
+            reverse::preconditions::is_set ( input_block_ptr );
 
-    }
+            trace::data_containers_data ( "Add Block Block #%d", input_block_ptr->get_id() );
 
-    Control_Flow_Graph::Control_Flow_Graph ( Control_Flow_Graph const& rhs )
-        : m_graph ( rhs.m_graph )
-    {
+            bool no_duplicate;
+            data_containers::control_flow_graph::id_vertex_map_t::iterator pos;
+            data_containers::control_flow_graph::vertex_t node;
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-                             TraceLevel::DETAIL,
-                             "Inside Control_Flow_Graph copy constructor" );
-#endif /* LIBREVERSE_DEBUG */
+            boost::tie ( pos, no_duplicate ) = m_index.insert ( std::make_pair ( input_block_ptr->get_id(),
+                                               data_containers::control_flow_graph::vertex_t() ) );
 
-    }
+            if ( no_duplicate ) {
+                // Insertion was successful
+                // Make a new vertex and return handle to 'node'
+                node = add_vertex ( m_graph );
 
-    void
-    Control_Flow_Graph::add_Basic_Block ( data_types::Basic_Block::ptr_t input_block_ptr )
-    {
+                // Assign component to vertex position
+                m_basic_block_map[node] = input_block_ptr;
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-                             TraceLevel::DETAIL,
-                             "Entering Control_Flow_Graph::add_Basic_Block" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-	io::Preconditions::is_set ( input_block_ptr );
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-                             TraceLevel::DETAIL,
-                             boost::str ( boost::format( "Add Block Block #%d") % input_block_ptr->get_ID() ) );
-#endif /* LIBREVERSE_DEBUG */
-
-        bool no_duplicate;
-        data_types::Control_Flow_Graph::IdVertexMap_t::iterator pos;
-        data_types::Control_Flow_Graph::Vertex_t node;
-
-        boost::tie (pos, no_duplicate) = m_index.insert ( std::make_pair ( input_block_ptr->get_ID(),
-									   data_types::Control_Flow_Graph::Vertex_t() ) );
-
-	if ( no_duplicate )
-	  {
-	    // Insertion was successful
-	    // Make a new vertex and return handle to 'node'
-	    node = add_vertex ( m_graph );
-
-	    // Assign component to vertex position
-	    m_basic_block_map[node] = input_block_ptr;
-
-	    // Add vertex handle to map position
-	    pos->second = node;
-	  }
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-                             TraceLevel::DETAIL,
-                             "Exiting Control_Flow_Graph::add_Basic_Block" );
-#endif /* LIBREVERSE_DEBUG */
-
-    }
-
-    void
-    Control_Flow_Graph::add_Edge ( boost::uint32_t source_id,
-				   boost::uint32_t destination_id )
-    {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-                             TraceLevel::DETAIL,
-                             "Entering Control_Flow_Graph::add_Child (uint32,uint32)" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-	// Get the source vertex
-	data_types::Control_Flow_Graph::Vertex_t const& source_vertex = this->get_Vertex ( source_id );
-
-	// Get the source vertex
-	data_types::Control_Flow_Graph::Vertex_t const& dest_vertex = this->get_Vertex ( destination_id );
-
-	// Use the internal index for each in creating the edge
-	data_types::Control_Flow_Graph::Add_Edge_Result_t result = boost::add_edge ( source_vertex,
-										     dest_vertex,
-										     m_graph );
-
-
-#ifdef LIBREVERSE_DEBUG
-	if ( ! result.second )
-	  {
-                Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-				     TraceLevel::WARN,
-				     boost::str ( boost::format("Attempted to add a duplicate edge from %d to %d")
-						  % source_id
-						  % destination_id ) );
-                Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-				     TraceLevel::WARN,
-				     "Duplicate edge is ignored." );
-	  }
-
-        Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-                             TraceLevel::DETAIL,
-                             "Exiting Control_Flow_Graph::add_Edge (uint32,uint32)" );
-#endif /* LIBREVERSE_DEBUG */
-
-    }
-
-    data_types::Basic_Block::ptr_t
-    Control_Flow_Graph::get_Basic_Block ( data_types::Control_Flow_Graph::Vertex_t node ) const
-    {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-                             TraceLevel::DETAIL,
-                             boost::str ( boost::format ( "Inside Control_Flow_Graph::get_Basic_Block (%1%)" ) % node ) );
-
-      Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-			   TraceLevel::DATA,
-			   "CFG before getting basic block" );
-
-      Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-			   TraceLevel::DATA,
-			   boost::str ( boost::format ( "%1%" ) % this->to_String() ) );
-
-#endif /* LIBREVERSE_DEBUG */
-
-	return m_basic_block_map[node];
-    }
-
-    data_types::Control_Flow_Graph::Graph_t const&
-    Control_Flow_Graph::get_Graph () const
-    {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Inside Control_Flow_Graph::get_Graph ()" );
-#endif /* LIBREVERSE_DEBUG */
-
-        return m_graph;
-    }
-
-    bool
-    Control_Flow_Graph::empty () const
-    {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-                             TraceLevel::DETAIL,
-                             "Inside Control_Flow_Graph::empty ()" );
-#endif /* LIBREVERSE_DEBUG */
-
-        return boost::num_vertices ( m_graph ) == 0;
-    }
-
-    Control_Flow_Graph&
-    Control_Flow_Graph::operator= ( Control_Flow_Graph const& rhs )
-    {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-                             TraceLevel::DETAIL,
-                             "Entering Control_Flow_Graph::operator= (assignment)" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        Control_Flow_Graph temp ( rhs );
-        swap ( temp );
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-                             TraceLevel::DETAIL,
-                             "Exiting Control_Flow_Graph::operator= (assignment)" );
-#endif /* LIBREVERSE_DEBUG */
-
-        return *this;
-    }
-
-    void
-    Control_Flow_Graph::swap ( Control_Flow_Graph& rhs )
-    {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-                             TraceLevel::DETAIL,
-                             "Entering Control_Flow_Graph::swap" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        m_graph.swap ( rhs.m_graph );
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-                             TraceLevel::DETAIL,
-                             "Exiting Control_Flow_Graph::swap" );
-#endif /* LIBREVERSE_DEBUG */
-
-    }
-
-    std::string
-    Control_Flow_Graph::to_String () const
-    {
-      std::stringstream output;
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-                             TraceLevel::DETAIL,
-                             "Entering Control_Flow_Graph::to_String" );
-
-        Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-                             TraceLevel::DATA,
-			     boost::str ( boost::format ( "Basic Block count: %1%" ) % m_index.size() ) );
-
-#endif /* LIBREVERSE_DEBUG */
-
-        for ( data_types::Control_Flow_Graph::IdVertexMap_t::const_iterator pos = m_index.begin();
-              pos != m_index.end();
-              ++pos )
-            {
-	      data_types::Basic_Block::ptr_t block_ptr = m_basic_block_map[ (*pos).second ];
-
-	      // print out text version of graph
-	      output << block_ptr->to_String() << std::endl;
-
-	    }
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-                             TraceLevel::DETAIL,
-                             "Exiting Control_Flow_Graph::to_String" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        return output.str();
-    }
-
-    data_types::Control_Flow_Graph::Vertex_t const&
-    Control_Flow_Graph::get_Vertex (  boost::uint32_t id ) const
-    {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Entering Control_Flow_Graph::get_Vertex (uint32)" );
-#endif /* LIBREVERSE_DEBUG */
-
-        data_types::Control_Flow_Graph::IdVertexMap_t::const_iterator pos = m_index.find ( id );
-
-        if ( pos == m_index.end() )
-            {
-
-#ifdef LIBREVERSE_DEBUG
-                Trace::write_Trace
-                    ( TraceArea::INFRASTRUCTURE,
-                      TraceLevel::ERROR,
-                      boost::str ( boost::format("Exception throw in %s at line %d")
-                                   % __FILE__
-                                   % __LINE__ ) );
-#endif /* LIBREVERSE_DEBUG */
-
-                throw errors::component_exception ( errors::component_exception::INVALID_INDEX );
+                // Add vertex handle to map position
+                pos->second = node;
             }
 
+            trace::data_containers_detail ( "Exiting control_flow_graph::add_Basic_Block" );
+        }
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::INFRASTRUCTURE,
-                             TraceLevel::DETAIL,
-                             "Exiting Control_Flow_Graph::get_Vertex (uint32)" );
-#endif /* LIBREVERSE_DEBUG */
+        void
+        control_flow_graph::add_edge ( boost::uint32_t source_id,
+                                       boost::uint32_t destination_id )
+        {
+            trace::data_containers_detail ( "Entering control_flow_graph::add_Child (uint32,uint32)" );
 
+            // Get the source vertex
+            data_containers::control_flow_graph::vertex_t const& source_vertex = this->get_vertex ( source_id );
 
-        return pos->second;
-    }
+            // Get the source vertex
+            data_containers::control_flow_graph::vertex_t const& dest_vertex = this->get_vertex ( destination_id );
 
-
-    data_types::Control_Flow_Graph::Graph_t::vertices_size_type
-    Control_Flow_Graph::size () const
-    {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-                             TraceLevel::DETAIL,
-                             "Inside Control_Flow_Graph::size" );
-#endif /* LIBREVERSE_DEBUG */
+            // Use the internal index for each in creating the edge
+            data_containers::control_flow_graph::add_edge_result_t result = boost::add_edge ( source_vertex,
+                    dest_vertex,
+                    m_graph );
 
 
-        return boost::num_vertices ( m_graph );
+            if ( ! result.second ) {
+                trace::data_containers_data ( "Attempted to add a duplicate edge from %d to %d",
+                                              source_id,
+                                              destination_id );
+                trace::data_containers_error ( "Duplicate edge is ignored." );
+            }
 
-    }
+            trace::data_containers_detail ( "Exiting control_flow_graph::add_Edge (uint32,uint32)" );
 
-    std::string
-    Control_Flow_Graph::get_Name () const
-    {
+        }
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-                             TraceLevel::DETAIL,
-                             "Inside Control_Flow_Graph::get_Name" );
-#endif /* LIBREVERSE_DEBUG */
+        boost::shared_ptr < basic_block >
+        control_flow_graph::get_basic_block ( data_containers::control_flow_graph::vertex_t node ) const
+        {
+            trace::data_containers_data ( "Inside control_flow_graph::get_Basic_Block (%1%)", node );
 
-	return m_name;
+            return m_basic_block_map[node];
+        }
 
-    }
+        data_containers::control_flow_graph::graph_t const&
+        control_flow_graph::get_graph () const
+        {
+            trace::data_containers_detail ( "Inside control_flow_graph::get_Graph ()" );
 
-}  /* namespace data_types */
+            return m_graph;
+        }
+
+        bool
+        control_flow_graph::empty () const
+        {
+            trace::data_containers_detail ( "Inside control_flow_graph::empty ()" );
+
+            return boost::num_vertices ( m_graph ) == 0;
+        }
+
+        control_flow_graph&
+        control_flow_graph::operator= ( control_flow_graph const& rhs )
+        {
+            trace::data_containers_detail ( "Entering control_flow_graph::operator= (assignment)" );
+
+            control_flow_graph temp ( rhs );
+            swap ( temp );
+
+            trace::data_containers_detail ( "Exiting control_flow_graph::operator= (assignment)" );
+
+            return *this;
+        }
+
+        void
+        control_flow_graph::swap ( control_flow_graph& rhs )
+        {
+            trace::data_containers_detail ( "Entering control_flow_graph::swap" );
+
+            m_graph.swap ( rhs.m_graph );
+
+            trace::data_containers_detail ( "Exiting control_flow_graph::swap" );
+        }
+
+        reverse::data_containers::control_flow_graph::id_vertex_map_t::const_iterator control_flow_graph::vertex_begin() const
+        {
+            return m_index.begin();
+        }
+
+        reverse::data_containers::control_flow_graph::id_vertex_map_t::const_iterator control_flow_graph::vertex_end() const
+        {
+            return m_index.end();
+        }
+
+
+
+        std::ostream& operator<< ( std::ostream& os, control_flow_graph const& rhs )
+        {
+            trace::data_containers_detail ( "Entering control_flow_graph::to_String" );
+            trace::data_containers_data ( "Basic Block count: %1%", rhs.size() );
+
+            for ( data_containers::control_flow_graph::id_vertex_map_t::const_iterator pos = rhs.vertex_begin();
+                    pos != rhs.vertex_end();
+                    ++pos ) {
+                boost::shared_ptr< basic_block > block_ptr = rhs.get_basic_block ( ( *pos ).second );
+
+                // print out text version of graph
+                os << block_ptr << std::endl;
+            }
+
+            trace::data_containers_detail ( "Exiting control_flow_graph::to_String" );
+
+            return os;
+        }
+
+        data_containers::control_flow_graph::vertex_t const&
+        control_flow_graph::get_vertex ( boost::uint32_t id ) const
+        {
+            trace::data_containers_detail ( "Entering control_flow_graph::get_vertex (uint32)" );
+
+            data_containers::control_flow_graph::id_vertex_map_t::const_iterator pos = m_index.find ( id );
+
+            if ( pos == m_index.end() ) {
+
+                trace::data_containers_error ( "Exception throw in %s at line %d",
+                                               __FILE__,
+                                               __LINE__ );
+
+                throw errors::component_exception ( errors::component_exception::invalid_index );
+            }
+
+            trace::data_containers_detail ( "Exiting control_flow_graph::get_vertex (uint32)" );
+
+            return pos->second;
+        }
+
+
+        data_containers::control_flow_graph::graph_t::vertices_size_type
+        control_flow_graph::size () const
+        {
+            trace::data_containers_detail ( "Inside control_flow_graph::size" );
+
+            return boost::num_vertices ( m_graph );
+        }
+
+        std::string control_flow_graph::get_name() const
+        {
+            trace::data_containers_detail ( "Inside control_flow_graph::get_Name" );
+
+            return m_name;
+
+        }
+
+    }  /* namespace data_containers */
 } /* namespace reverse */

@@ -89,7 +89,7 @@ namespace reverse { namespace infrastructure {
 
     infrastructure_types::Component::ptr_t
     Component_Factory::get_Meta_Writer ( infrastructure_types::Component_State::ptr_t state_ptr,
-	json_spirit::Object const& obj )
+	ciere::json::object_t const& obj )
     {
 
 #ifdef LIBREVERSE_DEBUG

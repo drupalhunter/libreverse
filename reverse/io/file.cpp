@@ -109,7 +109,7 @@ namespace reverse {
 	  boost::interprocess::file_mapping file_map ( name.c_str(), boost::interprocess::read_only );
 	  boost::interprocess::mapped_region mapped_data ( file_map, boost::interprocess::read_only );
 
-	  void* start = mapped_data.get_address();
+	  boost::uint8_t* start = static_cast<boost::uint8_t*>(mapped_data.get_address());
 	  std::size_t size = mapped_data.get_size();
 	    
 	  m_file_img = boost::make_shared < data_containers::memory_map > ( start, size );
@@ -152,7 +152,7 @@ namespace reverse {
       return result;
     }
 
-    data_containers::memory_map::const_iterator
+    data_containers::memory_map::values_t::const_iterator
     file::begin() const
     {
       trace::io_detail ( "Entering File::begin" );
@@ -164,7 +164,7 @@ namespace reverse {
       return m_file_img->begin();
     }
       
-    data_containers::memory_map::const_iterator
+    data_containers::memory_map::values_t::const_iterator
     file::end() const
     {
       trace::io_detail ( "Entering File::end" );

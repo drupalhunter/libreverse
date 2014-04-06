@@ -319,7 +319,7 @@ namespace reverse {
 	  {
 	    trace::io_detail ( "entering elf_reader_32::get_string_name" );
 
-	    data_containers::memory_map::const_iterator pos = m_string_table_ptr->begin();
+	    data_containers::memory_map::values_t::const_iterator pos = m_string_table_ptr->begin();
 
 	    const char* name = reinterpret_cast<const char*> ( & ( *pos ) + index );
 

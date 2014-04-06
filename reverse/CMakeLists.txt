@@ -40,6 +40,8 @@ add_library ( ${PROJECT_NAME} ${REVERSE_SOURCES} ${REVERSE_HEADERS} ${REVERSE_DE
 
 add_dependencies ( ${PROJECT_NAME} components reverse_data_containers infrastructure io meta )
 
+target_link_libraries( ${PROJECT_NAME} components reverse_data_containers infrastructure io meta )
+
 INSTALL( TARGETS ${PROJECT_NAME}
    LIBRARY DESTINATION lib COMPONENT libraries
    ARCHIVE DESTINATION lib COMPONENT libraries )

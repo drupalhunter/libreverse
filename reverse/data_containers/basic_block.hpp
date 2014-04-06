@@ -51,6 +51,10 @@ namespace reverse {
       std::vector< boost::shared_ptr < instruction > >::const_iterator begin() const;
 
       std::vector< boost::shared_ptr < instruction > >::const_iterator end() const;
+      
+      std::vector< std::string >::const_iterator comments_begin () const;
+      
+      std::vector< std::string >::const_iterator comments_end () const;
 
     private:
 

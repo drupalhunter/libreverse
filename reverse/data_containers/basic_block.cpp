@@ -52,7 +52,7 @@ namespace reverse {
         }
 
         void
-        basic_block::add_Comment ( std::string const& comment )
+        basic_block::add_comment ( std::string const& comment )
         {
             reverse::preconditions::not_empty ( comment );
 
@@ -84,17 +84,28 @@ namespace reverse {
         {
             return m_instructions.end();
         }
+              
+        std::vector< std::string >::const_iterator basic_block::comments_begin() const
+        {
+	    return m_comments.begin();
+        }
+    
+        std::vector< std::string >::const_iterator basic_block::comments_end() const
+        {
+	    return m_comments.end();
+        }
 
+        
         std::ostream& operator<< ( std::ostream& os, basic_block const& rhs )
         {
             os << "-----------------" << std::endl
-               << boost::format ( "Basic Block (%1%)" ) % m_id << std::endl
+               << boost::format ( "Basic Block (%1%)" ) % rhs.get_id() << std::endl
                << "-----------------" << std::endl << std::endl
                << "  Comments" << std::endl
                << "  --------" << std::endl;
 
-            for ( std::vector<std::string>::const_iterator cpos = m_comments.begin();
-                    cpos != m_comments.end();
+            for ( std::vector<std::string>::const_iterator cpos = rhs.comments_begin();
+                    cpos != rhs.comments_end();
                     ++cpos ) {
                 os << boost::format ( "  %1%" ) % ( *cpos ) << std::endl;
             }
@@ -103,10 +114,10 @@ namespace reverse {
                << "    Code" << std::endl
                << "  --------" << std::endl;
 
-            for ( data_types::basic_block::DataList_t::const_iterator cpos = m_instructions.begin();
-                    cpos != m_instructions.end();
+            for ( std::vector< boost::shared_ptr < instruction > >::const_iterator cpos = rhs.begin();
+                    cpos != rhs.end();
                     ++cpos ) {
-                os << boost::format ( "  %1%" ) % ( *cpos )->to_String() << std::endl;
+                os << boost::format ( "  %1%" ) % *cpos << std::endl;
             }
 
             return os;

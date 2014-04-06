@@ -25,8 +25,9 @@
 #include <boost/cstdint.hpp>
 #include <boost/shared_ptr.hpp>
 
-#include <iostream>
+#include <fstream>
 #include <iomanip>
+#include <iostream>
 #include <vector>
 #include <map>
 
@@ -46,9 +47,6 @@ namespace reverse {
 
       // !\brief The internal data structure of a Memory Map
       typedef std::vector <data_t> values_t;
-
-      // !\brief Iterator into the internal data structure of a Memory Map
-      typedef values_t::const_iterator const_iterator;
 
       // !\brief Map key is a 32-bit address in memory
       typedef boost::uint32_t map_key_t;
@@ -90,9 +88,9 @@ namespace reverse {
        * \brief Set up a memory map of a set size with the contents
        * of the input file stream.
        *
-       * \param start Input file stream where data is stored.
+       * \param input_address Address of where to start reading input data.
        *
-       * \param size Length of the input file stream
+       * \param size Length in bytes of the input file stream
        *
        * \param base_address Address of where the input data is located
        *
@@ -107,7 +105,7 @@ namespace reverse {
        * value of the input variable 'base_address' or the default
        * value of zero
        */
-      explicit memory_map ( void* start,
+      explicit memory_map ( boost::uint8_t* input_address,
 			    std::size_t size,
 			    boost::uint32_t base_address = 0 );
 
@@ -224,31 +222,31 @@ namespace reverse {
        * \pre Length is non-zero
        */
       std::pair < boost::shared_ptr < memory_map >, boost::int8_t>
-      subset ( boost::uint32_t length );
+      subset ( boost::uint32_t length ) const;
 
       values_t::iterator begin();
 
-      const_iterator begin() const;
+      values_t::const_iterator begin() const;
 
-      const_iterator end() const;
+      values_t::const_iterator end() const;
+      
+      boost::uint32_t get_base_address ( void ) const;
 
       boost::uint32_t get_present_position_value ( void ) const;
 
-      const_iterator get_present_position ( void ) const;
+      values_t::const_iterator get_present_position ( void ) const;
 
       boost::uint32_t get_present_position_address ( void ) const;
 
-      boost::uint32_t get_position_address ( const_iterator ) const;
+      boost::uint32_t get_position_address ( values_t::const_iterator pos ) const;
 
       boost::uint32_t get_previous_position_value ( void ) const;
 
-      const_iterator get_previous_position ( void ) const;
+      values_t::const_iterator get_previous_position ( void ) const;
 
       boost::uint32_t get_previous_position_address ( void ) const;
       
       boost::uint32_t size ( void ) const;
-
-      std::string to_string ( void ) const;
 
       bool operator== ( memory_map& rhs_ref ) const;
 
@@ -267,6 +265,8 @@ namespace reverse {
       boost::uint32_t m_base_address;
       
     };
+    
+    std::ostream& operator<< ( std::ofstream& os, memory_map const& rhs );
 
   } // namespace data_containers
 } // namespace reverse

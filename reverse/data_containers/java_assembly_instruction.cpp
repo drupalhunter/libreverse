@@ -1,4 +1,4 @@
-/*  Java_Assembly_Instruction.h
+/*  java_assembly_instruction.h
 
     Copyright (C) 2008 Stephen Torri
 
@@ -19,62 +19,54 @@
     <http://www.gnu.org/licenses/>.
 */
 
-#include <reverse/data_container/Java_Assembly_Instruction.h>
+#include <reverse/data_containers/java_assembly_instruction.hpp>
+#include <reverse/trace.hpp>
 
 #include <boost/format.hpp>
 
-#ifdef LIBREVERSE_DEBUG
-#include <reverse/Trace.h>
-using namespace reverse::api;
-using namespace reverse::trace;
-#endif /* LIBREVERSE_DEBUG */
-
 namespace reverse {
-  namespace data_container {
+  namespace data_containers {
     
-    const boost::uint32_t Java_Assembly_Instruction::TYPE = Instruction::JAVA_ASSEMBLY;
+    const boost::uint32_t java_assembly_instruction::type = instruction::java_assembly;
     
-    Java_Assembly_Instruction::Java_Assembly_Instruction ( boost::uint32_t index, std::string input )
+    java_assembly_instruction::java_assembly_instruction ( boost::uint32_t index, std::string input )
       : m_index ( index ),
 	m_code ( input )
     {
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-			   TraceLevel::DETAIL,
-			   "Inside Java_Assembly_Instruction constructor" );
-#endif /* LIBREVERSE_DEBUG */
+      trace::data_containers_detail( "Inside java_assembly_instruction constructor" );
     }
 
     boost::uint32_t
-    Java_Assembly_Instruction::get_Type ( void ) const
+    java_assembly_instruction::get_type ( void ) const
     {
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-			   TraceLevel::DETAIL,
-			   "Inside Java_Assembly_Instruction::get_Type" );
-#endif /* LIBREVERSE_DEBUG */
+      trace::data_containers_detail( "Inside java_assembly_instruction::get_Type" );
 
-      return TYPE;
+      return type;
     }
+    
+        boost::uint32_t java_assembly_instruction::get_index() const
+        {
+	  return m_index;
+        }
 
-    std::string
-    Java_Assembly_Instruction::to_String ( void ) const
+    
+        const std::string& java_assembly_instruction::get_code() const
+        {
+	  return m_code;
+        }
+
+
+    std::ostream& operator<< ( std::ostream& os, java_assembly_instruction const& rhs )
     {
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-			   TraceLevel::DETAIL,
-			   "Entering Java_Assembly_Instruction::to_String" );
-#endif /* LIBREVERSE_DEBUG */
+      trace::data_containers_detail("Entering java_assembly_instruction::to_String" );
 
-      std::string result = boost::str ( boost::format ( "%1%: %2%" ) % m_index % m_code );
+      os << boost::format ( "%1%: %2%" )
+	% rhs.get_index()
+	% rhs.get_code();
 
-#ifdef LIBREVERSE_DEBUG
-      Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-			   TraceLevel::DETAIL,
-			   "Exiting Java_Assembly_Instruction::to_String" );
-#endif /* LIBREVERSE_DEBUG */
+      trace::data_containers_detail( "Exiting java_assembly_instruction::to_String" );
 
-      return result;
+      return os;
     }
 
   }  /* namespace data_container */

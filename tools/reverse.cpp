@@ -1,7 +1,10 @@
-#include <libreverse/source/Reverse.h>
-#include <iostream>
+#include <reverse/reverse.hpp>
+#include <reverse/results.hpp>
+
 #include <boost/program_options.hpp>
 #include <boost/format.hpp>
+
+#include <iostream>
 
 int main ( int ac, char** av )
 {
@@ -30,14 +33,14 @@ int main ( int ac, char** av )
         return 0;
     }
 
-    libreverse::api::Reverse r_obj;
+    reverse::reverse r_obj;
     boost::int32_t result = r_obj.execute ( vm["file"].as<std::string>(),
-                                            libreverse::api::Input_Types::BINARY,
-                                            libreverse::api::Output_Types::JAVA,
-                                            libreverse::api::TraceLevel::DATA,
-					    libreverse::api::TraceArea::GRNN );
+                                            reverse::input_types::binary,
+                                            reverse::output_types::java,
+                                            reverse::trace_level::data,
+					    reverse::trace_area::grnn );
 
-    if ( result != libreverse::api::Results::SUCCESS )
+    if ( result != reverse::results::success )
       {
 	std::cerr << "Problem with running the analysis on " << vm["file"].as<std::string>() << std::endl;
       }

@@ -201,6 +201,25 @@ static void meta_error ( const char* message, const char* filename, unsigned int
                                        % line ) );
 }
 
+static void data_containers_detail ( const char* message )
+{
+     write_trace ( trace_area::data_containers, trace_level::detail, message );
+}
+
+static void data_containers_error ( const char* message )
+{
+     write_trace ( trace_area::data_containers, trace_level::error, message );
+}
+
+static void data_containers_error ( const char* message, const char* filename, unsigned int line )
+{
+     trace::write_trace ( trace_area::data_containers,
+                          trace_level::error,
+                          boost::str ( boost::format ( message )
+                                       % filename
+                                       % line ) );
+}
+
 #endif // ifdef LIBREVERSE_DEBUG
 
 } // namespace reverse

@@ -28,7 +28,7 @@
 #include <string>
 
 namespace reverse {
-  namespace data_container {
+  namespace data_containers {
 
     class java_assembly_instruction : public instruction {
     public:
@@ -38,9 +38,13 @@ namespace reverse {
       virtual ~java_assembly_instruction(){}
 
       virtual boost::uint32_t get_type ( void ) const;
+      
+      boost::uint32_t get_index () const;
+      
+      std::string const& get_code () const;
 
-      virtual std::string to_string ( void ) const;
-
+    private:
+      
       /*----------------------------*/
       /*         VARIABLES          */
       /*----------------------------*/
@@ -51,8 +55,10 @@ namespace reverse {
       std::string m_code;
 
     };
+    
+    std::ostream& operator<< ( std::ostream& os, java_assembly_instruction const& rhs );
 
-  }  // namespace data_container
+  }  // namespace data_containers
 } // namespace reverse
 
 

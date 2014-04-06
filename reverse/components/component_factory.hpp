@@ -22,7 +22,7 @@
 #ifndef REVERSE_COMPONENTS_COMPONENT_FACTORY_HPP_INCLUDED
 #define REVERSE_COMPONENTS_COMPONENT_FACTORY_HPP_INCLUDED
 
-#include <json_spirit/json_spirit.h>
+#include <ciere/json/value.hpp>
 
 #include <boost/shared_ptr.hpp>
 
@@ -86,7 +86,7 @@ namespace reverse {
        */
       boost::shared_ptr < infrastructure::component >
       get_meta_writer ( boost::shared_ptr < infrastructure::component_state > state_ptr,
-	json_spirit::Object const& obj );
+	ciere::json::object_t const& obj );
 
       /**
        * \brief create a new unpacker component

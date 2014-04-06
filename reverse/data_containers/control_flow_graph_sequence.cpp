@@ -19,204 +19,130 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#include "control_flow_graph_sequence.h"
-#include "Control_Flow_Graph.h"
+#include <reverse/data_containers/control_flow_graph_sequence.hpp>
+#include <reverse/data_containers/control_flow_graph.hpp>
+#include <reverse/errors/internal_exception.hpp>
+#include <reverse/data_containers/basic_block.hpp>
+#include <reverse/preconditions.hpp>
+#include <reverse/trace.hpp>
 
-#include "errors/Internal_Exception.h"
-#include "data_containers/Basic_Block.h"
-#include "io/Preconditions.h"
-
-#include <sstream>
 #include <boost/format.hpp>
 #include <boost/graph/topological_sort.hpp>
 
-#ifdef LIBREVERSE_DEBUG
-#include "Trace.h"
-using namespace reverse::api;
-using namespace reverse::trace;
-#endif /* LIBREVERSE_DEBUG */
+namespace reverse {
+    namespace data_containers {
 
-namespace reverse { namespace data_container {
+        control_flow_graph_sequence::control_flow_graph_sequence ()
+        {
+            trace::data_containers_detail ( "Inside control_flow_graph_sequence constructor" );
+        }
 
-    control_flow_graph_sequence::control_flow_graph_sequence ()
-    {
+        control_flow_graph_sequence::control_flow_graph_sequence ( control_flow_graph_sequence const& rhs )
+        {
+            trace::data_containers_detail ( "Entering control_flow_graph_sequence copy constructor" );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-                             TraceLevel::DETAIL,
-                             "Inside control_flow_graph_sequence constructor" );
-#endif /* LIBREVERSE_DEBUG */
-    }
+            for ( control_flow_graph_sequence::sequence_t::const_iterator cpos = rhs.m_graph_list.begin();
+                    cpos != rhs.m_graph_list.end();
+                    ++cpos ) {
+                boost::shared_ptr < const control_flow_graph > cfg_ptr = ( *cpos );
+                boost::shared_ptr < control_flow_graph > copied_cfg_ptr ( new data_containers::control_flow_graph ( *cfg_ptr ) );
+                m_graph_list.push_back ( copied_cfg_ptr );
+            }
 
-    control_flow_graph_sequence::control_flow_graph_sequence ( control_flow_graph_sequence const& rhs )
-    {
+            trace::data_containers_detail ( "Exiting control_flow_graph_sequence copy constructor" );
+        }
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-                             TraceLevel::DETAIL,
-                             "Entering control_flow_graph_sequence copy constructor" );
-#endif /* LIBREVERSE_DEBUG */
+        void
+        control_flow_graph_sequence::add_control_flow_graph ( boost::shared_ptr< control_flow_graph >& input_block_ptr )
+        {
+            trace::data_containers_detail ( "Entering control_flow_graph_sequence::add_Control_Flow_Graph" );
 
+            reverse::preconditions::is_set ( input_block_ptr );
 
-	for ( data_types::control_flow_graph_sequence::Sequence_t::const_iterator cpos = rhs.m_graph_list.begin();
-	      cpos != rhs.m_graph_list.end();
-	      ++cpos )
-	  {
-	    data_types::Control_Flow_Graph::const_ptr_t cfg_ptr = (*cpos);
-	    data_types::Control_Flow_Graph::ptr_t copied_cfg_ptr ( new data_container::Control_Flow_Graph ( *cfg_ptr ) );
-	    m_graph_list.push_back ( copied_cfg_ptr );
-	  }
-	    
+            m_graph_list.push_back ( input_block_ptr );
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-                             TraceLevel::DETAIL,
-                             "Exiting control_flow_graph_sequence copy constructor" );
-#endif /* LIBREVERSE_DEBUG */
+            trace::data_containers_detail ( "Exiting control_flow_graph_sequence::add_Control_Flow_Graph" );
+        }
 
-    }
+        control_flow_graph_sequence::sequence_t::iterator
+        control_flow_graph_sequence::begin()
+        {
+            return m_graph_list.begin();
+        }
 
-    void
-    control_flow_graph_sequence::add_Control_Flow_Graph ( boost::shared_ptr < Control_Flow_Graph > input_cfg_ptr )
-    {
+        control_flow_graph_sequence::sequence_t::iterator
+        control_flow_graph_sequence::end()
+        {
+            return m_graph_list.end();
+        }
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-                             TraceLevel::DETAIL,
-                             "Entering control_flow_graph_sequence::add_Control_Flow_Graph" );
-#endif /* LIBREVERSE_DEBUG */
+        control_flow_graph_sequence::sequence_t::const_iterator
+        control_flow_graph_sequence::begin() const
+        {
+            return m_graph_list.begin();
+        }
 
+        control_flow_graph_sequence::sequence_t::const_iterator
+        control_flow_graph_sequence::end() const
+        {
+            return m_graph_list.end();
+        }
 
-	io::Preconditions::is_set ( input_cfg_ptr );
+        size_t control_flow_graph_sequence::size() const
+        {
+	    return m_graph_list.size();
+        }
 
-	m_graph_list.push_back ( input_cfg_ptr );
+        
+        bool
+        control_flow_graph_sequence::empty () const
+        {
+            trace::data_containers_detail ( "Inside control_flow_graph_sequence::empty ()" );
 
+            return m_graph_list.empty();
+        }
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-                             TraceLevel::DETAIL,
-                             "Exiting control_flow_graph_sequence::add_Control_Flow_Graph" );
-#endif /* LIBREVERSE_DEBUG */
+        control_flow_graph_sequence&
+        control_flow_graph_sequence::operator= ( control_flow_graph_sequence const& rhs )
+        {
+            trace::data_containers_detail ( "Entering control_flow_graph_sequence::operator= (assignment)" );
 
-    }
+            control_flow_graph_sequence temp ( rhs );
+            swap ( temp );
 
-    std::vector < boost::shared_ptr<Control_Flow_Graph> >::iterator
-    control_flow_graph_sequence::begin()
-    {
-      return m_graph_list.begin();
-    }
+            trace::data_containers_detail ( "Exiting control_flow_graph_sequence::operator= (assignment)" );
 
-    std::vector < boost::shared_ptr<Control_Flow_Graph> >::iterator
-    control_flow_graph_sequence::end()
-    {
-      return m_graph_list.end();
-    }
+            return *this;
+        }
 
-    std::vector < boost::shared_ptr<Control_Flow_Graph> >::const_iterator
-    control_flow_graph_sequence::begin() const
-    {
-      return m_graph_list.begin();
-    }
+        void
+        control_flow_graph_sequence::swap ( control_flow_graph_sequence& rhs )
+        {
+            trace::data_containers_detail ( "Entering control_flow_graph_sequence::swap" );
 
-    std::vector < boost::shared_ptr<Control_Flow_Graph> >::const_iterator
-    control_flow_graph_sequence::end() const
-    {
-      return m_graph_list.end();
-    }
+            m_graph_list.swap ( rhs.m_graph_list );
 
-    bool
-    control_flow_graph_sequence::empty () const
-    {
+            trace::data_containers_detail ( "Exiting control_flow_graph_sequence::swap" );
+        }
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-                             TraceLevel::DETAIL,
-                             "Inside control_flow_graph_sequence::empty ()" );
-#endif /* LIBREVERSE_DEBUG */
+        std::ostream& operator<< ( std::ostream& os, control_flow_graph_sequence const& rhs )
+        {
+            trace::data_containers_detail ( "Entering control_flow_graph_sequence::to_String" );
+            trace::data_containers_data ( "Control Flow Graph count: %1%", rhs.size() );
 
-        return m_graph_list.empty();
-    }
+            for ( control_flow_graph_sequence::sequence_t::const_iterator cpos = rhs.begin();
+                    cpos != rhs.end();
+                    ++cpos ) {
+                boost::shared_ptr < control_flow_graph > cfg_ptr = ( *cpos );
 
-    control_flow_graph_sequence&
-    control_flow_graph_sequence::operator= ( control_flow_graph_sequence const& rhs )
-    {
+                // print out text version of graph
+                os << cfg_ptr << std::endl;
+            }
 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-                             TraceLevel::DETAIL,
-                             "Entering control_flow_graph_sequence::operator= (assignment)" );
-#endif /* LIBREVERSE_DEBUG */
+            trace::data_containers_detail ( "Exiting control_flow_graph_sequence::to_String" );
 
+            return os;
+        }
 
-        control_flow_graph_sequence temp ( rhs );
-        swap ( temp );
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-                             TraceLevel::DETAIL,
-                             "Exiting control_flow_graph_sequence::operator= (assignment)" );
-#endif /* LIBREVERSE_DEBUG */
-
-        return *this;
-    }
-
-    void
-    control_flow_graph_sequence::swap ( control_flow_graph_sequence& rhs )
-    {
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-                             TraceLevel::DETAIL,
-                             "Entering control_flow_graph_sequence::swap" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        m_graph_list.swap ( rhs.m_graph_list );
-
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-                             TraceLevel::DETAIL,
-                             "Exiting control_flow_graph_sequence::swap" );
-#endif /* LIBREVERSE_DEBUG */
-
-    }
-
-    std::ostream& operator<< ( std::ostream& os, control_flow_graph_sequence const& rhs )
-    {
- 
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-                             TraceLevel::DETAIL,
-                             "Entering control_flow_graph_sequence::to_String" );
-
-        Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-                             TraceLevel::DATA,
-			     boost::str ( boost::format ( "Control Flow Graph count: %1%" ) % m_graph_list.size() ) );
-
-#endif /* LIBREVERSE_DEBUG */
-
-        for ( data_types::control_flow_graph_sequence::Sequence_t::const_iterator cpos = m_graph_list.begin();
-              cpos != m_graph_list.end();
-              ++cpos )
-            {
-	      data_types::Control_Flow_Graph::ptr_t cfg_ptr = (*cpos);
-
-	      // print out text version of graph
-	      os << cfg_ptr->to_String() << std::endl;
-
-	    }
-
-#ifdef LIBREVERSE_DEBUG
-        Trace::write_Trace ( TraceArea::DATA_CONTAINERS,
-                             TraceLevel::DETAIL,
-                             "Exiting control_flow_graph_sequence::to_String" );
-#endif /* LIBREVERSE_DEBUG */
-
-
-        return os;
-    }
-
-}  /* namespace data_types */
+    }  /* namespace data_containers */
 } /* namespace reverse */

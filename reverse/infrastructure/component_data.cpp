@@ -430,7 +430,7 @@ namespace reverse {
       
       if ( m_map_ptr )
 	{
-	  output << m_map_ptr->to_string() << std::endl;
+	  output << m_map_ptr << std::endl;
 	}
       
       trace::infrastructure_detail ( "Exiting component_data::to_string" );

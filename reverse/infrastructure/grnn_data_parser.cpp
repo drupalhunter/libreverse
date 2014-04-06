@@ -31,8 +31,7 @@
 #include <reverse/components/input/grnn/grnn_data_map.hpp>
 #include <reverse/components/input/grnn/grnn_data_types.hpp>
 
-#include <json_spirit/json_spirit.h>
-#include <json_spirit/reader.h>
+#include <ciere/json/io.hpp>
 
 #include <boost/filesystem.hpp>
 #include <boost/format.hpp>
@@ -62,27 +61,24 @@ namespace reverse {
                         boost::filesystem::path full_path ( filename );
                         std::ifstream input ( full_path.c_str() );
 
-                        json_spirit::Value top_value;
-                        json_spirit::read ( input, top_value );
+			ciere::json::value top_value;
+			ciere::json::construct ( input, top_value );
 
                         // Parse file
-                        json_spirit::Object& value_obj = top_value.getObject();
-
-                        for ( json_spirit::Object::const_iterator cpos = value_obj.begin();
-                                        cpos != value_obj.end();
-                                        ++cpos ) {
-
-                                const json_spirit::Value& value = cpos->second;
-                                const json_spirit::Object& component_obj = value.getObject();
-                                const std::string& type = cpos->first;
-                                const double sigma = component_obj.find ( "sigma" )->second.getReal();
-                                const std::string filename = component_obj.find ( "filename" )->second.getString();
+			for ( ciere::json::value::const_object_iterator cpos = top_value["grnn_data"].begin_object();
+			      cpos != top_value.end_object();
+			      ++cpos )
+			     {
+                                ciere::json::value const& grnn_value = cpos->value();
+                                std::string entry_type = cpos->name();
+                                const double sigma = grnn_value["sigma"].get_as<ciere::json::double_t>();
+                                const std::string filename = grnn_value["filename"].get_as<ciere::json::string_t>();
 
                                 // Add entry to GRNN_Data_Map
                                 boost::shared_ptr < components::input::grnn::grnn_data_entry > entry_obj =
                                         boost::make_shared < components::input::grnn::grnn_data_entry > ( sigma, filename );
 
-                                m_data_map->insert ( components::input::grnn::grnn_data_types::get_type ( type ), entry_obj );
+                                m_data_map->insert ( components::input::grnn::grnn_data_types::get_type ( entry_type ), entry_obj );
                         }
 
 

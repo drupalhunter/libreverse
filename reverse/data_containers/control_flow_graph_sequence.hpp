@@ -36,19 +36,23 @@ namespace reverse {
     {
     public:
 
+      typedef std::vector < boost::shared_ptr<control_flow_graph> > sequence_t;
+      
       explicit control_flow_graph_sequence ();
 
       control_flow_graph_sequence ( control_flow_graph_sequence const& rhs );
 
       void add_control_flow_graph ( boost::shared_ptr< control_flow_graph >& input_block_ptr );
 
-      std::vector < boost::shared_ptr<control_flow_graph> >::iterator begin();
+      sequence_t::iterator begin();
 
-      std::vector < boost::shared_ptr<control_flow_graph> >::iterator end();
+      sequence_t::iterator end();
 
-      std::vector < boost::shared_ptr<control_flow_graph> >::const_iterator begin() const;
+      sequence_t::const_iterator begin() const;
 
-      std::vector < boost::shared_ptr<control_flow_graph> >::const_iterator end() const;
+      sequence_t::const_iterator end() const;
+      
+      sequence_t::size_type size () const;
 
       virtual ~control_flow_graph_sequence (){}
 
@@ -60,7 +64,7 @@ namespace reverse {
 
     private:
 
-      std::vector < boost::shared_ptr<control_flow_graph> > m_graph_list;
+      sequence_t m_graph_list;
     };
     
     std::ostream& operator<< ( std::ostream& os, control_flow_graph_sequence const& rhs );

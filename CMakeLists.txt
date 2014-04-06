@@ -9,17 +9,18 @@ include(ExternalProject)
 SET(Boost_USE_STATIC_LIBS OFF)
 SET(Boost_USE_MULTITHREAD ON)
 
-FIND_PACKAGE(Boost REQUIRED COMPONENTS program_options )
+FIND_PACKAGE(Boost REQUIRED COMPONENTS program_options date_time )
 FIND_PACKAGE(ICU REQUIRED)
 
-ExternalProject_Add ( JSON_SPIRIT
-  GIT_REPOSITORY https://github.com/sirikata/json-spirit.git
-  CONFIGURE_COMMAND cmake -DJSON_SPIRIT_LIBRARY_TYPE=STATIC
-  UPDATE_COMMAND ""
-  SOURCE_DIR ${CMAKE_SOURCE_DIR}/external/json-spirit/build
-  INSTALL_COMMAND ""
-  BUILD_IN_SOURCE 1 ) 
-SET ( JSON_SPIRIT_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/external/json-spirit/include" )
+#ExternalProject_Add ( JSON_SPIRIT
+#  GIT_REPOSITORY https://github.com/cierelabs/json_spirit.git
+#  GIT_TAG "master"
+#  CONFIGURE_COMMAND cmake
+#  UPDATE_COMMAND ""
+#  SOURCE_DIR ${CMAKE_SOURCE_DIR}/external/json_spirit
+#  INSTALL_COMMAND ""
+#  BUILD_IN_SOURCE 1 ) 
+SET ( JSON_SPIRIT_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/external/json_spirit/" )
 
 add_subdirectory(reverse)
 add_subdirectory(testing)

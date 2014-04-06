@@ -232,6 +232,36 @@ namespace reverse {
 				 % v1 ) );
     }
 
+    static void data_containers_detail ( const char* );
+
+    template <typename T>
+    static void data_containers_data ( const char* message, T const& value )
+    {
+      write_trace ( trace_area::data_containers,
+		    trace_level::data,
+		    boost::str ( boost::format ( message ) % value ) );
+    }
+
+    template <typename T, typename V>
+    static void data_containers_data ( const char* message, T const& v1,  V const& v2 )
+    {
+      write_trace ( trace_area::data_containers,
+		    trace_level::data,
+		    boost::str ( boost::format ( message ) % v1 % v2 ) );
+    }
+    
+    template <typename T1, typename T2, typename T3>
+    static void data_containers_data ( const char* message, T1 const& v1, T2 const& v2, T3 const& v3 )
+    {
+      write_trace ( trace_area::data_containers,
+		    trace_level::data,
+		    boost::str ( boost::format ( message ) % v1 % v2 % v3 ) );
+    }
+    
+    static void data_containers_error ( const char* message );
+
+    static void data_containers_error ( const char* message, const char* filename, unsigned int line );
+      
     
 #else
     static bool write_trace ( boost::uint32_t, boost::uint32_t, const char* ) { return true; }
@@ -325,6 +355,23 @@ namespace reverse {
     static void meta_error ( const char*, const char*, unsigned int ) {}
     template <typename T1>
     static void meta_error ( const char* message, T1 const& v1 ) {}
+
+    static void data_containers_detail ( const char* ) {}
+
+    static void data_containers_error ( const char* message ) {}
+
+    static void data_containers_error ( const char* message, const char* filename, unsigned int line ) {}
+
+    template <typename T>
+    static void data_containers_data ( const char* message, T const& value ) {}
+    
+    template <typename T1, typename T2>
+    static void data_containers_data ( const char* message, T1 const& v1, T2 const& v2 )
+    {}
+    
+    template <typename T1, typename T2, typename T3>
+    static void data_containers_data ( const char* message, T1 const& v1, T2 const& v2, T3 const& v3 )
+    {}
     
 #endif
 

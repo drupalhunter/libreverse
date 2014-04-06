@@ -29,7 +29,7 @@
 #include <string>
 
 namespace reverse {
-  namespace data_container {
+  namespace data_containers {
 
     class control_flow_graph
     {
@@ -117,13 +117,15 @@ namespace reverse {
 
       void swap ( control_flow_graph& rhs );
 
-      std::string to_string (void) const;
-
       vertex_t const& get_vertex ( boost::uint32_t id ) const;
 
       graph_t::vertices_size_type size () const;
 
       std::string get_name () const;
+      
+      id_vertex_map_t::const_iterator vertex_begin() const;
+      
+      id_vertex_map_t::const_iterator vertex_end() const;
 
     private:
 
@@ -135,8 +137,10 @@ namespace reverse {
       
       basic_block_map_t m_basic_block_map;
     };
+    
+    std::ostream& operator<< ( std::ostream& os, control_flow_graph const& rhs );
 
-  } // namespace data_container
+  } // namespace data_containers
 } // namespace reverse
 
 #endif // #ifndef REVERSE_DATA_CONTAINER_CONTROL_FLOW_GRAPH_HPP_INCLUDED
